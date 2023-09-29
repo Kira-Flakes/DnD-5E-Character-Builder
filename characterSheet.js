@@ -1,6 +1,6 @@
 // characterSheet.js
 // This file should represent the entirety of a character sheet, 
-// with all attributes
+// with all attributes.
 
 const labelText = document.getElementById('_character');
 
@@ -44,7 +44,7 @@ function setClassLevel(newLevel) {
 }
 
 function updateSheet() {
-  document.getElementById('_charname').innerHTML = characterSheet._name;
+  
 }
 
 // Export the getter and setter functions.
