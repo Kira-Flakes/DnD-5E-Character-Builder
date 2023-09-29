@@ -1,28 +1,39 @@
+<!-- Naming convention: Labels begin with '_' character. 
+  Corresponding User defined inputs and variables have the 
+  same name without the underscore -->
+
 <link rel="stylesheet" href="sheetstyle.css"/>
 <form class="charsheet">
     <header>
       <section class="charname">
-        <label for="charname">Character Name</label><input name="charname" placeholder="Thoradin Fireforge" />
+        <label for="charname">Character Name</label>
+        <label for="_charname">Thoradin Fireforge</label>
       </section>
       <section class="misc">
         <ul>
           <li>
-            <label for="classlevel">Class & Level</label><input name="classlevel" placeholder="Paladin 2" />
+            <label for="classlevel" >Class & Level</label>
+            <label for="miscfield" >blank</label>
           </li>
           <li>
-            <label for="background">Background</label><input name="background" placeholder="Acolyte" />
+            <label for="background">Background</label>
+            <label for="miscfield" >Acolyte</label>
           </li>
           <li>
-            <label for="playername">Player Name</label><input name="playername" placeholder="Player McPlayerface">
+            <label for="playername">Player Name</label>
+            <label for="miscfield" name="playername" ></label>
           </li>
           <li>
-            <label for="race">Race</label><input name="race" placeholder="Half-elf" />
+            <label for="race">Race</label>
+            <label for="miscfield" name="race" ></label>
           </li>
           <li>
-            <label for="alignment">Alignment</label><input name="alignment" placeholder="Lawful Good" />
+            <label for="alignment">Alignment</label>
+            <label for="miscfield" name="alignment" ></label>
           </li>
           <li>
-            <label for="experiencepoints">Experience Points</label><input name="experiencepoints" placeholder="3240" />
+            <label for="experiencepoints">Experience Points</label>
+            <label for="miscfield" name="experiencepoints" ></label>
           </li>
         </ul>
       </section>

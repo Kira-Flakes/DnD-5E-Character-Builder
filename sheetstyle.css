@@ -89,12 +89,11 @@ form.charsheet header section.charname {
   top: 0;
   margin: auto;
 }
-form.charsheet header section.charname input {
-  padding: 0.5em;
-  margin: 5px;
-  border: 0;
-}
 form.charsheet header section.charname label {
+  padding-left: 1em;
+}
+form.charsheet header section.charname label[for=_charname] {
+  font-size: 110%;
   padding-left: 1em;
 }
 form.charsheet header section.misc {
@@ -116,10 +115,10 @@ form.charsheet header section.misc ul li {
 }
 form.charsheet header section.misc ul li label {
   margin-bottom: 5px;
+  font-size: 90%;
 }
-form.charsheet header section.misc ul li input {
-  border: 0;
-  border-bottom: 1px solid #ddd;
+form.charsheet header section.misc ul li label[for=miscfield] {
+  font-size: 115%;
 }
 form.charsheet main {
   display: flex;

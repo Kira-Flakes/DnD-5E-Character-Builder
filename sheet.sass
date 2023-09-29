@@ -94,12 +94,16 @@ form.charsheet
       top: 0
       margin: auto
       
-      input
-        padding: 0.5em
-        margin: 5px
-        border: 0
+      // input
+      //   padding: 0.5em
+      //   margin: 5px
+      //   border: 0
         
       label
+        padding-left: 1em
+
+      label[for="_charname"]
+        font-size: 110%
         padding-left: 1em
     
     section.misc
@@ -121,10 +125,16 @@ form.charsheet
           
           label
             margin-bottom: 5px
+            font-size: 90%
+            // color: rgba(0, 0, 0, 0.5)
 
-          input
-            border: 0
-            border-bottom: 1px solid $faded
+          label[for="miscfield"]
+            font-size: 115%
+
+
+          // input
+          //   border: 0
+          //   border-bottom: 1px solid $faded
   main
     display: flex
     justify-content: space-between
