@@ -41,6 +41,38 @@
             </div>
             <div class="column right">
                 <p>Helpful information goes here...</p>
+				
+								
+				<p id="stat"></p>
+				<p id="statdesc"></p>
+				
+				<script>
+				
+					fetch(`https://www.dnd5eapi.co/api/ability-scores/str`).then((response) => {
+						if (response.ok) {
+						return response.json();
+	  
+						} else {
+							throw new Error("NETWORK RESPONSE ERROR");
+						}
+					})
+					.then(data => {
+	  
+						console.log(data.full_name);
+						const term = JSON.stringify(data.full_name);
+						document.getElementById("stat").innerHTML = term;
+	
+						console.log(data.desc);
+						const termdesc = JSON.stringify(data.desc);
+						document.getElementById("statdesc").innerHTML = termdesc;
+					}
+  
+
+  
+					)
+				</script>
+				
+				
             </div>
         </div>
     </body>
