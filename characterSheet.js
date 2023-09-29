@@ -2,6 +2,7 @@
 // This file should represent the entirety of a character sheet, 
 // with all attributes
 
+const labelText = document.getElementById('_character');
 
 // Define an object to represent the character sheet.
 const characterSheet = {
@@ -42,10 +43,15 @@ function setClassLevel(newLevel) {
   }
 }
 
+function updateSheet() {
+  document.getElementById('_charname').innerHTML = characterSheet._name;
+}
+
 // Export the getter and setter functions.
 module.exports = {
   getCharacterName,
   setCharacterName,
+  updateSheet,
 };
 
 
