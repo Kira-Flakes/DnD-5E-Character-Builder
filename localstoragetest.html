@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="Our first page">
+        <meta name="keywords" content="html tutorial template">
+        <link rel="stylesheet" href="builderstyle.css">
+
+        <title>JS localStorage Test</title>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event) {
+                //Get user input
+                var characterClass = prompt("What is your character's class?");
+                var alignment = prompt("What is your character's alignment?");
+                var race = prompt("What is your character's race?");
+
+                localStorage.setItem("Class", characterClass);
+                console.log("Your character's class is " + localStorage.getItem("Class") + ".");
+
+                localStorage.setItem("Alignment", alignment);
+                console.log("Your character's alignment is " + localStorage.getItem("Alignment") + ".");
+
+                localStorage.setItem("Race", race);
+                console.log("Your character's race is " + localStorage.getItem("Race") + ".");
+                localStorage.removeItem("Alignment");
+
+                console.log("Your character's alignment should now be missing from localStorage");
+
+            });
+        </script>
+    </head>
+    <body>
+        <p>This page tests various JS localStorage methods</p>
+        
+    </body>
+</html>
