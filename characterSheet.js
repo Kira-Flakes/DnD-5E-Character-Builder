@@ -17,6 +17,7 @@ const characterSheet = {
 
 // Getter method to retrieve the character's name.
 function getCharacterName() {
+  localStorage.getItem("_name");
   return characterSheet._name;
 }
 
@@ -27,6 +28,7 @@ function setCharacterName(newName) {
   } else {
     console.error('Invalid name format. Name must be a string.');
   }
+  localStorage.setItem("_name", newName);
 }
 
 // Getter method to retrieve the character's class level.
