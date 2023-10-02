@@ -5,9 +5,14 @@
 <link rel="stylesheet" href="sheetstyle.css"/>
 <form class="charsheet">
     <header>
+      <script src="characterSheet.js"></script> 
       <section class="charname">
         <label for="charname">Character Name</label>
-        <label for="_charname">Thoradin Fireforge</label>
+        <label id=_cName for="_charname">Thoradin Fireforge</label>
+        <script>
+          const charNameLabel =document.getElementById('_cName');
+          charNameLabel = getCharacterName();
+        </script>
       </section>
       <section class="misc">
         <ul>
@@ -37,6 +42,7 @@
           </li>
         </ul>
       </section>
+
     </header>
     <main>
       <section>
