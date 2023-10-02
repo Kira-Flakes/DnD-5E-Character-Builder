@@ -1,47 +1,69 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="Our first page">
-        <meta name="keywords" content="html tutorial template">
-        <link rel="stylesheet" href="builderstyle.css">
 
-        <title>Background</title>
-    </head>
-    <body>
-        <h1>Wiz-Rad!</h1>
-        <button onclick ="window.location.href = 'charsheet.html';">
-            Goto Character sheet!
-        </button>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="builderstyle.css">
 
-        <!--Container for 3-column layout-->
-        <div class="container">
-            <div class="column left">
-                <div style="flex-direction: column"; class="container";>
-                    <div class="tab">
-                        <a href="./gettingstarted.html">Getting Started</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./background.html">Background</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./race.html">Race</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./class.html">Class</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./equipment.html">Equipment</a>
-                    </div>
+    <title>Background</title>
+</head>
+
+<body>
+    <h1>Wiz-Rad!</h1>
+    <button onclick="window.location.href = 'charsheet.html';">
+        Goto Character sheet!
+    </button>
+
+    <!--Container for 3-column layout-->
+    <div class="container">
+        <div class="column left">
+            <div style="flex-direction: column" ; class="container" ;>
+                <div class="tab">
+                    <a href="./gettingstarted.html">Getting Started</a>
+                </div>
+                <div class="tab">
+                    <a href="./background.html">Background</a>
+                </div>
+                <div class="tab">
+                    <a href="./race.html">Race</a>
+                </div>
+                <div class="tab">
+                    <a href="./class.html">Class</a>
+                </div>
+                <div class="tab">
+                    <a href="./equipment.html">Equipment</a>
                 </div>
             </div>
-            <div class="column middle">
-                <p>Questions go here...</p>
-            </div>
-            <div class="column right">
-                <p>Helpful information goes here...</p>
-            </div>
         </div>
-    </body>
+        <div class="column middle">
+            <p>Questions go here...</p>
+            <label>Enter your character name:</label>
+            <input id="charnamein" type="text" placeholder="" />
+            <!-- <button id="charnamesubmit">Submit</button> -->
+            <!-- <label id="outputLabel"></label> -->
+
+            <!-- <script>
+                const inputElement = document.getElementById('charnamein');
+                const submitButton = document.getElementById('charnamesubmit');
+                const outputLabel = document.getElementById('outputLabel');
+
+                submitButton.addEventListener('click', function () {
+                    console.log("Test");
+                    const enteredText = inputElement.value;
+                    outputLabel.textContent = enteredText;
+                    
+                });
+            </script> -->
+        </div>
+        <div class="column right">
+            <p>Helpful information goes here...</p>
+        </div>
+    </div>
+    <script type="module" src="characterSheet.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+
 </html>
