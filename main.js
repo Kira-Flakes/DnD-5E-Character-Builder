@@ -1,5 +1,3 @@
-
-
-const charSheet = require('./characterSheet.js');
-
-charSheet.setCharacterName(document.getElementById('charnamein'));
+// // import { characterSheet } from './characterSheet.js';
+// const character = new characterSheet();
+// console.log('This is my main test');
