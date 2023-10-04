@@ -135,4 +135,10 @@ class characterSheet {
     for (const key in keys) // set all attributes on the character sheet based on the keys.
       document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
   }
+
+// Helper function that removes all the elements from local storage,
+// will likely be modified with different parameters later on.
+  clearLocalSorage() {
+    localStorage.clear;
+  }
 }
