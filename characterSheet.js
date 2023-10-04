@@ -31,15 +31,15 @@ class characterSheet {
   }
 
   // Getter method to retrieve the character's name.
-  getCharacterName() {
+  get characterName() {
     return this._name;
   }
 
   // Setter method to set the character's name.
-  setCharacterName(newName) {
+  set characterName(newName) {
     // console.log(typeof newName);
     if (typeof newName === 'string') {
-      characterSheet._name = newName;
+      this._name = newName;
       localStorage.setItem("_name", newName);
     } else {
       console.error('Invalid name format. Name must be a string.');
@@ -47,74 +47,80 @@ class characterSheet {
   }
 
   // Getter method to retrieve the character's class level.
-  getClassLevel() {
+  get classLevel() {
     return this._classlevel;
   }
 
   // Setter method to set the character's class level.
-  setClassLevel(newLevel) {
+  set classLevel(newLevel) {
     if (typeof newLevel === 'string') { //&& newLevel >= 1) { // change back to int
       this._classlevel = newLevel;
+      localStorage.setItem("_classlevel",newLevel);
     } else {
       console.error('Invalid class level. Level must be a positive number.');
     }
   }
 
-  getBackground() {
+  get background() {
     return this._background;
   }
 
-  setBackground(newBackground) {
+  set background(newBackground) {
     if (typeof newBackground === 'string') {
-      this._classlevel = newLevel;
+      this._background = newBackground;
+      localStorage.setItem("_background",newBackground);
     } else {
       console.error('Invalid class level. Level must be a string.');
     }
   }
 
-  getPlayername() {
+  get playername() {
     return this._playername;
   }
 
-  setPlayername(newPlayername) {
+  set playername(newPlayername) {
     if (typeof newPlayername === 'string') {
       this._playername = newPlayername;
+      localStorage.setItem("_playername",newPlayername);
     } else {
       console.error('Invalid playername. Race must be a string.');
     }
   }
 
-  getRace() {
+  get race() {
     return characterSheet._race;
   }
 
-  setRace(newRace) {
+  set race(newRace) {
     if (typeof newRace === 'string') {
       this._race = newRace;
+      localStorage.setItem("_race",this._race);
     } else {
       console.error('Invalid player race. Race must be a string.');
     }
   }
 
-  getAlignment() {
+  get alignment() {
     return this._alignment;
   }
 
-  setAlignment(newAlignment) {
+  set alignment(newAlignment) {
     if (typeof newAlignment === 'string') {
       this._alignment = newAlignment;
+      localStorage.setItem("_alignment",this._alignment);
     } else {
       console.error('Invalid alignment. Alignment must be a string.')
     }
   }
 
-  getExpPts() {
+  get experiencepts() {
     return this._experiencepts;
   }
 
-  setExpPts(newExpPts) {
+  set experiencepts(newExpPts) {
     if (typeof newExpPts === 'string') {
       this._experiencepts = newExpPts;
+      localStorage.setItem("_experiencepts",this._experiencepts);
     } else {
       console.error('Invalid exp pts. Pts must be a string');
     }
@@ -126,6 +132,7 @@ class characterSheet {
   }
   set strength(value) {
     this._strength = value;
+    localStorage.setItem("_strength",this._strength);
   }
 
   // Getter and Setter for _dex
@@ -134,6 +141,7 @@ class characterSheet {
   }
   set dex(value) {
     this._dex = value;
+    localStorage.setItem("_dex",this._dex);
   }
 
   // Getter and Setter for _constitution
@@ -142,6 +150,7 @@ class characterSheet {
   }
   set constitution(value) {
     this._constitution = value;
+    localStorage.setItem("_constitution",this._constitution);
   }
 
   // Getter and Setter for _wisdom
@@ -193,6 +202,6 @@ class characterSheet {
 // Helper function that removes all the elements from local storage,
 // will likely be modified with different parameters later on.
   clearLocalSorage() {
-    localStorage.clear;
+    localStorage.clear
   }
 }
