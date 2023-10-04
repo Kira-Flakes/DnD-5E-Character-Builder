@@ -15,14 +15,13 @@ class characterSheet {
 
     // all values are initialized first from the blank character sheet.
     // allows for us to use placeholders. NOTE: This can be simplified later 
-    this._name = document.getElementById("_name").textContent;
-    this._classlevel = document.getElementById("_classlevel").textContent;
-    this._background = document.getElementById('_background').textContent;
-    this._playername = document.getElementById("_playername").textContent;
-    this._race = document.getElementById("_race").textContent;
-    this._alignment = document.getElementById("_alignment").textContent;
-    this._experiencepts = document.getElementById("_experiencepts").textContent;
-    this._strength = 0;
+    this._name = "";
+    this._classlevel = "";
+    this._background = "";
+    this._playername = "";
+    this._race = "";
+    this._alignment = "";
+    this._experiencepts = "";
     this._dex = 0;
     this._constitution = 0;
     this._wisdom = 0;
