@@ -22,6 +22,12 @@ class characterSheet {
     this._race = document.getElementById("_race").textContent;
     this._alignment = document.getElementById("_alignment").textContent;
     this._experiencepts = document.getElementById("_experiencepts").textContent;
+    _strength;
+    _dex;
+    _constitution;
+    _wisdom;
+    _intellegence;
+    _charisma;
   }
 
   // Getter method to retrieve the character's name.
