@@ -22,12 +22,12 @@ class characterSheet {
     this._race = document.getElementById("_race").textContent;
     this._alignment = document.getElementById("_alignment").textContent;
     this._experiencepts = document.getElementById("_experiencepts").textContent;
-    _strength;
-    _dex;
-    _constitution;
-    _wisdom;
-    _intellegence;
-    _charisma;
+    this._strength = 0;
+    this._dex = 0;
+    this._constitution = 0;
+    this._wisdom = 0;
+    this._intellegence = 0;
+    this._charisma = 0;
   }
 
   // Getter method to retrieve the character's name.
@@ -118,6 +118,54 @@ class characterSheet {
     } else {
       console.error('Invalid exp pts. Pts must be a string');
     }
+  }
+
+  // Getter and Setter for _strength
+  get strength() {
+    return this._strength;
+  }
+  set strength(value) {
+    this._strength = value;
+  }
+
+  // Getter and Setter for _dex
+  get dex() {
+    return this._dex;
+  }
+  set dex(value) {
+    this._dex = value;
+  }
+
+  // Getter and Setter for _constitution
+  get constitution() {
+    return this._constitution;
+  }
+  set constitution(value) {
+    this._constitution = value;
+  }
+
+  // Getter and Setter for _wisdom
+  get wisdom() {
+    return this._wisdom;
+  }
+  set wisdom(value) {
+    this._wisdom = value;
+  }
+
+  // Getter and Setter for _intellegence
+  get intellegence() {
+    return this._intellegence;
+  }
+  set intellegence(value) {
+    this._intellegence = value;
+  }
+
+  // Getter and Setter for _charisma
+  get charisma() {
+    return this._charisma;
+  }
+  set charisma(value) {
+    this._charisma = value;
   }
 
   // IMPORTANT: this function will return keys for all variables. 
