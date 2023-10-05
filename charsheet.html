@@ -2,15 +2,19 @@
   Corresponding User defined inputs and variables have the 
   same name without the underscore -->
 <script src="characterSheet.js"></script>
+<script src="characterUtils.js"></script>
 <script>
 
-  let character; // global scope
+  var character; // global scope
+  var utils;
 
   // Initialize the character object, all remaining script calls should reference this object.
   window.addEventListener('load', function () {
     character = new characterSheet();
-    character.updateSheet(); // local storage attributes fill the sheet
+    // character.updateSheet(); // local storage attributes fill the sheet
   }); // end listener
+  classSelector();
+
 </script>
 
 <link rel="stylesheet" href="sheetstyle.css" />

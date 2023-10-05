@@ -1,68 +1,82 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="Our first page">
-        <meta name="keywords" content="html tutorial template">
-        <link rel="stylesheet" href="builderstyle.css">
-		<script type = "text/javascript" src="api.js"></script>  
+<script src="characterSheet.js"></script>
+<script>
 
-        <title>Getting Started</title>
-    </head>
-    <body>
-        <h1>Wiz-Rad!</h1>
-        <button onclick ="window.location.href = 'charsheet.html';">
-            Goto Character sheet!
-        </button>
+    var character; // global scope
 
-        <!--Container for 3-column layout-->
-        <div class="container">
-            <div class="column left">
-                <div style="flex-direction: column"; class="container";>
-                    <div class="tab">
-                        <a href="./gettingstarted.html">-->Getting Started<--</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./background.html">Background</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./race.html">Race</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./class.html">Class</a>
-                    </div>
-                    <div class="tab">
-                        <a href="./equipment.html">Equipment</a>
-                    </div>
+    // Initialize the character object, all remaining script calls should reference this object.
+    window.addEventListener('load', function () {
+        character = new characterSheet();
+        // character.updateSheet(); // local storage attributes fill the sheet
+    }); // end listener
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="builderstyle.css">
+    <script type="text/javascript" src="api.js"></script>
+
+    <title>Getting Started</title>
+</head>
+
+<body>
+    <h1>Wiz-Rad!</h1>
+    <button onclick="window.location.href = 'charsheet.html';">
+        Goto Character sheet!
+    </button>
+
+    <!--Container for 3-column layout-->
+    <div class="container">
+        <div class="column left">
+            <div style="flex-direction: column" ; class="container" ;>
+                <div class="tab">
+                    <a href="./gettingstarted.html">-->Getting Started<--< /a>
                 </div>
-            </div>
-            <div class="column middle">
-                <p>Getting Started questions go here...</p>
-                <div class="question">
-                    <p>Would you like to use a preset character, or make your own?</p>
-                    <div class="container">
-                        <button>Preset</button>
-                        <button>Make my own</button>
-                    </div>
+                <div class="tab">
+                    <a href="./background.html">Background</a>
                 </div>
-                
-            </div>
-            <div class="column right">
-                <p>Helpful information goes here...</p>
-				
-								
-				<p id="stat"></p>
-				<p id="statdesc"></p>
-				
-				<script>
-				
-abilityScores("wis");
-
-				</script>
-				
-				
+                <div class="tab">
+                    <a href="./race.html">Race</a>
+                </div>
+                <div class="tab">
+                    <a href="./class.html">Class</a>
+                </div>
+                <div class="tab">
+                    <a href="./equipment.html">Equipment</a>
+                </div>
             </div>
         </div>
-    </body>
+        <div class="column middle">
+            <p>Getting Started questions go here...</p>
+            <div class="question">
+                <p>Would you like to use a preset character, or make your own?</p>
+                <div class="container">
+                    <button>Preset</button>
+                    <button>Make my own</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="column right">
+            <p>Helpful information goes here...</p>
+
+
+            <p id="stat"></p>
+            <p id="statdesc"></p>
+
+            <script>
+
+                abilityScores("wis");
+
+            </script>
+
+
+        </div>
+    </div>
+</body>
+
 </html>
