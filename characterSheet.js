@@ -8,6 +8,22 @@
 //  ints: ???
 //  ints with dependencies: ???
 
+// Grabs user input based on the id of its input tag and stores 
+// it in local storage with the same key name as the input id
+function storeKeyFromInput(inputID) {
+
+  /* Handles text input */
+  if (document.getElementById(inputID) == null) {
+    var userInput = document.querySelector(`input[name="${inputID}"]:checked`).value;
+  }
+  /* Handles radio input bubbles */
+  else {
+    var userInput = document.getElementById(inputID).value;
+  }
+  
+  localStorage.setItem(inputID, userInput);
+}
+
 // Object represents the character sheet values
 class characterSheet {
 

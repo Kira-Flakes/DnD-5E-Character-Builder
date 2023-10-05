@@ -8,7 +8,8 @@
 		<meta name="keywords" content="html tutorial template">
 		<link rel="stylesheet" href="builderstyle.css">
 
-		<title>Background</title>
+		<title>Background</title>	
+
 	</head>
 
 	<body>
@@ -40,56 +41,77 @@
 			</div>
         	<div class="column middle">
             	<p>Questions go here...</p>
-            	<div class="question">
-            		<p>Enter your character's first and last name.</p>
-                	<form>
-                		<input id="charName" type="text" />
-                	</form>
-            	</div>
-            	<div class="question">
-               		<p>What kind of dayjob does your character work?</p>
-               		<div class="container">
-                    	<button>Clerical</button>
-                    	<button>Blue-collar</button>
-                    	<button>Student</button>
-                    	<button>Crime</button>
-                    	<button>Soldier</button>
-                    	<button>Law Enforcement</button>
-                    	<button>Scientist</button>
-                    	<button>Religious</button>
-                    	<button>Communications</button>
-                    	<button>Business</button>
-                    	<button>Food service</button>
+				<div class="question">
+					<p>Enter your character's whole name.</p>
+						
+					<input id="_name" type="text" />
+					<button onclick="storeKeyFromInput('_name')" type="submit">Submit</button>
+						
+				</div>
+				<div class="question">
+					<p>What kind of dayjob does your character work? (Click buttons for descriptions)</p>
+					<input id="_bg1"  type="radio" name="_background" value="Acolyte">
+						<label for="_bg1">Acolyte</label>
+					<input id="_bg2"  type="radio" name="_background" value="Charlatan">
+						<label for="_bg2">Charlatan</label>
+					<input id="_bg3"  type="radio" name="_background" value="Criminal">
+						<label for="_bg3">Criminal</label>
+					<input id="_bg4"  type="radio" name="_background" value="Entertainer">
+						<label for="_bg4">Entertainer</label>
+					<input id="_bg5"  type="radio" name="_background" value="Folk Hero">
+						<label for="_bg5">Folk Hero</label>
+					<input id="_bg6"  type="radio" name="_background" value="Guild Artisan">
+						<label for="_bg6">Guild Artisan</label>
+					<input id="_bg7"  type="radio" name="_background" value="Hermit">
+						<label for="_bg7">Hermit</label>
+					<input id="_bg8"  type="radio" name="_background" value="Outlander">
+						<label for="_bg8">Outlander</label>
+					<input id="_bg9"  type="radio" name="_background" value="Noble">
+						<label for="_bg9">Noble</label>
+					<input id="_bg10" type="radio" name="_background" value="Sage">
+						<label for="_bg10">Sage</label>
+					<input id="_bg11" type="radio" name="_background" value="Sailor">
+						<label for="_bg11">Sailor</label>
+					<input id="_bg12" type="radio" name="_background" value="Soldier">
+						<label for="_bg12">Soldier</label>
+					<input id="_bg13" type="radio" name="_background" value="Urchin">
+						<label for="_bg13">Urchin</label>
+					</form>
+					<button onclick="storeKeyFromInput('_background')" type="submit">Submit</button>
+
+					<!-- Commented out for now. Currently using the above backrounds
+						 temporarily until these background category buttons work
+
+
+						 LOOK AT NAME ATTRIBUTES FOR THESE BUTTONS. MIGHT BE BETTER THAN RADIO BUTTONS
+
+					<div class="container">
+						<button>Clerical</button>
+						<button>Blue-collar</button>
+						<button>Student</button>
+						<button>Crime</button>
+						<button>Soldier</button>
+						<button>Law Enforcement</button>
+						<button>Scientist</button>
+						<button>Religious</button>
+						<button>Communications</button>
+						<button>Business</button>
+						<button>Food service</button>
 						<button>Retail</button>
-                    	<button>Adventurer</button>
-                	</div>
-            	</div>
+						<button>Adventurer</button>
+					</div>
+					-->
+				</div>
         	</div>
-            
-        	<!-- <button id="charnamesubmit">Submit</button> -->
-        	<!-- <label id="outputLabel"></label> -->
 
-        	<!-- <script>
-            	const inputElement = document.getElementById('charnamein');
-            	const submitButton = document.getElementById('charnamesubmit');
-            	const outputLabel = document.getElementById('outputLabel');
-
-            	submitButton.addEventListener('click', function () {
-                	console.log("Test");
-                	const enteredText = inputElement.value;
-                	outputLabel.textContent = enteredText;
-                    
-            	});
-        	</script> -->
         	<div class="column right">
             	<p>
-                	List of backgrounds will show up here. Expandable descriptions 
-                	for each background perhaps?
+                	Click the buttons for categories of backgrounds
             	</p>
             </div>
         </div>
-        
-        <script type="module" src="characterSheet.js"></script>
-        <script type="module" src="main.js"></script>
+		<script src="characterSheet.js"></script>
+        <script src="main.js"></script>
+		
     </body>
 </html>
