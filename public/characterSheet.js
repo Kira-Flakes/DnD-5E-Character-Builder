@@ -8,22 +8,6 @@
 //  ints: ???
 //  ints with dependencies: ???
 
-// Grabs user input based on the id of its input tag and stores 
-// it in local storage with the same key name as the input id
-function storeKeyFromInput(inputID) {
-
-  /* Handles text input */
-  if (document.getElementById(inputID) == null) {
-    var userInput = document.querySelector(`input[name="${inputID}"]:checked`).value;
-  }
-  /* Handles radio input bubbles */
-  else {
-    var userInput = document.getElementById(inputID).value;
-  }
-  
-  localStorage.setItem(inputID, userInput);
-}
-
 // Object represents the character sheet values
 class characterSheet {
 
@@ -31,30 +15,25 @@ class characterSheet {
 
     // all values are initialized first from the blank character sheet.
     // allows for us to use placeholders. NOTE: This can be simplified later 
-    this._name = "";
-    this._classlevel = "";
-    this._background = "";
-    this._playername = "";
-    this._race = "";
-    this._alignment = "";
-    this._experiencepts = "";
-    this._dex = 0;
-    this._constitution = 0;
-    this._wisdom = 0;
-    this._intellegence = 0;
-    this._charisma = 0;
+    this._name = document.getElementById("_name").textContent;
+    this._classlevel = document.getElementById("_classlevel").textContent;
+    this._background = document.getElementById('_background').textContent;
+    this._playername = document.getElementById("_playername").textContent;
+    this._race = document.getElementById("_race").textContent;
+    this._alignment = document.getElementById("_alignment").textContent;
+    this._experiencepts = document.getElementById("_experiencepts").textContent;
   }
 
   // Getter method to retrieve the character's name.
-  get characterName() {
+  getCharacterName() {
     return this._name;
   }
 
   // Setter method to set the character's name.
-  set characterName(newName) {
+  setCharacterName(newName) {
     // console.log(typeof newName);
     if (typeof newName === 'string') {
-      this._name = newName;
+      characterSheet._name = newName;
       localStorage.setItem("_name", newName);
     } else {
       console.error('Invalid name format. Name must be a string.');
@@ -62,134 +41,77 @@ class characterSheet {
   }
 
   // Getter method to retrieve the character's class level.
-  get classLevel() {
+  getClassLevel() {
     return this._classlevel;
   }
 
   // Setter method to set the character's class level.
-  set classLevel(newLevel) {
+  setClassLevel(newLevel) {
     if (typeof newLevel === 'string') { //&& newLevel >= 1) { // change back to int
       this._classlevel = newLevel;
-      localStorage.setItem("_classlevel",newLevel);
     } else {
       console.error('Invalid class level. Level must be a positive number.');
     }
   }
 
-  get background() {
+  getBackground() {
     return this._background;
   }
 
-  set background(newBackground) {
+  setBackground(newBackground) {
     if (typeof newBackground === 'string') {
-      this._background = newBackground;
-      localStorage.setItem("_background",newBackground);
+      this._classlevel = newLevel;
     } else {
       console.error('Invalid class level. Level must be a string.');
     }
   }
 
-  get playername() {
+  getPlayername() {
     return this._playername;
   }
 
-  set playername(newPlayername) {
+  setPlayername(newPlayername) {
     if (typeof newPlayername === 'string') {
       this._playername = newPlayername;
-      localStorage.setItem("_playername",newPlayername);
     } else {
       console.error('Invalid playername. Race must be a string.');
     }
   }
 
-  get race() {
+  getRace() {
     return characterSheet._race;
   }
 
-  set race(newRace) {
+  setRace(newRace) {
     if (typeof newRace === 'string') {
       this._race = newRace;
-      localStorage.setItem("_race",this._race);
     } else {
       console.error('Invalid player race. Race must be a string.');
     }
   }
 
-  get alignment() {
+  getAlignment() {
     return this._alignment;
   }
 
-  set alignment(newAlignment) {
+  setAlignment(newAlignment) {
     if (typeof newAlignment === 'string') {
       this._alignment = newAlignment;
-      localStorage.setItem("_alignment",this._alignment);
     } else {
       console.error('Invalid alignment. Alignment must be a string.')
     }
   }
 
-  get experiencepts() {
+  getExpPts() {
     return this._experiencepts;
   }
 
-  set experiencepts(newExpPts) {
+  setExpPts(newExpPts) {
     if (typeof newExpPts === 'string') {
       this._experiencepts = newExpPts;
-      localStorage.setItem("_experiencepts",this._experiencepts);
     } else {
       console.error('Invalid exp pts. Pts must be a string');
     }
-  }
-
-  // Getter and Setter for _strength
-  get strength() {
-    return this._strength;
-  }
-  set strength(value) {
-    this._strength = value;
-    localStorage.setItem("_strength",this._strength);
-  }
-
-  // Getter and Setter for _dex
-  get dex() {
-    return this._dex;
-  }
-  set dex(value) {
-    this._dex = value;
-    localStorage.setItem("_dex",this._dex);
-  }
-
-  // Getter and Setter for _constitution
-  get constitution() {
-    return this._constitution;
-  }
-  set constitution(value) {
-    this._constitution = value;
-    localStorage.setItem("_constitution",this._constitution);
-  }
-
-  // Getter and Setter for _wisdom
-  get wisdom() {
-    return this._wisdom;
-  }
-  set wisdom(value) {
-    this._wisdom = value;
-  }
-
-  // Getter and Setter for _intellegence
-  get intellegence() {
-    return this._intellegence;
-  }
-  set intellegence(value) {
-    this._intellegence = value;
-  }
-
-  // Getter and Setter for _charisma
-  get charisma() {
-    return this._charisma;
-  }
-  set charisma(value) {
-    this._charisma = value;
   }
 
   // IMPORTANT: this function will return keys for all variables. 
@@ -212,11 +134,5 @@ class characterSheet {
     var keys = character.keyNames(); // grabs all keys associated with a character sheet
     for (const key in keys) // set all attributes on the character sheet based on the keys.
       document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
-  }
-
-// Helper function that removes all the elements from local storage,
-// will likely be modified with different parameters later on.
-  clearLocalSorage() {
-    localStorage.clear
   }
 }

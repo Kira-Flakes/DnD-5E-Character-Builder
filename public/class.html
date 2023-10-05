@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="Our first page">
+        <meta name="keywords" content="html tutorial template">
+        <link rel="stylesheet" href="builderstyle.css">
+
+        <title>Class</title>
+    </head>
+    <body>
+        <h1>Wiz-Rad!</h1>
+        <button onclick ="window.location.href = 'charsheet.html';">
+            Goto Character sheet!
+        </button>
+
+        <!--Container for 3-column layout-->
+        <div class="container">
+            <div class="column left">
+                <div style="flex-direction: column"; class="container";>
+                    <div class="tab">
+                        <a href="./gettingstarted.html">Getting Started</a>
+                    </div>
+                    <div class="tab">
+                        <a href="./background.html">Background</a>
+                    </div>
+                    <div class="tab">
+                        <a href="./race.html">Race</a>
+                    </div>
+                    <div class="tab">
+                        <a href="./class.html">Class</a>
+                    </div>
+                    <div class="tab">
+                        <a href="./equipment.html">Equipment</a>
+                    </div>
+                </div>
+            </div>
+            <div class="column middle">
+                <p>Class...</p>
+
+                <div class="question">
+                    <p>What role(s) do you want your character to play?</p>
+                    <form>
+                        <input type="checkbox" id="offensive">
+                        <label for="offensive">Offensive</label><br>
+
+                        <input type="checkbox" id="defensive">
+                        <label for="defensive">Defensive</label><br>
+
+                        <input type="checkbox" id="tank">
+                        <label for="tank">Tank</label><br>
+
+                        <input type="checkbox" id="caster">
+                        <label for="caster">Caster</label><br>
+
+                        <input type="checkbox" id="support">
+                        <label for="support">Support</label><br>
+                    </form>
+                </div>
+
+                <p>Or it could be more general:</p>
+
+                <div class="question">
+                    <p>What role(s) do you want your character to play?</p>
+                    <form>
+                        <input type="checkbox" id="fighter">
+                        <label for="fighter">Fighter</label><br>
+
+                        <input type="checkbox" id="thief">
+                        <label for="thief">Thief</label><br>
+
+                        <input type="checkbox" id="mage">
+                        <label for="mage">Mage</label><br>
+                    </form>
+                </div>
+
+                <p>The role(s) you chose align with...</p>
+            </div>
+            <div class="column right">
+                <p>Helpful information goes here...</p>
+
+            </div>
+        </div>
+    </body>
+</html>
