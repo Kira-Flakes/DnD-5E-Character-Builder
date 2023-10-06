@@ -34,7 +34,7 @@
         <div class="column left">
             <div style="flex-direction: column" ; class="container" ;>
                 <div class="tab">
-                    <a href="./gettingstarted.html">-->Getting Started<--< /a>
+                    <a href="./gettingstarted.html">-->Getting Started<--</a>
                 </div>
                 <div class="tab">
                     <a href="./background.html">Background</a>
@@ -57,6 +57,14 @@
                 <div class="container">
                     <button>Preset</button>
                     <button>Make my own</button>
+                </div>
+                <div class="question">
+                    <p>Enter your first and last name.</p>
+    
+                    <input id="_playername" type="text" />
+                    <button onclick="character.setPlayername(document.getElementById('_playername').value)" type="submit">Submit</button>
+                    <!-- <input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit"> -->
+    
                 </div>
             </div>
 
