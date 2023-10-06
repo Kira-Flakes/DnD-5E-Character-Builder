@@ -55,7 +55,8 @@
 				<p>Enter your character's first and last name.</p>
 
 				<input id="_name" type="text" />
-				<input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit">
+				<input onclick="character.setCharacterName(document.getElementById('_name').value)" type="submit">
+				<!-- <input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit"> -->
 
 			</div>
 			<div class="question">

@@ -46,28 +46,29 @@ class characterSheet {
   }
 
   // Getter method to retrieve the character's name.
-  get characterName() {
+  getCharacterName() {
     return this._name;
   }
 
   // Setter method to set the character's name.
-  set characterName(newName) {
-    // console.log(typeof newName);
+  setCharacterName(newName) {
+    console.log(typeof newName);
     if (typeof newName === 'string') {
       this._name = newName;
       localStorage.setItem("_name", newName);
+      this.updateSheet();
     } else {
       console.error('Invalid name format. Name must be a string.');
     }
   }
 
   // Getter method to retrieve the character's class level.
-  get classLevel() {
+  getclassLevel() {
     return this._classlevel;
   }
 
   // Setter method to set the character's class level.
-  set classLevel(newLevel) {
+  setClassLevel(newLevel) {
     if (typeof newLevel === 'string') { //&& newLevel >= 1) { // change back to int
       this._classlevel = newLevel;
       localStorage.setItem("_classlevel", newLevel);
@@ -76,11 +77,11 @@ class characterSheet {
     }
   }
 
-  get background() {
+  getBackground() {
     return this._background;
   }
 
-  set background(newBackground) {
+  setBackground(newBackground) {
     if (typeof newBackground === 'string') {
       this._background = newBackground;
       localStorage.setItem("_background", newBackground);
@@ -212,9 +213,12 @@ class characterSheet {
     var keys = character.keyNames(); // grabs all keys associated with a character sheet
     var unkowns = "Variabls not assigned: ";
     for (const key in keys) { // set all attributes on the character sheet based on the keys.
-      if (localStorage.getItem(keys[key]) != null)
+      if (localStorage.getItem(keys[key]) != null) // if it's in local storage, set it on the html sheet.
         document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
-      else unkowns = unkowns + " " + keys[key] + ", ";
+      else { // it's not in local storage, set it in local storage, blank value
+        localStorage.setItem(keys[key],""); 
+        unkowns = unkowns + " " + keys[key] + ", ";
+      }
     }
     console.log(unkowns);
   }
