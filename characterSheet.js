@@ -214,7 +214,11 @@ class characterSheet {
     var unkowns = "Variabls not assigned: ";
     for (const key in keys) { // set all attributes on the character sheet based on the keys.
       if (localStorage.getItem(keys[key]) != null) // if it's in local storage, set it on the html sheet.
-        document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
+        try {
+          document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
+        } catch {
+          console.log("["+keys[key]+"] not assigned");
+        }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key],""); 
         unkowns = unkowns + " " + keys[key] + ", ";
