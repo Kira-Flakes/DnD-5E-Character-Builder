@@ -1,75 +1,88 @@
 <!doctype html>
 <html>
+<script src="characterSheet.js"></script>
+<script>
 
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="description" content="Our first page">
-		<meta name="keywords" content="html tutorial template">
-		<link rel="stylesheet" href="builderstyle.css">
+	var character; // global scope
 
-		<title>Background</title>
-	</head>
+	// Initialize the character object, all remaining script calls should reference this object.
+	window.addEventListener('load', function () {
+		character = new characterSheet();
+		character.updateSheet(); // local storage attributes fill the sheet
+	}); // end listener
+</script>
 
-	<body>
-		<h1>Wiz-Rad!</h1>
-		<button onclick="window.location.href = 'charsheet.html';">
-			Goto Character sheet!
-		</button>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Our first page">
+	<meta name="keywords" content="html tutorial template">
+	<link rel="stylesheet" href="builderstyle.css">
 
-		<!--Container for 3-column layout-->
-		<div class="container">
-			<div class="column left">
-				<div style="flex-direction: column" ; class="container" ;>
-					<div class="tab">
-						<a href="./gettingstarted.html">Getting Started</a>
-					</div>
-					<div class="tab">
-						<a href="./background.html">Background</a>
-					</div>
-					<div class="tab">
-						<a href="./race.html">Race</a>
-					</div>
-					<div class="tab">
-						<a href="./class.html">Class</a>
-					</div>
-					<div class="tab">
-						<a href="./equipment.html">Equipment</a>
-					</div>
+	<title>Background</title>
+</head>
+
+<body>
+	<h1>Wiz-Rad!</h1>
+	<button onclick="window.location.href = 'charsheet.html';">
+		Goto Character sheet!
+	</button>
+
+	<!--Container for 3-column layout-->
+	<div class="container">
+		<div class="column left">
+			<div style="flex-direction: column" ; class="container" ;>
+				<div class="tab">
+					<a href="./gettingstarted.html">Getting Started</a>
+				</div>
+				<div class="tab">
+					<a href="./background.html">-->Background<--< /a>
+				</div>
+				<div class="tab">
+					<a href="./race.html">Race</a>
+				</div>
+				<div class="tab">
+					<a href="./class.html">Class</a>
+				</div>
+				<div class="tab">
+					<a href="./equipment.html">Equipment</a>
 				</div>
 			</div>
-        	<div class="column middle">
-            	<p>Questions go here...</p>
-            	<div class="question">
-            		<p>Enter your character's first and last name.</p>
-                	<form>
-                		<input id="charName" type="text" />
-                	</form>
-            	</div>
-            	<div class="question">
-               		<p>What kind of dayjob does your character work?</p>
-               		<div class="container">
-                    	<button>Clerical</button>
-                    	<button>Blue-collar</button>
-                    	<button>Student</button>
-                    	<button>Crime</button>
-                    	<button>Soldier</button>
-                    	<button>Law Enforcement</button>
-                    	<button>Scientist</button>
-                    	<button>Religious</button>
-                    	<button>Communications</button>
-                    	<button>Business</button>
-                    	<button>Food service</button>
-						<button>Retail</button>
-                    	<button>Adventurer</button>
-                	</div>
-            	</div>
-        	</div>
-            
-        	<!-- <button id="charnamesubmit">Submit</button> -->
-        	<!-- <label id="outputLabel"></label> -->
+		</div>
+		<div class="column middle">
+			<p>Questions go here...</p>
+			<div class="question">
+				<p>Enter your character's first and last name.</p>
 
-        	<!-- <script>
+				<input id="_name" type="text" />
+				<button onclick="character.setCharacterName(document.getElementById('_name').value)" type="submit">Submit</button>
+				<!-- <input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit"> -->
+
+			</div>
+			<div class="question">
+				<p>What kind of dayjob does your character work?</p>
+				<div class="container">
+					<button>Clerical</button>
+					<button>Blue-collar</button>
+					<button>Student</button>
+					<button>Crime</button>
+					<button>Soldier</button>
+					<button>Law Enforcement</button>
+					<button>Scientist</button>
+					<button>Religious</button>
+					<button>Communications</button>
+					<button>Business</button>
+					<button>Food service</button>
+					<button>Retail</button>
+					<button>Adventurer</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- <button id="charnamesubmit">Submit</button> -->
+		<!-- <label id="outputLabel"></label> -->
+
+		<!-- <script>
             	const inputElement = document.getElementById('charnamein');
             	const submitButton = document.getElementById('charnamesubmit');
             	const outputLabel = document.getElementById('outputLabel');
@@ -81,15 +94,16 @@
                     
             	});
         	</script> -->
-        	<div class="column right">
-            	<p>
-                	List of backgrounds will show up here. Expandable descriptions 
-                	for each background perhaps?
-            	</p>
-            </div>
-        </div>
-        
-        <script type="module" src="characterSheet.js"></script>
-        <script type="module" src="main.js"></script>
-    </body>
+		<div class="column right">
+			<p>
+				List of backgrounds will show up here. Expandable descriptions
+				for each background perhaps?
+			</p>
+		</div>
+	</div>
+
+	<!-- <script type="module" src="characterSheet.js"></script> -->
+	<!-- <script type="module" src="main.js"></script> -->
+</body>
+
 </html>
