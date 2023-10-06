@@ -20,7 +20,7 @@ function storeKeyFromInput(inputID) {
   else {
     var userInput = document.getElementById(inputID).value;
   }
-  
+
   localStorage.setItem(inputID, userInput);
 }
 
@@ -70,7 +70,7 @@ class characterSheet {
   set classLevel(newLevel) {
     if (typeof newLevel === 'string') { //&& newLevel >= 1) { // change back to int
       this._classlevel = newLevel;
-      localStorage.setItem("_classlevel",newLevel);
+      localStorage.setItem("_classlevel", newLevel);
     } else {
       console.error('Invalid class level. Level must be a positive number.');
     }
@@ -83,7 +83,7 @@ class characterSheet {
   set background(newBackground) {
     if (typeof newBackground === 'string') {
       this._background = newBackground;
-      localStorage.setItem("_background",newBackground);
+      localStorage.setItem("_background", newBackground);
     } else {
       console.error('Invalid class level. Level must be a string.');
     }
@@ -96,7 +96,7 @@ class characterSheet {
   set playername(newPlayername) {
     if (typeof newPlayername === 'string') {
       this._playername = newPlayername;
-      localStorage.setItem("_playername",newPlayername);
+      localStorage.setItem("_playername", newPlayername);
     } else {
       console.error('Invalid playername. Race must be a string.');
     }
@@ -109,7 +109,7 @@ class characterSheet {
   set race(newRace) {
     if (typeof newRace === 'string') {
       this._race = newRace;
-      localStorage.setItem("_race",this._race);
+      localStorage.setItem("_race", this._race);
     } else {
       console.error('Invalid player race. Race must be a string.');
     }
@@ -122,7 +122,7 @@ class characterSheet {
   set alignment(newAlignment) {
     if (typeof newAlignment === 'string') {
       this._alignment = newAlignment;
-      localStorage.setItem("_alignment",this._alignment);
+      localStorage.setItem("_alignment", this._alignment);
     } else {
       console.error('Invalid alignment. Alignment must be a string.')
     }
@@ -135,7 +135,7 @@ class characterSheet {
   set experiencepts(newExpPts) {
     if (typeof newExpPts === 'string') {
       this._experiencepts = newExpPts;
-      localStorage.setItem("_experiencepts",this._experiencepts);
+      localStorage.setItem("_experiencepts", this._experiencepts);
     } else {
       console.error('Invalid exp pts. Pts must be a string');
     }
@@ -147,7 +147,7 @@ class characterSheet {
   }
   set strength(value) {
     this._strength = value;
-    localStorage.setItem("_strength",this._strength);
+    localStorage.setItem("_strength", this._strength);
   }
 
   // Getter and Setter for _dex
@@ -156,7 +156,7 @@ class characterSheet {
   }
   set dex(value) {
     this._dex = value;
-    localStorage.setItem("_dex",this._dex);
+    localStorage.setItem("_dex", this._dex);
   }
 
   // Getter and Setter for _constitution
@@ -165,7 +165,7 @@ class characterSheet {
   }
   set constitution(value) {
     this._constitution = value;
-    localStorage.setItem("_constitution",this._constitution);
+    localStorage.setItem("_constitution", this._constitution);
   }
 
   // Getter and Setter for _wisdom
@@ -210,12 +210,17 @@ class characterSheet {
   updateSheet() {
     console.log("Updating character sheet from localStorage")
     var keys = character.keyNames(); // grabs all keys associated with a character sheet
-    for (const key in keys) // set all attributes on the character sheet based on the keys.
-      document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
+    var unkowns = "Variabls not assigned: ";
+    for (const key in keys) { // set all attributes on the character sheet based on the keys.
+      if (localStorage.getItem(keys[key]) != null)
+        document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
+      else unkowns = unkowns + " " + keys[key] + ", ";
+    }
+    console.log(unkowns);
   }
 
-// Helper function that removes all the elements from local storage,
-// will likely be modified with different parameters later on.
+  // Helper function that removes all the elements from local storage,
+  // will likely be modified with different parameters later on.
   clearLocalSorage() {
     localStorage.clear
   }
