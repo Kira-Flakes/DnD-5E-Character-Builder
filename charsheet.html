@@ -441,6 +441,7 @@
         doc.html(htmlContent, {
           callback: pdf => {
             pdf.save('document.pdf'); // Save the PDF with a filename
+            console.log('PDF saved.')
           }
         });
       });
