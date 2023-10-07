@@ -473,7 +473,7 @@ form.charsheet main section.combat > div.deathsaves > div > div.marks div.deaths
   flex: 1 50%;
 }
 form.charsheet main section.combat > div.deathsaves > div div.bubbles {
-  flex: 1 40%;
+  flex: 1 100%;
   margin-left: 5px;
 }
 form.charsheet main section.combat > div.deathsaves > div div.bubbles input[type=checkbox] {

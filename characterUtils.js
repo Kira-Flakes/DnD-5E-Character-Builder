@@ -22,3 +22,16 @@ function roll(min, max) {
     // Take the floor to get an integer value within the range [min, max]
     return Math.floor(randomInRange);
 }
+
+// function pdfConversion() {
+//     document.getElementById('generatePdf').addEventListener('click', () => {
+//         const doc = new jsPDF();
+//         const htmlContent = document.querySelector('html');
+    
+//         doc.html(htmlContent, {
+//           callback: pdf => {
+//             pdf.save('document.pdf'); // Save the PDF with a filename
+//           }
+//         });
+//       });
+// }

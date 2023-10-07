@@ -2,6 +2,7 @@
 <!-- Naming convention: Labels begin with '_' character. 
   Corresponding User defined inputs and variables have the 
   same name without the underscore -->
+<script> src = "characterUtils.js" </script>
 <script src="characterSheet.js"></script>
 <!-- <script src="characterUtils.js"></script> -->
 <script>
@@ -425,5 +426,24 @@
       </section>
     </section>
     <script type="module" src="characterSheet.js"></script>
+     <!-- Include the jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+     <!-- Create a button or trigger to generate the PDF -->
+    <button id="generatePdf">Generate PDF</button>
+
+     <!-- JavaScript to generate the PDF -->
+    <script>
+      document.getElementById('generatePdf').addEventListener('click', () => {
+        const doc = new jsPDF();
+        const htmlContent = document.querySelector('html');
+
+        doc.html(htmlContent, {
+          callback: pdf => {
+            pdf.save('document.pdf'); // Save the PDF with a filename
+          }
+        });
+      });
+    </script>
   </main>
 </form>
