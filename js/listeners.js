@@ -5,7 +5,7 @@
 function setWelcomeInfo() {
     const welcomeTxt = document.getElementById('welcomeMessage');
 
-        fetch('helperAPI.json')
+        fetch('/guide.json')
             .then(response => response.json())
             .then(data => {
                 
@@ -29,7 +29,7 @@ function setAlignmentInfo() {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
             button.style.backgroundColor = 'red'; // Change background color, for example
-            fetch('helperAPI.json')
+            fetch('/guide.json')
                 .then(response => response.json())
                 .then(data => {
                     // Use the JSON data here
