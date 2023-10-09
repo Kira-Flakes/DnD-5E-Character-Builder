@@ -2,6 +2,21 @@
 // user actions.
 
 
+function setWelcomeInfo() {
+    const welcomeTxt = document.getElementById('welcomeMessage');
+
+        fetch('helperAPI.json')
+            .then(response => response.json())
+            .then(data => {
+                
+                welcomeTxt.innerText = data[0].gettingStarted[0].welcome;
+                
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+}
+
 function setAlignmentInfo() {
     const alignButtons = Array.from(document.getElementsByName('_alignment'));
     console.log("Alignbuttons: " + alignButtons);
