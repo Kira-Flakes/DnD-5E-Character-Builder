@@ -2,6 +2,7 @@
 <html>
 <script src="/js/characterSheet.js"></script>
 <script src="/js/listeners.js"></script>
+<script src="/js/characterUtils.js"></script>
 <script>
 
     var character; // global scope
@@ -56,6 +57,11 @@
                     <button>Exotic</button>
                     <button>Monstrous</button>
                 </div>
+                <div class="query" loadQuestion()>
+                    <p id="currQuery">
+                        blank query
+                    </p>
+                </div>
             </div>
         </div>
         <div class="column right">
@@ -68,6 +74,7 @@
         </div>
         <script>
             races();
+            loadQuestion();
         </script>
     </div>
 </body>

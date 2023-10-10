@@ -3,7 +3,10 @@
         "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy for your epic fantasy adventures."
     },
     "race": {
-        "explainer": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations."
+        "explainer": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations.",
+        "questions": {
+            "q1": "Question 1"
+        }
     },
     "background": {
         "alignment": {
