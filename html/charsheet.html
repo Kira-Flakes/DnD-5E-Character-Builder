@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <!-- Naming convention: Labels begin with '_' character. 
   Corresponding User defined inputs and variables have the 
   same name without the underscore -->
-<script src="characterSheet.js"></script>
+<script> src = "/js/characterUtils.js" </script>
+<script src="/js/characterSheet.js"></script>
 <!-- <script src="characterUtils.js"></script> -->
 <script>
 
@@ -17,9 +19,10 @@
 
 </script>
 
-<link rel="stylesheet" href="sheetstyle.css" />
+<link rel="stylesheet" href="/css/sheetstyle.css" />
 <form class="charsheet">
   <header>
+    <a href="/html/index.html">Go Back</a>
     <section class="charname">
       <label for="charname">Character Name</label>
       <label id=_name for="_charname">Placeholder</label>
@@ -60,7 +63,8 @@
           <ul>
             <li>
               <div class="score">
-                <label for="Strengthscore">Strength</label><input name="Strengthscore" id="_strength" placeholder="10" class="stat" />
+                <label for="Strengthscore">Strength</label><input name="Strengthscore" id="_strength" placeholder="10"
+                  class="stat" />
               </div>
               <div class="modifier">
                 <input name="Strengthmod" placeholder="+0" class="statmod" />
@@ -77,8 +81,8 @@
             </li>
             <li>
               <div class="score">
-                <label for="Constitutionscore">Constitution</label><input name="Constitutionscore" id="_constitution" placeholder="10"
-                  class="stat" />
+                <label for="Constitutionscore">Constitution</label><input name="Constitutionscore" id="_constitution"
+                  placeholder="10" class="stat" />
               </div>
               <div class="modifier">
                 <input name="Constitutionmod" placeholder="+0" class="statmod" />
@@ -86,7 +90,8 @@
             </li>
             <li>
               <div class="score">
-                <label for="Wisdomscore">Wisdom</label><input name="Wisdomscore" placeholder="10" id="_wisdom" class="stat" />
+                <label for="Wisdomscore">Wisdom</label><input name="Wisdomscore" placeholder="10" id="_wisdom"
+                  class="stat" />
               </div>
               <div class="modifier">
                 <input name="Wisdommod" placeholder="+0" />
@@ -94,8 +99,8 @@
             </li>
             <li>
               <div class="score">
-                <label for="Intelligencescore">Intelligence</label><input name="Intelligencescore" id="_intellegence" placeholder="10"
-                  class="stat" />
+                <label for="Intelligencescore">Intelligence</label><input name="Intelligencescore" id="_intellegence"
+                  placeholder="10" class="stat" />
               </div>
               <div class="modifier">
                 <input name="Intelligencemod" placeholder="+0" class="statmod" />
@@ -103,7 +108,8 @@
             </li>
             <li>
               <div class="score">
-                <label for="Charismascore">Charisma</label><input name="Charismascore" id="_charisma" placeholder="10" class="stat" />
+                <label for="Charismascore">Charisma</label><input name="Charismascore" id="_charisma" placeholder="10"
+                  class="stat" />
               </div>
               <div class="modifier">
                 <input name="Charismamod" placeholder="+0" class="statmod" />
@@ -419,6 +425,15 @@
         </div>
       </section>
     </section>
-    <script type="module" src="characterSheet.js"></script>
+    <script type="module" src="/js/characterSheet.js"></script>
+    <!-- Include the jsPDF library -->
+    <!-- Create a button or trigger to generate the PDF -->
+    <button id="generatePdf">Generate PDF</button>
+
+    <!-- JavaScript to generate the PDF -->
+    <script>
+      window.jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF();
+    </script>
   </main>
 </form>
