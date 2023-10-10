@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <script src="/js/characterSheet.js"></script>
+<script src="/js/listeners.js"></script>
 <script>
 
     var character; // global scope
@@ -47,7 +48,7 @@
     <!--Container for 3-column layout-->
     <div class="container">
         <div class="column left">
-            <p>Race...</p>
+            <p id="raceExplainer" >Race...</p>
             <div class="question">
                 <p>What type of race is your character?</p>
                 <div class="container">
@@ -65,6 +66,9 @@
                 Character Sheet
             </button>
         </div>
+        <script>
+            races();
+        </script>
     </div>
 </body>
 

@@ -1,29 +1,24 @@
-[
-    {
-        "gettingStarted": [
-            {
-                "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy for your epic fantasy adventures."
+{
+    "gettingStarted": {
+        "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy for your epic fantasy adventures."
+    },
+    "race": {
+        "explainer": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations."
+    },
+    "background": {
+        "alignment": {
+            "description": "Alignment guides a character's decisions and role-playing, influencing their behavior and interactions within the game world. It's a tool for players to define their character's beliefs and values, helping to shape their role-playing experience and relationships with other characters and NPCs. However, alignment is flexible and may evolve as the character's story unfolds, allowing for dynamic character development.",
+            "options": {
+                "Lawful Good": "Principled and compassionate, guided by a strict moral code for the greater good.",
+                "Neutral Good": "Altruistic and kind, valuing goodness and empathy without rigid rules.",
+                "Chaotic Good": "Rebellious champions of freedom and kindness, often defying authority.",
+                "Lawful Neutral": "Upholds order and society, focusing on rules and structure over morality.",
+                "True Neutral": "Balanced and impartial, avoiding extremes and embracing nature's balance.",
+                "Chaotic Neutral": "Unpredictable and self-interested, cherishing personal freedom above all.",
+                "Lawful Evil": "Ruthlessly ambitious, using structure and laws to achieve dark goals.",
+                "Neutral Evil": "Self-serving and ruthless, driven by personal gain with no moral qualms.",
+                "Chaotic Evil": "Chaotic and destructive, driven by violence and chaos for its own sake."
             }
-        ],
-        "background": [
-            {
-                "alignment": [
-                    {
-                        "description": "Alignment guides a character's decisions and role-playing, influencing their behavior and interactions within the game world. It's a tool for players to define their character's beliefs and values, helping to shape their role-playing experience and relationships with other characters and NPCs. However, alignment is flexible and may evolve as the character's story unfolds, allowing for dynamic character development.",
-                        "options": {
-                            "Lawful Good": "Principled and compassionate, guided by a strict moral code for the greater good.",
-                            "Neutral Good": "Altruistic and kind, valuing goodness and empathy without rigid rules.",
-                            "Chaotic Good": "Rebellious champions of freedom and kindness, often defying authority.",
-                            "Lawful Neutral": "Upholds order and society, focusing on rules and structure over morality.",
-                            "True Neutral": "Balanced and impartial, avoiding extremes and embracing nature's balance.",
-                            "Chaotic Neutral": "Unpredictable and self-interested, cherishing personal freedom above all.",
-                            "Lawful Evil": "Ruthlessly ambitious, using structure and laws to achieve dark goals.",
-                            "Neutral Evil": "Self-serving and ruthless, driven by personal gain with no moral qualms.",
-                            "Chaotic Evil": "Chaotic and destructive, driven by violence and chaos for its own sake."
-                        }
-                    }
-                ]
-            }
-        ]
+        }
     }
-]
+}
