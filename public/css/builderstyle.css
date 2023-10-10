@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css?family=MedievalSharp&display=swap');
+
+:root {
+    --left-col-width: 100px;
+}
+
+body {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #171717;
+    font-size: 1.5vw;
+    color:rgb(255, 255, 255);
+}
+
+a {
+    color:rgb(255, 255, 255);
+    text-decoration:none;
+}
+
+p {
+    color: #ffd35c;
+}
+
+/* Wiz-Rad at top of page */
+h1 {
+    font-family:'OldeEnglish';
+    font-size: 50px;
+    color: rgb(250, 135, 135); 
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+/* Use this for every question */
+.question {
+    margin-bottom: 50px;
+}
+
+/* For p tags inside questions */
+.question p {
+    color: rgb(255, 130, 130);
+}
+
+/* For submit buttons only */
+button[type=submit] {
+    background-color: rgb(230, 159, 118);
+}
+
+
+/* 3-Column layout using the Flexbox container*/
+/* https://youtu.be/fYq5PXgSsbE?si=N6nJtT9u_ge_fNvo */
+.container {
+    display: flex;
+}
+
+/* For input tags of the button type inside container,
+   and normal buttons */
+.container input[type=button], button {
+    flex: 1; /* stretch out horizontally to occupy negative space */
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Change all flexbox columns/items */
+.column {
+    margin: 4px;
+    margin-top: 0px;
+    min-width: 15%;
+    height: 1000px;
+    border-radius: 10px;
+}
+
+/* Left column for questions */
+.left {
+    flex-grow: 1;
+    padding: 8px;
+    /* margin-left: 17vw; */
+    background-color: rgb(39, 39, 39);
+
+    
+}
+
+/* Right column for info */
+.right {
+    flex: 1;
+    min-width: 30%;
+    padding: 10px;
+    background-color: rgb(39, 39, 39);
+}
+
+/* For p tags inside right column */
+.right p {
+    color: rgb(255, 255, 255);
+}
+
+
+/* Tabs inside of left column */
+.tab {
+    flex: 1;
+    justify-content: left;
+    font-size: 1.5vw;
+    background-color: rgb(79, 47, 47);
+    height: 37px;
+    border: 4px solid #1f1f1f;
+    margin: 0px;
+    width: 80px;
+    color: aliceblue;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    min-width: 100px;
+    max-width: auto;
+}
+
+.tabs {
+    max-width: 65%;
+}
+
+
+.current {
+    background-color: rgb(119, 45, 45);
+}

@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+<head>
+	<script src="/js/characterSheet.js"></script>
+	<script src="/js/listeners.js"></script>
+	<!-- <script>
+		var character; // global scope
+		// Initialize the character object, all remaining script calls should reference this object.
+		window.addEventListener('load', function () {
+			character = new characterSheet();
+			character.updateSheet(); // local storage attributes fill the sheet
+		}); // end listener
+		setAlignmentInfo();
+	</script> -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Our first page">
+	<meta name="keywords" content="html tutorial template">
+	<link rel="stylesheet" href="../css/builderstyle.css">
+
+	<title>Background</title>
+
+</head>
+
+<body>
+	<h1>Wiz-Rad!</h1>
+	<div class="tabs">
+		<div style="flex-direction: row" ; class="container" ;>
+			<div class="tab">
+				<a href="./gettingstarted.html">Getting Started</a>
+			</div>
+			<div class="tab current">
+				<a href="./background.html">Background</a>
+			</div>
+			<div class="tab">
+				<a href="./race.html">Race</a>
+			</div>
+			<div class="tab">
+				<a href="./class.html">Class</a>
+			</div>
+			<div class="tab">
+				<a href="./equipment.html">Equipment</a>
+			</div>
+		</div>
+	</div>
+	<!--Container for 3-column layout-->
+	<div class="container">
+		<div class="column left">
+			<p>Questions go here...</p>
+			<div class="question">
+				<p>Enter your character's whole name.</p>
+
+				<input id="_name" type="text" />
+				<button onclick="storeKeyFromInput('_name')" type="submit">Submit</button>
+
+			</div>
+			<div class="question">
+				<p>What kind of dayjob does your character work? (Click buttons for descriptions)</p>
+				<input id="_bg1" type="radio" name="_background" value="Acolyte">
+				<label for="_bg1">Acolyte</label>
+				<input id="_bg2" type="radio" name="_background" value="Charlatan">
+				<label for="_bg2">Charlatan</label>
+				<input id="_bg3" type="radio" name="_background" value="Criminal">
+				<label for="_bg3">Criminal</label>
+				<input id="_bg4" type="radio" name="_background" value="Entertainer">
+				<label for="_bg4">Entertainer</label>
+				<input id="_bg5" type="radio" name="_background" value="Folk Hero">
+				<label for="_bg5">Folk Hero</label>
+				<input id="_bg6" type="radio" name="_background" value="Guild Artisan">
+				<label for="_bg6">Guild Artisan</label>
+				<input id="_bg7" type="radio" name="_background" value="Hermit">
+				<label for="_bg7">Hermit</label>
+				<input id="_bg8" type="radio" name="_background" value="Outlander">
+				<label for="_bg8">Outlander</label>
+				<input id="_bg9" type="radio" name="_background" value="Noble">
+				<label for="_bg9">Noble</label>
+				<input id="_bg10" type="radio" name="_background" value="Sage">
+				<label for="_bg10">Sage</label>
+				<input id="_bg11" type="radio" name="_background" value="Sailor">
+				<label for="_bg11">Sailor</label>
+				<input id="_bg12" type="radio" name="_background" value="Soldier">
+				<label for="_bg12">Soldier</label>
+				<input id="_bg13" type="radio" name="_background" value="Urchin">
+				<label for="_bg13">Urchin</label>
+				</form>
+				<button onclick="storeKeyFromInput('_background')" type="submit">Submit</button>
+
+				<!-- Commented out for now. Currently using the above backrounds
+						temporarily until these background category buttons work
+
+
+					LOOK AT NAME ATTRIBUTES FOR THESE BUTTONS. MIGHT BE BETTER THAN RADIO BUTTONS
+					NVM TRY RADIO BUTTONS WITHOUT THE CIRCLE
+
+				<div class="container">
+					<button name="_background">Clerical</button>
+					<button name="_background">Blue-collar</button>
+					<button name="_background">Student</button>
+					<button name="_background">Crime</button>
+					<button name="_background">Soldier</button>
+					<button name="_background">Law Enforcement</button>
+					<button name="_background">Scientist</button>
+					<button name="_background">Religious</button>
+					<button name="_background">Communications</button>
+					<button name="_background">Business</button>
+					<button name="_background">Food service</button>
+					<button name="_background">Retail</button>
+					<button name="_background">Adventurer</button>
+				</div>
+				-->
+			</div>
+			<div class="question">
+				<p>Choose alignment.</p>
+				<div class="container">
+					<button name="_alignment"  value="Lawful Good" onclick="character.setAlignment(value)">Lawful
+						Good</button>
+					<button name="_alignment" value="Neutral Good" onclick="character.setAlignment(value)">Neutral
+						Good</button>
+					<button name="_alignment" value="Chaotic Good" onclick="character.setAlignment(value)">Chaotic
+						Good</button>
+				</div>
+				<div class="container">
+					<button name="_alignment" value="Lawful Neutral" onclick="character.setAlignment(value)">Lawful
+						Neutral</button>
+					<button name="_alignment" value="True Neutral" onclick="character.setAlignment(value)">True
+						Neutral</button>
+					<button name="_alignment" value="Chaotic Neutral" onclick="character.setAlignment(value)">Chaotic
+						Neutral</button>
+				</div>
+				<div class="container">
+					<button name="_alignment" value="Lawful Evil" onclick="character.setAlignment(value)">Lawful
+						Evil</button>
+					<button name="_alignment" value="Neutral Evil" onclick="character.setAlignment(value)">Neutral
+						Evil</button>
+					<button name="_alignment" value="Chaotic Evil" onclick="character.setAlignment(value)">Chaotic
+						Evil</button>
+				</div>
+				<!-- <button onclick="storeKeyFromInput('_alignment')" type="submit">Submit</button> -->
+				<script>
+					var character; // global scope
+					// Initialize the character object, all remaining script calls should reference this object.
+					window.addEventListener('load', function () {
+						character = new characterSheet();
+						character.updateSheet(); // local storage attributes fill the sheet
+					}); // end listener
+					setAlignmentInfo();
+				</script>
+			</div>
+		</div>
+
+		<div class="column right">
+			<p>
+				List of backgrounds will show up here. Expandable descriptions
+				for each background perhaps?
+			</p>
+			<p id = alignmentSelection>
+				
+			</p>
+			<button onclick="window.location.href = '/html/charsheet.html';">
+				Character Sheet
+			</button>
+		</div>
+	</div>
+	<!-- <script src="characterSheet.js"></script> -->
+	<!-- <script src="main.js"></script> -->
+
+</body>
+
+</html>
