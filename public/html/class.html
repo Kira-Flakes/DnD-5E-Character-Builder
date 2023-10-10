@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<script src="characterSheet.js"></script>
+<script src="/js/characterSheet.js"></script>
 <script>
 
     var character; // global scope
@@ -17,39 +17,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Our first page">
     <meta name="keywords" content="html tutorial template">
-    <link rel="stylesheet" href="builderstyle.css">
+    <link rel="stylesheet" href="../css/builderstyle.css">
 
     <title>Class</title>
 </head>
 
 <body>
     <h1>Wiz-Rad!</h1>
-    <button onclick="window.location.href = 'charsheet.html';">
-        Goto Character sheet!
-    </button>
+    
+    <div class="tabs">
+        <div style="flex-direction: row" ; class="container" ;>
+            <div class="tab">
+                <a href="./gettingstarted.html">Getting Started</a>
+            </div>
+            <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
+                <a href="./race.html">Race</a>
+            </div>
+            <div class="tab current">
+                <a href="./class.html">Class</a>
+            </div>
+            <div class="tab">
+                <a href="./equipment.html">Equipment</a>
+            </div>
+        </div>
+    </div>
 
     <!--Container for 3-column layout-->
     <div class="container">
         <div class="column left">
-            <div style="flex-direction: column" ; class="container" ;>
-                <div class="tab">
-                    <a href="./gettingstarted.html">Getting Started</a>
-                </div>
-                <div class="tab">
-                    <a href="./background.html">Background</a>
-                </div>
-                <div class="tab">
-                    <a href="./race.html">Race</a>
-                </div>
-                <div class="tab">
-                    <a href="./class.html">-->Class<--</a>
-                </div>
-                <div class="tab">
-                    <a href="./equipment.html">Equipment</a>
-                </div>
-            </div>
-        </div>
-        <div class="column middle">
             <p>Class...</p>
 
             <div class="question">
@@ -92,7 +90,9 @@
         </div>
         <div class="column right">
             <p>Helpful information goes here...</p>
-
+            <button onclick="window.location.href = 'charsheet.html';">
+                Character Sheet
+            </button>
         </div>
     </div>
 </body>
