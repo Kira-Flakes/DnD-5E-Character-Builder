@@ -1,5 +1,16 @@
 <!doctype html>
 <html>
+<script src="characterSheet.js"></script>
+<script>
+
+    var character; // global scope
+
+    // Initialize the character object, all remaining script calls should reference this object.
+    window.addEventListener('load', function () {
+        character = new characterSheet();
+        character.updateSheet(); // local storage attributes fill the sheet
+    }); // end listener
+</script>
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +19,7 @@
     <meta name="keywords" content="html tutorial template">
     <link rel="stylesheet" href="builderstyle.css">
 
-    <title>Background</title>
+    <title>Race</title>
 </head>
 
 <body>
@@ -28,7 +39,7 @@
                     <a href="./background.html">Background</a>
                 </div>
                 <div class="tab">
-                    <a href="./race.html">Race</a>
+                    <a href="./race.html">-->Race<--</a>
                 </div>
                 <div class="tab">
                     <a href="./class.html">Class</a>
@@ -39,31 +50,22 @@
             </div>
         </div>
         <div class="column middle">
-            <p>Questions go here...</p>
-            <label>Enter your character name:</label>
-            <input id="charnamein" type="text" placeholder="" />
-            <!-- <button id="charnamesubmit">Submit</button> -->
-            <!-- <label id="outputLabel"></label> -->
-
-            <!-- <script>
-                const inputElement = document.getElementById('charnamein');
-                const submitButton = document.getElementById('charnamesubmit');
-                const outputLabel = document.getElementById('outputLabel');
-
-                submitButton.addEventListener('click', function () {
-                    console.log("Test");
-                    const enteredText = inputElement.value;
-                    outputLabel.textContent = enteredText;
-                    
-                });
-            </script> -->
+            <p>Race...</p>
+            <div class="question">
+                <p>What type of race is your character?</p>
+                <div class="container">
+                    <button>Human-like</button>
+                    <button>Exotic</button>
+                    <button>Monstrous</button>
+                </div>
+            </div>
         </div>
         <div class="column right">
-            <p>Helpful information goes here...</p>
+            <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+            <p>Exotic: Too many to list.</p>
+            <p>Monstrous: Too many to list.</p>
         </div>
     </div>
-    <script type="module" src="characterSheet.js"></script>
-    <script type="module" src="main.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<script src="/js/characterSheet.js"></script>
+<script>
+
+    var character; // global scope
+
+    // Initialize the character object, all remaining script calls should reference this object.
+    window.addEventListener('load', function () {
+        character = new characterSheet();
+        character.updateSheet(); // local storage attributes fill the sheet
+    }); // end listener
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="../css/builderstyle.css">
+
+    <title>Equipment</title>
+</head>
+
+<body>
+    <h1>Wiz-Rad!</h1>
+    <div class="tabs">
+        <div style="flex-direction: row" ; class="container" ;>
+            <div class="tab">
+                <a href="./gettingstarted.html">Getting Started</a>
+            </div>
+            <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
+                <a href="./race.html">Race</a>
+            </div>
+            <div class="tab">
+                <a href="./class.html">Class</a>
+            </div>
+            <div class="tab current">
+                <a href="./equipment.html">Equipment</a>
+            </div>
+        </div>
+    </div>
+
+    <!--Container for 3-column layout-->
+    <div class="container">
+        <div class="column left">
+            <p>Equipment...</p>
+            <div class="question">
+                <p>What common items do you want your character to bring?</p>
+                <div class="container">
+                    <button>Camping gear</button>
+                    <button>Heavy tools</button>
+                    <button>Writing equipment</button>
+                    <button>Fishing gear</button>
+                    <button>...</button>
+                </div>
+            </div>
+            <div class="question">
+                <p>What clothes do you want your character to wear?</p>
+                <div class="container">
+                    <button>Common clothes</button>
+                    <button>Costume</button>
+                    <button>Fine clothes</button>
+                    <button>Robes</button>
+                    <button>Traveler's clothes</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>What magical items do you want your charcter to bring?</p>
+                <div class="container">
+                    <button>Crystal</button>
+                    <button>Orb</button>
+                    <button>Rod</button>
+                    <button>Staff</button>
+                    <button>Wand</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>Any religious keepsakes?</p>
+                <div class="container">
+                    <button>Amulet</button>
+                    <button>Emblem</button>
+                    <button>Reliquary</button>
+                </div>
+            </div>
+        </div>
+        <div class="column right">
+            <p>Helpful information goes here...</p>
+            <button onclick="window.location.href = '/html/charsheet.html';">
+                Character Sheet
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

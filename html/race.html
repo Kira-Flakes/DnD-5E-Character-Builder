@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<script src="/js/characterSheet.js"></script>
+<script src="/js/listeners.js"></script>
+<script src="/js/characterUtils.js"></script>
+<script>
+
+    var character; // global scope
+
+    // Initialize the character object, all remaining script calls should reference this object.
+    window.addEventListener('load', function () {
+        character = new characterSheet();
+        character.updateSheet(); // local storage attributes fill the sheet
+    }); // end listener
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="../css/builderstyle.css">
+
+    <title>Race</title>
+</head>
+
+<body>
+    <h1>Wiz-Rad!</h1>
+    <div class="tabs">
+        <div style="flex-direction: row" ; class="container" ;>
+            <div class="tab">
+                <a href="./gettingstarted.html">Getting Started</a>
+            </div>
+            <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab current">
+                <a href="./race.html">Race</a>
+            </div>
+            <div class="tab">
+                <a href="./class.html">Class</a>
+            </div>
+            <div class="tab">
+                <a href="./equipment.html">Equipment</a>
+            </div>
+        </div>
+    </div>
+
+    <!--Container for 3-column layout-->
+    <div class="container">
+        <div class="column left">
+            <p id="raceExplainer" >Race...</p>
+            <div class="question">
+                <p>What type of race is your character?</p>
+                <div class="container">
+                    <button>Human-like</button>
+                    <button>Exotic</button>
+                    <button>Monstrous</button>
+                </div>
+                <div class="query" loadQuestion()>
+                    <p id="currQuery">
+                        blank query
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="column right">
+            <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+            <p>Exotic: Too many to list.</p>
+            <p>Monstrous: Too many to list.</p>
+            <button onclick="window.location.href = 'charsheet.html';">
+                Character Sheet
+            </button>
+        </div>
+        <script>
+            races();
+            loadQuestion();
+        </script>
+    </div>
+</body>
+
+</html>
