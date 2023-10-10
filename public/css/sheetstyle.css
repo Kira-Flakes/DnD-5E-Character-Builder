@@ -265,10 +265,10 @@ form.charsheet main > section section.attributes div.attr-applications div.list-
 }
 form.charsheet main > section section.attributes div.attr-applications div.list-section ul li input[type=checkbox] {
   appearance: none;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 8px;
   order: 1;
 }
 form.charsheet main > section section.attributes div.attr-applications div.list-section ul li input[type=checkbox]:checked {
@@ -473,15 +473,15 @@ form.charsheet main section.combat > div.deathsaves > div > div.marks div.deaths
   flex: 1 50%;
 }
 form.charsheet main section.combat > div.deathsaves > div div.bubbles {
-  flex: 1 40%;
+  flex: 1 100%;
   margin-left: 5px;
 }
 form.charsheet main section.combat > div.deathsaves > div div.bubbles input[type=checkbox] {
   appearance: none;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 form.charsheet main section.combat > div.deathsaves > div div.bubbles input[type=checkbox]:checked {
   background-color: black;

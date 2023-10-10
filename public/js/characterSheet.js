@@ -90,11 +90,11 @@ class characterSheet {
     }
   }
 
-  get playername() {
+  getPlayername() {
     return this._playername;
   }
 
-  set playername(newPlayername) {
+  setPlayername(newPlayername) {
     if (typeof newPlayername === 'string') {
       this._playername = newPlayername;
       localStorage.setItem("_playername", newPlayername);
@@ -103,11 +103,11 @@ class characterSheet {
     }
   }
 
-  get race() {
+  getRace() {
     return characterSheet._race;
   }
 
-  set race(newRace) {
+  setRace(newRace) {
     if (typeof newRace === 'string') {
       this._race = newRace;
       localStorage.setItem("_race", this._race);
@@ -116,11 +116,11 @@ class characterSheet {
     }
   }
 
-  get alignment() {
+  getAlignment() {
     return this._alignment;
   }
 
-  set alignment(newAlignment) {
+  setAlignment(newAlignment) {
     if (typeof newAlignment === 'string') {
       this._alignment = newAlignment;
       localStorage.setItem("_alignment", this._alignment);
@@ -129,11 +129,11 @@ class characterSheet {
     }
   }
 
-  get experiencepts() {
+  getExperiencePts() {
     return this._experiencepts;
   }
 
-  set experiencepts(newExpPts) {
+  setExperiencePts(newExpPts) {
     if (typeof newExpPts === 'string') {
       this._experiencepts = newExpPts;
       localStorage.setItem("_experiencepts", this._experiencepts);
@@ -143,10 +143,10 @@ class characterSheet {
   }
 
   // Getter and Setter for _strength
-  get strength() {
+  getStrength() {
     return this._strength;
   }
-  set strength(value) {
+  setStrength(value) {
     this._strength = value;
     localStorage.setItem("_strength", this._strength);
   }
