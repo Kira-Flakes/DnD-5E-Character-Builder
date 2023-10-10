@@ -3,8 +3,8 @@
 // based on tick boxes the user has selected, determines the most likely
 //class the player would like to role-play under.
 // input: bitmap of the 
-import './api.js';
-let api = new API;
+// import './api.js';
+// let api = new API;
 
 function classSelector(preferences) {
   classes = API(classes, "");
@@ -21,4 +21,18 @@ function roll(min, max) {
 
   // Take the floor to get an integer value within the range [min, max]
   return Math.floor(randomInRange);
+}
+
+function loadQuestion() {
+  const cq = document.getElementById('currQuery');
+  fetch('/guide.json')
+    .then(response => response.json())
+    .then(data => {
+
+      cq.innerText = data.race.questions.q1;
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
