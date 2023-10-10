@@ -5,12 +5,16 @@
 }
 
 body {
-    font-family:'MedievalSharp';
-    background-color:#1f1f1f;
-    font-size: 2vw;
-    color:aliceblue;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #171717;
+    font-size: 1.5vw;
+    color:rgb(255, 255, 255);
 }
 
+a {
+    color:rgb(255, 255, 255);
+    text-decoration:none;
+}
 
 p {
     color: #ffd35c;
@@ -20,9 +24,9 @@ p {
 h1 {
     font-family:'OldeEnglish';
     font-size: 50px;
-    color: lightskyblue; 
+    color: rgb(250, 135, 135); 
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 35px;
 }
 
 /* Use this for every question */
@@ -32,11 +36,12 @@ h1 {
 
 /* For p tags inside questions */
 .question p {
-    color: mediumturquoise;
+    color: rgb(255, 130, 130);
 }
 
+/* For submit buttons only */
 button[type=submit] {
-    background-color: darkorange;
+    background-color: rgb(230, 159, 118);
 }
 
 
@@ -52,7 +57,7 @@ button[type=submit] {
     flex: 1; /* stretch out horizontally to occupy negative space */
     margin-right: 10px;
     margin-bottom: 10px;
-    height: 20px;
+    height: 40px;
     border-radius: 6px;
     text-align: center;
 }
@@ -66,12 +71,12 @@ button[type=submit] {
     border-radius: 10px;
 }
 
-/* Middle column for body */
+/* Left column for questions */
 .left {
     flex-grow: 1;
     padding: 8px;
     /* margin-left: 17vw; */
-    background-color: #363a40;
+    background-color: rgb(39, 39, 39);
 
     
 }
@@ -81,23 +86,25 @@ button[type=submit] {
     flex: 1;
     min-width: 30%;
     padding: 10px;
-    background-color: darkslategray;
+    background-color: rgb(39, 39, 39);
 }
 
 /* For p tags inside right column */
 .right p {
-    color: aliceblue;
+    color: rgb(255, 255, 255);
 }
 
 
 /* Tabs inside of left column */
 .tab {
     flex: 1;
-    font-size: 2vw;
-    background-color: darkslategray;
-    height: 15px;
+    justify-content: left;
+    font-size: 1.5vw;
+    background-color: rgb(79, 47, 47);
+    height: 37px;
     border: 4px solid #1f1f1f;
     margin: 0px;
+    width: 80px;
     color: aliceblue;
     text-align: center;
     padding-top: 10px;
@@ -107,16 +114,11 @@ button[type=submit] {
     max-width: auto;
 }
 
-.currentTab {
-    flex: 1;
-    background-color: rgb(45, 119, 119);
-    height: 15px;
-    border: 4px solid #1f1f1f;
-    margin: 0px;
-    color: aliceblue;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 10px;
-    min-width: 100px;
+.tabs {
+    max-width: 65%;
+}
+
+
+.current {
+    background-color: rgb(119, 45, 45);
 }
