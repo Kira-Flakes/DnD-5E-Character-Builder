@@ -24,32 +24,30 @@
 
 <body>
     <h1>Wiz-Rad!</h1>
-    <button onclick="window.location.href = 'charsheet.html';">
-        Goto Character sheet!
-    </button>
+    
+    <div class="tabs">
+        <div style="flex-direction: row" ; class="container" ;>
+            <div class="tab">
+                <a href="./gettingstarted.html">Getting Started</a>
+            </div>
+            <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
+                <a href="./race.html">Race</a>
+            </div>
+            <div class="currentTab">
+                <a href="./class.html">Class</a>
+            </div>
+            <div class="tab">
+                <a href="./equipment.html">Equipment</a>
+            </div>
+        </div>
+    </div>
 
     <!--Container for 3-column layout-->
     <div class="container">
         <div class="column left">
-            <div style="flex-direction: column" ; class="container" ;>
-                <div class="tab">
-                    <a href="./gettingstarted.html">Getting Started</a>
-                </div>
-                <div class="tab">
-                    <a href="./background.html">Background</a>
-                </div>
-                <div class="tab">
-                    <a href="./race.html">Race</a>
-                </div>
-                <div class="tab">
-                    <a href="./class.html">-->Class<--</a>
-                </div>
-                <div class="tab">
-                    <a href="./equipment.html">Equipment</a>
-                </div>
-            </div>
-        </div>
-        <div class="column middle">
             <p>Class...</p>
 
             <div class="question">
@@ -92,7 +90,9 @@
         </div>
         <div class="column right">
             <p>Helpful information goes here...</p>
-
+            <button onclick="window.location.href = 'charsheet.html';">
+                Character Sheet
+            </button>
         </div>
     </div>
 </body>
