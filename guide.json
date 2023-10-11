@@ -5,7 +5,15 @@
     "race": {
         "explainer": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations.",
         "questions": {
-            "q1": "Question 1"
+            "q1": {
+                "q": "Are you more inclined toward a natural or civilized way of life?",
+                "ans": {
+                    "yes": "",
+                    "no": ""
+                }
+            },
+            "q2": "Do you prefer a short and sturdy physique or a taller and more agile one?",
+            "q3": "Are you drawn to magical abilities or a strong connection to nature?"
         }
     },
     "background": {
