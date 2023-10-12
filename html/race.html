@@ -3,6 +3,7 @@
 <script src="/js/characterSheet.js"></script>
 <script src="/js/listeners.js"></script>
 <script src="/js/characterUtils.js"></script>
+<script src="/js/main.js"></script>
 <script>
 
     var character; // global scope
@@ -46,35 +47,39 @@
         </div>
     </div>
 
-    <!--Container for 3-column layout-->
+    <!--Container for 2-column layout-->
     <div class="container">
         <div class="column left">
-            <p id="raceExplainer" >Race...</p>
-            <div class="question">
-                <p>What type of race is your character?</p>
-                <div class="container">
-                    <button>Human-like</button>
-                    <button>Exotic</button>
-                    <button>Monstrous</button>
-                </div>
-                <div class="query" loadQuestion()>
-                    <p id="currQuery">
-                        blank query
-                    </p>
-                </div>
+            <p id="title">Race</p>
+            <!-- Add a brief race explanation -->
+            <div class="question" id="question">
+                <p id="prompt">prompt</p>
+                <div id="answers"></div>
+            </div>
+            <div class="response" id="response">
+                <p id="responseTitle"></p>
             </div>
         </div>
+
         <div class="column right">
-            <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
-            <p>Exotic: Too many to list.</p>
-            <p>Monstrous: Too many to list.</p>
-            <button onclick="window.location.href = 'charsheet.html';">
-                Character Sheet
-            </button>
+            <!-- <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+        <p>Exotic: Too many to list.</p>
+        <p>Monstrous: Too many to list.</p> -->
+            <div>
+                <p id="helperInfo">help goes here</p>
+            </div>
+
+            <footer>
+                <button onclick="window.location.href = 'charsheet.html';">
+                    Character Sheet
+                </button>
+            </footer>
         </div>
         <script>
-            races();
-            loadQuestion();
+            // races();
+            init()
+            loadQuestion("race");
+
         </script>
     </div>
 </body>
