@@ -22,17 +22,3 @@ function roll(min, max) {
   // Take the floor to get an integer value within the range [min, max]
   return Math.floor(randomInRange);
 }
-
-// function loadQuestion() {
-//   const cq = document.getElementById('currQuery');
-//   fetch('/guide.json')
-//     .then(response => response.json())
-//     .then(data => {
-
-//       cq.innerText = data.race.questions.q1;
-
-//     })
-//     .catch(error => {
-//       console.error('Error:', error);
-//     });
-// }
