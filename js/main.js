@@ -1,5 +1,6 @@
 // Calling this function will reset every aspect of the creator, as if a new
-// User was creating their character
+// User was creating their character. Useful for testing, but should not be called as much in
+// the final implementation
 function init() {
 
     // initialize localStorage values

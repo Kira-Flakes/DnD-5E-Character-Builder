@@ -4,7 +4,6 @@
 // Sets the message for the user to be greeted with
 function setWelcomeInfo() {
     const welcomeTxt = document.getElementById('welcomeMessage');
-
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -73,74 +72,73 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// Recursively calls all question in the json data.
+// Once the final question is answered (using button listeners),
+// the response operation occurs if it exists. (for now only "set" operations are handled, 
+// but more operations can be added easily).
 function loadQuestion(page) {
 
-    const question = document.getElementById('prompt');
-    const tempButtonsId = []
-    // const state
-    q = 'q' + localStorage.getItem(page + 'State');
-    console.log("Q: " + q)
+    const question = document.getElementById('prompt'); // get the question div from html
+    const tempButtonsId = [] // all buttons go here so they can be deleted once the question is done.
+    q = 'q' + localStorage.getItem(page + 'State'); // create the string that accesses the race state (what question the user is on) from localstorage
 
-
-    fetch('/guide.json')
+    fetch('/guide.json') // open json data
         .then(response => response.json())
         .then(data => {
-            const currentPage = data[page];
-            title.innerText = capitalize(page);
-            const questionJSON = currentPage.questions[q];
-            try {
+            const currentPage = data[page]; // seek data from the current page (race, class, etc)
+            // title.innerText = capitalize(page); 
+
+            const questionJSON = currentPage.questions[q]; // get question based on state
+            try {  // try to load the question
                 question.innerText = questionJSON.q;
             }
-            catch {
+            catch { // question is null, we are at the end of the sequence
                 console.log("End of questions for this section")
-                const qDiv = document.getElementById('question');
+                const qDiv = document.getElementById('question'); // get question div
 
-                // Remove all child elements within the div
+                // Remove all child elements within the div, since we are done with the questions
                 while (qDiv.firstChild) {
                     qDiv.removeChild(qDiv.firstChild);
                 }
-                console.log("Type: ", currentPage.questions.response.type)
-                loadResponse(page, currentPage.questions.response.type)
+                loadResponse(page, currentPage.questions.response.type) // move on to the response to the questions, if it exists
                 return
             }
-            answers = currentPage.questions[q].ans
-            console.log(answers)
+            answers = currentPage.questions[q].ans // get array of possible answers to the question
 
-            // create buttons for each answer, assigning the value of the button the 
-            // subset of characters it will offer the player, depending on the answer.
+            // create buttons for each answer, assigning the value of the buttons the 
+            // subset of options each answer returns (example: player wants short race, 
+            // so the button "short" is assigned the value [dwarf, halfling etc]. This is from the json data)
             for (let ans in answers) {
+                // create new button based on the answer
                 var answerButton = document.createElement("button");
                 answerButton.setAttribute('id', ans)
                 var buttonText = document.createTextNode(ans);
                 answerButton.appendChild(buttonText);
-                document.getElementById('answers').appendChild(answerButton);
+
+                document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-                console.log("ans " + answers[ans])
-                tempButtonsId.push(ans)
+
+                tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
-                    // console.log("Set from answers: " + this.getAttribute('value'))
-                    intersect = setFunctions("intersection", this.value, currentSet(page))
-                    // console.log("Clicked " + this.innerText + " set is " + intersect)
+                    intersect = setFunctions("intersection", this.value, currentSet(page)) // perform set interesciton so the players choices narrow
                     localStorage.setItem('$' + page, intersect)
-                    // console.log("Temp buttons: "+tempButtonsId[1])
-                    alterState(page, 1);
-                    for (btn in tempButtonsId) {
-                        console.log("BTN:" + tempButtonsId[btn])
+                    alterState(page, 1); // add one to the state, so we go to the next question
+                    for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
-                    loadQuestion(page)
+                    loadQuestion(page) // load the next question
                 }; // set actions for the buttons
-                loadHelperInfo(answerButton,answers[ans])
+                loadHelperInfo(answerButton,answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
         })
         .catch(error => {
             console.error('Error:', error);
         });
-
-    // document.getElementById('prompt')
 }
 
+// Function uses the json data attached to each question, specifically the helpful information.
+// loads it to the right column of the page when the user hovers over the option.
 function loadHelperInfo(button, jsonData) {
     button.addEventListener('mouseenter', function () {
         // Code to run when the button is hovered over
@@ -164,6 +162,9 @@ function loadHelperInfo(button, jsonData) {
     });
 }
 
+// Depending on the response type, we load that to the main column.
+// Example: A series of quesitons might narrow down a set of options for the player to choose from.
+// those options are loaded here.
 function loadResponse(page, type) {
     fetch('/guide.json')
         .then(response => response.json())
@@ -175,8 +176,8 @@ function loadResponse(page, type) {
 
                     break;
 
-                default:
-                    console.error("Error: response did not load");
+                default: // no response detected, not necesarily an error.
+                    console.error("Potential Error: response did not load (no response may be needed)");
                     break;
             }
         })
@@ -185,6 +186,7 @@ function loadResponse(page, type) {
         });
 }
 
+// Creates buttons based on choices from a series of questions.
 function giveChoices(page) {
     const tempButtons = []
     const div = document.getElementById('response')
@@ -208,12 +210,12 @@ function giveChoices(page) {
         });
 }
 
+// Returns a set object based on the working set in localstorage
+// Useful for perfroming set operations.
 function currentSet(seeking) {
     const query = '$' + seeking;
     const resString = localStorage.getItem(query);
     const res = resString.split(',');
-    // console.log("currentSet, res "+res);
-
     return new Set(res)
 }
 
@@ -221,9 +223,7 @@ function currentSet(seeking) {
 // Returns a new set based on a set operation between two sets
 function setFunctions(action, setone, settwo) {
     var s1arr = setone.split(',');
-    // var s2arr = settwo.split(',');
     var s1 = new Set(s1arr)
-    // var s2 = new Set(s2arr)
     switch (action) {
         case "intersection":
             res = getIntersection(s1, settwo)
@@ -235,6 +235,7 @@ function setFunctions(action, setone, settwo) {
     }
 }
 
+// Performs an interseciton on a set.
 function getIntersection(set1, set2) {
     const ans = new Set();
     for (let i of set2) {
@@ -248,6 +249,9 @@ function getIntersection(set1, set2) {
 
 // change the state of the topic.
 // Params: Topic we are changeing the state of, and the amount we will change it by
+// Example uses: User answered question 2. Change it by 1 to go to question 3.
+//               User's answers have already narrowed down their options enough, Change it to
+//                  the number that corresponds to the response state.
 function alterState(topic, change) {
     var storageItem = topic + "State"
     s = parseInt(localStorage.getItem(storageItem)) + change
