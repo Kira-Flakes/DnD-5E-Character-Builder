@@ -1,30 +1,52 @@
 {
     "gettingStarted": {
-        "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy for your epic fantasy adventures."
+        "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy.",
+        "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."
     },
     "race": {
-        "explainer": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations.",
+        "explainer": {
+            "header": "Race",
+            "details": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations."
+        },
         "questions": {
             "q1": {
                 "q": "Are you more inclined toward a natural or civilized way of life?",
                 "ans": {
-                    "Natural": ["a,b,c","Natural races are deeply connected to the wild, often with strong ties to nature and its elements."],
-                    "Civilized": ["d,e,f","Civilized races thrive in structured societies, emphasizing culture, technology, and law within well-organized communities."]
+                    "Natural": [
+                        "a,b,c",
+                        "Natural races are deeply connected to the wild, often with strong ties to nature and its elements."
+                    ],
+                    "Civilized": [
+                        "d,e,f",
+                        "Civilized races thrive in structured societies, emphasizing culture, technology, and law within well-organized communities."
+                    ]
                 },
                 "res": "Based on your choices, we think these classes might suite you."
             },
             "q2": {
                 "q": "Do you prefer a short and sturdy physique or a taller and more agile one?",
                 "ans": {
-                    "Short and Sturdy": ["Halfling,Gnome,Dwarf ","Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."],
-                    "Tall and Agile": ["Dwarf,Elf,Human,Dragonborn,Half-Elf,Half-Orc,Tiefling","Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."]
+                    "Short and Sturdy": [
+                        "Halfling,Gnome,Dwarf ",
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                    ],
+                    "Tall and Agile": [
+                        "Dwarf,Elf,Human,Dragonborn,Half-Elf,Half-Orc,Tiefling",
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
+                    ]
                 }
             },
             "q3": {
                 "q": "Are you drawn to magical abilities or a strong connection to nature?",
                 "ans": {
-                    "Magical Abilities": ["a,b,c,d,e,f","Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."],
-                    "Nature": ["d,e,f","Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."]
+                    "Magical Abilities": [
+                        "a,b,c,d,e,f",
+                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
+                    ],
+                    "Nature": [
+                        "d,e,f",
+                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
+                    ]
                 }
             },
             "response": {

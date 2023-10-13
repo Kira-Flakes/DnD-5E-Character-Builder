@@ -49,16 +49,18 @@
 
     <!--Container for 2-column layout-->
     <div class="container">
-        <div class="column left">
+        <div class="column left" id="content">
             <p id="title">Race</p>
             <!-- Add a brief race explanation -->
+            <div id="explainer">
+            </div>
             <div class="question" id="question">
-                <p id="prompt">prompt</p>
+                <p id="prompt"></p>
                 <div id="answers"></div>
             </div>
             <div class="response" id="response">
                 <p id="responseTitle"></p>
-            </div>
+            </div>     
         </div>
 
         <div class="column right">
@@ -78,7 +80,7 @@
         <script>
             // races();
             init()
-            loadQuestion("race");
+            initPageInfo("race",0);
 
         </script>
     </div>

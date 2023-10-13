@@ -2,18 +2,56 @@
 // user actions.
 
 // Sets the message for the user to be greeted with
-function setWelcomeInfo() {
+function setWelcomeInfo(page) {
     const welcomeTxt = document.getElementById('welcomeMessage');
+    const info = document.getElementById('info')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-
-            welcomeTxt.innerText = data.gettingStarted.welcome;
-
+            const currPage = data[page]
+            welcomeTxt.innerText = currPage.welcome;
+            info.innerHTML = highlightTextWithMouseover(currPage.explainer,['race', 'class', 'ability scores', 'personality', 'equipment']);
+            console.log("Here")
         })
         .catch(error => {
             console.error('Error:', error);
         });
+    // returnedBtn = document.createElement('button')
+    // returnedBtn.innerText = 'Continue'
+    // returnedBtn.onclick = function () {
+    //     document.location.href = "../html/class.html"
+    // }
+    
+}
+
+// Put all explainer information on the page
+function loadExplainer(page, iter) {
+    explainerDiv = document.getElementById("explainer")
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const currentPage = data[page]
+            console.log("setting details")
+            explainerDiv.innerText = currentPage.explainer.details
+            continueBtn = document.createElement('button')
+            continueBtn.innerText = 'Continue'
+            continueBtn.onclick = function () {
+                clearDiv(explainerDiv)
+                initPageInfo(page, iter + 1)
+                document.getElementById('content').removeChild(continueBtn)
+            }
+            document.getElementById('content').appendChild(continueBtn)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function clearDiv(div) {
+    while (div.firstChild) { // delete all buttons, since we are done with this question
+        div.removeChild(div.firstChild)
+    }
 }
 
 // Sets alignment information
@@ -53,7 +91,7 @@ function setAlignmentInfo() {
     });
 }
 
-// access API and get the races
+// access guide and get the races
 function races() {
     const res = document.getElementById("raceExplainer");
     fetch('/guide.json')
@@ -70,6 +108,43 @@ function races() {
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function loadPageInfo() {
+
+}
+
+function initPageInfo(page, iter) {
+    // const continueButton = document.createElement('button')
+    const mainContent = document.getElementsByClassName('content')
+    console.log("Initializing page \'" + page + "\'")
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const currentPage = data[page]
+            console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            switch (Object.keys(currentPage)[iter]) {
+                case "welcome":
+                    setWelcomeInfo(page) // adds continue button on return
+                    break;
+                case "explainer":
+                    console.log("In explainer")
+                    loadExplainer(page, iter)
+                    break;
+                case "questions":
+                    console.log("In questions")
+                    loadQuestion(page)
+
+                default:
+                    console.log("No info type found, returning")
+                // mainContent.appendChild(continueButton)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    // initPageInfo(page, iter+1)
 }
 
 // Recursively calls all question in the json data.
@@ -129,7 +204,7 @@ function loadQuestion(page) {
                     }
                     loadQuestion(page) // load the next question
                 }; // set actions for the buttons
-                loadHelperInfo(answerButton,answers[ans]) // add the helper information to the page, explaining the implications of the choice.
+                loadHelperInfo(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
         })
         .catch(error => {
@@ -256,4 +331,24 @@ function alterState(topic, change) {
     var storageItem = topic + "State"
     s = parseInt(localStorage.getItem(storageItem)) + change
     localStorage.setItem(storageItem, s)
+}
+
+function highlightTextWithMouseover(inputString, textsToHighlight, mouseoverAction) {
+    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {
+        return inputString;
+    }
+
+    const openTag = '<mark>';
+    const closeTag = '</mark>';
+
+    let highlightedString = inputString;
+
+    textsToHighlight.forEach(textToHighlight => {
+        const regex = new RegExp(textToHighlight, 'g');
+        highlightedString = highlightedString.replace(regex, match => {
+            return openTag + match + closeTag;
+        });
+    });
+
+    return highlightedString;
 }
