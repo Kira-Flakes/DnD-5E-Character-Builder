@@ -56,6 +56,59 @@
             }
         }
     },
+    "class": {
+        "explainer": {
+            "header": "Class",
+            "details": "Exlainer not written"
+        },
+        "questions": {
+            "q1": {
+                "q": "q1 not written",
+                "ans": {
+                    "Natural": [
+                        "a,b,c",
+                        "Natural races are deeply connected to the wild, often with strong ties to nature and its elements."
+                    ],
+                    "Civilized": [
+                        "d,e,f",
+                        "Civilized races thrive in structured societies, emphasizing culture, technology, and law within well-organized communities."
+                    ]
+                },
+                "res": "Based on your choices, we think these classes might suite you."
+            },
+            "q2": {
+                "q": "q2 not written",
+                "ans": {
+                    "Short and Sturdy": [
+                        "Halfling,Gnome,Dwarf ",
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                    ],
+                    "Tall and Agile": [
+                        "Dwarf,Elf,Human,Dragonborn,Half-Elf,Half-Orc,Tiefling",
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
+                    ]
+                }
+            },
+            "q3": {
+                "q": "q3 not written",
+                "ans": {
+                    "Magical Abilities": [
+                        "a,b,c,d,e,f",
+                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
+                    ],
+                    "Nature": [
+                        "d,e,f",
+                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
+                    ]
+                }
+            },
+            "response": {
+                "type": "set",
+                "title": "Based on your responses, we've handpicked a selection of races for your character:",
+                "options": "$race"
+            }
+        }
+    },
     "background": {
         "alignment": {
             "description": "Alignment guides a character's decisions and role-playing, influencing their behavior and interactions within the game world. It's a tool for players to define their character's beliefs and values, helping to shape their role-playing experience and relationships with other characters and NPCs. However, alignment is flexible and may evolve as the character's story unfolds, allowing for dynamic character development.",
