@@ -10,7 +10,7 @@ function setWelcomeInfo(page) {
         .then(data => {
             const currPage = data[page]
             welcomeTxt.innerText = currPage.welcome;
-            info.innerHTML = highlightTextWithMouseover(currPage.explainer,['race', 'class', 'ability scores', 'personality', 'equipment']);
+            info.innerHTML = highlightTextWithMouseover(currPage.explainer, ['race', 'class', 'ability scores', 'personality', 'equipment']);
             console.log("Here")
         })
         .catch(error => {
@@ -21,7 +21,7 @@ function setWelcomeInfo(page) {
     // returnedBtn.onclick = function () {
     //     document.location.href = "../html/class.html"
     // }
-    
+
 }
 
 // Put all explainer information on the page
@@ -196,7 +196,7 @@ function loadQuestion(page) {
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
-                    intersect = setFunctions("intersection", this.value, currentSet(page)) // perform set interesciton so the players choices narrow
+                    intersect = setFunctions("intersection", this.value, localStorage.getItem('$' + page)) // perform set interesciton so the players choices narrow
                     localStorage.setItem('$' + page, intersect)
                     alterState(page, 1); // add one to the state, so we go to the next question
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
@@ -210,6 +210,21 @@ function loadQuestion(page) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+// put this in alterstate, second parameter. 
+function checkAnswerViability(currentPage, qNumber) {
+    nextQ = currentPage.questions['q'+(qNumber+1)];
+    for (var ans in nextQ.ans) {
+        if (setFunctions("intersection",'$'+currentPage,ans) == null) {
+            return
+        }
+        // if the intersection of any of the next answers is null,
+        // recur on this until it isn't null.
+        // return the qNumber plus one
+
+
+    }
 }
 
 // Function uses the json data attached to each question, specifically the helpful information.
@@ -299,9 +314,11 @@ function currentSet(seeking) {
 function setFunctions(action, setone, settwo) {
     var s1arr = setone.split(',');
     var s1 = new Set(s1arr)
+    var s2arr = settwo.split(',');
+    var s2 = new Set(s2arr);
     switch (action) {
         case "intersection":
-            res = getIntersection(s1, settwo)
+            res = getIntersection(s1, s2)
             // console.log("Res "+Array.from(res).join(','))
             return Array.from(res).join(',')
         // break;

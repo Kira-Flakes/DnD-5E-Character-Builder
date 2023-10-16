@@ -1,0 +1,21 @@
+The json guide has the following rules:
+
+Symbol meanings:
+'$' means we are describing a users set of possibilities.
+    Example: $race means we are accessing the current set of races the player can choose from.
+'%" means a set of all possible options, regardless of options the user has selected.
+
+Question objects:
+    Structure:
+    question -> q1 
+                q2 
+                ...
+                qn 
+    Rules:
+    1. All answers must return a set representing the remaining possiblilities for the player.
+        Example: Do you want a short character? "Yes" returns all short characters. "No" returns all tall characters. 
+
+
+
+Sets:
+    $race: [Dwarf,Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc,Halfling,Gnome]

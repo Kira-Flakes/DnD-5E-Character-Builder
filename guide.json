@@ -14,11 +14,10 @@
                 "ans": {
                     "Short": [
                         "Halfling,Gnome,Dwarf",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
-                        ""
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
                     ],
                     "Tall": [
-                        "%",
+                        "Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
@@ -28,24 +27,23 @@
                 "ans": {
                     "Yes": [
                         "Human,Half-Elf,Half-Orc",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
-                        ""
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
                     ],
                     "No": [
-                        "%",
+                        "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
             },
             "q3": {
-                "q": "Would you rather see in the dark or reath fire (or other elements)",
+                "q": "Would you rather:",
                 "ans": {
-                    "Magical Abilities": [
-                        "a,b,c,d,e,f",
+                    "See in the dark": [
+                        "Dwarf,Elf,Tiefling",
                         "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
                     ],
-                    "Nature": [
-                        "d,e,f",
+                    "Breath fire (or other elements)": [
+                        "Dragonborn",
                         "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
                     ]
                 }
