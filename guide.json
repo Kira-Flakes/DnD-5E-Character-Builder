@@ -10,7 +10,7 @@
         },
         "questions": {
             "q1": {
-                "q": "Do you prefer a short and sturdy physique or a taller and more agile one?",
+                "q": "Do you want your character to be short or tall?",
                 "ans": {
                     "Short": [
                         "Halfling,Gnome,Dwarf",
@@ -18,27 +18,27 @@
                         ""
                     ],
                     "Tall": [
-                        "",
+                        "%",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
             },
             "q2": {
-                "q": "Do you prefer a short and sturdy physique or a taller and more agile one?",
+                "q": "Do you want to play as both a human or half-human?",
                 "ans": {
-                    "Short": [
-                        "Halfling,Gnome,Dwarf",
+                    "Yes": [
+                        "Human,Half-Elf,Half-Orc",
                         "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
                         ""
                     ],
-                    "Tall": [
-                        "",
+                    "No": [
+                        "%",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
             },
             "q3": {
-                "q": "Are you drawn to magical abilities or a strong connection to nature?",
+                "q": "Would you rather see in the dark or reath fire (or other elements)",
                 "ans": {
                     "Magical Abilities": [
                         "a,b,c,d,e,f",
