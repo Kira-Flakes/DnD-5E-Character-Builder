@@ -10,28 +10,29 @@
         },
         "questions": {
             "q1": {
-                "q": "Are you more inclined toward a natural or civilized way of life?",
+                "q": "Do you prefer a short and sturdy physique or a taller and more agile one?",
                 "ans": {
-                    "Natural": [
-                        "a,b,c",
-                        "Natural races are deeply connected to the wild, often with strong ties to nature and its elements."
+                    "Short": [
+                        "Halfling,Gnome,Dwarf",
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        ""
                     ],
-                    "Civilized": [
-                        "d,e,f",
-                        "Civilized races thrive in structured societies, emphasizing culture, technology, and law within well-organized communities."
+                    "Tall": [
+                        "",
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
-                },
-                "res": "Based on your choices, we think these classes might suite you."
+                }
             },
             "q2": {
                 "q": "Do you prefer a short and sturdy physique or a taller and more agile one?",
                 "ans": {
-                    "Short and Sturdy": [
-                        "Halfling,Gnome,Dwarf ",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                    "Short": [
+                        "Halfling,Gnome,Dwarf",
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        ""
                     ],
-                    "Tall and Agile": [
-                        "Dwarf,Elf,Human,Dragonborn,Half-Elf,Half-Orc,Tiefling",
+                    "Tall": [
+                        "",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
