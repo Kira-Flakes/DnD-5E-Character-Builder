@@ -1,3 +1,5 @@
+CTRL - Z for easier readability
+
 The json guide has the following rules:
 
 Symbol meanings:
@@ -6,6 +8,8 @@ Symbol meanings:
 '%" means a set of all possible options, regardless of options the user has selected.
 
 Question objects:
+
+    Basic concept: To make this dynamic, we need to account for future changes. So I've structured the question sequence in the following way. Questions and answers are loaded to the html page.
     Structure:
     question -> q1 
                 q2 
