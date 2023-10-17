@@ -85,7 +85,7 @@
                 "res": "Based on your choices, we think these classes might suite you."
             },
             "q2": {
-                "q": "q2 not written",
+                "q": "Are you more inclined toward a natural or civilized way of life?",
                 "ans": {
                     "Short and Sturdy": [
                         "Halfling,Gnome,Dwarf ",
