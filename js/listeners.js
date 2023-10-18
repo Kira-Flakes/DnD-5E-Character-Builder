@@ -1,19 +1,57 @@
+// import { API } from './api.js';
 // Scipts that allow for us to listen to html pages and update the pages based on 
 // user actions.
 
+
+// var api = new API()
+
+// const { nextTick } = require("process");
+
 // Sets the message for the user to be greeted with
-function setWelcomeInfo() {
+function setWelcomeInfo(page) {
     const welcomeTxt = document.getElementById('welcomeMessage');
+    const info = document.getElementById('info')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-
-            welcomeTxt.innerText = data.gettingStarted.welcome;
-
+            const currPage = data[page]
+            welcomeTxt.innerText = currPage.welcome;
+            info.innerHTML = highlightTextWithMouseover(currPage.explainer, ['race', 'class', 'ability scores', 'personality', 'equipment', 'character sheet']);
+            console.log("Here")
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+// Put all explainer information on the page
+function loadExplainer(page, iter) {
+    explainerDiv = document.getElementById("explainer")
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const currentPage = data[page]
+            console.log("setting details")
+            explainerDiv.innerText = currentPage.explainer.details
+            continueBtn = document.createElement('button')
+            continueBtn.innerText = 'Continue'
+            continueBtn.onclick = function () {
+                clearDiv(explainerDiv)
+                initPageInfo(page, iter + 1)
+                document.getElementById('content').removeChild(continueBtn)
+            }
+            document.getElementById('content').appendChild(continueBtn)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function clearDiv(div) {
+    while (div.firstChild) { // delete all buttons, since we are done with this question
+        div.removeChild(div.firstChild)
+    }
 }
 
 // Sets alignment information
@@ -53,7 +91,7 @@ function setAlignmentInfo() {
     });
 }
 
-// access API and get the races
+// access guide and get the races
 function races() {
     const res = document.getElementById("raceExplainer");
     fetch('/guide.json')
@@ -72,6 +110,44 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function loadPageInfo() {
+
+}
+
+function initPageInfo(page, iter) {
+    // const continueButton = document.createElement('button')
+    const mainContent = document.getElementsByClassName('content')
+    console.log("Initializing page \'" + page + "\'")
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const currentPage = data[page]
+            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            switch (Object.keys(currentPage)[iter]) {
+                case "welcome":
+                    setWelcomeInfo(page) // adds continue button on return
+                    break;
+                case "explainer":
+                    // console.log("In explainer")
+                    // test()
+                    loadExplainer(page, iter)
+                    break;
+                case "questions":
+                    // console.log("In questions")
+                    loadQuestion(page)
+
+                default:
+                    console.log("No info type found, returning")
+                // mainContent.appendChild(continueButton)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    // initPageInfo(page, iter+1)
+}
+
 // Recursively calls all question in the json data.
 // Once the final question is answered (using button listeners),
 // the response operation occurs if it exists. (for now only "set" operations are handled, 
@@ -81,7 +157,7 @@ function loadQuestion(page) {
     const question = document.getElementById('prompt'); // get the question div from html
     const tempButtonsId = [] // all buttons go here so they can be deleted once the question is done.
     q = 'q' + localStorage.getItem(page + 'State'); // create the string that accesses the race state (what question the user is on) from localstorage
-
+    var state = parseInt(localStorage.getItem(page + 'State'));
     fetch('/guide.json') // open json data
         .then(response => response.json())
         .then(data => {
@@ -121,15 +197,18 @@ function loadQuestion(page) {
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
-                    intersect = setFunctions("intersection", this.value, currentSet(page)) // perform set interesciton so the players choices narrow
+                    intersect = setFunctions("intersection", this.value, localStorage.getItem('$' + page)) // TODO: Change to combine strings
+                    // var vals = combineValues(this.value, localStorage.getItem('$' + page))
                     localStorage.setItem('$' + page, intersect)
-                    alterState(page, 1); // add one to the state, so we go to the next question
+                    // localStorage.setItem('$' + page, vals)
+                    alterState(page, 1 + checkAnswerViability(page, currentPage, state)); // add one to the state, so we go to the next question
+                    console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
                     loadQuestion(page) // load the next question
                 }; // set actions for the buttons
-                loadHelperInfo(answerButton,answers[ans]) // add the helper information to the page, explaining the implications of the choice.
+                loadHelperInfoFromButton(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
         })
         .catch(error => {
@@ -137,9 +216,98 @@ function loadQuestion(page) {
         });
 }
 
+function extractNames(inputString, asSet = false) {
+    if (asSet) {
+        // Initialize a Set to store names
+        const namesSet = new Set();
+        // Split the input string by commas to separate elements
+        const parts = inputString.split(',');
+        for (const part of parts) {
+            // Split each part by a semicolon to separate the name and value
+            const elements = part.split(';');
+            // Check if the part has the required format (name;value)
+            if (elements.length === 2) {
+                const name = elements[0].trim(); // Extract and trim the name
+                namesSet.add(name); // Add the name to the set
+            }
+        }
+        return namesSet; // Return the set of names
+    } else {
+        // Initialize an array to store names
+        const namesArray = [];
+        // Split the input string by commas to separate elements
+        const parts = inputString.split(',');
+        for (const part of parts) {
+            // Split each part by a semicolon to separate the name and value
+            const elements = part.split(';');
+            // Check if the part has the required format (name;value)
+            if (elements.length === 2) {
+                const name = elements[0].trim(); // Extract and trim the name
+                namesArray.push(name); // Add the name to the array
+            }
+        }
+        // Join the names in the array into a comma-separated string
+        const namesString = namesArray.join(', ');
+        return namesString; // Return the string of names
+    }
+}
+
+function combineValues(string1, string2) {
+    const result = new Map();
+
+    function parseString(inputString) {
+        const parts = inputString.split(',');
+
+        for (const part of parts) {
+            const elements = part.split(';');
+            if (elements.length === 2) {
+                const name = elements[0];
+                const value = parseInt(elements[1]);
+
+                if (!isNaN(value)) {
+                    if (result.has(name)) {
+                        result.set(name, result.get(name) + value);
+                    } else {
+                        result.set(name, value);
+                    }
+                }
+            }
+        }
+    }
+
+    parseString(string1);
+    parseString(string2);
+
+    const combinedString = Array.from(result, ([name, value]) => `${name};${value}`).join(',');
+    console.log(combinedString)
+    return combinedString;
+}
+
+// put this in alterstate param. Checks for
+// the next question that actually changes the working set
+function checkAnswerViability(title, currentPage, qNumber) {
+    var nextQ = currentPage.questions['q' + (qNumber + 1)];
+    console.log(title + " Current page")
+
+    if (nextQ === undefined) return 1
+    workingSet = localStorage.getItem('$' + title)
+    console.log("Working set: " + workingSet)
+    for (var ans in nextQ.ans) {
+        console.log("Set func results: " + setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])))
+        console.log("ans: " + nextQ.ans[ans][0])
+        if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
+
+            // if (setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])).length == 0) {
+            console.log("Intersection: " + setFunctions("intersection", workingSet, nextQ.ans[ans][0]))
+            return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
+        }
+    }
+    return 0
+}
+
 // Function uses the json data attached to each question, specifically the helpful information.
 // loads it to the right column of the page when the user hovers over the option.
-function loadHelperInfo(button, jsonData) {
+function loadHelperInfoFromButton(button, jsonData) {
     button.addEventListener('mouseenter', function () {
         // Code to run when the button is hovered over
         button.style.backgroundColor = 'red'; // Change background color, for example
@@ -196,9 +364,13 @@ function giveChoices(page) {
             responses = data[page].questions.response
             document.getElementById('responseTitle').innerText = responses.title;
             set = localStorage.getItem(responses.options)
+            // var options = getItemsWithHighestValues(set)
             raceOptions = set.split(',')
             for (r in raceOptions) {
+                // for (r in options) {
                 const choice = document.createElement('button');
+                // choice.innerText = options[r]
+                // console.log(options[r])
                 choice.innerText = raceOptions[r]
                 tempButtons.push(choice)
                 div.appendChild(choice)
@@ -208,6 +380,39 @@ function giveChoices(page) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function getItemsWithHighestValues(inputString) {
+    const pairs = inputString.split(',');
+    let highestValue = -1;
+    let secondHighestValue = -1;
+    let highestValueRaces = [];
+    let secondHighestValueRaces = [];
+
+    pairs.forEach(pair => {
+        const [race, value] = pair.split(';');
+        const numericValue = parseInt(value, 10);
+
+        if (numericValue > highestValue) {
+            secondHighestValue = highestValue;
+            secondHighestValueRaces = [...highestValueRaces];
+            highestValue = numericValue;
+            highestValueRaces = [race];
+        } else if (numericValue === highestValue) {
+            highestValueRaces.push(race);
+        } else if (numericValue > secondHighestValue) {
+            secondHighestValue = numericValue;
+            secondHighestValueRaces = [race];
+        } else if (numericValue === secondHighestValue) {
+            secondHighestValueRaces.push(race);
+        }
+    });
+
+    if (highestValueRaces.length === 1) {
+        return [...highestValueRaces, ...secondHighestValueRaces];
+    }
+    console.log("Highest value races: " + highestValueRaces)
+    return highestValueRaces;
 }
 
 // Returns a set object based on the working set in localstorage
@@ -223,10 +428,14 @@ function currentSet(seeking) {
 // Returns a new set based on a set operation between two sets
 function setFunctions(action, setone, settwo) {
     var s1arr = setone.split(',');
+
     var s1 = new Set(s1arr)
+    var s2arr = settwo.split(',');
+    console.log(s2arr + "SJASFNLASKFN")
+    var s2 = new Set(s2arr);
     switch (action) {
         case "intersection":
-            res = getIntersection(s1, settwo)
+            res = getIntersection(s1, s2)
             // console.log("Res "+Array.from(res).join(','))
             return Array.from(res).join(',')
         // break;
@@ -237,6 +446,7 @@ function setFunctions(action, setone, settwo) {
 
 // Performs an interseciton on a set.
 function getIntersection(set1, set2) {
+    console.log("IN intersection - Set1: " + Array.from(set1) + " set2" + Array.from(set2))
     const ans = new Set();
     for (let i of set2) {
         if (set1.has(i)) {
@@ -257,3 +467,434 @@ function alterState(topic, change) {
     s = parseInt(localStorage.getItem(storageItem)) + change
     localStorage.setItem(storageItem, s)
 }
+
+function highlightTextWithMouseover(inputString, textsToHighlight) {
+    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {
+        return inputString;
+    }
+
+    const closeTag = '</mark>';
+
+    let highlightedString = inputString;
+    const encounteredTexts = new Set();
+
+    textsToHighlight.forEach(textToHighlight => {
+        const regex = new RegExp(textToHighlight, 'g');
+        highlightedString = highlightedString.replace(regex, match => {
+            if (!encounteredTexts.has(match)) {
+                encounteredTexts.add(match);
+                const mouseoverAction = 'loadHelperInfoFromMisc(\'' + match + '\')';
+                const openTag = '<mark onmouseover="' + mouseoverAction + '">';
+                return openTag + match + closeTag;
+            }
+            return match; // Return the match without highlighting if it's encountered again
+        });
+    });
+
+    return highlightedString;
+}
+
+function loadHelperInfoFromMisc(text) {
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            response = data["misc"][text]
+            document.getElementById('helperInfo').innerText = response
+            console.log(response)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+    document.getElementById('helperInfo').innerText = text
+}
+
+function test() {
+    console.log(backgrounds("Human"))
+}
+
+
+function displayRaceDetails(race) {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// API
+
+
+function API(subject, specific) 											 //function def, subject is the catagory of what you are looking for, specific is the exact stat/item/spell/etc
+{
+    const dndAPI = "https://www.dnd5eapi.co/api/";							 //the non changing part of the call
+    let sub = subject;														 //changing parts of the call
+    let spec = specific;
+    let call = dndAPI;														 //concatonating together the call
+    call += sub + "/" + spec;
+    const url = new URL(call);												 //creating new url object using concatonated string
+    console.log(url);
+    return call;															 //returns url object
+}
+
+//try {API("spells", "acid-arrow");} 											 // test api call function
+// need to add catch for incorrect API calls
+
+
+
+function abilityScores(stat) {												 //Function that takes an ability score stat and makes an API call
+
+    let statS = String(stat)
+    let search = API("ability-scores", statS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.full_name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.full_name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.desc);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+
+
+        )
+}
+
+//abilityScores("str");															// test api call function
+// need to add catch for incorrect API calls
+
+function classes(Class) {												 //Function that takes a class and makes an API call (CURRENTLY STAT VOMIT, NEEDS TO BE FORMATTED)
+
+    let classS = String(Class)
+    let search = API("classes", classS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.proficiency_choices);
+            const termdesc = JSON.stringify(data.proficiency_choices);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+            //classes("bard");	
+
+        )
+}
+
+function spells(spell) {												 //Function that takes a spell and makes an API call
+
+    let spellS = String(spell)
+    let search = API("spells", spellS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.desc);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+
+
+        )
+}
+
+//spells("fireball")
+
+
+function features(feat) {												 //Function that takes a feature and makes an API call
+
+    let featS = String(feat)
+    let search = API("features", featS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.desc);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+
+
+        )
+}
+
+//features("actor")
+
+function alignments(alignment) {												 //Function that takes an alignment and makes an API call
+
+    let alignmentS = String(alignment)
+    let search = API("alignments", alignmentS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.desc);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+
+
+        )
+}
+
+//alignments("chaotic-neutral")
+
+
+//more things to add in documentation for the api
+
+
+function API2(subject, specific) 											 //function def, subject is the catagory of what you are looking for, specific is the exact stat/item/spell/etc
+{
+    const dndAPI = "https://api.open5e.com/v1/";							 //the non changing part of the call
+    let sub = subject;														 //changing parts of the call
+    let spec = specific;
+    let call = dndAPI;														 //concatonating together the call
+    call += sub + "/" + spec;
+    const url = new URL(call);												 //creating new url object using concatonated string
+    console.log(url);
+    return call;															 //returns url object
+}
+
+function backgrounds(background) {												 //Function that takes an alignment and makes an API call
+
+    let backgroundS = String(background)
+    let search = API2("backgrounds", backgroundS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.desc);
+            document.getElementById("statdesc").innerHTML = termdesc;
+        }
+
+
+        )
+}
+
+//backgrounds("acolyte")
+
+function weapons(wep) {												 //Function that takes a feature and makes an API call
+
+    let wepS = String(wep)
+    let search = API2("weapons", wepS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.category);
+            document.getElementById("statdesc").innerHTML = termdesc;
+
+            console.log(data.desc);
+            const termdesc2 = JSON.stringify(data.cost);
+            document.getElementById("statdesc2").innerHTML = termdesc2;
+
+            console.log(data.desc);
+            const termdesc3 = JSON.stringify(data.damage_dice);
+            document.getElementById("statdesc3").innerHTML = termdesc3;
+
+            console.log(data.desc);
+            const termdesc4 = JSON.stringify(data.damage_type);
+            document.getElementById("statdesc4").innerHTML = termdesc4;
+
+            console.log(data.desc);
+            const termdesc5 = JSON.stringify(data.weight);
+            document.getElementById("statdesc5").innerHTML = termdesc5;
+
+            console.log(data.desc);
+            const termdesc6 = JSON.stringify(data.properties);
+            document.getElementById("statdes6").innerHTML = termdesc6;
+        }
+
+            //weapons need text added to describe weight, value, etc.
+
+        )
+}
+
+//weapons("rapier");
+
+function armor(arm) {												 //Function that takes a feature and makes an API call
+
+    let armS = String(arm)
+    let search = API2("armor", armS);
+
+
+
+    fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+        if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+            return response.json();
+
+        } else {															 //Accounting for possible network issues
+            throw new Error("Network Error");
+        }
+    })
+        .then(data => {															 //using the JSON file
+
+            console.log(data.name);										 //Sending JSON attribute to log
+            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+            document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+            console.log(data.desc);
+            const termdesc = JSON.stringify(data.category);
+            document.getElementById("statdesc").innerHTML = termdesc;
+
+            console.log(data.desc);
+            const termdesc2 = JSON.stringify(data.cost);
+            document.getElementById("statdesc2").innerHTML = termdesc2;
+
+            console.log(data.desc);
+            const termdesc3 = JSON.stringify(data.ac_string);
+            document.getElementById("statdesc3").innerHTML = termdesc3;
+
+            console.log(data.desc);
+            const termdesc4 = JSON.stringify(data.strength_requirement);
+            document.getElementById("statdesc4").innerHTML = termdesc4;
+
+            console.log(data.desc);
+            const termdesc5 = JSON.stringify(data.weight);
+            document.getElementById("statdesc5").innerHTML = termdesc5;
+
+            console.log(data.desc);
+            const termdesc6 = JSON.stringify(data.stealth_disadvantage);
+            document.getElementById("statdesc6").innerHTML = termdesc5;
+
+            //armors need text added to describe weight, value, etc.
+            //Weight and Stealth disadvantage values not showing up fml
+        }
+        )
+}
+//armor("scale-mail");

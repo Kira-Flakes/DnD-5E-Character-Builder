@@ -10,7 +10,8 @@
     window.addEventListener('load', function () {
         character = new characterSheet();
         // character.updateSheet(); // local storage attributes fill the sheet
-        setWelcomeInfo();
+        // setWelcomeInfo();
+        initPageInfo('gettingStarted',0);
     }); // end listener
 </script>
 
@@ -51,18 +52,25 @@
     <div class="container">
         <div class="column left">
             <p id="welcomeMessage">Temp</p>
-            <div class="question">
-                <p>Would you like to use a preset character, or make your own?</p>
-                <div class="container">
+            <div class="content">
+                <p id="info"></p>
+                <!-- <p>Would you like to use a preset character, or make your own?</p> -->
+                <!-- <div class="container">
                     <button>Preset</button>
                     <button>Make my own</button>
-                </div>
+                </div> -->
                 <div class="question">
-                    <p>Enter your first and last name.</p>
+                    <p>First, please enter the players name as you'd like it to appear on the character sheet:</p>
 
                     <input id="_playername" type="text" />
-                    <button onclick="character.setPlayername(document.getElementById('_playername').value)"
+                    <button onclick="next()"
                         type="submit">Submit</button>
+                    <script>
+                        function next() {
+                            character.setPlayername(document.getElementById('_playername').value)
+                            window.location.href = "../html/race.html"
+                        }
+                    </script>
                     <!-- <input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit"> -->
 
                 </div>
@@ -70,21 +78,21 @@
 
         </div>
         <div class="column right">
-            <p>Helpful information goes here...</p>
+            <!-- <p>During this process, we will show you helpful informaiton about your decisions.</p> -->
 
 
             <p id="stat"></p>
             <p id="statdesc"></p>
 
-            <script>
+            <div>
+                <p id="helperInfo"></p>
+            </div>
 
-                abilityScores("wis");
-
-            </script>
-            <button onclick="window.location.href = './charsheet.html';">
-                Character Sheet
-            </button>
-
+            <footer>
+                <button onclick="window.location.href = 'charsheet.html';">
+                    Character Sheet
+                </button>
+            </footer>
 
         </div>
     </div>

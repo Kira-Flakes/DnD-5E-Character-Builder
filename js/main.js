@@ -4,11 +4,11 @@
 function init() {
 
     // initialize localStorage values
-    
-    localStorage.setItem("$race",""); // working set
-    localStorage.setItem("allRace", // add all races
-    "list of all races goes here"
-    )
+    // races = "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0";
+    races = "Dwarf,Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc,Halfling,Gnome";
+
+    localStorage.setItem("$race",races); // working set
+    localStorage.setItem("%race", races);
 
     // States are directly associated with the questions. 
     // Example: chainging race to state 2 will mean question 2 of the state will be asked.
