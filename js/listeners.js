@@ -192,10 +192,10 @@ function loadQuestion(page) {
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
-                    // intersect = setFunctions("intersection", this.value, localStorage.getItem('$' + page)) // TODO: Change to combine strings
-                    var vals = combineValues(this.value, localStorage.getItem('$' + page))
-                    // localStorage.setItem('$' + page, intersect)
-                    localStorage.setItem('$' + page, vals)
+                    intersect = setFunctions("intersection", this.value, localStorage.getItem('$' + page)) // TODO: Change to combine strings
+                    // var vals = combineValues(this.value, localStorage.getItem('$' + page))
+                    localStorage.setItem('$' + page, intersect)
+                    // localStorage.setItem('$' + page, vals)
                     alterState(page, 1 + checkAnswerViability(page, currentPage, state)); // add one to the state, so we go to the next question
                     console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
@@ -290,7 +290,9 @@ function checkAnswerViability(title, currentPage, qNumber) {
     for (var ans in nextQ.ans) {
         console.log("Set func results: " + setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])))
         console.log("ans: " + nextQ.ans[ans][0])
-        if (setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])).length == 0) {
+        if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
+
+        // if (setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])).length == 0) {
             console.log("Intersection: " + setFunctions("intersection", workingSet, nextQ.ans[ans][0]))
             return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
         }
@@ -357,11 +359,14 @@ function giveChoices(page) {
             responses = data[page].questions.response
             document.getElementById('responseTitle').innerText = responses.title;
             set = localStorage.getItem(responses.options)
-            var options = getItemsWithHighestValues(set)
-            for (r in options) {
+            // var options = getItemsWithHighestValues(set)
+            raceOptions = set.split(',')
+            for (r in raceOptions) {
+            // for (r in options) {
                 const choice = document.createElement('button');
-                choice.innerText = options[r]
-                console.log(options[r])
+                // choice.innerText = options[r]
+                // console.log(options[r])
+                choice.innerText = raceOptions[r]
                 tempButtons.push(choice)
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 
