@@ -1,5 +1,8 @@
 // Scipts that allow for us to listen to html pages and update the pages based on 
 // user actions.
+import '../api.js';
+
+// api = new API()
 
 // const { nextTick } = require("process");
 
