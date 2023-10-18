@@ -64,7 +64,6 @@
             "q1": {
                 "q": "Do you want to fight enemies up close or from afar?",
                 "ans": {
-                        "Natural races are deeply connected to the wild, often with strong ties to nature and its elements."
                     "Up close": [
                         "Barbarian",
                         "up close"
