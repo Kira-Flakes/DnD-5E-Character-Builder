@@ -31,7 +31,7 @@ function loadExplainer(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            console.log("setting details")
+            // console.log("setting details")
             explainerDiv.innerText = currentPage.explainer.details
             continueBtn = document.createElement('button')
             continueBtn.innerText = 'Continue'
@@ -363,15 +363,16 @@ function giveChoices(page) {
         .then(data => {
             responses = data[page].questions.response
             document.getElementById('responseTitle').innerText = responses.title;
+            console.log("HERE")
             set = localStorage.getItem(responses.options)
             // var options = getItemsWithHighestValues(set)
-            raceOptions = set.split(',')
-            for (r in raceOptions) {
+            let options = set.split(',')
+            for (r in options) {
                 // for (r in options) {
                 const choice = document.createElement('button');
                 // choice.innerText = options[r]
                 // console.log(options[r])
-                choice.innerText = raceOptions[r]
+                choice.innerText = options[r]
                 tempButtons.push(choice)
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 

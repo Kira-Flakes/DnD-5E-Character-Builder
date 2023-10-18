@@ -5,4 +5,4 @@ Make character Race html display to put in main column
 
 Add dice roll demo
 
-Implement complete character tree.
+Implement complete race tree.
