@@ -15,3 +15,8 @@ function init() {
     localStorage.setItem("state",'0'); // saves the state of the program, set to zero
     localStorage.setItem("raceState","1");
 }   
+
+// resets all the data in localstorage
+// function reset() {
+//     for (e in localStorage.get)
+// }
