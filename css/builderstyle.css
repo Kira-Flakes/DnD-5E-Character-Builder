@@ -213,3 +213,8 @@ button[type=submit] {
 .current {
     background-color: rgb(119, 45, 45);
 }
+
+mark {
+    background-color: transparent;
+    color: #ba8c10;
+  }

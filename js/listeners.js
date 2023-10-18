@@ -1,7 +1,7 @@
 // Scipts that allow for us to listen to html pages and update the pages based on 
 // user actions.
 
-const { nextTick } = require("process");
+// const { nextTick } = require("process");
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -12,18 +12,12 @@ function setWelcomeInfo(page) {
         .then(data => {
             const currPage = data[page]
             welcomeTxt.innerText = currPage.welcome;
-            info.innerHTML = highlightTextWithMouseover(currPage.explainer, ['race', 'class', 'ability scores', 'personality', 'equipment']);
+            info.innerHTML = highlightTextWithMouseover(currPage.explainer, ['race', 'class', 'ability scores', 'personality', 'equipment','character sheet']);
             console.log("Here")
         })
         .catch(error => {
             console.error('Error:', error);
         });
-    // returnedBtn = document.createElement('button')
-    // returnedBtn.innerText = 'Continue'
-    // returnedBtn.onclick = function () {
-    //     document.location.href = "../html/class.html"
-    // }
-
 }
 
 // Put all explainer information on the page
@@ -209,7 +203,7 @@ function loadQuestion(page) {
                     }
                     loadQuestion(page) // load the next question
                 }; // set actions for the buttons
-                loadHelperInfo(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
+                loadHelperInfoFromButton(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
         })
         .catch(error => {
@@ -306,7 +300,7 @@ function checkAnswerViability(title, currentPage, qNumber) {
 
 // Function uses the json data attached to each question, specifically the helpful information.
 // loads it to the right column of the page when the user hovers over the option.
-function loadHelperInfo(button, jsonData) {
+function loadHelperInfoFromButton(button, jsonData) {
     button.addEventListener('mouseenter', function () {
         // Code to run when the button is hovered over
         button.style.backgroundColor = 'red'; // Change background color, for example
@@ -384,32 +378,32 @@ function getItemsWithHighestValues(inputString) {
     let secondHighestValue = -1;
     let highestValueRaces = [];
     let secondHighestValueRaces = [];
-  
+
     pairs.forEach(pair => {
-      const [race, value] = pair.split(';');
-      const numericValue = parseInt(value, 10);
-  
-      if (numericValue > highestValue) {
-        secondHighestValue = highestValue;
-        secondHighestValueRaces = [...highestValueRaces];
-        highestValue = numericValue;
-        highestValueRaces = [race];
-      } else if (numericValue === highestValue) {
-        highestValueRaces.push(race);
-      } else if (numericValue > secondHighestValue) {
-        secondHighestValue = numericValue;
-        secondHighestValueRaces = [race];
-      } else if (numericValue === secondHighestValue) {
-        secondHighestValueRaces.push(race);
-      }
+        const [race, value] = pair.split(';');
+        const numericValue = parseInt(value, 10);
+
+        if (numericValue > highestValue) {
+            secondHighestValue = highestValue;
+            secondHighestValueRaces = [...highestValueRaces];
+            highestValue = numericValue;
+            highestValueRaces = [race];
+        } else if (numericValue === highestValue) {
+            highestValueRaces.push(race);
+        } else if (numericValue > secondHighestValue) {
+            secondHighestValue = numericValue;
+            secondHighestValueRaces = [race];
+        } else if (numericValue === secondHighestValue) {
+            secondHighestValueRaces.push(race);
+        }
     });
-  
+
     if (highestValueRaces.length === 1) {
-      return [...highestValueRaces, ...secondHighestValueRaces];
+        return [...highestValueRaces, ...secondHighestValueRaces];
     }
-    console.log("Highest value races: "+highestValueRaces)
+    console.log("Highest value races: " + highestValueRaces)
     return highestValueRaces;
-  }
+}
 
 // Returns a set object based on the working set in localstorage
 // Useful for perfroming set operations.
@@ -464,22 +458,53 @@ function alterState(topic, change) {
     localStorage.setItem(storageItem, s)
 }
 
-function highlightTextWithMouseover(inputString, textsToHighlight, mouseoverAction) {
+function highlightTextWithMouseover(inputString, textsToHighlight) {
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {
         return inputString;
     }
 
-    const openTag = '<mark>';
     const closeTag = '</mark>';
 
     let highlightedString = inputString;
+    const encounteredTexts = new Set();
 
     textsToHighlight.forEach(textToHighlight => {
         const regex = new RegExp(textToHighlight, 'g');
         highlightedString = highlightedString.replace(regex, match => {
-            return openTag + match + closeTag;
+            if (!encounteredTexts.has(match)) {
+                encounteredTexts.add(match);
+                const mouseoverAction = 'loadHelperInfoFromMisc(\'' + match + '\')';
+                const openTag = '<mark onmouseover="' + mouseoverAction + '">';
+                return openTag + match + closeTag;
+            }
+            return match; // Return the match without highlighting if it's encountered again
         });
     });
 
     return highlightedString;
+}
+
+function loadHelperInfoFromMisc(text) {
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            response = data["misc"][text]
+            document.getElementById('helperInfo').innerText = response
+            console.log(response)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+    document.getElementById('helperInfo').innerText = text
+}
+
+function test() {
+    console.log("TESTING")
+}
+
+
+function displayRaceDetails(race) {
+
 }

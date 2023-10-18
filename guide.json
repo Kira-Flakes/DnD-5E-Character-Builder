@@ -132,5 +132,13 @@
                 "Chaotic Evil": "Chaotic and destructive, driven by violence and chaos for its own sake."
             }
         }
+    },
+    "misc": {
+        "race": "Every character has a lineage. The race you are assigned contributes to your characters identity and influences the abilities you possess.",
+        "class": "Class broadly describes a character’s vocation and the tactics the character is likely to employ when exploring, fighting and negotiating. \n\n    Classes also determine the benefits you will receive. We will choose a class that receives benefits based on your preferred playstyle.",
+        "ability scores": "Much of what your character can do is determined by your ability scores. The six abilities are Strength, Constitution, Intelligence, Wisdom, and Charisma.",
+        "personality": "Once you have the basic game aspects of your character, you'll need to consider who your character is as a person. You'll give them a name, an alignment and background. Keep this in mind when answering questions.",
+        "equipment": "With a good idea of who your character is, you can choose what they will need on their adventure. Equipment includes armor, weapons, gold and useful tools.",
+        "character sheet": "A character sheet is used in tabletop role-playing games, like Dungeons & Dragons, to record and organize a player's character information. It includes details such as a character's name, race, class, abilities, skills, equipment, and backstory. Character sheets are essential for tracking a character's progress, abilities, and decisions throughout the game, serving as a reference point for players and game masters during gameplay."
     }
 }
