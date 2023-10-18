@@ -217,14 +217,14 @@ class characterSheet {
         try {
           document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
         } catch {
-          console.log("["+keys[key]+"] not assigned");
+          // console.log("["+keys[key]+"] not assigned");
         }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key],""); 
         unkowns = unkowns + " " + keys[key] + ", ";
       }
     }
-    console.log(unkowns);
+    // console.log(unkowns);
   }
 
   // Helper function that removes all the elements from local storage,

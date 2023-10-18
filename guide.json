@@ -57,54 +57,55 @@
     },
     "class": {
         "explainer": {
-            "header": "Class",
-            "details": "Exlainer not written"
+            "header": "class explainer placeholder",
+            "details": "class explainer placeholder"
         },
         "questions": {
             "q1": {
-                "q": "q1 not written",
+                "q": "Do you want to fight enemies up close or from afar?",
                 "ans": {
-                    "Natural": [
-                        "a,b,c",
                         "Natural races are deeply connected to the wild, often with strong ties to nature and its elements."
+                    "Up close": [
+                        "Barbarian",
+                        "up close"
                     ],
-                    "Civilized": [
-                        "d,e,f",
-                        "Civilized races thrive in structured societies, emphasizing culture, technology, and law within well-organized communities."
+                    "From afar": [
+                        "Ranger",
+                        "from afar"
                     ]
                 },
                 "res": "Based on your choices, we think these classes might suite you."
             },
             "q2": {
-                "q": "q2 not written",
+                "q": "question2",
                 "ans": {
-                    "Short and Sturdy": [
-                        "Halfling,Gnome,Dwarf ",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                    "button1": [
+                        "",
+                        ""
                     ],
-                    "Tall and Agile": [
-                        "Dwarf,Elf,Human,Dragonborn,Half-Elf,Half-Orc,Tiefling",
-                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
+                    "button2": [
+                        "",
+                        ""
                     ]
                 }
             },
             "q3": {
-                "q": "q3 not written",
+                "q": "?",
                 "ans": {
-                    "Magical Abilities": [
-                        "a,b,c,d,e,f",
-                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
+                    "button1": [
+                        "",
+                        ""
                     ],
-                    "Nature": [
-                        "d,e,f",
-                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
+                    "button2": [
+                        "",
+                        ""
                     ]
                 }
             },
             "response": {
                 "type": "set",
-                "title": "Based on your responses, we've handpicked a selection of races for your character:",
-                "options": "$race"
+                "title": "hello",
+                "options": "$class"
             }
         }
     },
