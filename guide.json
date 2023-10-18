@@ -6,60 +6,51 @@
     "race": {
         "explainer": {
             "header": "Race",
-            "details": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. \n\nRaces influence how you are seen by the world. You may be large and intimidating, or small and unassuming. You may speak a common language, but be unable to communicate in certain areas of the world you may find yourself in. \n\nSome aspects of race are considered more useful than others. For example, Darkvision is a trait certain races possess, and it is considered one of the most powerful attributes. You’ll often find yourself in darkness. \n\nWe will make sure you have the option to choose these powerful traits."
-        
+            "details": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations."
         },
         "questions": {
             "q1": {
-                "q": "When going into dangerous territory, do you rely more on your gear or on your past expereinces?",
+                "q": "Do you want your character to be short or tall?",
                 "ans": {
-                    "Gear": [
-                        "Dwarf;1,Elf;0,Tiefling;0,Dragonborn;1,Human;1,Half-Elf;0,Half-Orc;1,Halfling;0,Gnome;1",
+                    "Short": [
+                        "Halfling,Gnome,Dwarf",
                         "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
                     ],
-                    "Experience": [
-                        "Dwarf;0,Elf;1,Tiefling;0,Dragonborn;1,Human;1,Half-Elf;1,Half-Orc;-1,Halfling;1,Gnome;0",
+                    "Tall": [
+                        "Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc",
                         "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
             },
             "q2": {
-                "q": "What would you like to resemble more, a human or a mythical creature?",
+                "q": "Do you want to play as both a human or half-human?",
                 "ans": {
-                    "Human": [
-                        "Dwarf;0,Elf;0,Tiefling;-1,Dragonborn;-2,Human;2,Half-Elf;1,Half-Orc;-1,Halfling;-1,Gnome;-1",
-                        "Human-like races in D&D often include humans, elves, and dwarves, reflecting qualities such as versatility, agility, or resilience."
+                    "Yes": [
+                        "Human,Half-Elf,Half-Orc",
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
                     ],
-                    "Mythical": [
-                        "Dwarf;1,Elf;1,Tiefling;2,Dragonborn;2,Human;-2,Half-Elf;0,Half-Orc;1,Halfling;1;Gnome;1",
-                        "Non-human races, such as orcs and gnomes, possess unique abilities and physical traits that distinguish them in the world of D&D."
-                    ],
-                    "No Preference": [
-                        "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0",
-                        "We won't limit your choices based on this question."
+                    "No": [
+                        "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
                     ]
                 }
             },
             "q3": {
-                "q": "Darkvision is can be extremely useful, and some players like to make sure they have it. Do you want Darkvision?",
+                "q": "Would you rather:",
                 "ans": {
-                    "I need Darkvision": [
-                        "Dwarf;50,Elf;50,Tiefling;50,Dragonborn;0,Human;0,Half-Elf;50,Half-Orc;50,Halfling;0,Gnome;50",
+                    "See in the dark": [
+                        "Dwarf,Elf,Tiefling",
                         "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
                     ],
-                    "I Would Prefer Darkvision": [
-                        "Dwarf;2,Elf;2,Tiefling;2,Dragonborn;0,Human;0,Half-Elf;2,Half-Orc;2,Halfling;0,Gnome;2",
+                    "Breath fire (or other elements)": [
+                        "Dragonborn",
                         "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
-                    ],
-                    "I don't need Darkvision": [
-                        "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0",
-                        ""
                     ]
                 }
             },
             "response": {
                 "type": "set",
-                "title": "Based on your responses, we've chosen a selection of races for your character:",
+                "title": "Based on your responses, we've handpicked a selection of races for your character:",
                 "options": "$race"
             }
         }
@@ -85,7 +76,7 @@
                 "res": "Based on your choices, we think these classes might suite you."
             },
             "q2": {
-                "q": "Are you more inclined toward a natural or civilized way of life?",
+                "q": "q2 not written",
                 "ans": {
                     "Short and Sturdy": [
                         "Halfling,Gnome,Dwarf ",
@@ -132,13 +123,5 @@
                 "Chaotic Evil": "Chaotic and destructive, driven by violence and chaos for its own sake."
             }
         }
-    },
-    "misc": {
-        "race": "Every character has a lineage. The race you are assigned contributes to your characters identity and influences the abilities you possess.",
-        "class": "Class broadly describes a character’s vocation and the tactics the character is likely to employ when exploring, fighting and negotiating. \n\n    Classes also determine the benefits you will receive. We will choose a class that receives benefits based on your preferred playstyle.",
-        "ability scores": "Much of what your character can do is determined by your ability scores. The six abilities are Strength, Constitution, Intelligence, Wisdom, and Charisma.",
-        "personality": "Once you have the basic game aspects of your character, you'll need to consider who your character is as a person. You'll give them a name, an alignment and background. Keep this in mind when answering questions.",
-        "equipment": "With a good idea of who your character is, you can choose what they will need on their adventure. Equipment includes armor, weapons, gold and useful tools.",
-        "character sheet": "A character sheet is used in tabletop role-playing games, like Dungeons & Dragons, to record and organize a player's character information. It includes details such as a character's name, race, class, abilities, skills, equipment, and backstory. Character sheets are essential for tracking a character's progress, abilities, and decisions throughout the game, serving as a reference point for players and game masters during gameplay."
     }
 }
