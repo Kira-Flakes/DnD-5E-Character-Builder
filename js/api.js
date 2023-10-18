@@ -290,6 +290,7 @@ function weapons(wep){												 //Function that takes a feature and makes an 
 
 //weapons("rapier");
 
+
 function armor(arm){												 //Function that takes a feature and makes an API call
 	
 	let armS = String(arm)
@@ -333,7 +334,7 @@ function armor(arm){												 //Function that takes a feature and makes an AP
 		
 		console.log(data.desc);
 		const termdesc6 = JSON.stringify(data.stealth_disadvantage);
-		document.getElementById("statdesc6").innerHTML = termdesc5;
+		document.getElementById("statdesc6").innerHTML = termdesc6;
 
   //armors need text added to describe weight, value, etc.
   //Weight and Stealth disadvantage values not showing up fml
@@ -341,3 +342,58 @@ function armor(arm){												 //Function that takes a feature and makes an AP
 )
 }
 //armor("scale-mail");
+
+function races(race){												 //Function that takes an alignment and makes an API call
+	
+	let raceS = String(race)
+	let search = API2("races", raceS);
+
+
+
+	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+		return response.json();
+		
+		} else {															 //Accounting for possible network issues
+		throw new Error("Network Error");
+		}
+	})
+	.then(data => {															 //using the JSON file
+		
+  console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.description);
+		document.getElementById("statdesc").innerHTML = termdesc;
+		
+		console.log(data.desc);
+		const termdesc2 = JSON.stringify(data.desc);
+		document.getElementById("statdesc2").innerHTML = termdesc2;
+		
+		console.log(data.desc);
+		const termdesc3 = JSON.stringify(data.asi_desc);
+		document.getElementById("statdesc3").innerHTML = termdesc3;
+		
+		console.log(data.desc);
+		const termdesc4 = JSON.stringify(data.alignment);
+		document.getElementById("statdesc4").innerHTML = termdesc4;
+		
+		console.log(data.desc);
+		const termdesc5 = JSON.stringify(data.size_raw);
+		document.getElementById("statdesc5").innerHTML = termdesc5;
+		
+		console.log(data.desc);
+		const termdesc6 = JSON.stringify(data.languages);
+		document.getElementById("statdesc6").innerHTML = termdesc6;
+		
+		console.log(data.desc);
+		const termdesc6 = JSON.stringify(data.subraces);
+		document.getElementById("statdesc7").innerHTML = termdesc7;
+
+
+)
+}
+
+//race("elf")
