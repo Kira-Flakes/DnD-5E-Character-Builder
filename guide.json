@@ -72,8 +72,7 @@
                         "Ranger",
                         "from afar"
                     ]
-                },
-                "res": "Based on your choices, we think these classes might suite you."
+                }
             },
             "q2": {
                 "q": "question2",
@@ -103,7 +102,7 @@
             },
             "response": {
                 "type": "set",
-                "title": "hello",
+                "title": "Based on your responses, we've handpicked a selection of races for your character:",
                 "options": "$class"
             }
         }
