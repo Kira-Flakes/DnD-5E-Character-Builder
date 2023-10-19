@@ -169,7 +169,7 @@ function loadQuestion(page) {
                 question.innerText = questionJSON.q;
             }
             catch { // question is null, we are at the end of the sequence
-                console.log("End of questions for this section")
+                // console.log("End of questions for this section")
                 const qDiv = document.getElementById('question'); // get question div
 
                 // Remove all child elements within the div, since we are done with the questions
@@ -193,7 +193,7 @@ function loadQuestion(page) {
 
                 document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-
+                console.log("ANSWERS: "+answers[ans][2])
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
@@ -201,8 +201,9 @@ function loadQuestion(page) {
                     // var vals = combineValues(this.value, localStorage.getItem('$' + page))
                     localStorage.setItem('$' + page, intersect)
                     // localStorage.setItem('$' + page, vals)
-                    alterState(page, 1 + checkAnswerViability(page, currentPage, state)); // add one to the state, so we go to the next question
-                    console.log("State changed to: " + localStorage.getItem("raceState"))
+                    nextQuestion(answers[ans])
+                    alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
+                    // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
@@ -214,6 +215,11 @@ function loadQuestion(page) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function nextQuestion(previousAnswer) {
+    // console.log("PREV ANS: "+previousAnswer[2])
+    return parseInt(previousAnswer[2])
 }
 
 function extractNames(inputString, asSet = false) {
@@ -287,18 +293,16 @@ function combineValues(string1, string2) {
 // the next question that actually changes the working set
 function checkAnswerViability(title, currentPage, qNumber) {
     var nextQ = currentPage.questions['q' + (qNumber + 1)];
-    console.log(title + " Current page")
-
     if (nextQ === undefined) return 1
     workingSet = localStorage.getItem('$' + title)
     console.log("Working set: " + workingSet)
     for (var ans in nextQ.ans) {
-        console.log("Set func results: " + setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])))
-        console.log("ans: " + nextQ.ans[ans][0])
+        // console.log("Set func results: " + setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])))
+        // console.log("ans: " + nextQ.ans[ans][0])
         if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
 
             // if (setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])).length == 0) {
-            console.log("Intersection: " + setFunctions("intersection", workingSet, nextQ.ans[ans][0]))
+            // console.log("Intersection: " + setFunctions("intersection", workingSet, nextQ.ans[ans][0]))
             return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
         }
     }
@@ -339,7 +343,7 @@ function loadResponse(page, type) {
         .then(data => {
             switch (type) {
                 case "set": // we present user with options
-                    console.log("We are in a choice from a set")
+                    // console.log("We are in a choice from a set")
                     giveChoices(page)
 
                     break;
@@ -432,7 +436,6 @@ function setFunctions(action, setone, settwo) {
 
     var s1 = new Set(s1arr)
     var s2arr = settwo.split(',');
-    console.log(s2arr + "SJASFNLASKFN")
     var s2 = new Set(s2arr);
     switch (action) {
         case "intersection":
@@ -447,7 +450,7 @@ function setFunctions(action, setone, settwo) {
 
 // Performs an interseciton on a set.
 function getIntersection(set1, set2) {
-    console.log("IN intersection - Set1: " + Array.from(set1) + " set2" + Array.from(set2))
+    // console.log("IN intersection - Set1: " + Array.from(set1) + " set2" + Array.from(set2))
     const ans = new Set();
     for (let i of set2) {
         if (set1.has(i)) {

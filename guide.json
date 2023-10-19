@@ -14,7 +14,8 @@
                 "ans": {
                     "Short": [
                         "Halfling,Gnome,Dwarf",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        "TEST SUCCEEDED"
                     ],
                     "Tall": [
                         "Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc",
