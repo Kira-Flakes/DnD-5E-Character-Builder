@@ -152,7 +152,7 @@ function createFloor() {
 
 function createDiceMesh() {
     const boxMaterialOuter = new THREE.MeshStandardMaterial({
-        color: 0xd66774,
+        color: 0xd66770,
     })
     const boxMaterialInner = new THREE.MeshStandardMaterial({
         color: 0x590c15,

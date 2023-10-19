@@ -218,3 +218,24 @@ mark {
     background-color: transparent;
     color: #ba8c10;
   }
+
+.raceInfoDiv {
+    color: #ffd35c;
+    padding: auto;
+    
+    font-size: 50%;
+}
+.raceInfoDiv h1 {
+    font-size: 200%;
+}
+
+.raceInfoDiv p {
+    padding:0%;
+}
+
+.webgl {
+    align-items:end;
+    top:0;
+    right: 0;
+    position: absolute;
+}

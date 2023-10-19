@@ -6,6 +6,7 @@
 // var api = new API()
 
 // const { nextTick } = require("process");
+const divCache = []
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -399,6 +400,10 @@ function giveChoices(page) {
             let options = set.split(',')
             for (const r in options) {
                 const choice = document.createElement('button');
+                const raceD = {}
+                raceD.id = options[r]
+                raceD.val = raceDiscreptionDiv(options[r])
+                divCache.push(raceD)
                 choice.setAttribute('id', 'choiceButton')
                 choice.innerText = options[r]
                 choice.onclick = function () {
@@ -409,8 +414,14 @@ function giveChoices(page) {
                     pickSubrace(options[r])
 
                 }; // set actions for the buttons
+                // button.addEventListener('mouseenter', function () {
+                choice.addEventListener('mouseenter', function () {
+                    console.log("MOUSEDOVER")
+                    clearHelperInfo()
+                    document.getElementById('helperInfo').appendChild(divCache[r].val)
+                })
                 tempButtons.push(choice)
-                div.appendChild(raceDiscreptionDiv(options[r]))
+                // div.appendChild(raceDiscreptionDiv(options[r]))
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 
             }
@@ -420,14 +431,19 @@ function giveChoices(page) {
         });
 }
 
+function clearHelperInfo() {
+    document.getElementById('helperInfo').innerText = ''
+    document.getElementById('helperInfo').innerHTML = ''
+
+}
+
 function raceDiscreptionDiv(race) {
-    infoDiv = document.createElement('div')
-    infoDiv.innerText = 'testing new div creation'
-    // infoDiv.appendChild(test)
-
-    console.log("RACE INFO: " + races(race.toLowerCase()))
-
-    return (infoDiv)
+    res = races(race.toLowerCase())
+    // children = res.childElements()
+    // for (const child in children) {
+    //     child.
+    // }
+    return res
 
 }
 
@@ -1027,6 +1043,8 @@ function races(race) {
 
     let raceS = String(race)
     let search = API2("races", raceS);
+    const raceDiv = document.createElement('div')
+    raceDiv.setAttribute('class','raceInfoDiv')
 
     fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
         if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
@@ -1038,43 +1056,71 @@ function races(race) {
     })
         .then(data => {
 
-            console.log(data.name);
-            const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-            document.getElementById("stat").innerHTML = term;
+            const termInfo = parseAPIString(JSON.stringify(data.name));	     //Turning JSON attribute into a string
+            const term = termInfo[0]			
+            console.log("TERM: "+term)
+            stat = document.createElement("h1")
+            stat.innerHTML = term;
+            raceDiv.appendChild(stat)
 
-            console.log(data.desc);
-            const termdesc = JSON.stringify(data.desc);
-            document.getElementById("statdesc").innerHTML = termdesc;
+            const termdescInfo = parseAPIString(JSON.stringify(data.desc));
+            const termdesc = termdescInfo[0]
+            console.log("TERMdesc: "+termdesc)
+            statdesc = document.createElement("p")
+            statdesc.innerHTML = termdesc
+            raceDiv.appendChild(statdesc)
 
-            console.log(data.desc);
-            const termdesc2 = JSON.stringify(data.asi_desc);
-            document.getElementById("statdesc2").innerHTML = termdesc2;
+            const termdesc2Info = parseAPIString(JSON.stringify(data.asi_desc));
+            const termdesc2 = termdesc2Info[0]
+            statdesc2 = document.createElement("p")
+            statdesc2.innerHTML = termdesc2
+            raceDiv.appendChild(statdesc2)
 
-            console.log(data.desc);
-            const termdesc3 = JSON.stringify(data.alignment);
-            document.getElementById("statdesc3").innerHTML = termdesc3;
+            const termdesc3Info = parseAPIString(JSON.stringify(data.alignment));
+            const termdesc3 = termdesc3Info[0]
+            statdesc3 = document.createElement("p")
+            statdesc3.innerHTML = termdesc3
+            raceDiv.appendChild(statdesc3)
 
-            console.log(data.desc);
-            const termdesc4 = JSON.stringify(data.size_raw);
-            document.getElementById("statdesc4").innerHTML = termdesc4;
+            const termdesc4 = parseAPIString(JSON.stringify(data.asi_desc))[0];
+            statdesc4 = document.createElement("p")
+            statdesc4.innerHTML = termdesc4
+            raceDiv.appendChild(statdesc4)
+            
+            const termdesc5 = parseAPIString(JSON.stringify(data.languages))[0];
+            statdesc5 = document.createElement("p")
+            statdesc5.innerHTML = termdesc5
+            raceDiv.appendChild(statdesc5)
 
-            console.log(data.desc);
-            const termdesc5 = JSON.stringify(data.languages);
-            document.getElementById("statdesc5").innerHTML = termdesc5;
+            const termdesc6 = parseAPIString(JSON.stringify(data.vision))[0];
+            statdesc6 = document.createElement("p")
+            statdesc6.innerHTML = termdesc6
+            raceDiv.appendChild(statdesc6)
 
-            console.log(data.desc);
-            const termdesc6 = JSON.stringify(data.vision);
-            document.getElementById("statdesc6").innerHTML = termdesc6;
+            const termdesc7 = parseAPIString(JSON.stringify(data.traits))[0];
+            statdesc7 = document.createElement("p")
+            statdesc7.innerHTML = termdesc7
+            raceDiv.appendChild(statdesc7)
 
-            console.log(data.desc);
-            const termdesc7 = JSON.stringify(data.traits);
-            document.getElementById("statdesc7").innerHTML = termdesc7;
-
-            console.log(data.desc);
-            const termdesc8 = JSON.stringify(data.subraces);
-            document.getElementById("statdesc8").innerHTML = termdesc8;
+            // const termdesc8 = parseAPIString(JSON.stringify(data.subraces))[0];
+            // statdesc8 = document.createElement("p")
+            // statdesc8.innerHTML = termdesc8
+            // raceDiv.appendChild(statdesc8)
 
         })												 //using the JSON file
 
+    return raceDiv
 
+}
+
+function parseAPIString(string) {
+    res = []
+    string = string.replaceAll("\"",'')
+    string = string.replaceAll("##",'<h2>')
+    string = string.replaceAll("\\n","</h2>")
+    string = string.replaceAll("**_","<h2>")
+    string = string.replaceAll("._**","</h2>")
+    res.push(string)
+
+    return res
 }
