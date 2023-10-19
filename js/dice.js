@@ -76,7 +76,7 @@ function initScene() {
         diceArray.push(createDice());
         addDiceEvents(diceArray[i]);
     }
-    throwDice();
+    // throwDice();
 
     render();
 }
