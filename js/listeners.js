@@ -34,7 +34,7 @@ function loadExplainer(page, iter) {
             // console.log("setting details")
             explainerDiv.innerText = currentPage.explainer.details
             continueBtn = document.createElement('button')
-            continueBtn.innerText = 'Continue'
+            continueBtn.innerText = 'Begin'
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
                 initPageInfo(page, iter + 1)
@@ -148,6 +148,20 @@ function initPageInfo(page, iter) {
     // initPageInfo(page, iter+1)
 }
 
+// function decisionTree(page) {
+//     state = localStorage.getItem(page + 'State')
+//     console.log("Init decision tree at state "+state)
+//     fetch('/guide.json') // open json data
+//         .then(response => response.json())
+//         .then(data => {
+//             const currentPage = data[page]; // seek data from the current page (race, class, etc)
+//             const questionJSON = currentPage.questions[q]; // get question based on state
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
+
 // Recursively calls all question in the json data.
 // Once the final question is answered (using button listeners),
 // the response operation occurs if it exists. (for now only "set" operations are handled, 
@@ -162,8 +176,6 @@ function loadQuestion(page) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]; // seek data from the current page (race, class, etc)
-            // title.innerText = capitalize(page); 
-
             const questionJSON = currentPage.questions[q]; // get question based on state
             try {  // try to load the question
                 question.innerText = questionJSON.q;
@@ -171,11 +183,21 @@ function loadQuestion(page) {
             catch { // question is null, we are at the end of the sequence
                 // console.log("End of questions for this section")
                 const qDiv = document.getElementById('question'); // get question div
-
-                // Remove all child elements within the div, since we are done with the questions
-                while (qDiv.firstChild) {
-                    qDiv.removeChild(qDiv.firstChild);
+                // Get all elements within the div
+                const childElements = qDiv.getElementsByTagName('*');
+                // Initialize an index for the while loop
+                let i = 0;
+                // Use a while loop to set inner text to ''
+                while (i < childElements.length) {
+                    const element = childElements[i];
+                    element.innerText = '';
+                    i++;
                 }
+
+                // Remove all test elements within the div, since we are done with the questions
+                // while (qDiv.firstChild) {
+                //     qDiv.removeChild(qDiv.firstChild);
+                // }
                 loadResponse(page, currentPage.questions.response.type) // move on to the response to the questions, if it exists
                 return
             }
@@ -193,15 +215,12 @@ function loadQuestion(page) {
 
                 document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-                console.log("ANSWERS: "+answers[ans][2])
+                console.log("ANSWERS: " + answers[ans][2])
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
-                    intersect = setFunctions("intersection", this.value, localStorage.getItem('$' + page)) // TODO: Change to combine strings
-                    // var vals = combineValues(this.value, localStorage.getItem('$' + page))
-                    localStorage.setItem('$' + page, intersect)
-                    // localStorage.setItem('$' + page, vals)
-                    nextQuestion(answers[ans])
+                    localStorage.setItem('$' + page, answers[ans][0])
+                    // nextQuestion(answers[ans])
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
@@ -339,6 +358,7 @@ function loadHelperInfoFromButton(button, jsonData) {
 // those options are loaded here.
 function loadResponse(page, type) {
     fetch('/guide.json')
+        // console.log("TYPE: " +type)
         .then(response => response.json())
         .then(data => {
             switch (type) {
@@ -346,6 +366,10 @@ function loadResponse(page, type) {
                     // console.log("We are in a choice from a set")
                     giveChoices(page)
 
+                    break;
+                case "subRace":
+                    console.log("In subrace case")
+                    giveChoices(page)
                     break;
 
                 default: // no response detected, not necesarily an error.
@@ -365,19 +389,28 @@ function giveChoices(page) {
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
+            //reset the page elements in left column
+            setElementsInColumnOne({
+                title: 'Race',
+                explanation: 'Based on your responses, we think these races would be a good fit for your playstyle.',
+            })
             responses = data[page].questions.response
-            document.getElementById('responseTitle').innerText = responses.title;
-            console.log("HERE")
             set = localStorage.getItem(responses.options)
-            // var options = getItemsWithHighestValues(set)
             let options = set.split(',')
-            for (r in options) {
-                // for (r in options) {
+            for (const r in options) {
                 const choice = document.createElement('button');
-                // choice.innerText = options[r]
-                // console.log(options[r])
+                choice.setAttribute('id', 'choiceButton')
                 choice.innerText = options[r]
+                choice.onclick = function () {
+                    localStorage.setItem('_' + page, options[r])
+                    for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                        document.getElementById('choiceButton').remove()
+                    }
+                    pickSubrace(options[r])
+
+                }; // set actions for the buttons
                 tempButtons.push(choice)
+                // div.appendChild(API)
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 
             }
@@ -385,6 +418,82 @@ function giveChoices(page) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function raceDiscreptionDiv(div) {
+    document.createElement('div')
+}
+
+function pickSubrace(race) {
+    console.log("Race is " + race)
+    tempButtons = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Json test: ' + data['race'].subRace[race])
+            // response = document.getElementById('response')
+            // response.innerText = 'Choose a subrace for your ' + race
+            // document.getElementById('prompt').innerText = 'PROMTP'
+            setElementsInColumnOne({
+                title: 'Choose a Subrace for your ' + race,
+                explanation: 'A subrace will give your character more depth and personality.',
+                prompt: 'Select your race:',
+                responseTitle: ''
+            })
+            opts = data['race'].subRace[race].split(',')
+            for (const o in opts) {
+                btn = document.createElement('button')
+                btn.innerText = opts[o]
+                btn.onclick = function () {
+                    localStorage.setItem('subRace')
+                }
+                document.getElementById('content').appendChild(btn)
+            }
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function setElementsInColumnOne(requestedElements) {
+    // Retrieve the parent div
+    const contentDiv = document.getElementById('content');
+
+    // Check if each requested element should be set
+    if (requestedElements.title) {
+        // Set the title
+        const titleElement = document.getElementById('title');
+        titleElement.innerText = requestedElements.title;
+    }
+
+    if (requestedElements.explanation) {
+        // Set the explanation
+        const explainerDiv = document.getElementById('explainer');
+        explainerDiv.innerText = requestedElements.explanation;
+    }
+
+    if (requestedElements.prompt) {
+        // Set the prompt
+        const promptElement = document.getElementById('prompt');
+        promptElement.innerText = requestedElements.prompt;
+    }
+
+    if (requestedElements.answers) {
+        // Set the answers
+        const answersDiv = document.getElementById('answers');
+        answersDiv.innerText = requestedElements.answers;
+    }
+
+    if (requestedElements.responseTitle) {
+        // Set the response title
+        const responseTitleElement = document.getElementById('responseTitle');
+        responseTitleElement.innerText = requestedElements.responseTitle;
+    }
+
+    // Additional elements can be set similarly
+
+    // Optionally, you can also add error handling or checks for null values if needed
 }
 
 function getItemsWithHighestValues(inputString) {
@@ -468,9 +577,14 @@ function getIntersection(set1, set2) {
 //                  the number that corresponds to the response state.
 function alterState(topic, change) {
     var storageItem = topic + "State"
-    s = parseInt(localStorage.getItem(storageItem)) + change
-    localStorage.setItem(storageItem, s)
+    // s = parseInt(localStorage.getItem(storageItem)) + change
+    localStorage.setItem(storageItem, change)
 }
+// function alterState(topic, change) {
+//     var storageItem = topic + "State"
+//     s = parseInt(localStorage.getItem(storageItem)) + change
+//     localStorage.setItem(storageItem, s)
+// }
 
 function highlightTextWithMouseover(inputString, textsToHighlight) {
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {

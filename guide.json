@@ -6,7 +6,7 @@
     "race": {
         "explainer": {
             "header": "Race",
-            "details": "The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations."
+            "details": "    The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations.\n\nRace is by no means a restrictive attribute. While you may receive certain bonuses depending on the race you choose, choosing your class will have a much greater impact on your playstyle."
         },
         "questions": {
             "q1": {
@@ -15,11 +15,12 @@
                     "Short": [
                         "Halfling,Gnome,Dwarf",
                         "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
-                        "TEST SUCCEEDED"
+                        "->subRace"
                     ],
                     "Tall": [
                         "Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc",
-                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks.",
+                        "2"
                     ]
                 }
             },
@@ -28,11 +29,13 @@
                 "ans": {
                     "More Like A Human": [
                         "Human,Half-Elf,Half-Orc",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges."
+                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        "->subRace"
                     ],
                     "More Like A Creature": [
                         "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
-                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks."
+                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks.",
+                        "3"
                     ]
                 }
             },
@@ -41,19 +44,32 @@
                 "ans": {
                     "See in the dark": [
                         "Dwarf,Elf,Tiefling",
-                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy."
+                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy.",
+                        "->subRace"
                     ],
                     "Breath fire (or other elements)": [
                         "Dragonborn",
-                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems."
+                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems.",
+                        "->subRace"
                     ]
                 }
             },
             "response": {
-                "type": "set",
+                "type": "subRace",
                 "title": "Based on your responses, we've handpicked a selection of races for your character:",
                 "options": "$race"
             }
+        },
+        "subRace": {
+            "Dwarf": "Hill Dwarf,Mountain Dwarf",
+            "Elf": "High Elf,Wood Elf,Dark Elf (Drow)",
+            "Tiefling": "",
+            "Dragonborn": "",
+            "Human": "",
+            "Half-Elf": "",
+            "Half-Orc": "",
+            "Halfling": "opt1,opt2",
+            "Gnome": ""
         }
     },
     "class": {
