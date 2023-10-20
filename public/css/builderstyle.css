@@ -19,7 +19,7 @@ a {
 
 /* Miscellaneous text inside left column */
 p {
-    color: #ffd35c;
+    /* color: #ffd35c; */
 }
 
 /* Wiz-Rad at top of page */
@@ -332,6 +332,7 @@ button {
 mark {
     background-color: transparent;
     color: #ba8c10;
+    transition: color 0.3s; /* Smooth transition over 0.3 seconds */
 }
 
 .raceInfoDiv {
@@ -359,3 +360,12 @@ mark {
     right: 0;
     position: absolute;
 }
+
+.brighten-on-hover {
+    color: #333; /* Initial text color */
+    transition: color 0.3s; /* Smooth transition over 0.3 seconds */
+  }
+  
+  mark:hover {
+    color: rgb(156, 53, 53); /* Brightened text color on hover */
+  }
