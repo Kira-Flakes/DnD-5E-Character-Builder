@@ -4,7 +4,8 @@
 <script src="../js/listeners.js"></script>
 <script src="../js/characterUtils.js"></script>
 <script src="../js/main.js"></script>
-<script src="../js/api.js"></script>
+<!-- <script type="module" src="../js/d20Logo.js"></script> -->
+<!-- <script src="../js/api.js"></script> -->
 <script>
 
     var character; // global scope
@@ -25,26 +26,31 @@
 
     <title>Race</title>
 </head>
-
+<!-- <canvas class="webgl"></canvas> -->
 <body>
     <h1>Wiz-Rad!</h1>
+    
+    </h1>
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
-				<a href="./gettingstarted.html">Getting Started</a>
-			</div>
-			<div class="tab current">
-				<a href="./race.html">Race</a>
-			</div>
-			<div class="tab">
-				<a href="./class.html">Class</a>
-			</div>
-			<div class="tab">
-				<a href="./background.html">Background</a>
-			</div>
-			<div class="tab">
-				<a href="./equipment.html">Equipment</a>
-			</div>
+                <a href="./gettingstarted.html">Getting Started</a>
+            </div>
+            <div class="tab current">
+                <a href="./race.html">Race</a>
+            </div>
+            <div class="tab">
+                <a href="./class.html">Class</a>
+            </div>
+            <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
+                <a href="./equipment.html">Equipment</a>
+            </div>
+            <div class="tab">
+                <a href="./rollDemo.html">Roll Demo</a>
+            </div>
         </div>
     </div>
 
@@ -61,7 +67,15 @@
             </div>
             <div class="response" id="response">
                 <p id="responseTitle"></p>
-            </div>     
+            </div>
+            <!-- <p id="stat"></p>
+            <p id="statdesc"></p>
+            <p id="statdesc2"></p>			
+            <p id="statdesc3"></p>
+            <p id="statdesc4"></p>			
+            <p id="statdesc5"></p>			
+            <p id="statdesc6"></p>	
+			<p id="statdesc7"></p>	 -->
         </div>
 
         <div class="column right">
@@ -69,14 +83,15 @@
         <p>Exotic: Too many to list.</p>
         <p>Monstrous: Too many to list.</p> -->
             <div>
-                <p id="helperInfo">help goes here</p>
+                <p id="helperInfo"></p>
+</p>
             </div>
 
             <footer>
                 <button onclick="window.location.href = 'charsheet.html';">
                     Character Sheet
                 </button>
-                <button onclick="init()">
+                <button onclick="init(); location.reload()">
                     Reset
                 </button>
             </footer>
@@ -84,10 +99,19 @@
         <script>
             // races();
             // init()
-            initPageInfo("race",0);
+            initPageInfo("race", 0);
 
         </script>
+
     </div>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
+        }
+    </script>
 </body>
 
 </html>

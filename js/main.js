@@ -11,6 +11,8 @@ function init() {
     localStorage.setItem("%race", races);
     localStorage.setItem("class",classes)
     localStorage.setItem("$class",classes)
+    localStorage.setItem("_race",'')
+    localStorage.setItem('_subRace','')
 
     // States are directly associated with the questions. 
     // Example: chainging race to state 2 will mean question 2 of the state will be asked.
