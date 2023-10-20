@@ -1,6 +1,10 @@
 <!doctype html>
 <html>
-<script src="/js/characterSheet.js"></script>
+    <script src="../js/characterSheet.js"></script>
+    <script src="../js/listeners.js"></script>
+    <script src="../js/characterUtils.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/api.js"></script>
 <script>
 
     var character; // global scope
@@ -24,14 +28,11 @@
 
 <body>
     <h1>Wiz-Rad!</h1>
-    
+
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
                 <a href="./gettingstarted.html">Getting Started</a>
-            </div>
-            <div class="tab">
-                <a href="./background.html">Background</a>
             </div>
             <div class="tab">
                 <a href="./race.html">Race</a>
@@ -40,60 +41,56 @@
                 <a href="./class.html">Class</a>
             </div>
             <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
                 <a href="./equipment.html">Equipment</a>
+            </div>
+            <div class="tab">
+                <a href="./rollDemo.html">Roll Demo</a>
             </div>
         </div>
     </div>
 
-    <!--Container for 3-column layout-->
+    <!--Container for 2-column layout-->
     <div class="container">
-        <div class="column left">
-            <p>Class...</p>
-
-            <div class="question">
-                <p>What role(s) do you want your character to play?</p>
-                <form>
-                    <input type="checkbox" id="offensive">
-                    <label for="offensive">Offensive</label><br>
-
-                    <input type="checkbox" id="defensive">
-                    <label for="defensive">Defensive</label><br>
-
-                    <input type="checkbox" id="tank">
-                    <label for="tank">Tank</label><br>
-
-                    <input type="checkbox" id="caster">
-                    <label for="caster">Caster</label><br>
-
-                    <input type="checkbox" id="support">
-                    <label for="support">Support</label><br>
-                </form>
+        <div class="column left" id="content">
+            <p id="title">Class</p>
+            <!-- Add a brief race explanation -->
+            <div id="explainer">
             </div>
-
-            <p>Or it could be more general:</p>
-
-            <div class="question">
-                <p>What role(s) do you want your character to play?</p>
-                <form>
-                    <input type="checkbox" id="fighter">
-                    <label for="fighter">Fighter</label><br>
-
-                    <input type="checkbox" id="thief">
-                    <label for="thief">Thief</label><br>
-
-                    <input type="checkbox" id="mage">
-                    <label for="mage">Mage</label><br>
-                </form>
+            <div class="question" id="question">
+                <p id="prompt"></p>
+                <div id="answers"></div>
             </div>
-
-            <p>The role(s) you chose align with...</p>
+            <div class="response" id="response">
+                <p id="responseTitle"></p>
+            </div>
         </div>
+
         <div class="column right">
-            <p>Helpful information goes here...</p>
-            <button onclick="window.location.href = 'charsheet.html';">
-                Character Sheet
-            </button>
+            <!-- <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+        <p>Exotic: Too many to list.</p>
+        <p>Monstrous: Too many to list.</p> -->
+            <div>
+                <p id="helperInfo">help goes here</p>
+            </div>
+
+            <footer>
+                <button onclick="window.location.href = 'charsheet.html';">
+                    Character Sheet
+                </button>
+                <button onclick="init()">
+                    Reset
+                </button>
+            </footer>
         </div>
+        <script>
+            // races();
+            // init()
+            initPageInfo("class", 0);
+
+        </script>
     </div>
 </body>
 

@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "cannon-es": "^0.20.0"
+  }
+}

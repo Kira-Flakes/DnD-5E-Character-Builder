@@ -1,8 +1,11 @@
 <!doctype html>
 <html>
-<script src="/js/characterSheet.js"></script>
-<script src="/js/listeners.js"></script>
-<script src="/js/characterUtils.js"></script>
+<script src="../js/characterSheet.js"></script>
+<script src="../js/listeners.js"></script>
+<script src="../js/characterUtils.js"></script>
+<script src="../js/main.js"></script>
+<!-- <script type="module" src="../js/d20Logo.js"></script> -->
+<!-- <script src="../js/api.js"></script> -->
 <script>
 
     var character; // global scope
@@ -23,16 +26,15 @@
 
     <title>Race</title>
 </head>
-
+<!-- <canvas class="webgl"></canvas> -->
 <body>
     <h1>Wiz-Rad!</h1>
+    
+    </h1>
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
                 <a href="./gettingstarted.html">Getting Started</a>
-            </div>
-            <div class="tab">
-                <a href="./background.html">Background</a>
             </div>
             <div class="tab current">
                 <a href="./race.html">Race</a>
@@ -41,42 +43,75 @@
                 <a href="./class.html">Class</a>
             </div>
             <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
                 <a href="./equipment.html">Equipment</a>
+            </div>
+            <div class="tab">
+                <a href="./rollDemo.html">Roll Demo</a>
             </div>
         </div>
     </div>
 
-    <!--Container for 3-column layout-->
+    <!--Container for 2-column layout-->
     <div class="container">
-        <div class="column left">
-            <p id="raceExplainer" >Race...</p>
-            <div class="question">
-                <p>What type of race is your character?</p>
-                <div class="container">
-                    <button>Human-like</button>
-                    <button>Exotic</button>
-                    <button>Monstrous</button>
-                </div>
-                <div class="query" loadQuestion()>
-                    <p id="currQuery">
-                        blank query
-                    </p>
-                </div>
+        <div class="column left" id="content">
+            <p id="title">Race</p>
+            <!-- Add a brief race explanation -->
+            <div id="explainer">
             </div>
+            <div class="question" id="question">
+                <p id="prompt"></p>
+                <div id="answers"></div>
+            </div>
+            <div class="response" id="response">
+                <p id="responseTitle"></p>
+            </div>
+            <!-- <p id="stat"></p>
+            <p id="statdesc"></p>
+            <p id="statdesc2"></p>			
+            <p id="statdesc3"></p>
+            <p id="statdesc4"></p>			
+            <p id="statdesc5"></p>			
+            <p id="statdesc6"></p>	
+			<p id="statdesc7"></p>	 -->
         </div>
+
         <div class="column right">
-            <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
-            <p>Exotic: Too many to list.</p>
-            <p>Monstrous: Too many to list.</p>
-            <button onclick="window.location.href = 'charsheet.html';">
-                Character Sheet
-            </button>
+            <!-- <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+        <p>Exotic: Too many to list.</p>
+        <p>Monstrous: Too many to list.</p> -->
+            <div>
+                <p id="helperInfo"></p>
+</p>
+            </div>
+
+            <footer>
+                <button onclick="window.location.href = 'charsheet.html';">
+                    Character Sheet
+                </button>
+                <button onclick="init(); location.reload()">
+                    Reset
+                </button>
+            </footer>
         </div>
         <script>
-            races();
-            loadQuestion();
+            // races();
+            // init()
+            initPageInfo("race", 0);
+
         </script>
+
     </div>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
+        }
+    </script>
 </body>
 
 </html>
