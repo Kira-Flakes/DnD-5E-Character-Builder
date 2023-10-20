@@ -14,12 +14,12 @@
                 "ans": {
                     "Short": [
                         "Halfling,Gnome,Dwarf",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        "Those known for their shorter stature and a hardiness, making them well-suited for close combat and physical challenges. They often excel in strength and resilience, making them resilient warriors. Their smaller size doesn't hinder their capabilities; instead, it enhances their skills and allows them to adapt well to various physical tasks.",
                         "->subRace"
                     ],
                     "Tall": [
                         "Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc",
-                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks.",
+                        "Taller and more agile characters can possess grace, nimbleness, and agility, excelling in finesse-based tasks and ranged combat. This group has a wide range of characters with unique abilities and backgrounds, making them versatile and adaptable to different situations.",
                         "2"
                     ]
                 }
@@ -29,12 +29,12 @@
                 "ans": {
                     "More Like A Human": [
                         "Human,Half-Elf,Half-Orc",
-                        "Short and sturdy characters often excel in strength and resilience, adapted for close combat and enduring physical challenges.",
+                        "Characters with more human-like qualities in D&D tend to exhibit a balance of physical and mental attributes. They often adapt well to diverse roles and situations.",
                         "->subRace"
                     ],
                     "More Like A Creature": [
                         "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
-                        "Tall and agile characters possess grace and nimbleness, excelling in agility and precision, well-suited for ranged combat and finesse-based tasks.",
+                        "Individuals with unique qualities that possess traits which deviate from the typical human characteristics. These non-human attributes often come with distinct abilities and backgrounds, setting them apart from the common human experience.",
                         "3"
                     ]
                 }
@@ -50,26 +50,94 @@
                     "Breath fire (or other elements)": [
                         "Dragonborn",
                         "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems.",
+                        "4"
+                    ]
+                }
+            },
+            "q4": {
+                "q": "Do you destroy your foes up close or from afar?",
+                "ans": {
+                    "Up Close": [
+                        "Dragonborn(fire),Dragonborn(Poison),Dragonborn(Cold)",
+                        "Magical abilities provide characters with access to spells and arcane knowledge, allowing them to manipulate reality through incantations. Classes like Wizards and Sorcerers harness raw magical energy.",
+                        "5"
+                    ],
+                    "From Afar": [
+                        "Dragonborn",
+                        "Characters with a strong connection to nature, such as Druids and Rangers, draw power from the natural world. They communicate with animals, shape-shift, and wield nature-based spells. Their magic is closely tied to the elements and ecosystems.",
+                        "6"
+                    ]
+                }
+            },
+            "q5": {
+                "q": "Choose a breath weapon:",
+                "ans": {
+                    "Fire": [
+                        "Gold Dragonborn,Red Dragonborn",
+                        "Fire-related abilities involve the use of flames or fiery breath to deal damage. Such powers are often associated with an affinity for magical energy and can suit classes like Wizards and Sorcerers.",
+                        "->subRace"
+                    ],
+                    "Poison": [
+                        "Green Dragonborn",
+                        "Poison-based abilities typically revolve around the release of toxic gas that harms opponents. These capabilities align with classes like Druids and Rangers, which draw power from nature and are connected to the elements and ecosystems.",
+                        "->subRace"
+                    ],
+                    "Cold": [
+                        "Silver Dragonborn,White Dragonborn",
+                        "Cold abilities often involve the emission of freezing breath. The specifics of these powers aren't mentioned, but they're connected to the element of cold.",
+                        "->subRace"
+                    ]
+                }
+            },
+            "q6": {
+                "q": "Choose a breath weapon: Choose a breath weapon:",
+                "ans": {
+                    "Acid": [
+                        "Black Dragonborn,Copper Dragonborn",
+                        "Acid-based abilities allow for the expulsion of corrosive acid, which can be used as a breath weapon. Like Fire abilities, Acid powers are often related to manipulating magical energy and can align with classes like Wizards and Sorcerers.",
+                        "->subRace"
+                    ],
+                    "Lightning": [
+                        "Blue Dragonborn,Bronze Dragonborn",
+                        "Lightning abilities include the release of bolts of lightning. These powers have a connection to nature and the elements and are compatible with classes like Druids and Rangers, which draw their power from the natural world.",
+                        "->subRace"
+                    ],
+                    "Fire": [
+                        "Brass Dragonborn",
+                        "Fire-related abilities involve the use of flames or fiery breath to deal damage. Such powers are often associated with an affinity for magical energy and can suit classes like Wizards and Sorcerers.",
                         "->subRace"
                     ]
                 }
             },
             "response": {
                 "type": "subRace",
-                "title": "Based on your responses, we've handpicked a selection of races for your character:",
+                "title": "Based on your response, we've handpicked a selection of races for your character:",
                 "options": "$race"
             }
         },
         "subRace": {
-            "Dwarf": "Hill Dwarf,Mountain Dwarf",
-            "Elf": "High Elf,Wood Elf,Dark Elf (Drow)",
-            "Tiefling": "",
-            "Dragonborn": "",
-            "Human": "",
-            "Half-Elf": "",
-            "Half-Orc": "",
-            "Halfling": "opt1,opt2",
-            "Gnome": ""
+            "Dwarf": {
+                "Hill Dwarf": "<h2>Hill Dwarf</h2><p>As a hill dwarf, you have keen senses, deep intuition, and remarkable resilience. The gold dwarves of Faenln in their mighty southern kingdom are hill dwarves, as are the exiled Neidar and the debased Klar of Krynn in the Dragonlance setting.</p><p><strong>Ability Score Increase:</strong> Your Wisdom score increases by 1.</p><p><strong>Dwarven Toughness:</strong> Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.</p>",
+                "Mountain Dwarf": "<h2>Mountain Dwarf</h2><p>As a mountain dwarf, you're strong and hardy, accustomed to a difficult life in rugged terrain. You're probably on the tall side (for a dwarf), and tend toward lighter coloration. The shield dwarves of northern Faerun, as well as the ruling Hylar clan and the noble Daewar clan of Dragonlance, are mountain dwarves.</p><p><strong>Ability Score Increase:</strong> Your Strength score increases by 2.</p><p><strong>Dwarven Armor Training:</strong> You have proficiency with light and medium armor.</p>"
+            },
+            "Elf": {
+                "High Elf": "<h2>High Elf</h2> <p>As a high elf, you have a keen mind and a mastery of at least the basics of magic. In many of the worlds of D&D, there are two kinds of high elves. One type (which includes the gray elves and valley elves of Greyhawk, the Silvanesti of Dragonlance, and the sun elves of the Forgotten Realms) is haughty and reclusive, believing themselves to be superior to non-elves and even other elves. The other type (including the high elves of Greyhawk, the Qualinesti of Dragonlance, and the moon elves of the Forgotten Realms) is more common and friendly, often encountered among humans and other races. </p> <p><strong>Ability Score Increase:</strong> Your Intelligence score increases by 1. </p> <p><strong>Elf Weapon Training:</strong> You have proficiency with the longsword, shortsword, shortbow, and longbow. </p> <p><strong>Cantrip:</strong> You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it. </p> <p><strong>Extra Language:</strong> You can speak, read, and write one extra language of your choice.</p>",
+                "Wood Elf": "<h2>Wood Elf</h2> <p>As a wood elf, you have keen senses and intuition, and your fleet feet carry you quickly and stealthily through your native forests. This category includes the wild elves (grugach) of Greyhawk and the Kagonesli of Dragonlance, as well as the races called wood elves in Greyhawk and the Forgotten Realms. In Faerun, wood elves (also called wild elves, green elves, or forest elves) are reclusive and distrustful of non-elves. </p> <p><strong>Ability Score Increase:</strong> Your Wisdom score increases by 1. </p> <p><strong>Elf Weapon Training:</strong> You have proficiency with the longsword, shortsword, shortbow, and longbow. </p> <p><strong>Fleet of Foot:</strong> Your base walking speed increases to 35 feet. </p> <p><strong>Mask of the Wild:</strong> You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.</p>",
+                "Dark Elf (Drow)": "<h2>Dark Elf (Drow)</h2><p>Descended from an earlier subrace of dark-skinned elves, the drow were banished from the surface world for following the goddess Lolth down the path to evil and corruption. Now they have built their own civilization in the depths of the Underdark, patterned after the Way of Lolth. Also called dark elves, the drow have black skin that resembles polished obsidian and stark white or pale yellow hair. They commonly have very pale eyes (so pale as to be mistaken for white) in shades of lilac, silver, pink, red, and blue. They tend to be smaller and thinner than most elves.</p><p>Drow adventurers are rare, and the race does not exist in all worlds. Check with your Dungeon Master to see if you can play a drow character.</p><p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1.</p><p><strong>Superior Darkvision:</strong> Your darkvision has a radius of 120 feet.</p><p><strong>Sunlight Sensitivity:</strong> You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p><p><strong>Drow Magic:</strong> You know the dancing lights cantrip. When you reach 3rd level, you can cast the faerie fire spell once per day. When you reach 5th level, you can also cast the darkness spell once per day. Charisma is your spellcasting ability for these spells.</p><p><strong>Drow Weapon Training:</strong> You have proficiency with rapiers, shortswords, and hand crossbows.</p>"
+            },
+            "Tiefling": "null",
+            "Dragonborn": "null",
+            "Human": "null",
+            "Half-Elf": "null",
+            "Half-Orc": "null",
+            "Halfling": {
+                "Lightfoot Halfling": "<h2>Lightfoot Halfling</h2> <p>Lightfoot halflings are more prone to wanderlust than other halflings and often dwell alongside other races or take up a nomadic life. In the world of Greyhawk, these halflings are called hairfeet or tallfellows. They are known to be affable and get along well with others. In the Forgotten Realms, lightfoot halflings have spread the farthest and thus are the most common variety. </p> <p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1. </p> <p><strong>Naturally Stealthy:</strong> You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you. </p>",
+                "Stout Halfling": "<h2>Stout Halfling</h2> <p>Stout halflings are hardier than average and have some resistance to poison. Some say that stouts have dwarven blood. In the Forgotten Realms, these halflings are called stronghearts, and they're most common in the south. </p> <p><strong>Ability Score Increase:</strong> Your Constitution score increases by 1. </p> <p><strong>Stout Resilience:</strong> You have advantage on saving throws against poison, and you have resistance against poison damage.</p>"
+            },
+            "Gnome": {
+                "Forest Gnome": "<h2>Forest Gnome</h2> <p>Forest gnomes are rare and secretive, gathering in hidden communities in sylvan forests. They have a natural knack for illusion, quickness, and stealth. These gnomes tend to be friendly with other good-spirited woodland folk, and they regard elves and good fey as their most important allies. Forest gnomes also befriend small forest animals and rely on them for information about threats that might prowl their lands. </p> <p><strong>Ability Score Increase:</strong> Your Dexterity score increases by 1. </p> <p><strong>Natural Illusionist:</strong> You know the minor illusion cantrip. Intelligence is your spellcasting ability for it. </p> <p><strong>Speak with Small Beasts:</strong> Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts. Forest gnomes love animals and often keep squirrels, badgers, rabbits, moles, woodpeckers, and other creatures as beloved pets.</p>",
+                "Rock Gnome": "<h2>Rock Gnome</h2> <p>Most gnomes in the worlds of D&D are rock gnomes, known for their natural inventiveness and hardiness. They are particularly skilled in tinkering with devices and gadgets. In the Dragonlance setting, the tinker gnomes belong to this subrace. </p> <p><strong>Ability Score Increase:</strong> Your Constitution score increases by 1. </p> <p><strong>Artificer's Lore:</strong> Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply. </p> <p><strong>Tinker:</strong> You have proficiency with artisan's tools (tinker's tools) and can use them to create various clockwork devices, such as clockwork toys, fire starters, or music boxes.</p>"
+            }
         }
     },
     "class": {

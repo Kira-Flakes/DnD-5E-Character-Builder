@@ -35,6 +35,7 @@ function loadExplainer(page, iter) {
             // console.log("setting details")
             explainerDiv.innerText = currentPage.explainer.details
             continueBtn = document.createElement('button')
+            continueBtn.setAttribute('id','beginButton')
             continueBtn.innerText = 'Begin'
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
@@ -95,11 +96,13 @@ function setAlignmentInfo() {
 // access guide and get the races
 function races() {
     const res = document.getElementById("raceExplainer");
+    const helperStart = document.getElementById('helperInfo')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
 
             res.innerText = data.race.explainer;
+            helperStart.innerHTML = data.race.explainer.details
 
         })
         .catch(error => {
@@ -393,7 +396,7 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: 'Race',
-                explanation: 'Based on your responses, we think these races would be a good fit for your playstyle.',
+                explanation: 'Choose',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
@@ -454,22 +457,33 @@ function pickSubrace(race) {
         .then(response => response.json())
         .then(data => {
             console.log('Json test: ' + data['race'].subRace[race])
-            // response = document.getElementById('response')
-            // response.innerText = 'Choose a subrace for your ' + race
-            // document.getElementById('prompt').innerText = 'PROMTP'
+            // if no subrace is to be chosen.
+            console.log("Value here: "+data['race'].subRace[race])
+            if (data['race'].subRace[race] === 'null') {
+                localStorage.setItem("_race",race)
+                loadRaceCompletionDiv()
+                return
+            }
             setElementsInColumnOne({
                 title: 'Choose a Subrace for your ' + race,
                 explanation: 'A subrace will give your character more depth and personality.',
                 prompt: 'Select your race:',
                 responseTitle: ''
             })
-            opts = data['race'].subRace[race].split(',')
+            opts = data['race'].subRace[race]
             for (const o in opts) {
                 btn = document.createElement('button')
-                btn.innerText = opts[o]
+                btn.innerText = o
                 btn.onclick = function () {
-                    localStorage.setItem('subRace')
+                    localStorage.setItem('subRace',o)
+                    localStorage.setItem('_race',o)
+                    loadRaceCompletionDiv()
+
                 }
+                btn.addEventListener('mouseenter', function () {
+                    clearHelperInfo()
+                    document.getElementById('helperInfo').innerHTML = opts[o]
+                })
                 document.getElementById('content').appendChild(btn)
             }
 
@@ -477,6 +491,10 @@ function pickSubrace(race) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function loadRaceCompletionDiv() {
+
 }
 
 function setElementsInColumnOne(requestedElements) {
