@@ -7,6 +7,20 @@
 
 // const { nextTick } = require("process");
 const divCache = []
+let allDetails
+
+
+// Use the fetch API to retrieve the JSON data
+fetch('/guide.json')
+  .then(response => response.json())
+  .then(data => {
+    // Data is the parsed JSON object
+    allDetails = Object.keys(data.misc);
+    console.log(allDetails);
+  })
+  .catch(error => {
+    console.error('Error loading JSON:', error);
+  });
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -17,7 +31,7 @@ function setWelcomeInfo(page) {
         .then(data => {
             const currPage = data[page]
             welcomeTxt.innerText = currPage.welcome;
-            info.innerHTML = highlightTextWithMouseover(currPage.explainer, ['race', 'class', 'ability scores', 'personality', 'equipment', 'character sheet']);
+            info.innerHTML = highlightTextWithMouseover(currPage.explainer, allDetails);
             console.log("Here")
         })
         .catch(error => {
@@ -33,9 +47,9 @@ function loadExplainer(page, iter) {
         .then(data => {
             const currentPage = data[page]
             // console.log("setting details")
-            explainerDiv.innerText = currentPage.explainer.details
+            explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details,allDetails)
             continueBtn = document.createElement('button')
-            continueBtn.setAttribute('id','beginButton')
+            continueBtn.setAttribute('id', 'beginButton')
             continueBtn.innerText = 'Begin'
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
@@ -180,7 +194,7 @@ function loadQuestion(page) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]; // seek data from the current page (race, class, etc)
-            const questionJSON = currentPage.questions[q]; // get question based on state
+            const questionJSON =  currentPage.questions[q]; // get question based on state
             try {  // try to load the question
                 question.innerText = questionJSON.q;
             }
@@ -405,7 +419,12 @@ function giveChoices(page) {
                 const choice = document.createElement('button');
                 const raceD = {}
                 raceD.id = options[r]
-                raceD.val = raceDiscreptionDiv(options[r])
+                if (options[r].includes('Dragonborn')) {
+                    raceD.val = raceDiscreptionDiv('Dragonborn')
+                }
+                else {
+                    raceD.val = raceDiscreptionDiv(options[r])
+                }
                 divCache.push(raceD)
                 choice.setAttribute('id', 'choiceButton')
                 choice.innerText = options[r]
@@ -440,6 +459,15 @@ function clearHelperInfo() {
 
 }
 
+function clearMainInfo() {
+    document.getElementById('title').innerText = ""
+    document.getElementById('explainer').innerText = ""
+    document.getElementById('question').innerText = ""
+    // document.getElementById('prompt').innerText = ""
+
+
+}
+
 function raceDiscreptionDiv(race) {
     res = races(race.toLowerCase())
     // children = res.childElements()
@@ -452,42 +480,71 @@ function raceDiscreptionDiv(race) {
 
 function pickSubrace(race) {
     console.log("Race is " + race)
-    tempButtons = []
+    const tempButtonsId = []
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            console.log('Json test: ' + data['race'].subRace[race])
+            // console.log('Json test: ' + data['race'].subRace[race])
             // if no subrace is to be chosen.
-            console.log("Value here: "+data['race'].subRace[race])
+            console.log("Value here: " + data['race'].subRace[race])
             if (data['race'].subRace[race] === 'null') {
-                localStorage.setItem("_race",race)
-                loadRaceCompletionDiv()
+                localStorage.setItem("_race", race)
+                localStorage.setItem('_subRace', '')
+                
+                clearMainInfo()
+                conclusion("race")
                 return
             }
             setElementsInColumnOne({
                 title: 'Choose a Subrace for your ' + race,
                 explanation: 'A subrace will give your character more depth and personality.',
-                prompt: 'Select your race:',
+                // prompt: 'Select your race:',
                 responseTitle: ''
             })
             opts = data['race'].subRace[race]
             for (const o in opts) {
                 btn = document.createElement('button')
+                btn.setAttribute('id', o)
                 btn.innerText = o
                 btn.onclick = function () {
-                    localStorage.setItem('subRace',o)
-                    localStorage.setItem('_race',o)
-                    loadRaceCompletionDiv()
+                    localStorage.setItem('_subRace', o)
+                    // localStorage.setItem('_race', o)
+                    clearMainInfo()
 
+                    for (const b in tempButtonsId) {
+                        console.log("B: " + tempButtonsId[b])
+                        document.getElementById(tempButtonsId[b]).remove()
+                    }
+
+                    conclusion('race')
                 }
                 btn.addEventListener('mouseenter', function () {
                     clearHelperInfo()
                     document.getElementById('helperInfo').innerHTML = opts[o]
                 })
                 document.getElementById('content').appendChild(btn)
+                tempButtonsId.push(btn.id)
             }
 
         })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function conclusion(page) {
+    const conclusionDiv = document.createElement('div')
+    conclusionDiv.setAttribute('id', 'conclusionDiv')
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
+            // const continueBtn = document.createElement('button')
+            // continueBtn.innerText = "Continue"
+            // document.getElementById('footerButton').innerText = 'Continue'
+            document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+        })
+
         .catch(error => {
             console.error('Error:', error);
         });
@@ -628,14 +685,20 @@ function alterState(topic, change) {
 // }
 
 function highlightTextWithMouseover(inputString, textsToHighlight) {
-    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {
-        return inputString;
+    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
+        const strEl = inputString.split("**")
+        // console.log("STREL: " + strEl)
+        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length-1]
+        return newString;
     }
 
     const closeTag = '</mark>';
 
     let highlightedString = inputString;
     const encounteredTexts = new Set();
+    const strEl = inputString.split("**")
+    // console.log("STREL: " + strEl)
+    const newString = strEl[0] + localStorage.getItem("_") + strEl[strEl.length]
 
     textsToHighlight.forEach(textToHighlight => {
         const regex = new RegExp(textToHighlight, 'g');
@@ -1062,7 +1125,7 @@ function races(race) {
     let raceS = String(race)
     let search = API2("races", raceS);
     const raceDiv = document.createElement('div')
-    raceDiv.setAttribute('class','raceInfoDiv')
+    raceDiv.setAttribute('class', 'raceInfoDiv')
 
     fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
         if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
@@ -1075,15 +1138,15 @@ function races(race) {
         .then(data => {
 
             const termInfo = parseAPIString(JSON.stringify(data.name));	     //Turning JSON attribute into a string
-            const term = termInfo[0]			
-            console.log("TERM: "+term)
+            const term = termInfo[0]
+            console.log("TERM: " + term)
             stat = document.createElement("h1")
             stat.innerHTML = term;
             raceDiv.appendChild(stat)
 
             const termdescInfo = parseAPIString(JSON.stringify(data.desc));
             const termdesc = termdescInfo[0]
-            console.log("TERMdesc: "+termdesc)
+            console.log("TERMdesc: " + termdesc)
             statdesc = document.createElement("p")
             statdesc.innerHTML = termdesc
             raceDiv.appendChild(statdesc)
@@ -1104,7 +1167,7 @@ function races(race) {
             statdesc4 = document.createElement("p")
             statdesc4.innerHTML = termdesc4
             raceDiv.appendChild(statdesc4)
-            
+
             const termdesc5 = parseAPIString(JSON.stringify(data.languages))[0];
             statdesc5 = document.createElement("p")
             statdesc5.innerHTML = termdesc5
@@ -1133,11 +1196,11 @@ function races(race) {
 
 function parseAPIString(string) {
     res = []
-    string = string.replaceAll("\"",'')
-    string = string.replaceAll("##",'<h2>')
-    string = string.replaceAll("\\n","</h2>")
-    string = string.replaceAll("**_","<h2>")
-    string = string.replaceAll("._**","</h2>")
+    string = string.replaceAll("\"", '')
+    string = string.replaceAll("##", '<h2>')
+    string = string.replaceAll("\\n", "</h2>")
+    string = string.replaceAll("**_", "<h2>")
+    string = string.replaceAll("._**", "</h2>")
     res.push(string)
 
     return res
