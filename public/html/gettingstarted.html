@@ -65,8 +65,8 @@
                 <div class="question">
                     <p>First, please enter the players name as you'd like it to appear on the character sheet:</p>
 
-                    <input id="_playername" type="text" />
-                    <button onclick="next()" type="submit">Submit</button>
+                    <input id="_name" class="textinput" type="text" placeholder="Enter name"><br>
+                    <button class="submitButton" onclick="storeKeyFromInput('_name')" role="button">Submit</button>
                     <script>
                         function next() {
                             character.setPlayername(document.getElementById('_playername').value)
