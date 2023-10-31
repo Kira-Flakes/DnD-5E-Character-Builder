@@ -17,6 +17,8 @@
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: #171717;
+    background-image: url("../images/Stone_Background_smaller.png");
+    background-repeat: repeat;
     font-size: 1.5vw;
     color: rgb(255, 255, 255);
 }
@@ -203,7 +205,6 @@ button {
     border-width: 0;
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .1) 0 2px 5px 0, rgba(0, 0, 0, .07) 0 1px 1px 0;
     box-sizing: border-box;
-    color: #fff;
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
     font-size: 100%;
@@ -212,7 +213,6 @@ button {
     /* margin: 12px 0 0; */
     outline: none;
     overflow: hidden;
-    padding: 0 25px;
     position: relative;
     text-align: center;
     text-transform: none;
@@ -227,7 +227,7 @@ button {
     vertical-align: middle;
     text-align: center;
     background-color: #454545;
-    /* color: white; */
+    color: white;
     padding: 5px 10px;
     margin-bottom: 10px;
     border-radius: 3px;
