@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=MedievalSharp&display=swap');
 
+/* Fonts from fonts folder */
+@font-face {
+    font-family: 'Franchise';
+    src: url(../fonts/Franchise.ttf);
+}
+@font-face {
+    font-family: 'Nougat-ExtraBlack';
+    src: url(../fonts/Nougat-ExtraBlack.ttf);
+}
+
 :root {
     --left-col-width: 100px;
 }
@@ -19,13 +29,42 @@ a {
 
 /* Miscellaneous text inside left column */
 p {
-    /* color: #ffd35c; */
+    color: #8b8b8b;
 }
+
+/* Testing new Wiz-Rad header 
+.text {
+    position: absolute;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    transform: translate(50%,-50%);
+    text-transform: uppercase;
+    font-family: 'Nougat-ExtraBlack';
+    font-size: 30px;
+    font-weight: 700;
+    color: #f5f5f5;
+    text-shadow: 1px 1px 1px #919191,
+        1px 2px 1px #919191,
+        1px 3px 1px #919191,
+        1px 4px 1px #919191,
+        1px 5px 1px #919191,
+        1px 6px 1px #919191,
+        1px 7px 1px #919191,
+        1px 8px 1px #919191,
+        1px 9px 1px #919191,
+        1px 10px 1px #919191,
+    1px 18px 6px rgba(16,16,16,0.4),
+    1px 22px 10px rgba(16,16,16,0.2),
+    1px 25px 35px rgba(16,16,16,0.2),
+    1px 30px 60px rgba(16,16,16,0.4);
+}
+*/
 
 /* Wiz-Rad at top of page */
 h1 {
-    font-family: 'OldeEnglish';
-    font-size: 50px;
+    font-family: 'Nougat-ExtraBlack';
+    font-size: 60px;
+    font-style: italic;
     color: rgb(250, 135, 135);
     text-align: center;
     margin-bottom: 35px;
@@ -38,7 +77,7 @@ h1 {
 
 /* For p tags inside questions */
 .question p {
-    color: rgb(255, 130, 130);
+    color: rgb(255, 255, 255);
 }
 
 /* Hides the default bubbles for radio buttons */
@@ -47,6 +86,87 @@ input[type="checkbox"] {
     visibility: hidden;
     height: 0;
     width: 0;
+}
+
+/* Selected checkboxes */
+input[type="checkbox"]:checked+label {
+    background-color: rgb(119, 45, 45);
+}
+
+/* For selected radio buttons */
+input[type="radio"]:checked+label {
+    background-color: rgb(119, 45, 45);
+}
+
+.textinput {
+    border: 0; 
+    padding: 7px 15px; 
+    margin-bottom: 10px;
+    border: 1px solid #ccc; 
+    position: relative;
+    background: transparent;
+}
+.textinput ~ .focus-bg {
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: #ededed; 
+    opacity: 0; 
+    transition: 0.5s; 
+    z-index: -1;
+}
+.textinput:focus ~ .focus-bg {
+    transition: 0.5s; 
+    opacity: 1;
+}
+::placeholder {
+  color: rgb(149, 149, 149);
+}
+
+/* For input tags of the button type inside container,
+   and normal buttons */
+.container input[type=button],
+button {
+    flex: 1;
+    /* stretch out horizontally to occupy negative space */
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 58px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Button 41 from https://getcssscan.com/css-buttons-examples */
+.submitButton {
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #ab6c6c, #9c6161);
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    /*display: inline-block;*/
+    font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+    height: 58px;
+    line-height: 44px;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 10%;
+    z-index: 9;
+    border: 0;
+}
+.submitButton:hover {
+    background: #822f2f;
 }
 
 /* Labels for radio buttons */
@@ -87,7 +207,7 @@ button {
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
     font-size: 100%;
-    height: 44px;
+    height: 58px;
     line-height: 1.15;
     /* margin: 12px 0 0; */
     outline: none;
@@ -220,32 +340,10 @@ button:focus {
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
 
-/* Selected checkboxes */
-input[type="checkbox"]:checked+label {
-    background-color: rgb(119, 45, 45);
-}
-
-/* For selected radio buttons */
-input[type="radio"]:checked+label {
-    background-color: rgb(119, 45, 45);
-}
 
 /* For submit buttons only */
 button[type=submit] {
     background-color: rgb(230, 159, 118);
-}
-
-/* For input tags of the button type inside container,
-   and normal buttons */
-.container input[type=button],
-button {
-    flex: 1;
-    /* stretch out horizontally to occupy negative space */
-    margin-right: 10px;
-    margin-bottom: 10px;
-    height: 40px;
-    border-radius: 6px;
-    text-align: center;
 }
 
 

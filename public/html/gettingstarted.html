@@ -10,7 +10,8 @@
     window.addEventListener('load', function () {
         character = new characterSheet();
         // character.updateSheet(); // local storage attributes fill the sheet
-        setWelcomeInfo();
+        // setWelcomeInfo();
+        initPageInfo('gettingStarted', 0);
     }); // end listener
 </script>
 
@@ -33,16 +34,19 @@
                 <a href="./gettingstarted.html">Getting Started</a>
             </div>
             <div class="tab">
-                <a href="./background.html">Background</a>
-            </div>
-            <div class="tab">
                 <a href="./race.html">Race</a>
             </div>
             <div class="tab">
                 <a href="./class.html">Class</a>
             </div>
             <div class="tab">
+                <a href="./background.html">Background</a>
+            </div>
+            <div class="tab">
                 <a href="./equipment.html">Equipment</a>
+            </div>
+            <div class="tab">
+                <a href="./rollDemo.html">Roll Demo</a>
             </div>
         </div>
     </div>
@@ -51,18 +55,24 @@
     <div class="container">
         <div class="column left">
             <p id="welcomeMessage">Temp</p>
-            <div class="question">
-                <p>Would you like to use a preset character, or make your own?</p>
-                <div class="container">
+            <div class="content">
+                <p id="info"></p>
+                <!-- <p>Would you like to use a preset character, or make your own?</p> -->
+                <!-- <div class="container">
                     <button>Preset</button>
                     <button>Make my own</button>
-                </div>
+                </div> -->
                 <div class="question">
-                    <p>Enter your first and last name.</p>
+                    <p>First, please enter the players name as you'd like it to appear on the character sheet:</p>
 
-                    <input id="_playername" type="text" />
-                    <button onclick="character.setPlayername(document.getElementById('_playername').value)"
-                        type="submit">Submit</button>
+                    <input id="_name" class="textinput" type="text" placeholder="Enter name"><br>
+                    <button class="submitButton" onclick="storeKeyFromInput('_name')" role="button">Submit</button>
+                    <script>
+                        function next() {
+                            character.setPlayername(document.getElementById('_playername').value)
+                            window.location.href = "../html/race.html"
+                        }
+                    </script>
                     <!-- <input onclick="localStorage.setItem('_name',document.getElementById('_name').value)" type="submit"> -->
 
                 </div>
@@ -70,29 +80,31 @@
 
         </div>
         <div class="column right">
-            <p>Helpful information goes here...</p>
-
+            <!-- <p>During this process, we will show you helpful informaiton about your decisions.</p> -->
+            <div>
+                <p id="helperInfo">help goes here</p>
+            </div>
 
             <p id="stat"></p>
             <p id="statdesc"></p>
-            <p id="statdesc2"></p>			
+            <p id="statdesc2"></p>
             <p id="statdesc3"></p>
-            <p id="statdesc4"></p>			
-            <p id="statdesc5"></p>			
-            <p id="statdesc6"></p>	
-			<p id="statdesc7"></p>
-			<p id="statdesc8"></p>
-			
-			
-            <script>
+            <p id="statdesc4"></p>
+            <p id="statdesc5"></p>
+            <p id="statdesc6"></p>
+            <p id="statdesc7"></p>
 
-               races("half-orc");
+            <!-- <script>
 
-            </script>
-            <button onclick="window.location.href = './charsheet.html';">
-                Character Sheet
-            </button>
+               backgrounds("acolyte");
 
+            </script> -->
+
+            <footer>
+                <button onclick="window.location.href = 'charsheet.html';">
+                    Character Sheet
+                </button>
+            </footer>
 
         </div>
     </div>
