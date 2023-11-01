@@ -24,6 +24,7 @@
     <script type="text/javascript" src="/js/api.js"></script>
 
     <title>Getting Started</title>
+    
 </head>
 
 <body>
@@ -53,7 +54,7 @@
 
     <!--Container for 3-column layout-->
     <div class="container">
-        <div class="column left">
+        <div class="column left" id="colLeft">
             <p id="welcomeMessage">Temp</p>
             <div class="content">
                 <p id="info"></p>
@@ -66,10 +67,11 @@
                     <p>First, please enter the players name as you'd like it to appear on the character sheet:</p>
 
                     <input id="_playername" type="text" />
-                    <button onclick="next()" type="submit">Submit</button>
+                    <button onclick="presentPreset()" type="submit">Submit</button>
                     <script>
                         function next() {
                             character.setPlayername(document.getElementById('_playername').value)
+                            localStorage.setItem('_playername',document.getElementById("_playername").value)
                             window.location.href = "../html/race.html"
                         }
                     </script>
@@ -77,9 +79,10 @@
 
                 </div>
             </div>
+            <!-- <img src="../img/dwarf.png" alt="Drawft Preset"> -->
 
         </div>
-        <div class="column right">
+        <div class="column right" id="colRight">
             <!-- <p>During this process, we will show you helpful informaiton about your decisions.</p> -->
             <div>
                 <p id="helperInfo">help goes here</p>
@@ -120,9 +123,9 @@
                     Character Sheet
                 </button>
             </footer>
-
         </div>
     </div>
+    
 </body>
 
 </html>

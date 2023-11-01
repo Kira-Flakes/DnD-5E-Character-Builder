@@ -1,4 +1,21 @@
 {
+    "presetChoice": {
+        "explainer": "In Dungeons & Dragons, a character preset is a pre-designed character with predefined race, class, abilities, and background. Players might opt for a character preset to save time and simplify the character creation process, making it easier to jump into the game.",
+        "questions": {
+            "q": "Do you want to choose from a few presets, or would you rather build a character from scratch?",
+            "ans": [
+                "Preset",
+                "From Scratch"
+            ]
+        },
+        "presets": {
+            "Dwarf": {
+                "id": "DwarfPreset",
+                "race": "Hill-Dwarf",
+                "bio": "This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+            }
+        }
+    },
     "gettingStarted": {
         "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy.",
         "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."

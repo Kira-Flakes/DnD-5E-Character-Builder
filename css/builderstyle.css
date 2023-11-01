@@ -257,6 +257,19 @@ button {
     flex-direction: row;
 }
 
+#bio {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+
+.box {
+    margin: 40px 0;
+    width: fit-content; 
+}
+
+
+
 /* Change all flexbox columns/items */
 .column {
     margin: 4px;
@@ -369,3 +382,20 @@ mark {
   mark:hover {
     color: rgb(156, 53, 53); /* Brightened text color on hover */
   }
+
+  img {
+    width: 60%;
+    /* height: 20%; */
+    height: auto;
+    object-fit: cover;
+    filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%);
+  }
+
+#viewSheetBtn {
+    bottom: 0;
+    right: 0;
+}
+  /* .box{
+    display: flex;
+
+  } */

@@ -12,15 +12,15 @@ let allDetails
 
 // Use the fetch API to retrieve the JSON data
 fetch('/guide.json')
-  .then(response => response.json())
-  .then(data => {
-    // Data is the parsed JSON object
-    allDetails = Object.keys(data.misc);
-    console.log(allDetails);
-  })
-  .catch(error => {
-    console.error('Error loading JSON:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+        // Data is the parsed JSON object
+        allDetails = Object.keys(data.misc);
+        console.log(allDetails);
+    })
+    .catch(error => {
+        console.error('Error loading JSON:', error);
+    });
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -39,6 +39,92 @@ function setWelcomeInfo(page) {
         });
 }
 
+function presentPreset() {
+    colLeft = document.getElementById("colLeft")
+
+    // clear the div, make room for preset question.
+    if (colLeft) {
+        // Remove all child elements
+        while (colLeft.firstChild) {
+            colLeft.removeChild(colLeft.firstChild);
+        }
+    } else {
+        console.log('Div element not found.');
+    }
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            let explainDiv = document.createElement('div')
+            explainDiv.innerHTML = highlightTextWithMouseover(data['presetChoice'].explainer, allDetails)
+            colLeft.appendChild(explainDiv)
+
+            let qDiv = document.createElement('div')
+            qDiv.innerHTML = data['presetChoice'].questions.q
+            colLeft.appendChild(qDiv)
+            pBtn = document.createElement('button')
+            npBtn = document.createElement('button')
+            pBtn.innerHTML = data['presetChoice'].questions.ans[0]
+            pBtn.onclick = function () {
+                clearDiv(colLeft)
+                loadPresetBios()
+
+            }
+            npBtn.innerHTML = data['presetChoice'].questions.ans[1]
+            colLeft.appendChild(pBtn)
+            colLeft.appendChild(npBtn)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function loadPresetBios() {
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            colLeft = document.getElementById("colLeft")
+            presets = data['presetChoice'].presets
+            for (p in presets) {
+                bioContainer = document.createElement('div')
+                // bioContainer.setAttribute('class','container')
+                bioContainer.setAttribute('id','bio')
+                colLeft.appendChild(bioContainer)
+                boxL = document.createElement('div')
+                boxR = document.createElement('div')
+                boxL.setAttribute('class','box')
+                boxR.setAttribute('class','box')
+                bioContainer.appendChild(boxL)
+                bioContainer.appendChild(boxR)
+                pDiv = document.createElement("div")
+                pDiv.setAttribute('id','presetBio')
+                race = document.createElement("h2")
+                race.innerHTML = presets[p].race
+                boxL.appendChild(race)
+                pImg = document.createElement('img')
+                pImg.setAttribute('src','../img/'+presets[p].race+'Preset.png')
+                // pImg.setAttribute('id','pImg')
+                boxL.appendChild(pImg)
+                pBio = document.createElement('div')
+                pBio.innerHTML = presets[p].bio
+                boxR.appendChild(pBio)
+                viewSheet = document.createElement('button')
+                viewSheet.setAttribute('id','viewSheetBtn')
+                viewSheet.innerText = "View Character Sheet"
+                console.log("DSFDFDSF:  " + presets[p].id)
+                viewSheet.onclick = function () {
+                    loadPreset(presets[p].id)
+                    window.location.href = "../html/charsheet.html"
+                } 
+                boxR.appendChild(viewSheet)
+
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 // Put all explainer information on the page
 function loadExplainer(page, iter) {
     explainerDiv = document.getElementById("explainer")
@@ -47,7 +133,7 @@ function loadExplainer(page, iter) {
         .then(data => {
             const currentPage = data[page]
             // console.log("setting details")
-            explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details,allDetails)
+            explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details, allDetails)
             continueBtn = document.createElement('button')
             continueBtn.setAttribute('id', 'beginButton')
             continueBtn.innerText = 'Begin'
@@ -194,7 +280,7 @@ function loadQuestion(page) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]; // seek data from the current page (race, class, etc)
-            const questionJSON =  currentPage.questions[q]; // get question based on state
+            const questionJSON = currentPage.questions[q]; // get question based on state
             try {  // try to load the question
                 question.innerText = questionJSON.q;
             }
@@ -490,7 +576,7 @@ function pickSubrace(race) {
             if (data['race'].subRace[race] === 'null') {
                 localStorage.setItem("_race", race)
                 localStorage.setItem('_subRace', '')
-                
+
                 clearMainInfo()
                 conclusion("race")
                 return
@@ -688,7 +774,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
         const strEl = inputString.split("**")
         // console.log("STREL: " + strEl)
-        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length-1]
+        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
         return newString;
     }
 
