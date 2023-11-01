@@ -6,7 +6,7 @@
     "race": {
         "explainer": {
             "header": "Race",
-            "details": "    The race you choose influences your character's physical traits, abilities, and cultural background, shaping how you interact with the game world and your role within it. For example, being a dwarf might make you more resistant to poison, or being an elf could grant you keen senses, all of which can impact your role in different situations.\n\nRace is by no means a restrictive attribute. While you may receive certain bonuses depending on the race you choose, choosing your class will have a much greater impact on your playstyle."
+            "details": "    Humans are the most common people in the worlds of D&D, but they live and work alongside dwarves, elves, halflings, and countless other fantastic species. Your character belongs to one of these peoples. Dwarves, elves, halflings, and humans are the most common races to produce the sort of adventurers who make up typical parties. Dragonborn, gnomes, half-elves, half-orcs, and tieflings are less common as adventurers. Drow, a subrace of elves, are also uncommon. Your choice of race affects many different aspects of your character. It establishes fundamental qualities that exist throughout your character's adventuring career. When making this decision, keep in mind the kind of character you want to play. For example, a halfling could be a good choice for a sneaky rogue, a dwarf makes a tough warrior, and an elf can be a master of arcane magic, Your character race not only affects your ability scores and traits but also provides the cues for building your character's story."
         },
         "questions": {
             "q1": {
@@ -25,7 +25,7 @@
                 }
             },
             "q2": {
-                "q": "Do you want to play as both a human/half-human?",
+                "q": "Do you want to play as a human/half-human?",
                 "ans": {
                     "Human/Half-Human": [
                         "Human,Half-Elf,Half-Orc",
@@ -49,7 +49,7 @@
                     ],
                     "Breath fire (or other elements)": [
                         "Dragonborn",
-                        "Elemental attacks can be devistating and tactical attacks that give you the upper hand in certain situations",
+                        "Elemental attacks can be devastating and tactical attacks that give you the upper hand in certain situations",
                         "4"
                     ]
                 }
