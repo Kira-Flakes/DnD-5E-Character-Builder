@@ -127,6 +127,15 @@ input[type="radio"]:checked+label {
   color: rgb(149, 149, 149);
 }
 
+/* try this later */
+canvas {
+    width: 100px;
+    height: 100px;
+    
+    margin-right: 70px;
+    margin-top:-20px;
+}
+
 /* For input tags of the button type inside container,
    and normal buttons */
 .container input[type=button],
@@ -456,7 +465,6 @@ mark {
     align-items: end;
     top: 0;
     right: 0;
-    position: absolute;
 }
 
 .brighten-on-hover {

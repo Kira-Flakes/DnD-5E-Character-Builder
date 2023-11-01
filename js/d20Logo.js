@@ -13,8 +13,8 @@ scene.add(mesh);
 
 //sizes
 const sizes = {
-    width: window.innerWidth/2,
-    height: window.innerHeight/2,
+    width: 66,
+    height: 66,
 }
 
 // light
@@ -34,15 +34,16 @@ renderer.setClearAlpha()
 renderer.setSize(sizes.width,sizes.height);
 renderer.render(scene, camera);
 
-// resize
-window.addEventListener('resize', () => {
-    sizes.width = window.innerWidth*.3
-    sizes.height = window.innerHeight*.3
+// resize 
+
+/*window.addEventListener('resize', () => {
+    sizes.width = 1920
+    sizes.height = 1080
     // update camera
     camera.updateProjectionMatrix();
     camera.aspect = sizes.width/sizes.height;
     renderer.setSize(sizes.width,sizes.height);
-});
+});*/
 
 const loop = () => {
     mesh.rotation.x += 0.01;
