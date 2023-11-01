@@ -42,6 +42,8 @@ function setWelcomeInfo(page) {
 
 function presentPreset() {
     colLeft = document.getElementById("colLeft")
+    console.log("Content:::: "+document.getElementById('_playername').value)
+    localStorage.setItem('_playername',document.getElementById('_playername').value)
 
     // clear the div, make room for preset question.
     if (colLeft) {
