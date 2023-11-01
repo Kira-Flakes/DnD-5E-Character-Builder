@@ -8,6 +8,7 @@
 // const { nextTick } = require("process");
 const divCache = []
 let allDetails
+let racePrev = 0
 
 
 // Use the fetch API to retrieve the JSON data
@@ -325,15 +326,30 @@ function loadQuestion(page) {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
+                    racePrev = localStorage.getItem(page+"State")
+                    console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
+                    document.getElementById('backbutton').remove()
                     loadQuestion(page) // load the next question
                 }; // set actions for the buttons
                 loadHelperInfoFromButton(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
+            backBtn = document.createElement('button')
+            backBtn.setAttribute("id", 'backbutton')
+            backBtn.innerText = "Back"
+            backBtn.onclick = function() {
+                for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
+                    document.getElementById(tempButtonsId[btn]).remove()
+                }
+                document.getElementById('backbutton').remove()
+                alterState(page, (racePrev));
+                loadQuestion(page)
+            }
+            document.getElementById('content').appendChild(backBtn)
         })
         .catch(error => {
             console.error('Error:', error);
