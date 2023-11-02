@@ -17,9 +17,9 @@
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: #171717;
-    background-image: url("../images/Stone_Background_smaller.png");
+    background-image: url("../images/Stone_Background.png");
     background-repeat: repeat;
-    font-size: 1.5vw;
+    font-size: 3vh;
     color: rgb(255, 255, 255);
 }
 
@@ -33,34 +33,6 @@ a {
 p {
     color: #8b8b8b;
 }
-
-/* Testing new Wiz-Rad header 
-.text {
-    position: absolute;
-    margin-top: 100px;
-    margin-bottom: 100px;
-    transform: translate(50%,-50%);
-    text-transform: uppercase;
-    font-family: 'Nougat-ExtraBlack';
-    font-size: 30px;
-    font-weight: 700;
-    color: #f5f5f5;
-    text-shadow: 1px 1px 1px #919191,
-        1px 2px 1px #919191,
-        1px 3px 1px #919191,
-        1px 4px 1px #919191,
-        1px 5px 1px #919191,
-        1px 6px 1px #919191,
-        1px 7px 1px #919191,
-        1px 8px 1px #919191,
-        1px 9px 1px #919191,
-        1px 10px 1px #919191,
-    1px 18px 6px rgba(16,16,16,0.4),
-    1px 22px 10px rgba(16,16,16,0.2),
-    1px 25px 35px rgba(16,16,16,0.2),
-    1px 30px 60px rgba(16,16,16,0.4);
-}
-*/
 
 /* Wiz-Rad at top of page */
 h1 {
@@ -107,7 +79,11 @@ input[type="radio"]:checked+label {
     border: 1px solid #ccc; 
     position: relative;
     background: transparent;
+    color: white;
 }
+
+/* Gets rid of ugly blue selection outline */
+.textinput:focus {outline:0;}
 .textinput ~ .focus-bg {
     position: absolute; 
     left: 0; 
@@ -127,13 +103,9 @@ input[type="radio"]:checked+label {
   color: rgb(149, 149, 149);
 }
 
-/* try this later */
 canvas {
-    width: 100px;
-    height: 100px;
-    
-    margin-right: 70px;
-    margin-top:-20px;
+    margin-top:-150px;
+    margin-bottom:-78px;
 }
 
 /* For input tags of the button type inside container,
@@ -141,10 +113,8 @@ canvas {
 .container input[type=button],
 button {
     flex: 1;
-    /* stretch out horizontally to occupy negative space */
     margin-right: 10px;
     margin-bottom: 10px;
-    height: 58px;
     border-radius: 6px;
     text-align: center;
 }
@@ -193,19 +163,6 @@ label {
     border-radius: 3px;
 }
 
-/* button {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    cursor: pointer;
-    background-color: #454545;
-    color: white;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-} */
-
-
 /* CSS */
 button {
     appearance: button;
@@ -242,105 +199,6 @@ button {
     border-radius: 3px;
 }
 
-/* #beginButton {
-    < !-- HTML !--><button class="beginButton-pushable" role="button"><span class="beginButton-shadow"></span><span class="button-82-edge"></span><span class="button-82-front text">Button 82 </span></button>
-
-    CSS
-    .button-82-pushable {
-        position: relative;
-        border: none;
-        background: transparent;
-        padding: 0;
-        cursor: pointer;
-        outline-offset: 4px;
-        transition: filter 250ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-    }
-
-    .button-82-shadow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 12px;
-        background: hsl(0deg 0% 0% / 0.25);
-        will-change: transform;
-        transform: translateY(2px);
-        transition:
-            transform 600ms cubic-bezier(.3, .7, .4, 1);
-    }
-
-    .button-82-edge {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 12px;
-        background: linear-gradient(to left,
-                hsl(340deg 100% 16%) 0%,
-                hsl(340deg 100% 32%) 8%,
-                hsl(340deg 100% 32%) 92%,
-                hsl(340deg 100% 16%) 100%);
-    }
-
-    .button-82-front {
-        display: block;
-        position: relative;
-        padding: 12px 27px;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        color: white;
-        background: hsl(345deg 100% 47%);
-        will-change: transform;
-        transform: translateY(-4px);
-        transition:
-            transform 600ms cubic-bezier(.3, .7, .4, 1);
-    }
-
-    @media (min-width: 768px) {
-        .button-82-front {
-            font-size: 1.25rem;
-            padding: 12px 42px;
-        }
-    }
-
-    .button-82-pushable:hover {
-        filter: brightness(110%);
-        -webkit-filter: brightness(110%);
-    }
-
-    .button-82-pushable:hover .button-82-front {
-        transform: translateY(-6px);
-        transition:
-            transform 250ms cubic-bezier(.3, .7, .4, 1.5);
-    }
-
-    .button-82-pushable:active .button-82-front {
-        transform: translateY(-2px);
-        transition: transform 34ms;
-    }
-
-    .button-82-pushable:hover .button-82-shadow {
-        transform: translateY(4px);
-        transition:
-            transform 250ms cubic-bezier(.3, .7, .4, 1.5);
-    }
-
-    .button-82-pushable:active .button-82-shadow {
-        transform: translateY(1px);
-        transition: transform 34ms;
-    }
-
-    .button-82-pushable:focus:not(:focus-visible) {
-        outline: none;
-    }
-} 
-*/
-
 button:disabled {
     cursor: default;
 }
@@ -348,13 +206,6 @@ button:disabled {
 button:focus {
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
-
-
-/* For submit buttons only */
-button[type=submit] {
-    background-color: rgb(230, 159, 118);
-}
-
 
 /* 3-Column layout using the Flexbox container*/
 /* https://youtu.be/fYq5PXgSsbE?si=N6nJtT9u_ge_fNvo */
@@ -381,6 +232,7 @@ button[type=submit] {
     flex-grow: 1;
     padding: 8px;
     max-width: 60%;
+    min-width: 50%;
     min-height: 70vh;
     /* margin-left: 17vw; */
     background-color: rgb(39, 39, 39);
@@ -393,45 +245,42 @@ button[type=submit] {
     padding: 10px;
     min-height: 70vh;
     background-color: rgb(39, 39, 39);
-    /* font-size: 100%; */
 }
 
 /* .right h2 {
     font-size: 80%;
 } */
 
-
-
 /* For p tags inside right column */
 .right p {
     color: rgb(255, 255, 255);
 }
 
-
-/* Tabs inside of left column */
+/* Settings for individual tabs */
 .tab {
     flex: 1;
     justify-content: left;
-    font-size: 1.2vw;
+    font-size:2.8vh;
     background-color: rgb(79, 47, 47);
-    height: 2%;
+    height: auto;
     border: 4px solid #1f1f1f;
     margin-bottom: 1px;
-    width: 80px;
     color: aliceblue;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 10px;
     min-width: 100px;
-    max-width: auto;
+    max-width: 50%;
+    word-wrap: break-word;
 }
 
+/* Container for holding tabs */
 .tabs {
-    max-width: 65%;
+    max-width: 80%;
 }
 
-
+/* For signifying current selected tab (<div class="tab current">) */
 .current {
     background-color: rgb(119, 45, 45);
 }
@@ -461,6 +310,7 @@ mark {
     padding: 0%;
 }
 
+/* For the rotating d20 */
 .webgl {
     align-items: end;
     top: 0;
