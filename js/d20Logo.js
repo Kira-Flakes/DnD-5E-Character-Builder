@@ -13,9 +13,11 @@ scene.add(mesh);
 
 //sizes
 const sizes = {
-    width: window.innerWidth/2,
-    height: window.innerHeight/2,
+    width: window.innerHeight/5,
+    height: window.innerHeight/5,
 }
+
+//window.innerWidth/2,
 
 // light
 const light = new THREE.PointLight(0xffffff, 1, 100, 1);
@@ -34,19 +36,20 @@ renderer.setClearAlpha()
 renderer.setSize(sizes.width,sizes.height);
 renderer.render(scene, camera);
 
-// resize
+// resize 
+/*
 window.addEventListener('resize', () => {
-    sizes.width = window.innerWidth*.3
-    sizes.height = window.innerHeight*.3
+    sizes.width = window.innerWidth/10
+    sizes.height = window.innerWidth/10
     // update camera
     camera.updateProjectionMatrix();
     camera.aspect = sizes.width/sizes.height;
     renderer.setSize(sizes.width,sizes.height);
-});
+});*/
 
 const loop = () => {
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
+    mesh.rotation.x += 0.005;
+    mesh.rotation.y += 0.005;
     renderer.render(scene,camera);
     window.requestAnimationFrame(loop)
 }

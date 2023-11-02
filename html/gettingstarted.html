@@ -2,6 +2,7 @@
 <html>
 <script src="/js/characterSheet.js"></script>
 <script src="/js/listeners.js"></script>
+<script type="module" src="../js/d20Logo.js"></script>
 <script>
 
     var character; // global scope
@@ -27,7 +28,12 @@
 </head>
 
 <body>
-    <h1>Wiz-Rad!</h1>
+    <h1>Wiz-Rad!
+        <div style="display:inline;">
+            <canvas class="webgl"></canvas>
+        </div> 
+    </h1>
+    
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab current">
@@ -123,6 +129,14 @@
 
         </div>
     </div>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
+        }
+    </script>
 </body>
 
 </html>
