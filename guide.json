@@ -190,8 +190,8 @@
     },
     "class": {
         "explainer": {
-            "header": "class explainer placeholder",
-            "details": "class explainer placeholder"
+            "header": "A character's class is a fundamental aspect that defines their vocation, skills, and the roles they play in the game world. Unlike race and background, which contribute to a character's identity and personal history, the class primarily dictates a character's abilities, playstyle, and progression. It determines their combat skills, magical talents, and unique traits, making it distinct from race and background, which focus on character origins and cultural aspects.",
+            "details": "A character's class is a fundamental aspect that defines their vocation, skills, and the roles they play in the game world. Unlike race and background, which contribute to a character's identity and personal history, the class primarily dictates a character's abilities, playstyle, and progression. It determines their combat skills, magical talents, and unique traits, making it distinct from race and background, which focus on character origins and cultural aspects."
         },
         "questions": {
             "q1": {

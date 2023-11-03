@@ -40,7 +40,7 @@ function setWelcomeInfo(page) {
 }
 
 function presentPreset() {
-    localStorage.setItem('gettingstartedState','1')
+    localStorage.setItem('gettingstartedState', '1')
     colLeft = document.getElementById("colLeft")
     // console.log("Content:::: "+document.getElementById('_playername').value)
     if (document.getElementById('_playername').value === null) {
@@ -279,7 +279,7 @@ function initPageInfo(page, iter) {
             console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
-                    console.log("Setting welcome info for "+page)
+                    console.log("Setting welcome info for " + page)
                     setWelcomeInfo(page) // adds continue button on return
                     break;
                 case "explainer":
@@ -288,12 +288,14 @@ function initPageInfo(page, iter) {
                     loadExplainer(page, iter)
                     break;
                 case "questions":
-                    console.log("Setting questions info for "+page)
+                    console.log("Setting questions info for " + page)
                     // console.log("In questions")
                     loadQuestion(page)
-
+                    break;
                 default:
-                    console.log("No info type found, returning")
+                    console.log("No info type found, handling")
+                    handleSpecialCase(page)
+
                 // mainContent.appendChild(continueButton)
             }
         })
@@ -301,6 +303,21 @@ function initPageInfo(page, iter) {
             console.error('Error:', error);
         });
     // initPageInfo(page, iter+1)
+}
+
+function handleSpecialCase(page) {
+    switch (page) {
+        case 'race':
+            console.log("Handling: " + localStorage.getItem('_subRace'))
+            if (localStorage.getItem('subRaceDone') == '1') {
+                conclusion('race')
+            }
+            else {
+                loadResponse(page, 'subRace')
+            }
+            break;
+        default: return
+    }
 }
 
 // function decisionTree(page) {
@@ -685,7 +702,7 @@ function pickSubrace(race) {
                         console.log("B: " + tempButtonsId[b])
                         document.getElementById(tempButtonsId[b]).remove()
                     }
-
+                    localStorage.setItem('subRaceDone', '1')
                     conclusion('race')
                 }
                 btn.addEventListener('mouseenter', function () {
@@ -1328,14 +1345,14 @@ function races(race) {
 
             const termInfo = parseAPIString(JSON.stringify(data.name));	     //Turning JSON attribute into a string
             const term = termInfo[0]
-            console.log("TERM: " + term)
+            // console.log("TERM: " + term)
             stat = document.createElement("h1")
             stat.innerHTML = term;
             raceDiv.appendChild(stat)
 
             const termdescInfo = parseAPIString(JSON.stringify(data.desc));
             const termdesc = termdescInfo[0]
-            console.log("TERMdesc: " + termdesc)
+            // console.log("TERMdesc: " + termdesc)
             statdesc = document.createElement("p")
             statdesc.innerHTML = termdesc
             raceDiv.appendChild(statdesc)
