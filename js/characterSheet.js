@@ -734,11 +734,11 @@ class characterSheet {
           flag = 1
           // console.log("[" + keys[key] + "] not assigned");
         }
-        if (flag == 1) console.log("[" + keys[key] + "] not assigned");
+        // if (flag == 1) console.log("[" + keys[key] + "] not assigned");
       }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key], "");
-        unkowns = unkowns + " " + keys[key] + ", ";
+        // unkowns = unkowns + " " + keys[key] + ", ";
       }
     }
     // console.log(unkowns);

@@ -12,7 +12,27 @@
             "Dwarf": {
                 "id": "DwarfPreset",
                 "race": "Hill-Dwarf",
-                "bio": "This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+            },
+            "Half-Orc": {
+                "id": "HalfOrcPreset",
+                "race": "Half-Orc",
+                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+            },
+            "Gnome": {
+                "id": "ForestGnomePreset",
+                "race": "Forest Gnome",
+                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+            },
+            "Human": {
+                "id": "HumanPreset",
+                "race": "Human - Turami",
+                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+            },
+            "Dark Elf": {
+                "id": "DarkElfPreset",
+                "race": "Dark Elf (Drow)",
+                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
             }
         }
     },
@@ -39,7 +59,8 @@
                         "Taller and more agile characters can possess grace, nimbleness, and agility, excelling in finesse-based tasks and ranged combat. This group has a wide range of characters with unique abilities and backgrounds, making them versatile and adaptable to different situations.",
                         "2"
                     ]
-                }
+                },
+                "back": "beginning"
             },
             "q2": {
                 "q": "Do you want to play as both a human/half-human?",
@@ -54,7 +75,8 @@
                         "Individuals with unique qualities that possess traits which deviate from the typical human characteristics. These non-human attributes often come with distinct abilities and backgrounds, setting them apart from the common human experience.",
                         "3"
                     ]
-                }
+                },
+                "back": "1"
             },
             "q3": {
                 "q": "Would you rather:",
@@ -69,7 +91,8 @@
                         "Elemental attacks can be devistating and tactical attacks that give you the upper hand in certain situations",
                         "4"
                     ]
-                }
+                },
+                "back": "2"
             },
             "q4": {
                 "q": "Do you destroy your foes up close or from afar?",
@@ -84,7 +107,8 @@
                         "",
                         "6"
                     ]
-                }
+                },
+                "back": "3"
             },
             "q5": {
                 "q": "Choose a breath weapon:",
@@ -104,7 +128,8 @@
                         "Cold abilities often involve the emission of freezing breath. The specifics of these powers aren't mentioned, but they're connected to the element of cold.",
                         "->subRace"
                     ]
-                }
+                },
+                "back": "4"
             },
             "q6": {
                 "q": "Choose a breath weapon: Choose a breath weapon:",
@@ -124,7 +149,9 @@
                         "Fire-related abilities involve the use of flames or fiery breath to deal damage. Such powers are often associated with an affinity for magical energy and can suit classes like Wizards and Sorcerers.",
                         "->subRace"
                     ]
-                }
+                    
+                },
+                "back": "4"
             },
             "response": {
                 "type": "subRace",

@@ -42,8 +42,8 @@ function setWelcomeInfo(page) {
 
 function presentPreset() {
     colLeft = document.getElementById("colLeft")
-    console.log("Content:::: "+document.getElementById('_playername').value)
-    localStorage.setItem('_playername',document.getElementById('_playername').value)
+    // console.log("Content:::: "+document.getElementById('_playername').value)
+    localStorage.setItem('_playername', document.getElementById('_playername').value)
 
     // clear the div, make room for preset question.
     if (colLeft) {
@@ -73,6 +73,9 @@ function presentPreset() {
 
             }
             npBtn.innerHTML = data['presetChoice'].questions.ans[1]
+            npBtn.onclick = function () {
+                window.location.href = '../html/race.html'
+            }
             colLeft.appendChild(pBtn)
             colLeft.appendChild(npBtn)
         })
@@ -88,37 +91,39 @@ function loadPresetBios() {
         .then(data => {
             colLeft = document.getElementById("colLeft")
             presets = data['presetChoice'].presets
-            for (p in presets) {
+            for (const p in presets) {
+                console.log("P: " + p)
                 bioContainer = document.createElement('div')
                 // bioContainer.setAttribute('class','container')
-                bioContainer.setAttribute('id','bio')
+                bioContainer.setAttribute('id', 'bio')
                 colLeft.appendChild(bioContainer)
                 boxL = document.createElement('div')
                 boxR = document.createElement('div')
-                boxL.setAttribute('class','box')
-                boxR.setAttribute('class','box')
+                boxL.setAttribute('class', 'box')
+                boxR.setAttribute('class', 'box')
                 bioContainer.appendChild(boxL)
                 bioContainer.appendChild(boxR)
                 pDiv = document.createElement("div")
-                pDiv.setAttribute('id','presetBio')
+                pDiv.setAttribute('id', 'presetBio')
                 race = document.createElement("h2")
                 race.innerHTML = presets[p].race
                 boxL.appendChild(race)
                 pImg = document.createElement('img')
-                pImg.setAttribute('src','../img/'+presets[p].race+'Preset.png')
+                pImg.setAttribute('src', '../img/' + presets[p].id + '.png')
                 // pImg.setAttribute('id','pImg')
                 boxL.appendChild(pImg)
                 pBio = document.createElement('div')
                 pBio.innerHTML = presets[p].bio
                 boxR.appendChild(pBio)
-                viewSheet = document.createElement('button')
-                viewSheet.setAttribute('id','viewSheetBtn')
+                var viewSheet = document.createElement('button')
+                viewSheet.setAttribute('id', 'viewSheetBtn' + p)
                 viewSheet.innerText = "View Character Sheet"
-                console.log("DSFDFDSF:  " + presets[p].id)
+                // console.log("DSFDFDSF:  " + presets[p].id)
+                var funcHelper = presets[p].id
                 viewSheet.onclick = function () {
                     loadPreset(presets[p].id)
                     window.location.href = "../html/charsheet.html"
-                } 
+                }
                 boxR.appendChild(viewSheet)
 
             }
@@ -230,7 +235,7 @@ function initPageInfo(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     setWelcomeInfo(page) // adds continue button on return
@@ -328,7 +333,7 @@ function loadQuestion(page) {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
-                    racePrev = localStorage.getItem(page+"State")
+                    // racePrev = localStorage.getItem(page+"State")
                     console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
@@ -343,13 +348,21 @@ function loadQuestion(page) {
             backBtn = document.createElement('button')
             backBtn.setAttribute("id", 'backbutton')
             backBtn.innerText = "Back"
-            backBtn.onclick = function() {
+            backBtn.onclick = function () {
                 for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                     document.getElementById(tempButtonsId[btn]).remove()
                 }
                 document.getElementById('backbutton').remove()
-                alterState(page, (racePrev));
-                loadQuestion(page)
+                if (questionJSON.back == 'beginning') {
+                    // localStorage.setItem("raceState","1");
+                    loadExplainer(page,0)
+                }
+                else {
+                    alterState(page, (questionJSON.back));
+                    loadQuestion(page)
+                }
+                
+
             }
             document.getElementById('content').appendChild(backBtn)
         })
@@ -551,6 +564,12 @@ function giveChoices(page) {
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 
             }
+            // Add reset logic here if needed.
+            // backBtn = document.createElement('button')
+            // backBtn.setAttribute('id','backButton')
+            // backBtn.onclick = function () {
+
+            // }
         })
         .catch(error => {
             console.error('Error:', error);

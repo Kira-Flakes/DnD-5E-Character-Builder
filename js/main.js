@@ -20,7 +20,11 @@ function init() {
     localStorage.setItem("state",'0'); // saves the state of the program, set to zero
     localStorage.setItem("raceState","1");
     localStorage.setItem("classState","1");
-}   
+}  
+
+function progressBar() {
+    
+}
 
 // resets all the data in localstorage
 // function reset() {
