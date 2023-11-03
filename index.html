@@ -6,12 +6,13 @@
 <script>
 
     var character; // global scope
-
+    if (localStorage.getItem("init") != '1') init();
     // Initialize the character object, all remaining script calls should reference this object.
     window.addEventListener('load', function () {
         character = new characterSheet();
         character.updateSheet(); // local storage attributes fill the sheet
     }); // end listener
+    window.location.href = localStorage.getItem("currentRef")
 </script>
 
 <head>

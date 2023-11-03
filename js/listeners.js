@@ -33,7 +33,6 @@ function setWelcomeInfo(page) {
             const currPage = data[page]
             welcomeTxt.innerText = currPage.welcome;
             info.innerHTML = highlightTextWithMouseover(currPage.explainer, allDetails);
-            console.log("Here")
         })
         .catch(error => {
             console.error('Error:', error);
@@ -41,10 +40,18 @@ function setWelcomeInfo(page) {
 }
 
 function presentPreset() {
+    localStorage.setItem('gettingstartedState','1')
     colLeft = document.getElementById("colLeft")
     // console.log("Content:::: "+document.getElementById('_playername').value)
-    localStorage.setItem('_playername', document.getElementById('_playername').value)
-
+    if (document.getElementById('_playername').value === null) {
+        localStorage.setItem('_playername', '')
+    }
+    else {
+        localStorage.setItem('_playername', document.getElementById('_playername').value)
+    }
+    for (var pres in allPresets) {
+        allPresets[pres]._playername = localStorage.getItem('_playername')
+    }
     // clear the div, make room for preset question.
     if (colLeft) {
         // Remove all child elements
@@ -74,6 +81,7 @@ function presentPreset() {
             }
             npBtn.innerHTML = data['presetChoice'].questions.ans[1]
             npBtn.onclick = function () {
+                flushSheet(["_playername"])
                 window.location.href = '../html/race.html'
             }
             colLeft.appendChild(pBtn)
@@ -83,6 +91,33 @@ function presentPreset() {
             console.error('Error:', error);
         });
 
+}
+
+function flushSheet(ignore) {
+    for (var i = 0; i < localStorage.length; i++) {
+        item = localStorage.key(i);
+        // console.log("Item: " + item)
+        if (item.charAt(0) != '_') {
+            // console.log(item + " doesnt start with _")
+            continue
+        }
+        if (contains(ignore, item)) {
+            // console.log("Item: "+ item+" is to be ignored")
+            continue
+        }
+        localStorage.setItem(localStorage.key(i), '')
+        // console.log("LS now: " + localStorage.key(i))
+
+    }
+}
+
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function loadPresetBios() {
@@ -147,7 +182,9 @@ function loadExplainer(page, iter) {
             continueBtn.innerText = 'Begin'
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
-                initPageInfo(page, iter + 1)
+                alterState(page, 1)
+                // initPageInfo(page, iter + 1)
+                loadQuestion(page)
                 document.getElementById('content').removeChild(continueBtn)
             }
             document.getElementById('content').appendChild(continueBtn)
@@ -231,6 +268,10 @@ function initPageInfo(page, iter) {
     const mainContent = document.getElementsByClassName('content')
     console.log("Initializing page \'" + page + "\'")
 
+    if (localStorage.getItem('_' + page) != "") {
+        console.log("In special case on page")
+    }
+
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -238,6 +279,7 @@ function initPageInfo(page, iter) {
             console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
+                    console.log("Setting welcome info for "+page)
                     setWelcomeInfo(page) // adds continue button on return
                     break;
                 case "explainer":
@@ -246,6 +288,7 @@ function initPageInfo(page, iter) {
                     loadExplainer(page, iter)
                     break;
                 case "questions":
+                    console.log("Setting questions info for "+page)
                     // console.log("In questions")
                     loadQuestion(page)
 
@@ -355,13 +398,13 @@ function loadQuestion(page) {
                 document.getElementById('backbutton').remove()
                 if (questionJSON.back == 'beginning') {
                     // localStorage.setItem("raceState","1");
-                    loadExplainer(page,0)
+                    loadExplainer(page, 0)
                 }
                 else {
                     alterState(page, (questionJSON.back));
                     loadQuestion(page)
                 }
-                
+
 
             }
             document.getElementById('content').appendChild(backBtn)
@@ -526,7 +569,7 @@ function giveChoices(page) {
         .then(data => {
             //reset the page elements in left column
             setElementsInColumnOne({
-                title: 'Race',
+                title: page.charAt(0).toUpperCase() + page.slice(1),
                 explanation: 'Choose',
             })
             responses = data[page].questions.response
@@ -550,7 +593,7 @@ function giveChoices(page) {
                     for (btn in tempButtons) { // delete all buttons, since we are done with this question
                         document.getElementById('choiceButton').remove()
                     }
-                    pickSubrace(options[r])
+                    if (page == 'race') pickSubrace(options[r])
 
                 }; // set actions for the buttons
                 // button.addEventListener('mouseenter', function () {
@@ -574,6 +617,10 @@ function giveChoices(page) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function raceChoices() {
+
 }
 
 function clearHelperInfo() {
@@ -665,12 +712,30 @@ function conclusion(page) {
             // const continueBtn = document.createElement('button')
             // continueBtn.innerText = "Continue"
             // document.getElementById('footerButton').innerText = 'Continue'
-            document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+            continueToNextPage(page, data[page].conclusion.next)
+            try {
+                document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+            }
+            catch {
+                console.log("No explainer do get rid of")
+            }
         })
 
         .catch(error => {
             console.error('Error:', error);
         });
+
+}
+
+function continueToNextPage(currentPage, nextPage) {
+    btn = document.createElement('button')
+    btn.setAttribute('id', 'continueBtn')
+    btn.innerText = "Continue"
+    btn.onclick = function () {
+        window.location.href = "../html/" + nextPage + ".html"
+    }
+    document.getElementById('content').appendChild(btn)
+    console.log("WHats up?")
 }
 
 function loadRaceCompletionDiv() {
@@ -799,6 +864,7 @@ function getIntersection(set1, set2) {
 function alterState(topic, change) {
     var storageItem = topic + "State"
     // s = parseInt(localStorage.getItem(storageItem)) + change
+    console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
 // function alterState(topic, change) {

@@ -12,27 +12,27 @@
             "Dwarf": {
                 "id": "DwarfPreset",
                 "race": "Hill-Dwarf",
-                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
             },
             "Half-Orc": {
                 "id": "HalfOrcPreset",
                 "race": "Half-Orc",
-                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
             },
             "Gnome": {
                 "id": "ForestGnomePreset",
                 "race": "Forest Gnome",
-                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
             },
             "Human": {
                 "id": "HumanPreset",
                 "race": "Human - Turami",
-                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
             },
             "Dark Elf": {
                 "id": "DarkElfPreset",
                 "race": "Dark Elf (Drow)",
-                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle dingleberry!"
+                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
             }
         }
     },
@@ -184,7 +184,8 @@
             }
         },
         "conclusion": {
-            "header": "<h3>You've chosen **_race** as your character's race<h3>"
+            "header": "<h3>You've chosen **_race** as your character's race<h3>",
+            "next": "class"
         }
     },
     "class": {
@@ -237,6 +238,10 @@
                 "title": "Based on your responses, we've handpicked a selection of races for your character:",
                 "options": "$class"
             }
+        },
+        "conclusion": {
+            "header":"<h3>You've chosen **_class** as your character's class<h3>",
+            "next": "background"
         }
     },
     "background": {

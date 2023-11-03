@@ -15,11 +15,16 @@ function init() {
     localStorage.setItem("_race",'')
     localStorage.setItem('_subRace','')
 
+    localStorage.setItem('currentRef','../html/gettingStarted.html');
     // States are directly associated with the questions. 
     // Example: chainging race to state 2 will mean question 2 of the state will be asked.
     localStorage.setItem("state",'0'); // saves the state of the program, set to zero
-    localStorage.setItem("raceState","1");
-    localStorage.setItem("classState","1");
+    localStorage.setItem("raceState","0");
+    localStorage.setItem("classState","0");
+    localStorage.setItem("raceIter","0")
+
+    localStorage.setItem("gettingstartedState","0");
+    localStorage.setItem("init",'1')
 }  
 
 function progressBar() {

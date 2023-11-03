@@ -755,11 +755,14 @@ class characterSheet {
   }
 }
 
+
 const DwarfPreset = new characterSheet()
 const DarkElfPreset = new characterSheet()
 const HalfOrcPreset = new characterSheet()
 const ForestGnomePreset = new characterSheet()
 const HumanPreset = new characterSheet()
+
+const allPresets = [DwarfPreset,DarkElfPreset,HalfOrcPreset,ForestGnomePreset,HumanPreset]
 
 
 DwarfPreset._name = "Ulfgar Rumnaheim"
