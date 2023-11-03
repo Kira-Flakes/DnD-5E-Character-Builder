@@ -7,7 +7,7 @@
 <script type="module" src="../js/d20Logo.js"></script>
 <!-- <script src="../js/api.js"></script> -->
 <script>
-
+    localStorage.setItem("currentRef", "../html/race.html")
     var character; // global scope
 
     // Initialize the character object, all remaining script calls should reference this object.
@@ -26,13 +26,14 @@
 
     <title>Race</title>
 </head>
+
 <body>
     <h1>Wiz-Rad!
         <div style="display:inline;">
             <canvas class="webgl"></canvas>
-        </div> 
+        </div>
     </h1>
-    
+
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
@@ -71,8 +72,11 @@
                 <p id="responseTitle"></p>
             </div>
             <footer id="foot">
-                
+                <div id="continueBtn">
+
+                </div>
             </footer>
+
             <!-- <p id="stat"></p>
             <p id="statdesc"></p>
             <p id="statdesc2"></p>			
@@ -103,7 +107,7 @@
         <script>
             // races();
             // init()
-            initPageInfo("race", 0);
+            initPageInfo("race", parseInt(localStorage.getItem("raceState")));
 
         </script>
 

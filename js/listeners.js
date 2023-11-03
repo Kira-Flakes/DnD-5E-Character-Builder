@@ -8,19 +8,20 @@
 // const { nextTick } = require("process");
 const divCache = []
 let allDetails
+let racePrev = 0
 
 
 // Use the fetch API to retrieve the JSON data
 fetch('/guide.json')
-  .then(response => response.json())
-  .then(data => {
-    // Data is the parsed JSON object
-    allDetails = Object.keys(data.misc);
-    console.log(allDetails);
-  })
-  .catch(error => {
-    console.error('Error loading JSON:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+        // Data is the parsed JSON object
+        allDetails = Object.keys(data.misc);
+        console.log(allDetails);
+    })
+    .catch(error => {
+        console.error('Error loading JSON:', error);
+    });
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -32,7 +33,135 @@ function setWelcomeInfo(page) {
             const currPage = data[page]
             welcomeTxt.innerText = currPage.welcome;
             info.innerHTML = highlightTextWithMouseover(currPage.explainer, allDetails);
-            console.log("Here")
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function presentPreset() {
+    localStorage.setItem('gettingstartedState', '1')
+    colLeft = document.getElementById("colLeft")
+    // console.log("Content:::: "+document.getElementById('_playername').value)
+    if (document.getElementById('_playername').value === null) {
+        localStorage.setItem('_playername', '')
+    }
+    else {
+        localStorage.setItem('_playername', document.getElementById('_playername').value)
+    }
+    for (var pres in allPresets) {
+        allPresets[pres]._playername = localStorage.getItem('_playername')
+    }
+    // clear the div, make room for preset question.
+    if (colLeft) {
+        // Remove all child elements
+        while (colLeft.firstChild) {
+            colLeft.removeChild(colLeft.firstChild);
+        }
+    } else {
+        console.log('Div element not found.');
+    }
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            let explainDiv = document.createElement('div')
+            explainDiv.innerHTML = highlightTextWithMouseover(data['presetChoice'].explainer, allDetails)
+            colLeft.appendChild(explainDiv)
+
+            let qDiv = document.createElement('div')
+            qDiv.innerHTML = data['presetChoice'].questions.q
+            colLeft.appendChild(qDiv)
+            pBtn = document.createElement('button')
+            npBtn = document.createElement('button')
+            pBtn.innerHTML = data['presetChoice'].questions.ans[0]
+            pBtn.onclick = function () {
+                clearDiv(colLeft)
+                loadPresetBios()
+
+            }
+            npBtn.innerHTML = data['presetChoice'].questions.ans[1]
+            npBtn.onclick = function () {
+                flushSheet(["_playername"])
+                window.location.href = '../html/race.html'
+            }
+            colLeft.appendChild(pBtn)
+            colLeft.appendChild(npBtn)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function flushSheet(ignore) {
+    for (var i = 0; i < localStorage.length; i++) {
+        item = localStorage.key(i);
+        // console.log("Item: " + item)
+        if (item.charAt(0) != '_') {
+            // console.log(item + " doesnt start with _")
+            continue
+        }
+        if (contains(ignore, item)) {
+            // console.log("Item: "+ item+" is to be ignored")
+            continue
+        }
+        localStorage.setItem(localStorage.key(i), '')
+        // console.log("LS now: " + localStorage.key(i))
+
+    }
+}
+
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function loadPresetBios() {
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            colLeft = document.getElementById("colLeft")
+            presets = data['presetChoice'].presets
+            for (const p in presets) {
+                console.log("P: " + p)
+                bioContainer = document.createElement('div')
+                // bioContainer.setAttribute('class','container')
+                bioContainer.setAttribute('id', 'bio')
+                colLeft.appendChild(bioContainer)
+                boxL = document.createElement('div')
+                boxR = document.createElement('div')
+                boxL.setAttribute('class', 'box')
+                boxR.setAttribute('class', 'box')
+                bioContainer.appendChild(boxL)
+                bioContainer.appendChild(boxR)
+                pDiv = document.createElement("div")
+                pDiv.setAttribute('id', 'presetBio')
+                race = document.createElement("h2")
+                race.innerHTML = presets[p].race
+                boxL.appendChild(race)
+                pImg = document.createElement('img')
+                pImg.setAttribute('src', '../img/' + presets[p].id + '.png')
+                // pImg.setAttribute('id','pImg')
+                boxL.appendChild(pImg)
+                pBio = document.createElement('div')
+                pBio.innerHTML = presets[p].bio
+                boxR.appendChild(pBio)
+                var viewSheet = document.createElement('button')
+                viewSheet.setAttribute('id', 'viewSheetBtn' + p)
+                viewSheet.innerText = "View Character Sheet"
+                // console.log("DSFDFDSF:  " + presets[p].id)
+                var funcHelper = presets[p].id
+                viewSheet.onclick = function () {
+                    loadPreset(presets[p].id)
+                    window.location.href = "../html/charsheet.html"
+                }
+                boxR.appendChild(viewSheet)
+
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -47,13 +176,15 @@ function loadExplainer(page, iter) {
         .then(data => {
             const currentPage = data[page]
             // console.log("setting details")
-            explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details,allDetails)
+            explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details, allDetails)
             continueBtn = document.createElement('button')
             continueBtn.setAttribute('id', 'beginButton')
             continueBtn.innerText = 'Begin'
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
-                initPageInfo(page, iter + 1)
+                alterState(page, 1)
+                // initPageInfo(page, iter + 1)
+                loadQuestion(page)
                 document.getElementById('content').removeChild(continueBtn)
             }
             document.getElementById('content').appendChild(continueBtn)
@@ -137,13 +268,18 @@ function initPageInfo(page, iter) {
     const mainContent = document.getElementsByClassName('content')
     console.log("Initializing page \'" + page + "\'")
 
+    if (localStorage.getItem('_' + page) != "") {
+        console.log("In special case on page")
+    }
+
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
+                    console.log("Setting welcome info for " + page)
                     setWelcomeInfo(page) // adds continue button on return
                     break;
                 case "explainer":
@@ -152,11 +288,14 @@ function initPageInfo(page, iter) {
                     loadExplainer(page, iter)
                     break;
                 case "questions":
+                    console.log("Setting questions info for " + page)
                     // console.log("In questions")
                     loadQuestion(page)
-
+                    break;
                 default:
-                    console.log("No info type found, returning")
+                    console.log("No info type found, handling")
+                    handleSpecialCase(page)
+
                 // mainContent.appendChild(continueButton)
             }
         })
@@ -164,6 +303,21 @@ function initPageInfo(page, iter) {
             console.error('Error:', error);
         });
     // initPageInfo(page, iter+1)
+}
+
+function handleSpecialCase(page) {
+    switch (page) {
+        case 'race':
+            console.log("Handling: " + localStorage.getItem('_subRace'))
+            if (localStorage.getItem('subRaceDone') == '1') {
+                conclusion('race')
+            }
+            else {
+                loadResponse(page, 'subRace')
+            }
+            break;
+        default: return
+    }
 }
 
 // function decisionTree(page) {
@@ -194,7 +348,7 @@ function loadQuestion(page) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]; // seek data from the current page (race, class, etc)
-            const questionJSON =  currentPage.questions[q]; // get question based on state
+            const questionJSON = currentPage.questions[q]; // get question based on state
             try {  // try to load the question
                 question.innerText = questionJSON.q;
             }
@@ -239,15 +393,38 @@ function loadQuestion(page) {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
+                    // racePrev = localStorage.getItem(page+"State")
+                    console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
+                    document.getElementById('backbutton').remove()
                     loadQuestion(page) // load the next question
                 }; // set actions for the buttons
                 loadHelperInfoFromButton(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
+            backBtn = document.createElement('button')
+            backBtn.setAttribute("id", 'backbutton')
+            backBtn.innerText = "Back"
+            backBtn.onclick = function () {
+                for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
+                    document.getElementById(tempButtonsId[btn]).remove()
+                }
+                document.getElementById('backbutton').remove()
+                if (questionJSON.back == 'beginning') {
+                    // localStorage.setItem("raceState","1");
+                    loadExplainer(page, 0)
+                }
+                else {
+                    alterState(page, (questionJSON.back));
+                    loadQuestion(page)
+                }
+
+
+            }
+            document.getElementById('content').appendChild(backBtn)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -409,7 +586,7 @@ function giveChoices(page) {
         .then(data => {
             //reset the page elements in left column
             setElementsInColumnOne({
-                title: 'Race',
+                title: page.charAt(0).toUpperCase() + page.slice(1),
                 explanation: 'Choose',
             })
             responses = data[page].questions.response
@@ -433,7 +610,7 @@ function giveChoices(page) {
                     for (btn in tempButtons) { // delete all buttons, since we are done with this question
                         document.getElementById('choiceButton').remove()
                     }
-                    pickSubrace(options[r])
+                    if (page == 'race') pickSubrace(options[r])
 
                 }; // set actions for the buttons
                 // button.addEventListener('mouseenter', function () {
@@ -447,10 +624,20 @@ function giveChoices(page) {
                 div.appendChild(choice)
                 // TODO: add listeners for mousover and 
             }
+            // Add reset logic here if needed.
+            // backBtn = document.createElement('button')
+            // backBtn.setAttribute('id','backButton')
+            // backBtn.onclick = function () {
+
+            // }
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function raceChoices() {
+
 }
 
 function clearHelperInfo() {
@@ -490,7 +677,7 @@ function pickSubrace(race) {
             if (data['race'].subRace[race] === 'null') {
                 localStorage.setItem("_race", race)
                 localStorage.setItem('_subRace', '')
-                
+
                 clearMainInfo()
                 conclusion("race")
                 return
@@ -515,7 +702,7 @@ function pickSubrace(race) {
                         console.log("B: " + tempButtonsId[b])
                         document.getElementById(tempButtonsId[b]).remove()
                     }
-
+                    localStorage.setItem('subRaceDone', '1')
                     conclusion('race')
                 }
                 btn.addEventListener('mouseenter', function () {
@@ -542,12 +729,30 @@ function conclusion(page) {
             // const continueBtn = document.createElement('button')
             // continueBtn.innerText = "Continue"
             // document.getElementById('footerButton').innerText = 'Continue'
-            document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+            continueToNextPage(page, data[page].conclusion.next)
+            try {
+                document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+            }
+            catch {
+                console.log("No explainer do get rid of")
+            }
         })
 
         .catch(error => {
             console.error('Error:', error);
         });
+
+}
+
+function continueToNextPage(currentPage, nextPage) {
+    btn = document.createElement('button')
+    btn.setAttribute('id', 'continueBtn')
+    btn.innerText = "Continue"
+    btn.onclick = function () {
+        window.location.href = "../html/" + nextPage + ".html"
+    }
+    document.getElementById('content').appendChild(btn)
+    console.log("WHats up?")
 }
 
 function loadRaceCompletionDiv() {
@@ -676,6 +881,7 @@ function getIntersection(set1, set2) {
 function alterState(topic, change) {
     var storageItem = topic + "State"
     // s = parseInt(localStorage.getItem(storageItem)) + change
+    console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
 // function alterState(topic, change) {
@@ -688,7 +894,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
         const strEl = inputString.split("**")
         // console.log("STREL: " + strEl)
-        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length-1]
+        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
         return newString;
     }
 
@@ -1139,14 +1345,14 @@ function races(race) {
 
             const termInfo = parseAPIString(JSON.stringify(data.name));	     //Turning JSON attribute into a string
             const term = termInfo[0]
-            console.log("TERM: " + term)
+            // console.log("TERM: " + term)
             stat = document.createElement("h1")
             stat.innerHTML = term;
             raceDiv.appendChild(stat)
 
             const termdescInfo = parseAPIString(JSON.stringify(data.desc));
             const termdesc = termdescInfo[0]
-            console.log("TERMdesc: " + termdesc)
+            // console.log("TERMdesc: " + termdesc)
             statdesc = document.createElement("p")
             statdesc.innerHTML = termdesc
             raceDiv.appendChild(statdesc)

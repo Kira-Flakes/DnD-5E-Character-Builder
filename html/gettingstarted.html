@@ -4,7 +4,7 @@
 <script src="/js/listeners.js"></script>
 <script type="module" src="../js/d20Logo.js"></script>
 <script>
-
+    localStorage.setItem("currentRef","../html/gettingstarted.html")
     var character; // global scope
 
     // Initialize the character object, all remaining script calls should reference this object.
@@ -25,6 +25,7 @@
     <script type="text/javascript" src="/js/api.js"></script>
 
     <title>Getting Started</title>
+    
 </head>
 
 <body>
@@ -59,7 +60,7 @@
 
     <!--Container for 3-column layout-->
     <div class="container">
-        <div class="column left">
+        <div class="column left" id="colLeft">
             <p id="welcomeMessage">Temp</p>
             <div class="content">
                 <p id="info"></p>
@@ -69,13 +70,14 @@
                     <button>Make my own</button>
                 </div> -->
                 <div class="question">
-                    <p>First, please enter the players name as you'd like it to appear on the character sheet:</p>
+                    <p>First, please enter your name as you'd like it to appear on the character sheet.</p>
 
-                    <input id="_name" class="textinput" type="text" placeholder="Enter name"><br>
-                    <button class="submitButton" onclick="storeKeyFromInput('_name')" role="button">Submit</button>
+                    <input id="_playername" type="text" class="textinput" placeholder="Enter Your Name"/>
+                    <button onclick="presentPreset()" type="submit" class="submitButton">Submit</button>
                     <script>
                         function next() {
                             character.setPlayername(document.getElementById('_playername').value)
+                            localStorage.setItem('_playername',document.getElementById("_playername").value)
                             window.location.href = "../html/race.html"
                         }
                     </script>
@@ -83,12 +85,13 @@
 
                 </div>
             </div>
+            <!-- <img src="../img/dwarf.png" alt="Drawft Preset"> -->
 
         </div>
-        <div class="column right">
+        <div class="column right" id="colRight">
             <!-- <p>During this process, we will show you helpful informaiton about your decisions.</p> -->
             <div>
-                <p id="helperInfo">help goes here</p>
+                <p id="helperInfo">As you create your character, you may want to learn more about certain elements of a character sheet. That information will be displayed here.</p>
             </div>
 
             <!-- <p id="stat"></p>
@@ -99,7 +102,7 @@
             <p id="statdesc5"></p>
             <p id="statdesc6"></p>
             <p id="statdesc7"></p> -->
-            <button id="presetTest" onclick="loadPreset(HumanPreset)">
+            <!-- <button id="presetTest" onclick="loadPreset(HumanPreset)">
                 Human Preset
             </button>
             <button id="presetTest" onclick="loadPreset(DarkElfPreset)">
@@ -113,7 +116,7 @@
             </button>
             <button id="presetTest" onclick="loadPreset(DwarfPreset)">
                 Hill Dwarf Preset
-            </button>
+            </button> -->
 
             <!-- <script>
 
@@ -126,9 +129,11 @@
                     Character Sheet
                 </button>
             </footer>
-
         </div>
     </div>
+    <script>
+        initPageInfo("gettingstarted",parseInt(localStorage.getItem("gettingstartedState")))
+    </script>
     <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
     <script type="importmap">
         {

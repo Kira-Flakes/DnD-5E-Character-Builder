@@ -734,11 +734,11 @@ class characterSheet {
           flag = 1
           // console.log("[" + keys[key] + "] not assigned");
         }
-        if (flag == 1) console.log("[" + keys[key] + "] not assigned");
+        // if (flag == 1) console.log("[" + keys[key] + "] not assigned");
       }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key], "");
-        unkowns = unkowns + " " + keys[key] + ", ";
+        // unkowns = unkowns + " " + keys[key] + ", ";
       }
     }
     // console.log(unkowns);
@@ -755,17 +755,20 @@ class characterSheet {
   }
 }
 
+
 const DwarfPreset = new characterSheet()
 const DarkElfPreset = new characterSheet()
 const HalfOrcPreset = new characterSheet()
 const ForestGnomePreset = new characterSheet()
 const HumanPreset = new characterSheet()
 
+const allPresets = [DwarfPreset,DarkElfPreset,HalfOrcPreset,ForestGnomePreset,HumanPreset]
+
 
 DwarfPreset._name = "Ulfgar Rumnaheim"
 DwarfPreset._classlevel = 'War Cleric 1'
 DwarfPreset._background = 'Acolyte'
-DwarfPreset._playername = ''
+DwarfPreset._playername = localStorage.getItem('_playername')
 DwarfPreset._race = 'Hill Dwarf';
 DwarfPreset._alignment = 'Lawful Good';
 DwarfPreset._experiencepts = '0';
@@ -841,7 +844,7 @@ DwarfPreset._eqList = '-Warhammer\n-chain mail\n-light crossbow with 20 bolts\n-
 DarkElfPreset._name = 'Shava Naïlo (Nightbreeze)';
 DarkElfPreset._classlevel = 'Rogue 1';
 DarkElfPreset._background = 'Charlatan';
-DarkElfPreset._playername = '';
+DarkElfPreset._playername = localStorage.getItem('_playername')
 DarkElfPreset._race = 'Dark Elf (Drow)';
 DarkElfPreset._alignment = 'Chaotic Neutral';
 DarkElfPreset._experiencepts = '0';
@@ -917,7 +920,7 @@ DarkElfPreset._eqList = 'Short sword, short bow and quiver of 20 arrows, a burgl
 HalfOrcPreset._name = 'Holg';
 HalfOrcPreset._classlevel = 'Fighter 1';
 HalfOrcPreset._background = 'Soldier';
-HalfOrcPreset._playername = '';
+HalfOrcPreset._playername = localStorage.getItem('_playername')
 HalfOrcPreset._race = 'Half-Orc';
 HalfOrcPreset._alignment = 'Neutral Good';
 HalfOrcPreset._experiencepts = '0';
@@ -993,7 +996,7 @@ HalfOrcPreset._eqList = '-An insignia of rank, a broken blade taken from a falle
 ForestGnomePreset._name = 'Lorilla "Filchbatter" Scheppen';
 ForestGnomePreset._classlevel = 'Wizard 1';
 ForestGnomePreset._background = 'Sage';
-ForestGnomePreset._playername = '';
+ForestGnomePreset._playername = localStorage.getItem('_playername')
 ForestGnomePreset._race = 'Forest Gnome';
 ForestGnomePreset._alignment = 'Chaotic Good';
 ForestGnomePreset._experiencepts = '0';
@@ -1070,7 +1073,7 @@ ForestGnomePreset._etcAttacksAndSpells = 'Chromatic Orb    5             3d8 (ch
 HumanPreset._name = 'Diero Marivaldi';
 HumanPreset._classlevel = 'Bard 1';
 HumanPreset._background = 'Entertainer';
-HumanPreset._playername = '';
+HumanPreset._playername = localStorage.getItem('_playername');
 HumanPreset._race = 'Human - Turami';
 HumanPreset._alignment = 'Chaotic Good';
 HumanPreset._experiencepts = '0';
@@ -1145,8 +1148,13 @@ HumanPreset._eqList = '-A rapier and a diplomat\'s pack containing a chest, 2 ca
 HumanPreset._etcAttacksAndSpells = 'Dissonant Whispers    5    3d6 psychic';
 
 
-function loadPreset(preset) {
-  console.log("Name of preset:" + preset._name)
+function loadPreset(presetName) {
+  if (presetName == "DwarfPreset") var preset = DwarfPreset
+  if (presetName == "HumanPreset") var preset = HumanPreset
+  if (presetName == "ForestGnomePreset") var preset = ForestGnomePreset
+  if (presetName == "HalfOrcPreset") var preset = HalfOrcPreset
+  if (presetName == "DarkElfPreset") var preset = DarkElfPreset
+  console.log("Name of preset:" + preset)
   var keys = character.keyNames();
   for (var key in keys) {
     localStorage.setItem(keys[key], preset[keys[key]])
