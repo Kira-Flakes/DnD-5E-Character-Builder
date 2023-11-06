@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<script type="module" src="../js/d20Logo.js"></script>
+
+<!-- <head> -->
+<meta charset="UTF-8" />
+<!-- <meta name="viewpodrt" content="width=device-width, initial-scale=1"> -->
+<!-- <tile>Three.js Dice Roller | Codrops</title> -->
+<!-- <meta name="description"
+			content="Demo for the tutorial on how to code a dice roller with Three.js and cannon-es" />
+		<meta name="keywords" content="3d dice, three.js, cannon-es, webgl, rolling dice" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="favicon.ico"> -->
+<link rel="stylesheet" href="../css/builderstyle.css">
+<!-- <script>document.documentElement.className = "js"; var supportsCssVars = function () { var e, t = document.createElement("style"); return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e }; supportsCssVars() || alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
+		<script src="//tympanus.net/codrops/adpacks/analytics.js"></script> -->
+<!-- </head>  -->
+<script>
+	localStorage.setItem("currentRef","../html/rollDemo.html")
+</script>
+
+<body>
+	<h1>Wiz-Rad!
+        <div style="display:inline;">
+            <canvas class="webgl"></canvas>
+        </div> 
+    </h1>
+    
+	<div class="tabs">
+		<div style="flex-direction: row" ; class="container" ;>
+			<div class="tab">
+				<a href="./gettingstarted.html">Getting Started</a>
+			</div>
+			<div class="tab current">
+				<a href="./race.html">Race</a>
+			</div>
+			<div class="tab">
+				<a href="./class.html">Class</a>
+			</div>
+			<div class="tab">
+				<a href="./background.html">Background</a>
+			</div>
+			<div class="tab">
+				<a href="./equipment.html">Equipment</a>
+			</div>
+			<div class="tab">
+                <a href="./rollDemo.html">Roll Demo</a>
+            </div>
+		</div>
+	</div>
+
+	<!-- Container for 2-column layout -->
+	<div class="container">
+		<div class="column left" id="content">
+			<p id="title">Dice Demo</p>
+			<!-- Add a brief race explanation -->
+
+			<!-- <div class="frame__title"> -->
+			<!-- /<h1 class="frame__title-main">Three.js Dice Roller</h1>  -->
+			<!-- <a aria-label="Back to the article" class="frame__title-back" href="https://tympanus.net/codrops/?p=69521"> 
+							<span class="oh__inner">Back to the article</span> 
+							<svg width="18px" height="18px" viewBox="0 0 24 24"><path vector-effect="non-scaling-stroke" d="M18.25 15.5a.75.75 0 00.75-.75v-9a.75.75 0 00-.75-.75h-9a.75.75 0 000 1.5h7.19L6.22 16.72a.75.75 0 101.06 1.06L17.5 7.56v7.19c0 .414.336.75.75.75z"></path>
+							</svg>
+						</a> -->
+			<!-- </div> -->
+			<!-- <a class="frame__prev" href="https://tympanus.net/Development/TwistedText/">Previous demo</a> -->
+			<!-- </div> -->
+			<!-- <div class="content"> -->
+			<canvas id="canvas"></canvas>
+			<div class="ui-controls">
+				<div class="score">Score: <span id="score-result"></span></div>
+				<!-- <button id="roll-btn">Throw the dice</button> -->
+			</div>
+			<!-- </div> -->
+		</div>
+
+		<div class="column right">
+			<div id="explainer">
+			</div>
+			<div class="question" id="question">
+				<p id="prompt"></p>
+				<div id="answers"></div>
+			</div>
+			<div class="response" id="response">
+				<p id="responseTitle"></p>
+			</div>
+
+
+
+			<div class="column right">
+				<!-- <p>Human-like: Human, Elf, Dwarf, Gnome, Halfling, Half-Elf, Half-Orc, Dragonborn, Tiefling.</p>
+        <p>Exotic: Too many to list.</p>
+        <p>Monstrous: Too many to list.</p> -->
+				<div>
+					<p id="helperInfo">help goes here</p>
+				</div>
+
+				<footer>
+					<button onclick="window.location.href = 'charsheet.html';">
+						Character Sheet
+					</button>
+					<button onclick="init()">
+						Reset
+					</button>
+					<button id="roll-btn">
+						Roll
+					</button>
+				</footer>
+			</div>
+			<script>
+				// races();
+				// init()
+				// initPageInfo("class", 0);
+
+			</script>
+		</div>
+</body>
+
+<!-- <body>
+<main>
+<div class="frame">
+<div class="frame__title">
+	/<h1 class="frame__title-main">Three.js Dice Roller</h1> 
+	<a aria-label="Back to the article" class="frame__title-back" href="https://tympanus.net/codrops/?p=69521"> 
+						<span class="oh__inner">Back to the article</span> 
+						<svg width="18px" height="18px" viewBox="0 0 24 24"><path vector-effect="non-scaling-stroke" d="M18.25 15.5a.75.75 0 00.75-.75v-9a.75.75 0 00-.75-.75h-9a.75.75 0 000 1.5h7.19L6.22 16.72a.75.75 0 101.06 1.06L17.5 7.56v7.19c0 .414.336.75.75.75z"></path>
+						</svg>
+					</a>
+</div> -->
+<!-- <a class="frame__prev" href="https://tympanus.net/Development/TwistedText/">Previous demo</a> -->
+<!-- </div>
+<div class="content">
+	<canvas id="canvas"></canvas>
+	<div class="ui-controls">
+		<div class="score">Score: <span id="score-result"></span></div>
+		<button id="roll-btn">Throw the dice</button>
+	</div>
+</div> -->
+<!-- </main> -->
+<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+			  "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
+		  }
+		</script>
+<!-- <script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script> -->
+<script type="module" src="../js/dice.js"></script>
+</body>
+
+</html>
