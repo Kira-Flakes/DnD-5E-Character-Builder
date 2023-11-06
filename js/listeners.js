@@ -17,7 +17,7 @@ fetch('/guide.json')
     .then(data => {
         // Data is the parsed JSON object
         allDetails = Object.keys(data.misc);
-        console.log(allDetails);
+        // console.log(allDetails);
     })
     .catch(error => {
         console.error('Error loading JSON:', error);
@@ -195,6 +195,7 @@ function loadExplainer(page, iter) {
 
 }
 
+// Given a div, remove all children.
 function clearDiv(div) {
     while (div.firstChild) { // delete all buttons, since we are done with this question
         div.removeChild(div.firstChild)
@@ -213,7 +214,7 @@ function setAlignmentInfo() {
     alignButtons.forEach((button, index) => {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
-            button.style.backgroundColor = 'red'; // Change background color, for example
+            // button.style.backgroundColor = 'rgb(119, 45, 45)'; // Change background color, for example
             fetch('/guide.json')
                 .then(response => response.json())
                 .then(data => {
@@ -259,9 +260,9 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function loadPageInfo() {
+// function loadPageInfo() {
 
-}
+// }
 
 function initPageInfo(page, iter) {
     // const continueButton = document.createElement('button')
@@ -276,7 +277,7 @@ function initPageInfo(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
@@ -316,6 +317,9 @@ function handleSpecialCase(page) {
                 loadResponse(page, 'subRace')
             }
             break;
+        case 'class':
+            console.log("In class case\n")
+            conclusion('class');
         default: return
     }
 }
@@ -415,6 +419,7 @@ function loadQuestion(page) {
                 document.getElementById('backbutton').remove()
                 if (questionJSON.back == 'beginning') {
                     // localStorage.setItem("raceState","1");
+                    alterState(page, "0")
                     loadExplainer(page, 0)
                 }
                 else {
@@ -528,7 +533,7 @@ function checkAnswerViability(title, currentPage, qNumber) {
 function loadHelperInfoFromButton(button, jsonData) {
     button.addEventListener('mouseenter', function () {
         // Code to run when the button is hovered over
-        button.style.backgroundColor = 'red'; // Change background color, for example
+        // button.style.backgroundColor = 'rgb(119, 45, 45)'; // Change background color, for example
         fetch('/guide.json')
             .then(response => response.json())
             .then(data => {
@@ -587,43 +592,53 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Choose',
+                explanation: 'Your answers incidate that one of this options would be a good fit for your playstyle.',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
             let options = set.split(',')
-            for (const r in options) {
-                const choice = document.createElement('button');
-                const raceD = {}
-                raceD.id = options[r]
-                if (options[r].includes('Dragonborn')) {
-                    raceD.val = raceDiscreptionDiv('Dragonborn')
-                }
-                else {
-                    raceD.val = raceDiscreptionDiv(options[r])
-                }
-                divCache.push(raceD)
-                choice.setAttribute('id', 'choiceButton')
-                choice.innerText = options[r]
-                choice.onclick = function () {
-                    localStorage.setItem('_' + page, options[r])
-                    for (btn in tempButtons) { // delete all buttons, since we are done with this question
-                        document.getElementById('choiceButton').remove()
-                    }
-                    if (page == 'race') pickSubrace(options[r])
-
-                }; // set actions for the buttons
-                // button.addEventListener('mouseenter', function () {
-                choice.addEventListener('mouseenter', function () {
-                    console.log("MOUSEDOVER")
-                    clearHelperInfo()
-                    document.getElementById('helperInfo').appendChild(divCache[r].val)
-                })
-                tempButtons.push(choice)
-                // div.appendChild(raceDiscreptionDiv(options[r]))
-                div.appendChild(choice)
-                // TODO: add listeners for mousover and 
+            switch (page) {
+                case "race":
+                    raceChoices(options, tempButtons, div, page);
+                    break;
+                case "class":
+                    classChoices(options, tempButtons, div, page);
+                    break;
+                default:
+                    console.log("Case not handled in giveChoices()")
             }
+            // for (const r in options) {
+            //     const choice = document.createElement('button');
+            //     const raceD = {}
+            //     raceD.id = options[r]
+            //     if (options[r].includes('Dragonborn')) {
+            //         raceD.val = raceDiscreptionDiv('Dragonborn')
+            //     }
+            //     else {
+            //         raceD.val = raceDiscreptionDiv(options[r])
+            //     }
+            //     divCache.push(raceD)
+            //     choice.setAttribute('id', 'choiceButton')
+            //     choice.innerText = options[r]
+            //     choice.onclick = function () {
+            //         localStorage.setItem('_' + page, options[r])
+            //         for (btn in tempButtons) { // delete all buttons, since we are done with this question
+            //             document.getElementById('choiceButton').remove()
+            //         }
+            //         if (page == 'race') pickSubrace(options[r])
+
+            //     }; // set actions for the buttons
+            //     // button.addEventListener('mouseenter', function () {
+            //     choice.addEventListener('mouseenter', function () {
+            //         console.log("MOUSEDOVER")
+            //         clearHelperInfo()
+            //         document.getElementById('helperInfo').appendChild(divCache[r].val)
+            //     })
+            //     tempButtons.push(choice)
+            //     // div.appendChild(raceDiscreptionDiv(options[r]))
+            //     div.appendChild(choice)
+            //     // TODO: add listeners for mousover and 
+            // }
             // Add reset logic here if needed.
             // backBtn = document.createElement('button')
             // backBtn.setAttribute('id','backButton')
@@ -636,8 +651,92 @@ function giveChoices(page) {
         });
 }
 
-function raceChoices() {
+function raceChoices(options, tempButtons, div, page) {
+    console.log("In race choices")
+    for (const r in options) {
+        const choice = document.createElement('button');
+        const raceD = {}
+        raceD.id = options[r]
 
+        if (options[r].includes('Dragonborn')) {
+            raceD.val = raceDiscreptionDiv('Dragonborn')
+        }
+        else {
+            raceD.val = raceDiscreptionDiv(options[r])
+        }
+        console.log("divcache: " + raceD.val)
+        divCache.push(raceD)
+        choice.setAttribute('id', 'choiceButton')
+        choice.innerText = options[r]
+        choice.onclick = function () {
+            localStorage.setItem('_' + page, options[r])
+            for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                document.getElementById('choiceButton').remove()
+            }
+            if (page == 'race') pickSubrace(options[r])
+
+        }; // set actions for the buttons
+        // button.addEventListener('mouseenter', function () {
+        choice.addEventListener('mouseenter', function () {
+            console.log("MOUSEDOVER")
+            clearHelperInfo()
+            document.getElementById('helperInfo').appendChild(divCache[r].val)
+            // button.style.backgroundColor = 'rgb(119, 45, 45)';
+        })
+        tempButtons.push(choice)
+        // div.appendChild(raceDiscreptionDiv(options[r]))
+        div.appendChild(choice)
+        // TODO: add listeners for mousover and 
+    }
+}
+
+function classChoices(options, tempButtons, div, page) {
+    // while (divCache.length > 0) {
+    //     divCache.pop(); // Remove the last element
+    // }
+    for (const c in options) {
+        const choice = document.createElement('button');
+         classD = {}
+        classD.id = options[c]
+        console.log("opts: " + c)
+
+        classD.val = classDescriptionDiv(options[c])
+
+        // classD.val = DiscreptionDiv(options[c])
+        console.log("classD.val.innerHtml:" + classD.val.innerHTML)
+
+        divCache.push(classD)
+        console.log("DIVCHACHA: "+divCache)
+        console.log("divcache[0]: " + divCache[0].val.innerHTML)
+        console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
+        choice.setAttribute('id', 'choiceButton')
+        choice.innerText = options[c]
+        choice.onclick = function () {
+            localStorage.setItem('_' + page, options[c])
+            for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                document.getElementById('choiceButton').remove()
+            }
+            // Set the class
+            console.log("optsc " +options[c])
+            setClass(options[c]);
+            conclusion(page);
+
+        }; // set actions for the buttons
+        // button.addEventListener('mouseenter', function () {
+        choice.addEventListener('mouseenter', function () {
+            console.log("current Class" + divCache[c])
+            clearHelperInfo()
+            console.log("divCache["+c+"]: " + divCache[c].val.innerHTML)
+            document.getElementById('helperInfo').appendChild(divCache[c].val)
+        })
+        tempButtons.push(choice)
+        // div.appendChild(raceDiscreptionDiv(options[r]))
+        div.appendChild(choice)
+    }
+}
+
+function setClass(_class) {
+    localStorage.setItem("_classlevel", _class + " 1");
 }
 
 function clearHelperInfo() {
@@ -663,6 +762,32 @@ function raceDiscreptionDiv(race) {
     // }
     return res
 
+}
+
+function classDescriptionDiv(_class) {
+    const res = document.createElement('div')
+    res.setAttribute('id', 'raceDesc'+_class)
+    console.log("class: "+_class)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            info = data.class.classes[_class]
+            console.log("Info " + info.desc)
+            res.innerHTML = '<h2>' + _class + '</h2>' +
+                '<div>' + info.desc + '<div>' +
+                '<div>Primary Ability: ' + info.primaryAbility + '<div>' +
+                '<div>Saving Throws: ' + info.savingThrows + '<div>' +
+                '<div>Armor & Weapon Proficiencies: ' + info.ArmorWeaponProf + '<div>', allDetails
+            console.log("RESINNER: " + res.innerHTML)
+            return res
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    // res = classes(_class.toLowerCase());
+
+    return res
 }
 
 function pickSubrace(race) {
@@ -750,6 +875,9 @@ function continueToNextPage(currentPage, nextPage) {
     btn.innerText = "Continue"
     btn.onclick = function () {
         window.location.href = "../html/" + nextPage + ".html"
+        // for (c in divCache) {
+        //     divCache.pop()
+        // }
     }
     document.getElementById('content').appendChild(btn)
     console.log("WHats up?")
@@ -907,7 +1035,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     const newString = strEl[0] + localStorage.getItem("_") + strEl[strEl.length]
 
     textsToHighlight.forEach(textToHighlight => {
-        const regex = new RegExp(textToHighlight, 'g');
+        const regex = new RegExp(textToHighlight, 'gi');
         highlightedString = highlightedString.replace(regex, match => {
             if (!encounteredTexts.has(match)) {
                 encounteredTexts.add(match);
@@ -926,9 +1054,9 @@ function loadHelperInfoFromMisc(text) {
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            response = data["misc"][text]
+            response = data["misc"][text.toLowerCase()]
             document.getElementById('helperInfo').innerText = response
-            console.log(response)
+            // console.log(response)
         })
         .catch(error => {
             console.error('Error:', error);

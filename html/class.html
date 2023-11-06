@@ -78,14 +78,14 @@
         <p>Exotic: Too many to list.</p>
         <p>Monstrous: Too many to list.</p> -->
             <div>
-                <p id="helperInfo">help goes here</p>
+                <p id="helperInfo"></p>
             </div>
 
             <footer>
                 <button onclick="window.location.href = 'charsheet.html';">
                     Character Sheet
                 </button>
-                <button onclick="init()">
+                <button onclick="init(); location.reload()">
                     Reset
                 </button>
             </footer>
@@ -93,7 +93,7 @@
         <script>
             // races();
             // init()
-            initPageInfo("class", 0);
+            initPageInfo("class", parseInt(localStorage.getItem("classState")));
 
         </script>
     </div>

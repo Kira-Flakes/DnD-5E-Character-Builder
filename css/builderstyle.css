@@ -293,6 +293,15 @@ button:focus {
     max-width: 80%;
 }
 
+button:hover {
+    background-color: rgb(119, 45, 45);; /* Set your desired background color here */
+    color: white;
+}
+
+/* div .raceDesc {
+    margin: 20px;
+} */
+
 /* For signifying current selected tab (<div class="tab current">) */
 .current {
     background-color: rgb(119, 45, 45);
