@@ -194,47 +194,57 @@
         },
         "questions": {
             "q1": {
-                "q": "Would you rather strike your foes up close or from afar?",
+                "q": "Would you rather strike your foes up close, from afar, or both?",
                 "ans": {
-                    "Up close": [
+                    "Up Close": [
                         "",
-                        "Close range combat description.",
+                        "Up close combat involves melee attacks and physical engagement between characters. For example, a warrior wields a sword and charges into battle, engaging in close combat with an enemy.",
                         "2"
                     ],
-                    "From afar": [
+                    "From Afar": [
                         "",
-                        "Ranged attack discription",
+                        "From afar combat is characterized by ranged attacks and spellcasting from a distance. For instance, an archer takes aim from a distance, firing arrows at their opponents without direct physical contact.",
                         "3"
+                    ],
+                    "Both": [
+                        "",
+                        "A mixture of both combat styles combines elements of close combat and ranged combat, allowing characters to adapt to various situations, but makes it more difficult to specailize. For example, a spellcaster uses a combination of spells to weaken distant enemies and then engages in close combat with those who approach.",
+                        "5"
                     ]
                 },
                 "back": "beginning"
             },
             "q2": {
-                "q": "Do you want to cast spells, or?",
+                "q": "Would you rather rely on martial or magical prowess?",
                 "ans": {
-                    "Spells": [
-                        "",
-                        "",
-                        "4"
+                    "Magical": [
+                        "Paladin",
+                        "Magical prowess involves the ability to harness arcane or divine powers to cast spells and manipulate mystical forces.",
+                        "->continue"
                     ],
-                    "No Spells": [
+                    "Martial": [
                         "",
-                        "",
+                        "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
                         "7"
                     ]
                 },
                 "back": "1"
             },
             "q3": {
-                "q": "Do you want to cast spells, or?",
+                "q": "What type of spells would you prefer to cast?",
                 "ans": {
-                    "Spells": [
+                    "Offensive": [
                         "",
-                        "",
-                        "8"
+                        "Offensive spells are focused on damaging foes or causing negative conditions. For \"Fireball\" is used to unleash a powerful explosion and inflict damage on a group of adversaries.",
+                        "4"
                     ],
-                    "No Spells": [
-                        "Rogue,Fighter",
+                    "Support": [
+                        "Rogue",
+                        "Support spells are designed to aid allies or provide healing, protection, and other positive effects. For example, casting \"Heal\" to restore a wounded party member's hit points.",
+                        "->conclusion"
+                    ],
+                    "No Preference": [
+                        "Wizard",
                         "",
                         "->conclusion"
                     ]
@@ -242,77 +252,72 @@
                 "back": "1"
             },
             "q4": {
-                "q": "What type of spells do you want to cast?",
+                "q": "Are you someone who inherited powers from a long line of magic weilders, or are you controlled by dark forces most men could never understand?",
                 "ans": {
-                    "Healing Spells": [
-                        "Cleric,Paladin",
-                        "",
-                        "5"
-                    ],
-                    "Nature Magic": [
-                        "Ranger",
+                    "Inherited Powers": [
+                        "Sorcerer",
                         "",
                         "->conclusion"
                     ],
-                    "Otherworldly Spells": [
+                    "Controlled by Dark Forces": [
                         "Warlock",
                         "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "3"
+            },
+            "q5": {
+                "q": "Would you rather rely on martial or magical prowess?",
+                "ans": {
+                    "Martial": [
+                        "Fighter",
+                        "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
+                        "->conclusion"
+                    ],
+                    "Magical": [
+                        "",
+                        "Magical prowess involves the ability to harness arcane or divine powers to cast spells and manipulate mystical forces.",
                         "6"
                     ]
                 },
-                "back": "2"
+                "back": "1"
             },
-            "q5": {
-                "q": "Is your character: *Cleric Description* or *Paladin Description* (pg 45)",
+            "q6": {
+                "q": "What type of spells would you like to cast?",
                 "ans": {
-                    "Cleric": [
+                    "Support": [
                         "Cleric",
                         "",
                         "->conclusion"
                     ],
-                    "Paladin": [
-                        "Paladin",
+                    "Offensive": [
+                        "Druid",
+                        "",
+                        "->conclusion"
+                    ],
+                    "No Preference": [
+                        "Bard",
                         "",
                         "->conclusion"
                     ]
                 },
-                "back": "4"
-            },
-            "q6": {
-                "q": "Your class is now Warlock, *Warlock Description*. Who did you bargain with to get your powers? *The Archfey Description* *The Fiend Description* *The Great Old One Description* (pg 108)",
-                "ans": {
-                    "Artificer": [
-                        "",
-                        "",
-                        ""
-                    ],
-                    "Fiend": [
-                        "",
-                        "",
-                        ""
-                    ]
-                },
-                "back": "4"
+                "back": "5"
             },
             "q7": {
-                "q": "Is your character: *Barbarian Description* *Fighter Description* *Monk Description* or *Rogue Description* (pg 45)",
+                "q": "Is your character a primative warrior who can harness their rage, a calculated fighter always concious of their body and spirit, or a scoundrel who tricks their opponents?",
                 "ans": {
-                    "Fighter": [
-                        "Fighter",
-                        "",
-                        "->conclusion"
-                    ],
-                    "Barbarian": [
+                    "Primative Warrior": [
                         "Barbarian",
                         "",
                         "->conclusion"
                     ],
-                    "Monk": [
+                    "Calculated": [
                         "Monk",
                         "",
                         "->conclusion"
                     ],
-                    "Rogue": [
+                    "Scoundrel": [
                         "Rogue",
                         "",
                         "->conclusion"
@@ -523,7 +528,8 @@
         "cultural background": "A character's cultural background in games like Dungeons & Dragons affects their personality, abilities, and role-playing interactions, adding depth to the narrative and influencing their alignment and moral choices. It contributes to worldbuilding and enriches the game's storytelling experience.",
         "bonuses": "For example, playing as a dwarf might provide bonuses to resilience or Constitution, while selecting a wizard class can grant bonuses related to spellcasting and intelligence. These racial and class-based bonuses can influence your character's strengths, weaknesses, and overall playstyle within the game, but you won't be restrcited to a playstyle based only on race.",
         "divine magic": "Divine magic, as the name suggests, is the power of the gods, flowing from them into the world.",
-        "primary ability" : "A primary ability is the ability that influences a class's special abilities. For example, for spell casters, the primary ability determines the highest spell level that can be cast.",
+        "primary ability": "A primary ability is the ability that influences a class's special abilities. For example, for spell casters, the primary ability determines the highest spell level that can be cast.",
         "saving throws": "A saving throw, also called a save, represents an attempt to resist a spell, a trap, a poison, a disease, or a similar threat. You don't normally decide to make a saving throw; you are forced to make one because your character is at risk of harm."
+
     }
 }

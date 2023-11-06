@@ -592,7 +592,7 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Your answers incidate that one of this options would be a good fit for your playstyle.',
+                explanation: 'Your answers incidate that this would be a good fit for your playstyle.',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
