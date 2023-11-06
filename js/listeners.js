@@ -319,7 +319,8 @@ function handleSpecialCase(page) {
             break;
         case 'class':
             console.log("In class case\n")
-            conclusion('class');
+            loadResponse(page)
+            // conclusion('class');
         default: return
     }
 }
@@ -391,14 +392,14 @@ function loadQuestion(page) {
 
                 document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-                console.log("ANSWERS: " + answers[ans][2])
+                // console.log("ANSWERS: " + answers[ans][2])
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
                     // racePrev = localStorage.getItem(page+"State")
-                    console.log("RacePrev: " + racePrev)
+                    // console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
@@ -437,7 +438,11 @@ function loadQuestion(page) {
 }
 
 function nextQuestion(previousAnswer) {
-    // console.log("PREV ANS: "+previousAnswer[2])
+    console.log("PREV ANS: "+previousAnswer[2])
+    if (previousAnswer[2] == '->more') {
+        console.log("In more case")
+        // TODO: Add more logic here
+    }
     return parseInt(previousAnswer[2])
 }
 
@@ -698,17 +703,17 @@ function classChoices(options, tempButtons, div, page) {
         const choice = document.createElement('button');
          classD = {}
         classD.id = options[c]
-        console.log("opts: " + c)
+        // console.log("opts: " + c)
 
         classD.val = classDescriptionDiv(options[c])
 
         // classD.val = DiscreptionDiv(options[c])
-        console.log("classD.val.innerHtml:" + classD.val.innerHTML)
+        // console.log("classD.val.innerHtml:" + classD.val.innerHTML)
 
         divCache.push(classD)
-        console.log("DIVCHACHA: "+divCache)
-        console.log("divcache[0]: " + divCache[0].val.innerHTML)
-        console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
+        // console.log("DIVCHACHA: "+divCache)
+        // console.log("divcache[0]: " + divCache[0].val.innerHTML)
+        // console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
         choice.setAttribute('id', 'choiceButton')
         choice.innerText = options[c]
         choice.onclick = function () {
@@ -717,7 +722,7 @@ function classChoices(options, tempButtons, div, page) {
                 document.getElementById('choiceButton').remove()
             }
             // Set the class
-            console.log("optsc " +options[c])
+            // console.log("optsc " +options[c])
             setClass(options[c]);
             conclusion(page);
 
@@ -772,13 +777,13 @@ function classDescriptionDiv(_class) {
         .then(response => response.json())
         .then(data => {
             info = data.class.classes[_class]
-            console.log("Info " + info.desc)
+            // console.log("Info " + info.desc)
             res.innerHTML = '<h2>' + _class + '</h2>' +
                 '<div>' + info.desc + '<div>' +
                 '<div>Primary Ability: ' + info.primaryAbility + '<div>' +
                 '<div>Saving Throws: ' + info.savingThrows + '<div>' +
                 '<div>Armor & Weapon Proficiencies: ' + info.ArmorWeaponProf + '<div>', allDetails
-            console.log("RESINNER: " + res.innerHTML)
+            // console.log("RESINNER: " + res.innerHTML)
             return res
         })
         .catch(error => {
@@ -880,7 +885,7 @@ function continueToNextPage(currentPage, nextPage) {
         // }
     }
     document.getElementById('content').appendChild(btn)
-    console.log("WHats up?")
+    // console.log("WHats up?")
 }
 
 function loadRaceCompletionDiv() {
@@ -1009,7 +1014,7 @@ function getIntersection(set1, set2) {
 function alterState(topic, change) {
     var storageItem = topic + "State"
     // s = parseInt(localStorage.getItem(storageItem)) + change
-    console.log("Storage item: " + change)
+    // console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
 // function alterState(topic, change) {

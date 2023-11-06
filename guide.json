@@ -257,7 +257,7 @@
                     "Inherited Powers": [
                         "Sorcerer",
                         "",
-                        "->conclusion"
+                        "->more"
                     ],
                     "Controlled by Dark Forces": [
                         "Warlock",
@@ -503,6 +503,8 @@
         }
     },
     "background": {
+        "explainer": "Backround information is used to refine your characters perosnality by defining where your character comes from and what kind of person they are.",
+
         "alignment": {
             "description": "Alignment guides a character's decisions and role-playing, influencing their behavior and interactions within the game world. It's a tool for players to define their character's beliefs and values, helping to shape their role-playing experience and relationships with other characters and NPCs. However, alignment is flexible and may evolve as the character's story unfolds, allowing for dynamic character development.",
             "options": {
