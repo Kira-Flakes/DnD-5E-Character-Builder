@@ -13,12 +13,12 @@ function API(subject, specific) 											 //function def, subject is the catag
 }
 
 //try {API("spells", "acid-arrow");} 											 // test api call function
-// need to add catch for incorrect API calls
-
-
-
-function abilityScores(stat) {												 //Function that takes an ability score stat and makes an API call
-
+																			 // need to add catch for incorrect API calls
+																			 
+																			 
+																			 
+function abilityScores(stat){												 //Function that takes an ability score stat and makes an API call
+	
 	let statS = String(stat)
 	let search = API("ability-scores", statS);
 
@@ -26,34 +26,34 @@ function abilityScores(stat) {												 //Function that takes an ability scor
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.full_name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.full_name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.desc);
-			const termdesc = JSON.stringify(data.desc);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-
-
-		)
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.full_name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.full_name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+  }
+  
+  
+  
+  )
 }
 
 //abilityScores("str");															// test api call function
-// need to add catch for incorrect API calls
-
-function classes(Class) {												 //Function that takes a class and makes an API call (CURRENTLY STAT VOMIT, NEEDS TO BE FORMATTED)
-
+																			 // need to add catch for incorrect API calls
+																			 
+function classes(Class){												 //Function that takes a class and makes an API call (CURRENTLY STAT VOMIT, NEEDS TO BE FORMATTED)
+	
 	let classS = String(Class)
 	let search = API("classes", classS);
 
@@ -61,31 +61,36 @@ function classes(Class) {												 //Function that takes a class and makes an
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.proficiency_choices);
-			const termdesc = JSON.stringify(data.proficiency_choices);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-			//classes("bard");	
-
-		)
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.hit_die);
+		const termdesc = JSON.stringify(data.hit_die);
+		document.getElementById("statdesc").innerHTML = termdesc;
+		
+		console.log(data.proficiency_choices);
+		const termdesc2 = JSON.stringify(data.proficiency_choices);
+		document.getElementById("statdesc2").innerHTML = termdesc2;
+		
+  }
+  
+  //classes("bard");	
+  
+  )
 }
 
-function spells(spell) {												 //Function that takes a spell and makes an API call
-
+function spells(spell){												 //Function that takes a spell and makes an API call
+	
 	let spellS = String(spell)
 	let search = API("spells", spellS);
 
@@ -93,34 +98,34 @@ function spells(spell) {												 //Function that takes a spell and makes an 
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.desc);
-			const termdesc = JSON.stringify(data.desc);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-
-
-		)
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+  }
+  
+  
+  
+  )
 }
 
 //spells("fireball")
 
 
-function features(feat) {												 //Function that takes a feature and makes an API call
-
+function features(feat){												 //Function that takes a feature and makes an API call
+	
 	let featS = String(feat)
 	let search = API("features", featS);
 
@@ -128,33 +133,33 @@ function features(feat) {												 //Function that takes a feature and makes 
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.desc);
-			const termdesc = JSON.stringify(data.desc);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-
-
-		)
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+  }
+  
+  
+  
+  )
 }
 
 //features("actor")
 
-function alignments(alignment) {												 //Function that takes an alignment and makes an API call
-
+function alignments(alignment){												 //Function that takes an alignment and makes an API call
+	
 	let alignmentS = String(alignment)
 	let search = API("alignments", alignmentS);
 
@@ -162,27 +167,27 @@ function alignments(alignment) {												 //Function that takes an alignment 
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.desc);
-			const termdesc = JSON.stringify(data.desc);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-
-
-		)
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+  }
+  
+  
+  
+  )
 }
 
 //alignments("chaotic-neutral")
@@ -203,8 +208,8 @@ function API2(subject, specific) 											 //function def, subject is the cata
 	return call;															 //returns url object
 }
 
-function backgrounds(background) {												 //Function that takes an alignment and makes an API call
-
+function backgrounds(background){												 //Function that takes an alignment and makes an API call
+	
 	let backgroundS = String(background)
 	let search = API2("backgrounds", backgroundS);
 
@@ -212,43 +217,10 @@ function backgrounds(background) {												 //Function that takes an alignmen
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
-		}
-	})
-		.then(data => {															 //using the JSON file
-
-
-			console.log(data.name);										 //Sending JSON attribute to log
-			const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
-			document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
-
-			console.log(data.desc);
-			const termdesc = JSON.stringify(data.desc);
-			document.getElementById("statdesc").innerHTML = termdesc;
-		}
-
-
-		)
-}
-
-//backgrounds("acolyte")
-
-function weapons(wep) {												 //Function that takes a feature and makes an API call
-
-	let wepS = String(wep)
-	let search = API2("weapons", wepS);
-
-
-
-	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
-		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
-		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
 	.then(data => {															 //using the JSON file
@@ -259,31 +231,60 @@ function weapons(wep) {												 //Function that takes a feature and makes an
 		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
 		
 		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+  }
+
+
+)
+}
+
+//backgrounds("acolyte")
+
+function weapons(wep){												 //Function that takes a feature and makes an API call
+	
+	let wepS = String(wep)
+	let search = API2("weapons", wepS);
+
+
+
+	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+		return response.json();
+		
+		} else {															 //Accounting for possible network issues
+		throw new Error("Network Error");
+		}
+	})
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+		
+		console.log(data.category);
 		const termdesc = JSON.stringify(data.category);
 		document.getElementById("statdesc").innerHTML = termdesc;
 		
-		console.log(data.desc);
+		console.log(data.cost);
 		const termdesc2 = JSON.stringify(data.cost);
 		document.getElementById("statdesc2").innerHTML = termdesc2;
 		
-		console.log(data.desc);
+		console.log(data.damage_dice);
 		const termdesc3 = JSON.stringify(data.damage_dice);
 		document.getElementById("statdesc3").innerHTML = termdesc3;
 		
-		console.log(data.desc);
+		console.log(data.damage_type);
 		const termdesc4 = JSON.stringify(data.damage_type);
 		document.getElementById("statdesc4").innerHTML = termdesc4;
 		
-		console.log(data.desc);
-		const termdesc5 = JSON.stringify(data.weight);
+		console.log(data.properties);
+		const termdesc5 = JSON.stringify(data.properties);
 		document.getElementById("statdesc5").innerHTML = termdesc5;
-		
-		console.log(data.desc);
-		const termdesc6 = JSON.stringify(data.properties);
-		document.getElementById("statdesc6").innerHTML = termdesc6;
   }
   
-  //weapons need text added to describe weight, value, etc.
+  //weapons need text added to describe value, etc.
   
   )
 }
@@ -299,13 +300,13 @@ function armors(arm){												 //Function that takes a feature and makes an A
 
 	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
 		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
-			return response.json();
-
+		return response.json();
+		
 		} else {															 //Accounting for possible network issues
-			throw new Error("Network Error");
+		throw new Error("Network Error");
 		}
 	})
-		.then(data => {															 //using the JSON file
+	.then(data => {															 //using the JSON file
 
 		console.log(data.name);										 //Sending JSON attribute to log
 		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
@@ -315,28 +316,23 @@ function armors(arm){												 //Function that takes a feature and makes an A
 		const termdesc = JSON.stringify(data.category);
 		document.getElementById("statdesc").innerHTML = termdesc;
 		
-		console.log(data.desc);
+		console.log(data.cost);
 		const termdesc2 = JSON.stringify(data.cost);
 		document.getElementById("statdesc2").innerHTML = termdesc2;
 		
-		console.log(data.desc);
+		console.log(data.ac_string);
 		const termdesc3 = JSON.stringify(data.ac_string);
 		document.getElementById("statdesc3").innerHTML = termdesc3;
 		
-		console.log(data.desc);
+		console.log(data.strength_requirement);
 		const termdesc4 = JSON.stringify(data.strength_requirement);
 		document.getElementById("statdesc4").innerHTML = termdesc4;
 		
-		console.log(data.desc);
-		const termdesc5 = JSON.stringify(data.weight);
+		console.log(data.stealth_disadvantage);
+		const termdesc5 = JSON.stringify(data.stealth_disadvantage);
 		document.getElementById("statdesc5").innerHTML = termdesc5;
-		
-		console.log(data.desc);
-		const termdesc6 = JSON.stringify(data.stealth_disadvantage);
-		document.getElementById("statdesc6").innerHTML = termdesc6;
 
-  //armors need text added to describe weight, value, etc.
-  //Weight values not showing up due to no value being in the api, external table exists???
+  //armors need text added to describe value, etc.
 }
 )
 }
@@ -365,31 +361,31 @@ function races(race){
 		const termdesc = JSON.stringify(data.desc);
 		document.getElementById("statdesc").innerHTML = termdesc;
 		
-		console.log(data.desc);
+		console.log(data.asi_desc);
 		const termdesc2 = JSON.stringify(data.asi_desc);
 		document.getElementById("statdesc2").innerHTML = termdesc2;
 		
-		console.log(data.desc);
+		console.log(data.alignment);
 		const termdesc3 = JSON.stringify(data.alignment);
 		document.getElementById("statdesc3").innerHTML = termdesc3;
 
-		console.log(data.desc);
+		console.log(data.size_raw);
 		const termdesc4 = JSON.stringify(data.size_raw);
 		document.getElementById("statdesc4").innerHTML = termdesc4;
 
-		console.log(data.desc);
+		console.log(data.languages);
 		const termdesc5 = JSON.stringify(data.languages);
 		document.getElementById("statdesc5").innerHTML = termdesc5;
 
-		console.log(data.desc);
+		console.log(data.vision);
 		const termdesc6 = JSON.stringify(data.vision);
 		document.getElementById("statdesc6").innerHTML = termdesc6;		
 		
-		console.log(data.desc);
+		console.log(data.traits);
 		const termdesc7 = JSON.stringify(data.traits);
 		document.getElementById("statdesc7").innerHTML = termdesc7;
 		
-		console.log(data.desc);
+		console.log(data.subraces);
 		const termdesc8 = JSON.stringify(data.subraces);
 		document.getElementById("statdesc8").innerHTML = termdesc8;
 		
@@ -399,3 +395,51 @@ function races(race){
 }
 
 //races("half-orc");
+
+function items(item){												 //Function that takes a feature and makes an API call
+	
+	let itemS = String(item)
+	let search = API("equipment", itemS);
+
+
+
+	fetch(search).then((response) => { 										 //API call using fetch then taking a json as a response
+		if (response.ok) {													 //Check if you get a proper response since fetch only fails due to network issues
+		return response.json();
+		
+		} else {															 //Accounting for possible network issues
+		throw new Error("Network Error");
+		}
+	})
+	.then(data => {															 //using the JSON file
+		
+	
+		console.log(data.name);										 //Sending JSON attribute to log
+		const term = JSON.stringify(data.name);						 //Turning JSON attribute into a string
+		document.getElementById("stat").innerHTML = term;					 //Returning string to HTML to be displayed
+
+		console.log(data.desc);
+		const termdesc = JSON.stringify(data.desc);
+		document.getElementById("statdesc").innerHTML = termdesc;
+		
+		console.log(data.cost);
+		const termdesc2 = JSON.stringify(data.cost);
+		document.getElementById("statdesc2").innerHTML = termdesc2;
+		
+		console.log(data.equipment_category.name);
+		const termdesc3 = JSON.stringify(data.equipment_category.name);
+		document.getElementById("statdesc3").innerHTML = termdesc3;
+		
+		console.log(data.gear_category.name);
+		const termdesc4 = JSON.stringify(data.gear_category.name);
+		document.getElementById("statdesc4").innerHTML = termdesc4;
+		
+		console.log(data.contents);
+		const termdesc5 = JSON.stringify(data.contents);
+		document.getElementById("statdesc5").innerHTML = termdesc5;
+  }
+  
+  )
+}
+
+//items("burglars-pack");	
