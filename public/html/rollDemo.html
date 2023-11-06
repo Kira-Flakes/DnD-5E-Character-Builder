@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
+	<script type="module" src="../js/d20Logo.js"></script>
 
 <!-- <head> -->
 <meta charset="UTF-8" />
@@ -14,9 +15,17 @@
 <!-- <script>document.documentElement.className = "js"; var supportsCssVars = function () { var e, t = document.createElement("style"); return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e }; supportsCssVars() || alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
 		<script src="//tympanus.net/codrops/adpacks/analytics.js"></script> -->
 <!-- </head>  -->
+<script>
+	localStorage.setItem("currentRef","../html/rollDemo.html")
+</script>
 
 <body>
-	<h1>Wiz-Rad!</h1>
+	<h1>Wiz-Rad!
+        <div style="display:inline;">
+            <canvas class="webgl"></canvas>
+        </div> 
+    </h1>
+    
 	<div class="tabs">
 		<div style="flex-direction: row" ; class="container" ;>
 			<div class="tab">

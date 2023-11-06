@@ -14,7 +14,12 @@ Question objects:
     question -> q1 
                 q2 
                 ...
-                qn 
+                qn ->
+                    ans  each answer has three spots: [
+                                                        Reamining options after choosing this answer (only relevant in race for now.),
+                                                        Discription that displays when the mouse enters the answer buttons field,
+                                                        The next question or sequence after picking this answer
+                                                        ]
     Rules:
     1. All answers must return a set representing the remaining possiblilities for the player.
         Example: Do you want a short character? "Yes" returns all short characters. "No" returns all tall characters. 
