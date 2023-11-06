@@ -1,4 +1,41 @@
 {
+    "presetChoice": {
+        "explainer": "In Dungeons & Dragons, a character preset is a pre-designed character with predefined race, class, abilities, and background. Players might opt for a character preset to save time and simplify the character creation process, making it easier to jump into the game.",
+        "questions": {
+            "q": "Do you want to choose from a few presets, or would you rather build a character from scratch?",
+            "ans": [
+                "Preset",
+                "From Scratch"
+            ]
+        },
+        "presets": {
+            "Dwarf": {
+                "id": "DwarfPreset",
+                "race": "Hill-Dwarf",
+                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+            },
+            "Half-Orc": {
+                "id": "HalfOrcPreset",
+                "race": "Half-Orc",
+                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+            },
+            "Gnome": {
+                "id": "ForestGnomePreset",
+                "race": "Forest Gnome",
+                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+            },
+            "Human": {
+                "id": "HumanPreset",
+                "race": "Human - Turami",
+                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+            },
+            "Dark Elf": {
+                "id": "DarkElfPreset",
+                "race": "Dark Elf (Drow)",
+                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+            }
+        }
+    },
     "gettingStarted": {
         "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy.",
         "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."
@@ -22,7 +59,8 @@
                         "Taller and more agile characters can possess grace, nimbleness, and agility, excelling in finesse-based tasks and ranged combat. This group has a wide range of characters with unique abilities and backgrounds, making them versatile and adaptable to different situations.",
                         "2"
                     ]
-                }
+                },
+                "back": "beginning"
             },
             "q2": {
                 "q": "Do you want to play as both a human/half-human?",
@@ -37,7 +75,8 @@
                         "Individuals with unique qualities that possess traits which deviate from the typical human characteristics. These non-human attributes often come with distinct abilities and backgrounds, setting them apart from the common human experience.",
                         "3"
                     ]
-                }
+                },
+                "back": "1"
             },
             "q3": {
                 "q": "Would you rather:",
@@ -52,7 +91,8 @@
                         "Elemental attacks can be devistating and tactical attacks that give you the upper hand in certain situations",
                         "4"
                     ]
-                }
+                },
+                "back": "2"
             },
             "q4": {
                 "q": "Do you destroy your foes up close or from afar?",
@@ -67,7 +107,8 @@
                         "",
                         "6"
                     ]
-                }
+                },
+                "back": "3"
             },
             "q5": {
                 "q": "Choose a breath weapon:",
@@ -87,7 +128,8 @@
                         "Cold abilities often involve the emission of freezing breath. The specifics of these powers aren't mentioned, but they're connected to the element of cold.",
                         "->subRace"
                     ]
-                }
+                },
+                "back": "4"
             },
             "q6": {
                 "q": "Choose a breath weapon: Choose a breath weapon:",
@@ -107,7 +149,8 @@
                         "Fire-related abilities involve the use of flames or fiery breath to deal damage. Such powers are often associated with an affinity for magical energy and can suit classes like Wizards and Sorcerers.",
                         "->subRace"
                     ]
-                }
+                },
+                "back": "4"
             },
             "response": {
                 "type": "subRace",
@@ -140,58 +183,322 @@
             }
         },
         "conclusion": {
-            "header": "<h3>You've chosen **_race** as your character's race<h3>"
+            "header": "<h3>You've chosen **_race** as your character's race<h3>",
+            "next": "class"
         }
     },
     "class": {
         "explainer": {
-            "header": "class explainer placeholder",
-            "details": "class explainer placeholder"
+            "header": "A character's class is a fundamental aspect that defines their vocation, skills, and the roles they play in the game world. Unlike race and background, which contribute to a character's identity and personal history, the class primarily dictates a character's abilities, playstyle, and progression. It determines their combat skills, magical talents, and unique traits, making it distinct from race and background, which focus on character origins and cultural aspects.",
+            "details": "A character's class is a fundamental aspect that defines their vocation, skills, and the roles they play in the game world. Unlike race and background, which contribute to a character's identity and personal history, the class primarily dictates a character's abilities, playstyle, and progression. It determines their combat skills, magical talents, and unique traits, making it distinct from race and background, which focus on character origins and cultural aspects."
         },
         "questions": {
             "q1": {
-                "q": "Do you want to fight enemies up close or from afar?",
+                "q": "Would you rather strike your foes up close, from afar, or both?",
                 "ans": {
-                    "Up close": [
-                        "Barbarian",
-                        "up close"
+                    "Up Close": [
+                        "",
+                        "Up close combat involves melee attacks and physical engagement between characters. For example, a warrior wields a sword and charges into battle, engaging in close combat with an enemy.",
+                        "2"
                     ],
-                    "From afar": [
-                        "Ranger",
-                        "from afar"
+                    "From Afar": [
+                        "",
+                        "From afar combat is characterized by ranged attacks and spellcasting from a distance. For instance, an archer takes aim from a distance, firing arrows at their opponents without direct physical contact.",
+                        "3"
+                    ],
+                    "Both": [
+                        "",
+                        "A mixture of both combat styles combines elements of close combat and ranged combat, allowing characters to adapt to various situations, but makes it more difficult to specailize. For example, a spellcaster uses a combination of spells to weaken distant enemies and then engages in close combat with those who approach.",
+                        "5"
                     ]
-                }
+                },
+                "back": "beginning"
             },
             "q2": {
-                "q": "question2",
+                "q": "Would you rather rely on martial or magical prowess?",
                 "ans": {
-                    "button1": [
-                        "",
-                        ""
+                    "Magical": [
+                        "Paladin",
+                        "Magical prowess involves the ability to harness arcane or divine powers to cast spells and manipulate mystical forces.",
+                        "->continue"
                     ],
-                    "button2": [
+                    "Martial": [
                         "",
-                        ""
+                        "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
+                        "7"
                     ]
-                }
+                },
+                "back": "1"
             },
             "q3": {
-                "q": "?",
+                "q": "What type of spells would you prefer to cast?",
                 "ans": {
-                    "button1": [
+                    "Offensive": [
+                        "",
+                        "Offensive spells are focused on damaging foes or causing negative conditions. For \"Fireball\" is used to unleash a powerful explosion and inflict damage on a group of adversaries.",
+                        "4"
+                    ],
+                    "Support": [
+                        "Rogue",
+                        "Support spells are designed to aid allies or provide healing, protection, and other positive effects. For example, casting \"Heal\" to restore a wounded party member's hit points.",
+                        "->conclusion"
+                    ],
+                    "No Preference": [
+                        "Wizard",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "1"
+            },
+            "q4": {
+                "q": "Are you someone who inherited powers from a long line of magic weilders, or are you controlled by dark forces most men could never understand?",
+                "ans": {
+                    "Inherited Powers": [
+                        "Sorcerer",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Controlled by Dark Forces": [
+                        "Warlock",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "3"
+            },
+            "q5": {
+                "q": "Would you rather rely on martial or magical prowess?",
+                "ans": {
+                    "Martial": [
+                        "Fighter",
+                        "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
+                        "->conclusion"
+                    ],
+                    "Magical": [
+                        "",
+                        "Magical prowess involves the ability to harness arcane or divine powers to cast spells and manipulate mystical forces.",
+                        "6"
+                    ]
+                },
+                "back": "1"
+            },
+            "q6": {
+                "q": "What type of spells would you like to cast?",
+                "ans": {
+                    "Support": [
+                        "Cleric",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Offensive": [
+                        "Druid",
+                        "",
+                        "->conclusion"
+                    ],
+                    "No Preference": [
+                        "Bard",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "5"
+            },
+            "q7": {
+                "q": "Is your character a primative warrior who can harness their rage, a calculated fighter always concious of their body and spirit, or a scoundrel who tricks their opponents?",
+                "ans": {
+                    "Primative Warrior": [
+                        "Barbarian",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Calculated": [
+                        "Monk",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Scoundrel": [
+                        "Rogue",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "2"
+            },
+            "q8": {
+                "q": "What type of spells do you want to cast?",
+                "ans": {
+                    "Healing Spells": [
+                        "Cleric",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Nature Spells": [
+                        "Ranger",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Shape-Shifting": [
+                        "Druid",
+                        "",
+                        "->conclusion"
+                    ],
+                    "No Preference": [
+                        "Bard,Wizard",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "3"
+            },
+            "q9": {
+                "q": "Is your character: *Bard Description* or *Wizard Description* (pg 45)",
+                "ans": {
+                    "Bard": [
                         "",
                         ""
                     ],
-                    "button2": [
+                    "Wizard": [
                         "",
                         ""
                     ]
-                }
+                },
+                "back": "8"
+            },
+            "q10": {
+                "q": "Is your character: *Fighter Description* or *Rogue Description* (pg 45)",
+                "ans": {
+                    "Fighter": [
+                        "Fighter",
+                        "",
+                        "11"
+                    ],
+                    "Rogue": [
+                        "Rogue",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "3"
+            },
+            "q11": {
+                "q": "Choose your character's fighting style: Archery, Defense, Dueling, Great Weapon Fighting, Protection, Two-Weapon Fighting",
+                "ans": {
+                    "Archery": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Defense": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Dueling": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Great Weapon": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Protection": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Two-Weapon": [
+                        "",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "10"
             },
             "response": {
                 "type": "set",
                 "title": "Based on your responses, we've handpicked a selection of races for your character:",
                 "options": "$class"
+            }
+        },
+        "conclusion": {
+            "header": "<h3>You've chosen **_class** as your character's class<h3>",
+            "next": "background"
+        },
+        "classes": {
+            "Barbarian": {
+                "desc": "A fierce warrior of a primitive background who can enter a battle rage.",
+                "primaryAbility": "Strength",
+                "savingThrows": "Strength & Constitution",
+                "ArmorWeaponProf": "Light and medium armor, shields, simple and martial weapons"
+            },
+            "Bard": {
+                "desc": "An inspiring magician whose power echoes the music of creation.",
+                "primaryAbility": "Charisma",
+                "savingThrows": "Dexterity & Charisma",
+                "ArmorWeaponProf": "Light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords"
+            },
+            "Cleric": {
+                "desc": "A priestly champion who wields divine magic in service of a higher power.",
+                "primaryAbility": "Wisdom",
+                "savingThrows": "Wisdom & Charisma",
+                "ArmorWeaponProf": "Light and medium armor, shields, simple weapons"
+            },
+            "Druid": {
+                "desc": "A priest of the Old Faith, wielding the powers of nature - moonlight and plant growth, fire and lightning - and adopting animal forms.",
+                "primaryAbility": "Wisdom",
+                "savingThrows": "Intelligence & Wisdom",
+                "ArmorWeaponProf": "Light and medium armor (non-metal), shields (non-metal), clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears"
+            },
+            "Fighter": {
+                "desc": "A master of martial combat, skilled with a variety of weapons and armor.",
+                "primaryAbility": "Strength or Dexterity",
+                "savingThrows": "Strength & Constitution",
+                "ArmorWeaponProf": "All armor, shields, simple and martial weapons"
+            },
+            "Monk": {
+                "desc": "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.",
+                "primaryAbility": "Dexterity & Wisdom",
+                "savingThrows": "Strength & Dexterity",
+                "ArmorWeaponProf": "Simple weapons, shortswords"
+            },
+            "Paladin": {
+                "desc": "A holy warrior bound to a sacred oath.",
+                "primaryAbility": "Strength & Charisma",
+                "savingThrows": "Wisdom & Charisma",
+                "ArmorWeaponProf": "All armor, shields, simple and martial weapons"
+            },
+            "Ranger": {
+                "desc": "A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization.",
+                "primaryAbility": "Dexterity & Wisdom",
+                "savingThrows": "Strength & Dexterity",
+                "ArmorWeaponProf": "Light and medium armor, shields, simple and martial weapons"
+            },
+            "Rogue": {
+                "desc": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies.",
+                "primaryAbility": "Dexterity",
+                "savingThrows": "Dexterity & Intelligence",
+                "ArmorWeaponProf": "Light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords"
+            },
+            "Sorcerer": {
+                "desc": "A spellcaster who draws on inherent magic from a gift or bloodline.",
+                "primaryAbility": "Charisma",
+                "savingThrows": "Constitution & Charisma",
+                "ArmorWeaponProf": "Daggers, darts, slings, quarterstaffs, light crossbows"
+            },
+            "Warlock": {
+                "desc": "A wielder of magic that is derived from a bargin with an extraplanar entity.",
+                "primaryAbility": "Charisma",
+                "savingThrows": "Wisdom & Charisma",
+                "ArmorWeaponProf": "Light armor, simple weapons"
+            },
+            "Wizard": {
+                "desc": "A scholarly magic-user capable of manipulating the structures of reality",
+                "primaryAbility": "Intelligence",
+                "savingThrows": "Wisdom & Intelligence",
+                "ArmorWeaponProf": "Daggers, darts, slings, quarterstaffs, light crossbows."
             }
         }
     },
@@ -213,13 +520,16 @@
     },
     "misc": {
         "race": "Every character has a lineage. The race you are assigned contributes to your characters identity and influences the abilities you possess.",
-        "class": "Class broadly describes a character’s vocation and the tactics the character is likely to employ when exploring, fighting and negotiating. \n\n    Classes also determine the benefits you will receive. We will choose a class that receives benefits based on your preferred playstyle.",
+        "class": "Class broadly describes a character's vocation and the tactics the character is likely to employ when exploring, fighting and negotiating. \n\n    Classes also determine the benefits you will receive. We will choose a class that receives benefits based on your preferred playstyle.",
         "ability scores": "Much of what your character can do is determined by your ability scores. The six abilities are Strength, Constitution, Intelligence, Wisdom, and Charisma.",
         "personality": "Once you have the basic game aspects of your character, you'll need to consider who your character is as a person. You'll give them a name, an alignment and background. Keep this in mind when answering questions.",
         "equipment": "With a good idea of who your character is, you can choose what they will need on their adventure. Equipment includes armor, weapons, gold and useful tools.",
         "character sheet": "A character sheet is used in tabletop role-playing games, like Dungeons & Dragons, to record and organize a player's character information. It includes details such as a character's name, race, class, abilities, skills, equipment, and backstory. Character sheets are essential for tracking a character's progress, abilities, and decisions throughout the game, serving as a reference point for players and game masters during gameplay.",
         "cultural background": "A character's cultural background in games like Dungeons & Dragons affects their personality, abilities, and role-playing interactions, adding depth to the narrative and influencing their alignment and moral choices. It contributes to worldbuilding and enriches the game's storytelling experience.",
-        "bonuses": "For example, playing as a dwarf might provide bonuses to resilience or Constitution, while selecting a wizard class can grant bonuses related to spellcasting and intelligence. These racial and class-based bonuses can influence your character's strengths, weaknesses, and overall playstyle within the game, but you won't be restrcited to a playstyle based only on race."
-        
+        "bonuses": "For example, playing as a dwarf might provide bonuses to resilience or Constitution, while selecting a wizard class can grant bonuses related to spellcasting and intelligence. These racial and class-based bonuses can influence your character's strengths, weaknesses, and overall playstyle within the game, but you won't be restrcited to a playstyle based only on race.",
+        "divine magic": "Divine magic, as the name suggests, is the power of the gods, flowing from them into the world.",
+        "primary ability": "A primary ability is the ability that influences a class's special abilities. For example, for spell casters, the primary ability determines the highest spell level that can be cast.",
+        "saving throws": "A saving throw, also called a save, represents an attempt to resist a spell, a trap, a poison, a disease, or a similar threat. You don't normally decide to make a saving throw; you are forced to make one because your character is at risk of harm."
+
     }
 }
