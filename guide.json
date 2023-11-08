@@ -255,9 +255,9 @@
                 "q": "Are you someone who inherited powers from a long line of magic weilders, or are you controlled by dark forces most men could never understand?",
                 "ans": {
                     "Inherited Powers": [
-                        "Sorcerer",
                         "",
-                        "->conclusion"
+                        "",
+                        "12"
                     ],
                     "Controlled by Dark Forces": [
                         "Warlock",
@@ -416,6 +416,22 @@
                     ]
                 },
                 "back": "10"
+            },
+            "q12": {
+                "q": "What is the origin of your magical powers? Do they come from a might draconic force, or a wild force of chaos that underlie the order of creation?",
+                "ans": {
+                    "Draconic Force": [
+                        "Sorcerer",
+                        "",
+                        "->conclusion"
+                    ],
+                    "Wild Force": [
+                        "Sorcerer",
+                        "",
+                        "->conclusion"
+                    ]
+                },
+                "back": "4"
             },
             "response": {
                 "type": "set",
