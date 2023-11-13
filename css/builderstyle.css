@@ -19,7 +19,7 @@ body {
     background-color: #171717;
     background-image: url("../images/Stone_Background.png");
     background-repeat: repeat;
-    font-size: 3vh;
+    font-size: 2.7vh;
     color: rgb(255, 255, 255);
 }
 
@@ -27,6 +27,9 @@ body {
 a {
     color: rgb(255, 255, 255);
     text-decoration: none;
+    display: block;
+    height: 100%;
+    width: 100%;
 }
 
 /* Miscellaneous text inside left column */
@@ -37,11 +40,12 @@ p {
 /* Wiz-Rad at top of page */
 h1 {
     font-family: 'Nougat-ExtraBlack';
-    font-size: 60px;
+    font-size: 5.5vh;
     font-style: italic;
     color: rgb(250, 135, 135);
     text-align: center;
     margin-bottom: 35px;
+    max-width: 80vw;
 }
 
 /* Use this for every question */
@@ -104,8 +108,9 @@ input[type="radio"]:checked+label {
 }
 
 canvas {
-    margin-top:-150px;
-    margin-bottom:-78px;
+    /*  */
+    margin-top:-12vh; 
+    margin-bottom:-8vh;
 }
 
 /* For input tags of the button type inside container,
@@ -129,20 +134,19 @@ button {
     cursor: pointer;
     /*display: inline-block;*/
     font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
-    height: 58px;
+    
     line-height: 44px;
     outline: 0;
     overflow: hidden;
-    padding: 0 20px;
     pointer-events: auto;
     position: relative;
     text-align: center;
     touch-action: manipulation;
     user-select: none;
     -webkit-user-select: none;
-    vertical-align: top;
+    
     white-space: nowrap;
-    width: 10%;
+    width: 2.7vw;
     z-index: 9;
     border: 0;
 }
@@ -161,20 +165,21 @@ label {
     padding: 5px 10px;
     margin-bottom: 10px;
     border-radius: 3px;
+    font-size: 1.6vw;
 }
 
 /* CSS */
 button {
     appearance: button;
     backface-visibility: hidden;
-    border-radius: 6px;
+
     border-width: 0;
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .1) 0 2px 5px 0, rgba(0, 0, 0, .07) 0 1px 1px 0;
     box-sizing: border-box;
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
-    font-size: 100%;
-    height: 58px;
+    font-size: 1.6vh;
+    height: 5vh;
     line-height: 1.15;
     /* margin: 12px 0 0; */
     outline: none;
@@ -188,13 +193,14 @@ button {
     -webkit-user-select: none;
     touch-action: manipulation;
     width: auto;
-    min-width: 20%;
+    min-width: 30%;
+    max-width: 50vw;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
     background-color: #454545;
     color: white;
-    padding: 5px 10px;
+    
     margin-bottom: 10px;
     border-radius: 3px;
 }
@@ -242,10 +248,10 @@ button:focus {
 
 /* Left column for questions */
 .left {
-    flex-grow: 1;
+    flex: 1;
+    flex-grow: 1.6;
     padding: 8px;
-    max-width: 60%;
-    min-width: 50%;
+    
     min-height: 70vh;
     /* margin-left: 17vw; */
     background-color: rgb(39, 39, 39);
@@ -254,15 +260,10 @@ button:focus {
 /* Right column for info */
 .right {
     flex: 1;
-    min-width: 30%;
     padding: 10px;
     min-height: 70vh;
     background-color: rgb(39, 39, 39);
 }
-
-/* .right h2 {
-    font-size: 80%;
-} */
 
 /* For p tags inside right column */
 .right p {
@@ -273,24 +274,23 @@ button:focus {
 .tab {
     flex: 1;
     justify-content: left;
-    font-size:2.8vh;
+    font-size:3vh;
     background-color: rgb(79, 47, 47);
     height: auto;
     border: 4px solid #1f1f1f;
     margin-bottom: 1px;
     color: aliceblue;
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0px;
     border-radius: 10px;
-    min-width: 100px;
+    width:auto;
     max-width: 50%;
     word-wrap: break-word;
 }
 
 /* Container for holding tabs */
 .tabs {
-    max-width: 80%;
+    max-width: 100%;
 }
 
 /* For signifying current selected tab (<div class="tab current">) */
