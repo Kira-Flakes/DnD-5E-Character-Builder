@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/builderstyle.css" />
+    <title>Read CSV file with JS</title>
+</head>
+
+<body>
+    <input type='file' id="UploadFile" accept=".csv">
+
+    <button id="uploadsuccess">file uploaded</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
+    <script>
+        const csvData = [];
+        var file = getFile();
+        const uploadsuccess = document.getElementById("uploadsuccess").
+            addEventListener("click", () => {
+                Papa.parse(file, {
+                    header: true,
+                    complete: function (results) {
+                        // Assuming 'Category' is the header for the category column
+                        const categoryIndex = results.meta.fields.indexOf('Category');
+                        
+
+                        // Extract categories from each row
+                        const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                        console.log(categories);
+                        // Remove duplicates (if any)
+                        const uniqueCategories = Array.from(new Set(categories));
+
+                        // Now you have an array of unique categories
+                        console.log(uniqueCategories);
+                    }
+                });
+            });
+    </script>
+</body>
+
+</html>

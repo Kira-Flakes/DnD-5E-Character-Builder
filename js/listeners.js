@@ -320,7 +320,10 @@ function handleSpecialCase(page) {
         case 'class':
             console.log("In class case\n")
             loadResponse(page)
-            // conclusion('class');
+        // conclusion('class');
+        // case 'background':
+        //     console.log('In background case');
+        //     loadResponse(page);
         default: return
     }
 }
@@ -438,7 +441,7 @@ function loadQuestion(page) {
 }
 
 function nextQuestion(previousAnswer) {
-    console.log("PREV ANS: "+previousAnswer[2])
+    console.log("PREV ANS: " + previousAnswer[2])
     if (previousAnswer[2] == '->more') {
         console.log("In more case")
         // TODO: Add more logic here
@@ -701,7 +704,7 @@ function classChoices(options, tempButtons, div, page) {
     // }
     for (const c in options) {
         const choice = document.createElement('button');
-         classD = {}
+        classD = {}
         classD.id = options[c]
         // console.log("opts: " + c)
 
@@ -731,7 +734,7 @@ function classChoices(options, tempButtons, div, page) {
         choice.addEventListener('mouseenter', function () {
             console.log("current Class" + divCache[c])
             clearHelperInfo()
-            console.log("divCache["+c+"]: " + divCache[c].val.innerHTML)
+            console.log("divCache[" + c + "]: " + divCache[c].val.innerHTML)
             document.getElementById('helperInfo').appendChild(divCache[c].val)
         })
         tempButtons.push(choice)
@@ -771,8 +774,8 @@ function raceDiscreptionDiv(race) {
 
 function classDescriptionDiv(_class) {
     const res = document.createElement('div')
-    res.setAttribute('id', 'raceDesc'+_class)
-    console.log("class: "+_class)
+    res.setAttribute('id', 'raceDesc' + _class)
+    console.log("class: " + _class)
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -1071,12 +1074,70 @@ function loadHelperInfoFromMisc(text) {
     document.getElementById('helperInfo').innerText = text
 }
 
-function test() {
-    console.log(backgrounds("Human"))
+function beginBackground() {
+    checkForSpecialBackgroundCase();
+}
+
+// Before we give the generic backround sequence, we need to handle special cases
+function checkForSpecialBackgroundCase() {
+    // cleric case - dieties are tied to alignment
+    initClericDieties();
+}
+
+function readCSV() {
+    const csvData = [];
+    const uploadsuccess = document.getElementById("uploadsuccess").
+        addEventListener("click", () => {
+            Papa.parse(document.getElementById('UploadFile').files[0], {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function (answer) {
+                    console.log("hi");
+                    for (i = 0; i < answer.data.length; i++) {
+                        csvData.push(answer.data[i].APFD);
+                    }
+                    console.log(csvData);
+                }
+            });
+        });
 }
 
 
-function displayRaceDetails(race) {
+function initClericDieties() {
+    // main div
+    const contentDiv = document.getElementById('content')
+    clearDiv(contentDiv);
+    const dietyDiv = document.createElement('div');
+
+    const explainerDiv = document.createElement('div');
+    var explainer = "Since you've chosen cleric as your background, you need to pick which diety you follow.\n\nDo you happen to know which devine realm your campaign takes place in?";
+    explainerDiv.innerHTML = explainer;
+    dietyDiv.appendChild(explainerDiv);
+    contentDiv.appendChild(dietyDiv);
+
+    yesBtn = document.createElement('button');
+    noBtn = document.createElement('button');
+    yesBtn.innerText = "Yes"
+    noBtn.innerText = "No"
+
+    yesBtn.onclick = function () {
+        chooseRealm();
+    }
+
+    noBtn
+
+    dietyDiv.appendChild(yesBtn);
+    dietyDiv.appendChild(noBtn);
+    handleFile();
+
+}
+
+function chooseRealm() {
+
+}
+
+function chooseDiety() {
 
 }
 

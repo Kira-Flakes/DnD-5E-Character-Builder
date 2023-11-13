@@ -1,0 +1,196 @@
+Category,Deity,Order,Morality,Suggested Domains,Symbol
+Celtic,"Math Mathonwy, god of magic",N,E,Knowledge,Staff
+Celtic,"Oghma, god ofspeech and writing",N,G,Knowledge,Unfurled scroll
+Celtic,"Arawn, god oflife and death",N,E,"Life, Death",Black star on gray background
+Celtic,"Brigantia, goddess of rivers and livestock",N,G,Life,Footbridge
+Celtic,"Diancecht, god of medicine and healing",L,G,Life,Crossed oak and mistletoe branches
+Celtic,"Goibhniu, god of smiths and healing",N,G,"Knowledge, Life",Giant mallet over sword
+Celtic,"Lugh, god of arts, travel, and commerce",C,N,"Knowledge, Life",Pair of long hands
+Celtic,"Belenus, god ofsun, light, and warmth",N,G,Light,Solar disk and standing stones
+Celtic,"Dunatis, god of mountains and peaks",N,N,Nature,Red sun-capped mountain peak
+Celtic,"Silvanus, god of nature and forests",N,N,Nature,Summer oak tree
+Celtic,"Manannan mac Lir, god of oceans and sea creatures",L,N,"Nature, Tempest",Wave of white water on green
+Celtic,"The Daghdha, god ofweather and crops",C,G,"Nature, Trickery",Bubbling cauldron or shield
+Celtic,"Morrigan, goddess of battle",C,E,War,Two crossed spears
+Celtic,"Nuada, god ofwar and warriors",N,N,War,Silver hand on black background
+Dragonlance,"Chemosh, god of the undead",L,E,Death,Yellow skull
+Dragonlance,"Morgion, god of disease and secrecy",N,E,Death,Hood with two red eyes
+Dragonlance,"Takhisis, goddess of night and hatred",L,E,Death,Black crescent
+Dragonlance,"Majere, god of meditation and order",L,G,Knowledge,Copper spider
+Dragonlance,"Gilean, god of knowledge",N,N,Knowledge,Open book
+Dragonlance,"Reorx, god of craft",N,N,Knowledge,Forging hammer
+Dragonlance,"Zivilyn, god of wisdom",N,N,Knowledge,Great green or gold tree
+Dragonlance,"Mishakal, goddess of healing",L,G,"Knowledge, Life",Blue infinity sign
+Dragonlance,"Shinare, goddess of wealth and trade",N,N,"Knowledge, Trickery",Griffon’s wing
+Dragonlance,"Branchala, god of music",N,G,Light,Bard’s harp
+Dragonlance,"Chislev, goddess of nature",N,N,Nature,Feather
+Dragonlance,"Sirrion, god of fire and change",N,N,Nature,Multi-colored fire
+Dragonlance,"Habbakuk, god of animal life and the sea",N,G,"Nature, Tempest",Blue bird
+Dragonlance,"Nuitari, god of evil magic",L,E,no clerics,Black circle or sphere
+Dragonlance,"Solinari, god of good magic",L,G,no clerics,White circle or sphere
+Dragonlance,"Lunitari, goddess of neutral magic",N,N,no clerics,Red circle or sphere
+Dragonlance,"Zeboim, goddess of the sea and storms",C,E,Tempest,Turtle shell
+Dragonlance,"Hiddukel, god of lies and greed",C,E,Trickery,Broken merchant’s scales
+Dragonlance,"Sargonnas, god of vengeance and fire",L,E,War,Stylized red condor
+Dragonlance,"Kiri-Jolith, god of honor and war",L,G,War,Bison’s horns
+Dragonlance,"Paladine, god of rulers and guardians",L,G,War,Silver triangle
+Eb: Other,"The Blood of Vol, philosophy of immortality and undeath",L,N,"Death, Life",Stylized dragon skull on red teardrop gem
+Eb: Other,"The Path of Light, philosophy of light and self—improvement",L,N,"Life, Light",Brilliant crystal
+Eb: Other,"The Silver Flame, deity of protection and good",L,G,"Life, Light, War",Flame drawn on silver or molded from silver
+Eb: Other,"The Undying Court, elven ancestors",N,G,"Knowledge, Life",Varies
+Eb: Other,"Cults of the Dragon Below, deities of madness",N,E,Trickery,Varies
+Eb: Other,"The Spirits of the Past, elven ancestors",C,G,War,Varies
+Eb: Sovereign Host,"Onatar, god of craft",N,G,Knowledge,Crossed hammer and tongs
+Eb: Sovereign Host,"Aureon, god of law and knowledge",L,N,Knowledge,Open tome
+Eb: Sovereign Host,"Arawai, goddess of fertility",N,G,"Life, Nature",Sheaf of wheat tied with green ribbon
+Eb: Sovereign Host,"Balinor, god of beasts and the hunt",N,N,"Life, Nature",Pair of antlers
+Eb: Sovereign Host,"Olladra, goddess of good fortune",N,G,"Life, Trickery",Domino
+Eb: Sovereign Host,"Dol Arrah, goddess of sunlight and honor",L,G,"Light, War",Rising sun
+Eb: Sovereign Host,"Boldrei, goddess of community and home",L,G,Lite,Fire in a stone hearth
+Eb: Sovereign Host,"Kol Korran, god of trade and wealth",N,N,Trickery,Nine-sided gold coin
+Eb: Sovereign Host,"Dol Dorn, god of strength at arms",C,G,War,Longsword crossed over a shield
+Eb: The Dark Six,"The Keeper, god of greed and death",N,E,Death,Dragonshard stone in the shape ofa fang
+Eb: The Dark Six,"The Shadow, god of dark magic",C,E,Knowledge,Obsidian tower
+Eb: The Dark Six,"The Traveler, deity of chaos and change",C,N,"Knowledge, Trickery","Four crossed, rune-inscribed bones"
+Eb: The Dark Six,Eb: The Dark Six,N,E,Tempest,Bundle of five sharpened bones
+Eb: The Dark Six,"The Fury, goddess of wrath and madness",N,E,War,Winged wyrm with woman’s head and upper body
+Eb: The Dark Six,"The Mockery, god of violence and treachery",N,E,War,Five blood-spattered tools
+Egyptian,"Nephthys, goddess of death and grief",L,G,Death,Horns around a lunar disk
+Egyptian,"Anubis, god of judgment and death",L,N,Death,Black jackal
+Egyptian,"Set, god of darkness and desert storms",L,E,"Death, Tempest, Trickery",Coiled cobra
+Egyptian,"Ptah, god of crafts, knowledge, and secrets",C,E,Knowledge,Bull
+Egyptian,"Imhotep, god of crafts and medicine",N,G,Knowledge,Step pyramid
+Egyptian,"Thoth, god of knowledge and wisdom",N,N,Knowledge,Ibis
+Egyptian,"Hathor, goddess of love, music, and motherhood",N,G,"Life, Light",Horned cow’s head with lunar disk
+Egyptian,"Isis, goddess of fertility and magic",C,G,"Knowledge, Life",Ankh and star
+Egyptian,"Osiris, god of nature and the underworld",L,N,"Life, Nature",Crook and flail
+Egyptian,"Re-Horakhty, god of the sun, ruler of the gods",L,G,"Life, Light",Solar disk encircled by serpent
+Egyptian,"Sobek, god of water and crocodiles",N,N,"Nature, Tempest",Crocodile head with horns and plumes
+Egyptian,"Apep. god of evil, fire, and serpents",N,E,Trickery,Flaming snake
+Egyptian,"Bes, god of luck and music",N,G,Trickery,Image of the misshapen deity
+Egyptian,"Bast, goddess of cats and vengeance",C,G,War,Cat
+Forgotten Realms,"Bhaal, god of murder",N,E,Death,Skull surrounded by a ring of blood droplets
+Forgotten Realms,"Loviatar, goddess of pain",L,E,Death,Nine-tailed barbed scourge
+Forgotten Realms,"Myrkul, god of death",N,E,Death,White human skull
+Forgotten Realms,"Talona, goddess of disease and poison",C,E,Death,Three teardrops on a triangle
+Forgotten Realms,"Kelemvor, god of the dead",L,N,Death,Upright skeletal arm holding balanced scales
+Forgotten Realms,"Shar, goddess of darkness and loss",N,E,"Death, Trickery",Black disk encircled with a border
+Forgotten Realms,"Deneir, god of writing",N,G,Knowledge,Lit candle above an open eye
+Forgotten Realms,"Mystra, goddess of magic",N,G,Knowledge,"Circle ofseven stars, or nine stars encircling a flowing red mist, or a single star"
+Forgotten Realms,"Azuth, god of wizards",L,N,Knowledge,"Left hand pointing upward, outlined in fire"
+Forgotten Realms,"Cond, god of craft",N,N,Knowledge,Toothed cog with four spokes
+Forgotten Realms,"Oghma, god of knowledge",N,N,Knowledge,Blank scroll
+Forgotten Realms,"Savras, god of divination and fate",L,N,Knowledge,Crystal ball containing many kinds ofeyes
+Forgotten Realms,"Waukeen, goddess of trade",N,N,"Knowledge, Trickery",Upright coin with Waukeen’s profile facing left
+Forgotten Realms,"Chauntea, goddess of agriculture",N,G,Life,Sheafofgrain or a blooming rose over grain
+Forgotten Realms,"Eldath, goddess of peace",N,G,"Life, Nature",Waterfall plunging into still pool
+Forgotten Realms,"Helm, god of protection",L,N,"Life, Light",Staring eye on upright left gauntlet
+Forgotten Realms,"Ilmater, god of endurance",L,G,Life,Hands bound at the wrist with red cord
+Forgotten Realms,"Lathander, god of birth and renewal",N,G,"Life, Light",Road traveling into a sunrise
+Forgotten Realms,"Lliira, goddess of joy",C,G,Life,Triangle ofthree six—pointed stars
+Forgotten Realms,"Selune, goddess of the moon",C,G,"Knowledge, Life",Pair ofeyes surrounded by seven stars
+Forgotten Realms,"Sune, goddess of love and beauty",C,G,"Life, Light",Face ofa beautiful red-haired woman
+Forgotten Realms,"Milil, god of poetry and song",N,G,Light,Five-stringed harp made ofleaves
+Forgotten Realms,"Malar, god of the hunt",C,E,Nature,Clawed paw
+Forgotten Realms,"Mielikki, goddess of forests",N,G,Nature,Unicorn’s head
+Forgotten Realms,"Silvanus, god of wild nature",N,N,Nature,Oak leaf
+Forgotten Realms,"Auril, goddess of winter",N,E,"Nature, Tempest",Six-pointed snowflake
+Forgotten Realms,"Talos, god of storms",C,E,Tempest,Three lightning bolts radiating from a central point
+Forgotten Realms,"Umberlee, goddess of the sea",C,E,Tempest,Wave curling left and right
+Forgotten Realms,"Beshaba, goddess of misfortune",C,E,Trickery,Black antlers
+Forgotten Realms,"Cyric, god of lies",C,E,Trickery,White jawless skull on black or purple sunburst
+Forgotten Realms,"Tymora, goddess of good fortune",C,G,Trickery,Face-up coin
+Forgotten Realms,"Leira, goddess of illusion",C,N,Trickery,Point-down triangle containing a swirl of mist
+Forgotten Realms,"Mask, god of thieves",C,N,Trickery,Black mask
+Forgotten Realms,"Bane, god of tyranny",L,E,War,"Upright black right hand, thumb and fingers together"
+Forgotten Realms,"Torm, god of courage and self-sacrifice",L,G,War,White right gauntlet
+Forgotten Realms,"Tyr, god of justice",L,G,War,Balanced scales resting on a warhammer
+Forgotten Realms,"Tempus, god of war",N,N,War,Upright flaming sword
+Greek,"Hades, god of the underworld",L,E,Death,Black ram
+Greek,"Hephaestus, god of smithing and craft",N,G,Knowledge,Hammer and anvil
+Greek,"Hecate, goddess of magic and the moon",C,E,"Knowledge, Trickery",Setting moon
+Greek,"Athena, goddess of wisdom and civilization",L,G,"Knowledge, War",Owl
+Greek,"Apollo, god of light, music, and healing",C,G,"Knowledge, Life, Light",Lyre
+Greek,"Artemis, goddess of hunting and childbirth",N,G,"Life, Nature",Bow and arrow on lunar disk
+Greek,"Demeter, goddess of agriculture",N,G,Life,Mare’s head
+Greek,"Dionysus, god of mirth and wine",C,N,Life,Thyrsus (staff tipped with pine cone)
+Greek,"Hestia, goddess of home and family",N,G,Life,Hearth
+Greek,"Aphrodite, goddess of love and beauty",C,G,Light,Sea shell
+Greek,"Pan, god of nature",C,N,Nature,Syrinx (pan pipes)
+Greek,"Poseidon, god of the sea and earthquakes",C,N,Tempest,Trident
+Greek,"Zeus, god of the sky, ruler of the gods",N,N,Tempest,Fist full of lightning bolts
+Greek,"Hercules, god of strength and adventure",C,G,"Tempest, War",Lion’s head
+Greek,"Hermes, god of travel and commerce",C,G,Trickery,Caduceus (winged staff and serpents)
+Greek,"Hera, goddess of marriage and intrigue",C,N,Trickery,Fan of peacock feathers
+Greek,"Tyche, goddess of good fortune",N,N,Trickery,Red pentagram
+Greek,"Ares, god of war and strife",C,E,War,Spear
+Greek,"Nike, goddess of victory",L,N,War,Winged woman
+Greyhawk,"Incabulos, god of plague and famine",N,E,Death,Reptilian eye with a horizontal diamond
+Greyhawk,"luz, god of pain and oppression",C,E,Death,Grinning human skull
+Greyhawk,"Nerull, god of death",N,E,Death,Skull with either a sickle or a scythe
+Greyhawk,"Wee Jas, goddess of magic and death",L,N,"Death, Knowledge",Red skull in front of fireball
+Greyhawk,"Vecna, god of evil secrets",N,E,Knowledge,Hand with eye in the palm
+Greyhawk,"Rao, god of peace and reason",L,G,Knowledge,White heart
+Greyhawk,"Boccob, god of magic",N,N,Knowledge,Eye within a pentagram
+Greyhawk,"Celestian, god of stars and wanderers",N,N,Knowledge,Arc of seven stars inside a circle
+Greyhawk,"Istus, goddess of fate and destiny",N,N,Knowledge,Weaver’s spindle with three strands
+Greyhawk,"St. Cuthbert, god of common sense and zeal",L,N,Knowledge,Circle at the center of a starburst of lines
+Greyhawk,"Fharlanghn, god of horizons and travel",N,G,"Knowledge, Trickery",Circle crossed by a curved horizon line
+Greyhawk,"Ehlonna, goddess of woodlands",N,G,"Life, Nature",Unicorn horn
+Greyhawk,"Pelor, god of the sun and healing",N,G,"Life, Light",Sun
+Greyhawk,"Ulaa, goddess of hills and mountains",L,G,"Life, War",Mountain with a circle at its heart
+Greyhawk,"Pholtus, god of light and law",L,G,Light,Silver sun or full moon partially eclipsed by a smaller crescent moon
+Greyhawk,"Beory, goddess of nature",N,N,Nature,Green disk
+Greyhawk,"Obad—Hai, god of nature",N,N,Nature,Oak leaf and acorn
+Greyhawk,"Kord, god of athletics and sport",C,G,"Tempest, War",Four spears and four maces radiating out from a central point
+Greyhawk,"Tharizdun, god of eternal darkness",C,E,Trickery,Dark spiral or inverted Ziggurat
+Greyhawk,"Olidammara, god of revelry",C,N,Trickery,Laughing mask
+Greyhawk,"Ralishaz, god of ill luck and insanity",C,N,Trickery,Three bone fate-casting sticks
+Greyhawk,"Erythnul, god of envy and slaughter",C,E,War,Blood drop
+Greyhawk,"Hextor, god of war and discord",L,E,War,Six arrows facing downward in a fan
+Greyhawk,"Heironeous, god of chivalry and valor",L,G,War,Lightning bolt
+Greyhawk,"Trithereon, god of liberty and retribution",C,G,War,Triskelion
+Nonhuman,"Blibdoolpoolp, kuo-toa goddess",N,E,Death,Lobster head or black pearl
+Nonhuman,"Laogzed, troglodyte god of hunger",C,E,Death,Image ofthe lizard/toad god
+Nonhuman,"Moradin, dwarf god of creation",L,G,Knowledge,Hammer and anvil
+Nonhuman,"Sehanine Moonbow, elf goddess of the moon",C,G,Knowledge,Crescent moon
+Nonhuman,"Skoraeus Stonebones, god of stone giants and art",N,N,Knowledge,Stalactite
+Nonhuman,"Surtur, god of fire giants and craft",L,E,"Knowledge, War",Flaming sword
+Nonhuman,"Bahamut, dragon god of good",L,G,"Life, War",Dragon’s head in profile
+Nonhuman,"Semuanya, lizardtolk deity of survival",N,N,Life,Egg
+Nonhuman,"Yondalla, halfling goddess of fertility and protection",L,G,Life,Shield
+Nonhuman,"Corellon Larethian, elf deity of art and magic",C,G,Light,Quarter moon or starburst
+Nonhuman,"Rillifane Rallathil, wood elf god of nature",C,G,Nature,Oak
+Nonhuman,"Skerrit, centaur and satyr god of nature",N,N,Nature,Oak growing from acorn
+Nonhuman,"Sekolah, sahuagin god of the hunt",L,E,"Nature, Tempest",Shark
+Nonhuman,"Deep Sashelas, elf god of the sea",C,G,"Nature, Tempest",Dolphin
+Nonhuman,"Eadro, merfolk deity of the sea",N,N,"Nature, Tempest",Spiral design
+Nonhuman,"Gruumsh, orc god of storms and war",C,E,"Tempest, War",Unblinking eye
+Nonhuman,"Lolth, drow goddess of spiders",C,E,Trickery,Spider
+Nonhuman,"Tiamat, dragon goddess of evil",L,E,Trickery,Dragon head with five claw marks
+Nonhuman,"Garl Glittergold, gnome god of trickery and wiles",L,G,Trickery,Gold nugget
+Nonhuman,"Grolantor, hill giant god of war",C,E,War,Wooden club
+Nonhuman,"Hruggek, bugbear god of violence",C,E,War,Morningstar
+Nonhuman,"Kurtulmak, kobold god of war and mining",L,E,War,Gnome skull
+Nonhuman,"Maglubiyet, goblinoid god of war",L,E,War,Bloody axe
+Nonhuman,"Thrym, god of frost giants and strength",C,E,War,White double-bladed axe
+Norse,"Hel, goddess of the underworld",N,E,Death,"Woman’s face, rotting on one side"
+Norse,"Odin, god of knowledge and war",N,G,"Knowledge, War",Watching blue eye
+Norse,"Tyr, god of courage and strategy",L,N,"Knowledge, War",Sword
+Norse,"Balder, god of beauty and poetry",N,G,"Life, Light",Gem-encrusted silver chalice
+Norse,"Frey, god of fertility and the sun",N,G,"Life, Light",Ice-blue greatsword
+Norse,"Freya, goddess of fertility and love",N,G,Life,Falcon
+Norse,"Frigga, goddess of birth and fertility",N,N,"Life, Light",Cat
+Norse,"Odur, god of light and the sun",C,G,Light,Solar disk
+Norse,"Forseti, god of justice and law",N,N,Light,Head ofa bearded man
+Norse,"Heimdall, god of watchfulness and loyalty",L,G,"Light, War",Curling musical horn
+Norse,"Skadi, god of earth and mountains",N,N,Nature,Mountain peak
+Norse,"Uller, god of hunting and winter",C,N,Nature,Longbow
+Norse,"Njord, god of sea and wind",N,G,"Nature, Tempest",Gold coin
+Norse,"Aegir, god of the sea and storms",N,E,Tempest,Rough ocean waves
+Norse,"Thor, god of storms and thunder",C,G,"Tempest, War",Hammer
+Norse,"Loki, god of thieves and trickery",C,E,Trickery,Flame
+Norse,"Hermod, god of luck",C,N,Trickery,Winged scroll
+Norse,"Surtur, god of fire giants and war",L,E,War,Flaming sword
+Norse,"Thrym, god of fire giants and cold",C,E,War,White double-bladed axe
+Norse,"Sif, goddess of war",C,G,War,Upraised sword

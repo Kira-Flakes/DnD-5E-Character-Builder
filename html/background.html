@@ -5,6 +5,9 @@
 	<script src="/js/characterSheet.js"></script>
 	<script src="/js/listeners.js"></script>
 	<script type="module" src="../js/d20Logo.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+	<script src="path/to/your/js/file.js"></script>
+
 	<!-- <script>
 		var character; // global scope
 		// Initialize the character object, all remaining script calls should reference this object.
@@ -58,7 +61,7 @@
 	</div>
 	<!--Container for 3-column layout-->
 	<div class="container">
-		<div class="column left">
+		<div class="column left" id="content">
 			<p>Questions go here...</p>
 			<div class="question">
 				<p>Enter your character's whole name.</p>
@@ -174,6 +177,9 @@
 				Character Sheet
 			</button>
 		</div>
+		<script>
+			beginBackground();
+		</script>
 	</div>
 	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
     <script type="importmap">
