@@ -1081,23 +1081,25 @@ function beginBackground() {
 // Before we give the generic backround sequence, we need to handle special cases
 function checkForSpecialBackgroundCase() {
     // cleric case - dieties are tied to alignment
-    initClericDieties();
+    if (localStorage.getItem("_class") == "Cleric") {
+        console.log("Cleric background special case. Handling...")
+        initClericDieties();
+    }
+
 }
 
-function readCSV() {
-    const csvData = [];
-    const uploadsuccess = document.getElementById("uploadsuccess").
-        addEventListener("click", () => {
-            Papa.parse(document.getElementById('UploadFile').files[0], {
-                download: true,
+function getRealms() {
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
                 header: true,
-                skipEmptyLines: true,
-                complete: function (answer) {
-                    console.log("hi");
-                    for (i = 0; i < answer.data.length; i++) {
-                        csvData.push(answer.data[i].APFD);
-                    }
-                    console.log(csvData);
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
                 }
             });
         });
@@ -1129,12 +1131,115 @@ function initClericDieties() {
 
     dietyDiv.appendChild(yesBtn);
     dietyDiv.appendChild(noBtn);
-    handleFile();
 
 }
 
 function chooseRealm() {
+    content = document.getElementById('content');
+    clearDiv(content);
+    const realmChoicesExplainer = document.createElement('div')
+    realmChoicesExplainer.innerHTML = highlightTextWithMouseover("Please choose your devine realm:", allDetails)
+    content.appendChild(realmChoicesExplainer);
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
+                    for (const realm in uniqueCategories) {
+                        const realmOpt = document.createElement('button');
+                        realmOpt.setAttribute('id', 'realmOption')
+                        realmOpt.innerText = uniqueCategories[realm];
+                        content.appendChild(realmOpt)
+                        realmOpt.onclick = function () {
+                            localStorage.setItem("realm", this.innerText)
+                            limitAlighment(this.innerText);
+                        }
+                    }
+                }
+            });
+        });
+}
 
+function limitAlighment(realm) {
+    console.log(realm)
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const data = results.data;
+
+                    // Replace 'YourCategory' with the desired category
+                    const desiredCategory = 'YourCategory';
+
+                    // Filter data for the desired category
+                    const categoryData = data.filter(row => row['Category'] === realm);
+                    // Extract 'Order' and 'Morality' for each line in the category
+                    const orderAndMorality = categoryData.map(row => {
+                        return {
+                            Order: row['Order'],
+                            Morality: row['Morality']
+                        };
+                    });
+                    console.log(orderAndMorality);
+                    var possibleAlignments = limitAlighmentHelper(orderAndMorality);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching the CSV file:', error));
+}
+
+// compare alignments together, store the 'illegal' options in localstorage under
+// 'invalidAlignments'
+function limitAlighmentHelper(options) {
+    var possibleAlignments = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            // var allAlignments =  data.background.alignment.options
+            var lsValue = ""
+            for (var opt in options) {
+                console.log(options[opt])
+                var fullName = getFullAlighnmentName(options[opt])
+                if (possibleAlignments.indexOf(fullName) === -1) {
+                    possibleAlignments.push(fullName);
+                    lsValue = lsValue + fullName+","
+                }
+                
+            }
+            lsValue = lsValue.slice(0, -1);
+            console.log(lsValue)
+            localStorage.setItem("possibleAlignments",lsValue) // Left off HERE
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function getFullAlighnmentName(AlignAcronymObject) {
+    var al1
+    var al2
+    if (AlignAcronymObject.Order == 'L') al1 = 'Lawful '
+    if (AlignAcronymObject.Order == 'N') al1 = 'Neutral '
+    if (AlignAcronymObject.Order == 'C') al1 = 'Chaotic '
+    if (AlignAcronymObject.Morality == 'G') al2 = 'Good'
+    if (AlignAcronymObject.Morality == 'N') al2 = 'Neutral'
+    if (AlignAcronymObject.Morality == 'E') al2 = 'Evil'
+    var result = al1+al2
+    if (result == 'Neutral Neutral'){
+        return "True Neutral"
+    }
+    else return result
+    
 }
 
 function chooseDiety() {

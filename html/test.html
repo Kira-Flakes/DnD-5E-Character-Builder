@@ -17,23 +17,16 @@
 
     <script>
         const csvData = [];
-        var file = getFile();
-        const uploadsuccess = document.getElementById("uploadsuccess").
-            addEventListener("click", () => {
-                Papa.parse(file, {
+        var filePath = '../misc/clericDieties.csv';
+        fetch(filePath)
+            .then(response => response.text())
+            .then(csvText => {
+                Papa.parse(csvText, {
                     header: true,
                     complete: function (results) {
-                        // Assuming 'Category' is the header for the category column
                         const categoryIndex = results.meta.fields.indexOf('Category');
-                        
-
-                        // Extract categories from each row
                         const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
-                        console.log(categories);
-                        // Remove duplicates (if any)
                         const uniqueCategories = Array.from(new Set(categories));
-
-                        // Now you have an array of unique categories
                         console.log(uniqueCategories);
                     }
                 });
