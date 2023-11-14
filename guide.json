@@ -536,6 +536,23 @@
             }
         }
     },
+    "equipment": {
+        "race":{
+            "dwarf": {
+                "1": "item1",
+                "2": "item2"
+            }
+        },
+        "class": {
+            "cleric": {
+                "1": "item1",
+                "2": "item2"
+            }
+        },
+        "background": {
+            "whatever influences background": "item1"
+        }
+    },
     "misc": {
         "race": "Every character has a lineage. The race you are assigned contributes to your characters identity and influences the abilities you possess.",
         "class": "Class broadly describes a character's vocation and the tactics the character is likely to employ when exploring, fighting and negotiating. \n\n    Classes also determine the benefits you will receive. We will choose a class that receives benefits based on your preferred playstyle.",

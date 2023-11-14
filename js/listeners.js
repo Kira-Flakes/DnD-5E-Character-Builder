@@ -1126,8 +1126,9 @@ function initClericDieties() {
     yesBtn.onclick = function () {
         chooseRealm();
     }
-
-    noBtn
+    noBtn.onclick = function () {
+        chooseAlignment();
+    }
 
     dietyDiv.appendChild(yesBtn);
     dietyDiv.appendChild(noBtn);
@@ -1159,6 +1160,7 @@ function chooseRealm() {
                         realmOpt.onclick = function () {
                             localStorage.setItem("realm", this.innerText)
                             limitAlighment(this.innerText);
+                            chooseAlignment()
                         }
                     }
                 }
@@ -1218,7 +1220,7 @@ function limitAlighmentHelper(options) {
             lsValue = lsValue.slice(0, -1);
             console.log(lsValue)
             localStorage.setItem("possibleAlignments",lsValue) // Left off HERE
-
+            
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1241,6 +1243,26 @@ function getFullAlighnmentName(AlignAcronymObject) {
     else return result
     
 }
+
+// function chooseAlignment() {
+//     content = document.getElementById("conent")
+//     clearDiv(content)
+//     content.innerHTML = "<p>Choose alignment.</p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)">Lawful
+//             Neutral</button>
+//         <button name="_alignment" value="True Neutral" onclick="character.setAlignment(value)">True
+//             Neutral</button>
+//         <button name="_alignment" value="Chaotic Neutral" onclick="character.setAlignment(value)">Chaotic
+//             Neutral</button>
+//     </div>
+//     <div class="container">
+//         <button name="_alignment" value="Lawful Evil" onclick="character.setAlignment(value)">Lawful
+//             Evil</button>
+//         <button name="_alignment" value="Neutral Evil" onclick="character.setAlignment(value)">Neutral
+//             Evil</button>
+//         <button name="_alignment" value="Chaotic Evil" onclick="character.setAlignment(value)">Chaotic
+//             Evil</button>
+//     </div>"
+// }
 
 function chooseDiety() {
 
