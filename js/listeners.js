@@ -1,3 +1,7 @@
+// TODO:
+// 1. Fix dieties to present multiple options
+
+
 // import { API } from './api.js';
 // Scipts that allow for us to listen to html pages and update the pages based on 
 // user actions.
@@ -207,10 +211,10 @@ function setAlignmentInfo() {
     const alignButtons = Array.from(document.getElementsByName('_alignment'));
     console.log("Alignbuttons: " + alignButtons);
 
-    for (const b of alignButtons) {
-        // console.log("SFUSDNF");
-        console.log(b);
-    }
+    // for (const b of alignButtons) {
+    //     // console.log("SFUSDNF");
+    //     console.log(b);
+    // }
     alignButtons.forEach((button, index) => {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
@@ -615,44 +619,6 @@ function giveChoices(page) {
                 default:
                     console.log("Case not handled in giveChoices()")
             }
-            // for (const r in options) {
-            //     const choice = document.createElement('button');
-            //     const raceD = {}
-            //     raceD.id = options[r]
-            //     if (options[r].includes('Dragonborn')) {
-            //         raceD.val = raceDiscreptionDiv('Dragonborn')
-            //     }
-            //     else {
-            //         raceD.val = raceDiscreptionDiv(options[r])
-            //     }
-            //     divCache.push(raceD)
-            //     choice.setAttribute('id', 'choiceButton')
-            //     choice.innerText = options[r]
-            //     choice.onclick = function () {
-            //         localStorage.setItem('_' + page, options[r])
-            //         for (btn in tempButtons) { // delete all buttons, since we are done with this question
-            //             document.getElementById('choiceButton').remove()
-            //         }
-            //         if (page == 'race') pickSubrace(options[r])
-
-            //     }; // set actions for the buttons
-            //     // button.addEventListener('mouseenter', function () {
-            //     choice.addEventListener('mouseenter', function () {
-            //         console.log("MOUSEDOVER")
-            //         clearHelperInfo()
-            //         document.getElementById('helperInfo').appendChild(divCache[r].val)
-            //     })
-            //     tempButtons.push(choice)
-            //     // div.appendChild(raceDiscreptionDiv(options[r]))
-            //     div.appendChild(choice)
-            //     // TODO: add listeners for mousover and 
-            // }
-            // Add reset logic here if needed.
-            // backBtn = document.createElement('button')
-            // backBtn.setAttribute('id','backButton')
-            // backBtn.onclick = function () {
-
-            // }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -677,7 +643,16 @@ function raceChoices(options, tempButtons, div, page) {
         choice.setAttribute('id', 'choiceButton')
         choice.innerText = options[r]
         choice.onclick = function () {
-            localStorage.setItem('_' + page, options[r])
+            if (options[r].includes('Dragonborn')) {
+                console.log("optionsR: "+options[r])
+                localStorage.setItem('_subrace', options[r])
+                localStorage.setItem('_race', 'Dragonborn')
+            }
+            else {
+                console.log("optionsR: "+options[r])
+                localStorage.setItem('_' + page, options[r])
+            }
+            
             for (btn in tempButtons) { // delete all buttons, since we are done with this question
                 document.getElementById('choiceButton').remove()
             }
@@ -1075,7 +1050,8 @@ function loadHelperInfoFromMisc(text) {
 }
 
 function beginBackground() {
-    checkForSpecialBackgroundCase();
+    // checkForSpecialBackgroundCase();
+    characterName();
 }
 
 // Before we give the generic backround sequence, we need to handle special cases
@@ -1127,6 +1103,7 @@ function initClericDieties() {
         chooseRealm();
     }
     noBtn.onclick = function () {
+        localStorage.setItem('possibleAlignments', 'Lawful Good,Neutral Good,Chaotic Good,Lawful Neutral,True Neutral,Chaotic Neutral,Lawful Evil,Neutral Evil,Chaotic Evil')
         chooseAlignment();
     }
 
@@ -1158,9 +1135,9 @@ function chooseRealm() {
                         realmOpt.innerText = uniqueCategories[realm];
                         content.appendChild(realmOpt)
                         realmOpt.onclick = function () {
-                            localStorage.setItem("realm", this.innerText)
-                            limitAlighment(this.innerText);
-                            chooseAlignment()
+                            // console.log("Setting realm to " + realmOpt.innerText)
+                            localStorage.setItem("realm", realmOpt.innerText)
+                            limitAlighment(realmOpt.innerText);
                         }
                     }
                 }
@@ -1169,7 +1146,7 @@ function chooseRealm() {
 }
 
 function limitAlighment(realm) {
-    console.log(realm)
+    // console.log(realm)
     var filePath = '../misc/clericDieties.csv';
     fetch(filePath)
         .then(response => response.text())
@@ -1191,8 +1168,8 @@ function limitAlighment(realm) {
                             Morality: row['Morality']
                         };
                     });
-                    console.log(orderAndMorality);
-                    var possibleAlignments = limitAlighmentHelper(orderAndMorality);
+                    // console.log(orderAndMorality);
+                    limitAlighmentHelper(orderAndMorality);
                 }
             });
         })
@@ -1200,31 +1177,24 @@ function limitAlighment(realm) {
 }
 
 // compare alignments together, store the 'illegal' options in localstorage under
-// 'invalidAlignments'
+// 
 function limitAlighmentHelper(options) {
     var possibleAlignments = []
-    fetch('/guide.json')
-        .then(response => response.json())
-        .then(data => {
-            // var allAlignments =  data.background.alignment.options
-            var lsValue = ""
-            for (var opt in options) {
-                console.log(options[opt])
-                var fullName = getFullAlighnmentName(options[opt])
-                if (possibleAlignments.indexOf(fullName) === -1) {
-                    possibleAlignments.push(fullName);
-                    lsValue = lsValue + fullName+","
-                }
-                
-            }
-            lsValue = lsValue.slice(0, -1);
-            console.log(lsValue)
-            localStorage.setItem("possibleAlignments",lsValue) // Left off HERE
-            
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+    var lsValue = ""
+    for (var opt in options) {
+        console.log(options[opt])
+        var fullName = getFullAlighnmentName(options[opt])
+        if (possibleAlignments.indexOf(fullName) === -1) {
+            possibleAlignments.push(fullName);
+            lsValue = lsValue + fullName + ","
+        }
+    }
+    lsValue = lsValue.slice(0, -1);
+    console.log(lsValue)
+    localStorage.setItem("possibleAlignments", lsValue)
+
+    chooseAlignment()
 }
 
 function getFullAlighnmentName(AlignAcronymObject) {
@@ -1236,37 +1206,232 @@ function getFullAlighnmentName(AlignAcronymObject) {
     if (AlignAcronymObject.Morality == 'G') al2 = 'Good'
     if (AlignAcronymObject.Morality == 'N') al2 = 'Neutral'
     if (AlignAcronymObject.Morality == 'E') al2 = 'Evil'
-    var result = al1+al2
-    if (result == 'Neutral Neutral'){
+    var result = al1 + al2
+    if (result == 'Neutral Neutral') {
         return "True Neutral"
     }
     else return result
+}
+
+
+
+function chooseAlignment() {
+    content = document.getElementById("content")
+    clearDiv(content)
+    content.innerHTML = "<h1>Alignment</h1><p>It's time to choose an alignment, representing the nature of your character's actions.</p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)\">Lawful Neutral</button><button name=\"_alignment\" value=\"True Neutral\" onclick=\"character.setAlignment(value)\">True Neutral</button><button name=\"_alignment\" value=\"Chaotic Neutral\" onclick=\"character.setAlignment(value)\">Chaotic Neutral</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Evil\" onclick=\"character.setAlignment(value)\">Lawful Evil</button><button name=\"_alignment\" value=\"Neutral Evil\" onclick=\"character.setAlignment(value)\">Neutral Evil</button><button name=\"_alignment\" value=\"Chaotic Evil\" onclick=\"character.setAlignment(value)\">Chaotic Evil</button></div>"
+    setAlignmentInfo()
+
+    // get all children from content
+    children = content.children
+    allowedAlignments = localStorage.getItem("possibleAlignments").split(',')
+    // console.log("Allowed align: " + allowedAlignments)
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        const childsChild = child.children
+        for (let j = 0; j < childsChild.length; j++) {
+            const cc = childsChild[j]
+            // console.log("cval: " + cc.innerText)
+            // Do something with each child element
+            if (!allowedAlignments.includes(cc.value)) {
+                // console.log("Grey out: " + child.innerText)
+                cc.setAttribute('id', 'greyOut')
+            }
+            else cc.setAttribute('id', '')
+
+            cc.onclick = function () {
+                localStorage.setItem("_alignment", cc.innerText)
+                if (localStorage.getItem("_class") == "Cleric") {
+                    chooseDiety(localStorage.getItem("_alignment"))
+                        .then(chosenDeity => {
+
+                            console.log("Chosen Deity:", chosenDeity);
+                            localStorage.setItem("_diety", chosenDeity)
+                            addDietyInfo(chosenDeity)
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                }
+                // dietyDebrief()
+            }
+        }
+    }
+}
+
+function chooseDiety(alignment) {
+    alignchars = alignment.split(" ")
+    var alignKey = []
+    alignKey.push(alignchars[0].charAt(0))
+    if (alignKey[0] == 'T') alignKey[0] = 'N'
+    alignKey.push(alignchars[1].charAt(0))
+    var filePath = '../misc/clericDieties.csv';
+
+    return new Promise((resolve, reject) => {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(csvText => {
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function (results) {
+                        const data = results.data;
+
+                        // Replace 'YourCategory' with the desired category
+                        // const desiredCategory = 'YourCategory';
+
+                        // Filter data for the desired category
+                        const categoryData = data.filter(row => row['Category'] === localStorage.getItem("realm"));
+
+                        // Find all deities that match the conditions
+                        const matchingDeities = categoryData
+                            .filter(row => row['Order'] === alignKey[0] && row['Morality'] === alignKey[1])
+                            .map(row => row['Deity']);
+
+                        // Resolve with the array of deities if found, otherwise, reject
+                        if (matchingDeities.length > 0) {
+                            resolve(matchingDeities);
+                        } else {
+                            reject("No deities found for the specified alignment.");
+                        }
+                    }
+                });
+            })
+            .catch(error => reject('Error fetching the CSV file: ' + error));
+    });
+}
+
+function addDietyInfo(listOfDieties) {
+    content = clearContentAndGet()
+
+
+    if (listOfDieties.length == 1) {
+        d = appendToContent('div', "standardDiv")
+        d.innerHTML = highlightTextWithMouseover("You have been assigned " + listOfDieties[0] + ".", allDetails)
+        // content.appendChild(d)
+        localStorage.setItem("_diety", listOfDieties[0])
+    }
+    else {
+        var explain = appendToContent('div', 'standardDiv')
+        possibleDietiesDiv = appendToContent('div', 'standardDiv')
+        explain.innerHTML = highlightTextWithMouseover("Choose a Diety to worship:\n", allDetails)
+        for (const d in listOfDieties) {
+            const diety = listOfDieties[d]
+            const dietyInfo = document.createElement('button')
+            dietyInfo.setAttribute('id', 'standardDiv')
+            dietyInfo.innerHTML = highlightTextWithMouseover(
+                listOfDieties[d],
+                allDetails)
+            possibleDietiesDiv.appendChild(dietyInfo)
+        }
+    }
+    cBtn = newContinueButton(true)
+    cBtn.onclick = function () {
+        console.log("TBT button action in function addDietyInfo")
+        pickJob()
+    }
+}
+
+function dietyDebrief() {
+    content = clearContentAndGet()
+    dietyOutro = appendToContent('div', 'standardDiv')
+    dietyOutro.innerHTML = highlightTextWithMouseover('Your cleric worships ' + localStorage.getItem("_diety"), allDetails)
+}
+
+function pickJob() {
+    content = clearContentAndGet()
+    appendToContent('h1').innerText = "Vocation"
+    appendToContent('div').innerHTML = highlightTextWithMouseover(
+        "Your character's vocation is an important part of their backstory.",
+        allDetails
+    )
+}
+
+// TODO: For humans we need to get region
+function characterName() {
+    content = clearContentAndGet()
+    appendToContent('h2').innerText = "Character Name"
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose what you would like to be called throughout your campaign."
     
+    appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" onclick="storeKeyFromInput(\'_name\')" role="button">Submit</button>'
+    appendToContent('div').innerHTML = "You can choose any name you please, but if you do want to pick a standard name for a " + localStorage.getItem("_race") + ", these are some examples."
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var race = localStorage.getItem("_race")
+            console.log(race)
+            var males = data.races[race].maleNames
+            var females = data.races[race].femaleNames
+            console.log(males)
+            document.getElementById('content').appendChild(createNameTable(race, males, females))
+        })
+
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
-// function chooseAlignment() {
-//     content = document.getElementById("conent")
-//     clearDiv(content)
-//     content.innerHTML = "<p>Choose alignment.</p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)">Lawful
-//             Neutral</button>
-//         <button name="_alignment" value="True Neutral" onclick="character.setAlignment(value)">True
-//             Neutral</button>
-//         <button name="_alignment" value="Chaotic Neutral" onclick="character.setAlignment(value)">Chaotic
-//             Neutral</button>
-//     </div>
-//     <div class="container">
-//         <button name="_alignment" value="Lawful Evil" onclick="character.setAlignment(value)">Lawful
-//             Evil</button>
-//         <button name="_alignment" value="Neutral Evil" onclick="character.setAlignment(value)">Neutral
-//             Evil</button>
-//         <button name="_alignment" value="Chaotic Evil" onclick="character.setAlignment(value)">Chaotic
-//             Evil</button>
-//     </div>"
-// }
+function createNameTable(race, maleValues, femaleValues) {
+    // Create a table element
+    const table = document.createElement('table');
 
-function chooseDiety() {
+    // Create a table header row
+    const headerRow = table.insertRow();
+
+    // Create header cells for "Male" and "Female"
+    const maleHeader = headerRow.insertCell(0);
+    maleHeader.textContent = "Male";
+
+    const femaleHeader = headerRow.insertCell(1);
+    femaleHeader.textContent = "Female";
+
+    // Determine the maximum number of rows needed based on the lengths of the input arrays
+    const maxRows = Math.max(maleValues.length, femaleValues.length);
+
+    // Populate the table rows
+    for (let i = 0; i < maxRows; i++) {
+        // Create a new row
+        const row = table.insertRow();
+
+        // Create cells for "Male" and "Female" columns
+        const maleCell = row.insertCell(0);
+        const femaleCell = row.insertCell(1);
+
+        // Assign values from the arrays if available
+        maleCell.textContent = i < maleValues.length ? maleValues[i] : '';
+        femaleCell.textContent = i < femaleValues.length ? femaleValues[i] : '';
+    }
+
+    // Append the table to the document body or any desired container
+    return table
+}
+
+
+function clearContentAndGet() {
+    clearDiv(document.getElementById('content'))
+    return document.getElementById('content')
+}
+
+function appendToContent(type, id = null) {
+    res = document.createElement(type)
+    document.getElementById('content').appendChild(res)
+    if (id != null) res.setAttribute('id', id)
+    return res
 
 }
+
+function newContinueButton(append = false) {
+    res = document.createElement('button')
+    res.innerText = "Continue"
+    res.setAttribute('id', 'continueBtn')
+    if (append) document.getElementById('content').appendChild(res)
+    return res
+}
+
+
+
+
+
+
 
 
 
