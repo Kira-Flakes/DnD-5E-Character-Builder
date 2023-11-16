@@ -1,5 +1,6 @@
 // TODO:
 // 1. Fix dieties to present multiple options
+// 2 fix highlight text with mousover. Just rewrite it.
 
 
 // import { API } from './api.js';
@@ -11,8 +12,10 @@
 
 // const { nextTick } = require("process");
 const divCache = []
-let allDetails
+var allDetails
 let racePrev = 0
+
+const sd = "standardDiv"
 
 
 // Use the fetch API to retrieve the JSON data
@@ -21,11 +24,26 @@ fetch('/guide.json')
     .then(data => {
         // Data is the parsed JSON object
         allDetails = Object.keys(data.misc);
-        // console.log(allDetails);
+        console.log(allDetails.type);
     })
     .catch(error => {
         console.error('Error loading JSON:', error);
     });
+
+function getAllDetails() {
+    // Use the fetch API to retrieve the JSON data
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            // Data is the parsed JSON object
+            res = Object.keys(data.misc);
+            console.log("in getAllDetails: " + res);
+            return res
+        })
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+        });
+}
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -43,7 +61,9 @@ function setWelcomeInfo(page) {
         });
 }
 
+
 function presentPreset() {
+    clearHelperInfo()
     localStorage.setItem('gettingstartedState', '1')
     colLeft = document.getElementById("colLeft")
     // console.log("Content:::: "+document.getElementById('_playername').value)
@@ -604,7 +624,7 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Your answers incidate that this would be a good fit for your playstyle.',
+                explanation: 'Your answers indicate that this would be a good fit for your playstyle.',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
@@ -644,15 +664,15 @@ function raceChoices(options, tempButtons, div, page) {
         choice.innerText = options[r]
         choice.onclick = function () {
             if (options[r].includes('Dragonborn')) {
-                console.log("optionsR: "+options[r])
+                console.log("optionsR: " + options[r])
                 localStorage.setItem('_subrace', options[r])
                 localStorage.setItem('_race', 'Dragonborn')
             }
             else {
-                console.log("optionsR: "+options[r])
+                console.log("optionsR: " + options[r])
                 localStorage.setItem('_' + page, options[r])
             }
-            
+
             for (btn in tempButtons) { // delete all buttons, since we are done with this question
                 document.getElementById('choiceButton').remove()
             }
@@ -995,17 +1015,17 @@ function alterState(topic, change) {
     // console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
-// function alterState(topic, change) {
-//     var storageItem = topic + "State"
-//     s = parseInt(localStorage.getItem(storageItem)) + change
-//     localStorage.setItem(storageItem, s)
-// }
+
 
 function highlightTextWithMouseover(inputString, textsToHighlight) {
+
+    console.log("Texts to highlight: " + textsToHighlight)
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
+
         const strEl = inputString.split("**")
         // console.log("STREL: " + strEl)
         const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
+        console.log(!Array.isArray(textsToHighlight))
         return newString;
     }
 
@@ -1029,7 +1049,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
             return match; // Return the match without highlighting if it's encountered again
         });
     });
-
+    console.log("Highlighted String: " + highlightedString)
     return highlightedString;
 }
 
@@ -1049,18 +1069,42 @@ function loadHelperInfoFromMisc(text) {
     document.getElementById('helperInfo').innerText = text
 }
 
-function beginBackground() {
-    // checkForSpecialBackgroundCase();
-    characterName();
+function beginBackground(specialCaseHandled = false) {
+
+    // add a boo param, if true then skip special background case
+    if (!specialCaseHandled) checkForSpecialBackgroundCase();
+    else {
+        chooseAlignment()
+    }
+
+
 }
 
 // Before we give the generic backround sequence, we need to handle special cases
 function checkForSpecialBackgroundCase() {
+    const cl = localStorage.getItem("_class")
     // cleric case - dieties are tied to alignment
-    if (localStorage.getItem("_class") == "Cleric") {
+    if (cl == "Cleric") {
         console.log("Cleric background special case. Handling...")
         initClericDieties();
     }
+    else if (cl == 'Warlock') {
+        console.log("Warlock background special case. Handling...")
+        warlockDetails()
+    }
+
+    else {
+        beginBackground(true)
+    }
+
+}
+
+function warlockDetails() {
+    content = clearContentAndGet()
+    wlDetailDiv = appendToContent('div', 'standardDiv')
+    wlDetailDiv.innerHTML = highlightTextWithMouseover(
+        "Warlocks in D&D form pacts with powerful beings from other planes, resembling godlike entities. Patrons grant diverse powers and demand favors, with varying attitudes toward sharing knowledge or forming exclusive pacts. Warlocks sharing a patron can see each other as allies, siblings, or rivals, fostering unique relationships.", allDetails
+    )
 
 }
 
@@ -1213,49 +1257,103 @@ function getFullAlighnmentName(AlignAcronymObject) {
     else return result
 }
 
-
+// </p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)\">Lawful Neutral</button><button name=\"_alignment\" value=\"True Neutral\" onclick=\"character.setAlignment(value)\">True Neutral</button><button name=\"_alignment\" value=\"Chaotic Neutral\" onclick=\"character.setAlignment(value)\">Chaotic Neutral</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Evil\" onclick=\"character.setAlignment(value)\">Lawful Evil</button><button name=\"_alignment\" value=\"Neutral Evil\" onclick=\"character.setAlignment(value)\">Neutral Evil</button><button name=\"_alignment\" value=\"Chaotic Evil\" onclick=\"character.setAlignment(value)\">Chaotic Evil</button></div>"
 
 function chooseAlignment() {
     content = document.getElementById("content")
+    console.log("allDetails: " + allDetails)
     clearDiv(content)
-    content.innerHTML = "<h1>Alignment</h1><p>It's time to choose an alignment, representing the nature of your character's actions.</p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)\">Lawful Neutral</button><button name=\"_alignment\" value=\"True Neutral\" onclick=\"character.setAlignment(value)\">True Neutral</button><button name=\"_alignment\" value=\"Chaotic Neutral\" onclick=\"character.setAlignment(value)\">Chaotic Neutral</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Evil\" onclick=\"character.setAlignment(value)\">Lawful Evil</button><button name=\"_alignment\" value=\"Neutral Evil\" onclick=\"character.setAlignment(value)\">Neutral Evil</button><button name=\"_alignment\" value=\"Chaotic Evil\" onclick=\"character.setAlignment(value)\">Chaotic Evil</button></div>"
-    setAlignmentInfo()
+    appendToContent('div', "standardDiv").innerHTML = "<h2>Alignment</h2>"
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose an alignment, representing the nature of your character's actions. How would your character respond to the following scenarios?"
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var quest1 = data.background.questionsAlign.q1
+            appendToContent('div', 'standardDiv').innerText = quest1.q
+            // console.log(response)
+            for (const ans in quest1.ans) {
+                console.log(ans)
+                const ansBtn = appendToContent('button')
+                ansBtn.innerText = ans
+                ansBtn.onclick = function () {
+                    console.log("qans: "+quest1.ans[ans][0])
+                    localStorage.setItem("alignAxis1", quest1.ans[ans][0])
+                    alignQuestion2(data)
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
 
     // get all children from content
-    children = content.children
-    allowedAlignments = localStorage.getItem("possibleAlignments").split(',')
-    // console.log("Allowed align: " + allowedAlignments)
-    for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        const childsChild = child.children
-        for (let j = 0; j < childsChild.length; j++) {
-            const cc = childsChild[j]
-            // console.log("cval: " + cc.innerText)
-            // Do something with each child element
-            if (!allowedAlignments.includes(cc.value)) {
-                // console.log("Grey out: " + child.innerText)
-                cc.setAttribute('id', 'greyOut')
-            }
-            else cc.setAttribute('id', '')
+    // children = content.children
+    // allowedAlignments = localStorage.getItem("possibleAlignments").split(',')
+    // // console.log("Allowed align: " + allowedAlignments)
+    // for (let i = 0; i < children.length; i++) {
+    //     const child = children[i];
+    //     const childsChild = child.children
+    //     for (let j = 0; j < childsChild.length; j++) {
+    //         const cc = childsChild[j]
+    //         // console.log("cval: " + cc.innerText)
+    //         // Do something with each child element
+    //         if (!allowedAlignments.includes(cc.value)) {
+    //             // console.log("Grey out: " + child.innerText)
+    //             cc.setAttribute('id', 'greyOut')
+    //         }
+    //         else cc.setAttribute('id', '')
 
-            cc.onclick = function () {
-                localStorage.setItem("_alignment", cc.innerText)
-                if (localStorage.getItem("_class") == "Cleric") {
-                    chooseDiety(localStorage.getItem("_alignment"))
-                        .then(chosenDeity => {
+    //         cc.onclick = function () {
+    //             localStorage.setItem("_alignment", cc.innerText)
+    //             if (localStorage.getItem("_class") == "Cleric") {
+    //                 chooseDiety(localStorage.getItem("_alignment"))
+    //                     .then(chosenDeity => {
 
-                            console.log("Chosen Deity:", chosenDeity);
-                            localStorage.setItem("_diety", chosenDeity)
-                            addDietyInfo(chosenDeity)
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                        });
-                }
-                // dietyDebrief()
-            }
+    //                         console.log("Chosen Deity:", chosenDeity);
+    //                         localStorage.setItem("_diety", chosenDeity)
+    //                         addDietyInfo(chosenDeity)
+    //                     })
+    //                     .catch(error => {
+    //                         console.error("Error:", error);
+    //                     });
+    //             }
+    //             // dietyDebrief()
+    //         }
+    //     }
+    // }
+}
+
+function alignQuestion2(data) {
+    content = clearContentAndGet()
+    var quest2 = data.background.questionsAlign.q2
+    appendToContent('div', 'standardDiv').innerText = quest2.q
+    // console.log(response)
+    for (ans in quest2.ans) {
+        console.log(ans)
+        var ansBtn = appendToContent('button')
+        ansBtn.innerText = ans
+        ansBtn.onclick = function () {
+            localStorage.setItem("alignAxis2", quest2.ans[ans][0])
+            // goto to next step
+            // chooseDevineDomain()
+            localStorage.setItem('_alignment',localStorage.getItem('alignAxis1') + " "+ localStorage.getItem('alignAxis2'))
+            alignDebrief()
         }
     }
+}
+
+function alignDebrief() {
+    content = clearContentAndGet()
+    appendToContent('div','standardDiv').innerHTML = highlightTextWithMouseover("You have been aligned with "+localStorage.getItem('_alignment')+ ".",allDetails)
+    cont = appendToContent('button')
+    cont.innerText = 'Continue'
+    cont.onclick = function () {
+        backgroundQuestions()
+    }
+
+    
 }
 
 function chooseDiety(alignment) {
@@ -1336,21 +1434,13 @@ function dietyDebrief() {
     dietyOutro.innerHTML = highlightTextWithMouseover('Your cleric worships ' + localStorage.getItem("_diety"), allDetails)
 }
 
-function pickJob() {
-    content = clearContentAndGet()
-    appendToContent('h1').innerText = "Vocation"
-    appendToContent('div').innerHTML = highlightTextWithMouseover(
-        "Your character's vocation is an important part of their backstory.",
-        allDetails
-    )
-}
 
 // TODO: For humans we need to get region
 function characterName() {
     content = clearContentAndGet()
     appendToContent('h2').innerText = "Character Name"
     appendToContent('div', 'standardDiv').innerHTML = "It's time to choose what you would like to be called throughout your campaign."
-    
+
     appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" onclick="storeKeyFromInput(\'_name\')" role="button">Submit</button>'
     appendToContent('div').innerHTML = "You can choose any name you please, but if you do want to pick a standard name for a " + localStorage.getItem("_race") + ", these are some examples."
 
@@ -1403,6 +1493,112 @@ function createNameTable(race, maleValues, femaleValues) {
 
     // Append the table to the document body or any desired container
     return table
+}
+
+function backgroundQuestions(questionNum = 1) {
+    content = clearContentAndGet()
+    if (questionNum == 1) {
+        explainer = appendToContent('div', 'standardDiv')
+        explainer.innerHTML = highlightTextWithMouseover(
+            "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background.",
+            allDetails
+        )
+        // explainer2 = appendToContent('div','standardDiv')
+        // explainer2.innerHTML = highlightTextWithMouseover(
+        //     "",
+        //     allDetails
+        // )
+    }
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var quest = data.background.questions['q' + questionNum.toString()]
+            console.log(quest)
+            appendToContent('div', 'standardDiv').innerHTML = quest.q
+            for (const ans in quest.ans) {
+                const btn = appendToContent('button')
+                btn.innerText = ans
+                btn.onclick = function () {
+                    console.log(quest.ans[ans][2])
+                    if (quest.ans[ans][2].charAt(0) == '-') {
+                        clearContentAndGet()
+                        pickBackgroundFromQuestions(quest.ans[ans][0])
+                    }
+                    else {
+                        backgroundQuestions(quest.ans[ans][2].toString())
+                    }
+                }
+            }
+        })
+
+        .catch(error => {
+            console.error('Error:', error);
+        });
+} // backgroundQuestions
+
+function pickBackgroundFromQuestions(optionsAsString) {
+    possibleChoices = optionsAsString.split(',')
+    for (const choice in possibleChoices) {
+        // console.log("Choice: "+possibleChoices[choice])
+        // console.log(possibleChoices[choice].toLowerCase())
+        loadAllBackgroundInfo(possibleChoices[choice])
+    }
+}
+
+function loadAllBackgroundInfo(choice) {
+    // var bgData
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const bgDiv = document.createElement('div')
+            bgDiv.setAttribute('id','backgroundInfo')
+            const title = document.createElement('h2')
+            title.innerText = choice
+            bgDiv.appendChild(title)
+            const bgData = data[choice]
+            // console.log("bgDATA: " + bgData)
+            for (el in bgData) {
+                console.log(el)
+                const label = document.createElement('h3')
+                label.innerText = el
+                const info = document.createElement('p')
+                if ( bgData[el] instanceof Object) {
+                    info.setAttribute('id','innerInfo')
+                    console.log("Object found")
+                    for (var thing in bgData[el]) {
+                        const tng = document.createElement('p')
+                        tng.innerText = bgData[el][thing]
+                        info.appendChild(tng)
+                    }
+                }
+                else {
+                    if (el == 'Description' || el == 'Suggested Characteristics') {
+                        info.innerHTML = bgData[el]
+                    }
+                    else {
+                        info.innerHTML = highlightTextWithMouseover(bgData[el],allDetails)
+                    }
+                }
+                
+                bgDiv.appendChild(label)
+                bgDiv.appendChild(info)
+            }
+            select = document.createElement('button')
+            select.innerText = "Select "+choice
+            select.onclick = function () {
+                localStorage.setItem("_background",choice)
+                // move to next sequence
+                console.log("Chose "+choice+" as background")
+                characterName()
+            }
+            bgDiv.appendChild(select)
+            document.getElementById('content').appendChild(bgDiv)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    
 }
 
 

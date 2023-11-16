@@ -37,7 +37,7 @@
         }
     },
     "gettingStarted": {
-        "welcome": "Welcome to the D&D Character Creator – Crafting heroes made easy.",
+        "welcome": "Welcome to Wiz-Rad, a D&D Character Creator.",
         "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."
     },
     "race": {
@@ -254,15 +254,15 @@
             "q4": {
                 "q": "Are you someone who inherited powers from a long line of magic weilders, or are you controlled by dark forces most men could never understand?",
                 "ans": {
-                    "Inherited Powers": [
+                    "Sorcerer": [
                         "",
-                        "",
+                        "jfknsdfjsdkl",
                         "12"
                     ],
-                    "Controlled by Dark Forces": [
+                    "Warlock": [
                         "Warlock",
-                        "",
-                        "->conclusion"
+                        "wproweropwertj",
+                        "->Warlock"
                     ]
                 },
                 "back": "3"
@@ -533,6 +533,95 @@
                 "Neutral Evil": "Self-serving and ruthless, driven by personal gain with no moral qualms.",
                 "Chaotic Evil": "Chaotic and destructive, driven by violence and chaos for its own sake."
             }
+        },
+        "questions": {
+            "q1": {
+                "q": "Did you grow up in an urban setting (e.g., a town or kingdom) or a rural setting (e.g., a farm, nomadic tribe, or the wilds)?",
+                "ans": {
+                    "Urban": [
+                        "",
+                        "",
+                        "2"
+                    ],
+                    "Rural": [
+                        "",
+                        "",
+                        "3"
+                    ]
+                }
+            },
+            "q2": {
+                "q": "Do you come from a life of crime?",
+                "ans": {
+                    "Yes": [
+                        "Charlatan,Criminal,Noble,Urchin",
+                        "",
+                        "->continue"
+                    ],
+                    "No": [
+                        "Acolyte,Guild Artisan,Noble,Entertainer,Sage,Soldier",
+                        "",
+                        "->continue"
+                    ]
+                }
+            },
+            "q3": {
+                "q": "Did you live in a very small community or in complete isolation?",
+                "ans": {
+                    "Small Community": [
+                        "Acolyte,Folk Hero,Soldier,Sailor",
+                        "",
+                        "->continue"
+                    ],
+                    "Isolated": [
+                        "Hermit,Outlander,Sage",
+                        "",
+                        "->continue"
+                    ]
+                }
+            }
+        },
+        "questionsAlign": {
+            "q1": {
+                "q": "One of your party members has been kidnapped! After days of searching, you've finally captured a bandit who knows where they're being held. How do you get the information out of her?",
+                "ans": {
+                    "Tell her that if she doesn't cooperate, you'll turn her in to the authorities. ": [
+                        "Lawful",
+                        "",
+                        "2"
+                    ],
+                    "Offer to let her go if she'll give you the information you're asking for.": [
+                        "Neutral",
+                        "",
+                        "2"
+                    ],
+                    "Shriek a discordant tune directly into her ear until she tells you what you want to know.": [
+                        "Chaotic",
+                        "",
+                        "2"
+                    ]
+                }
+            },
+            "q2": {
+                "q": "A king offers you compensation for slaying a dragon that was terrorizing his kingdom. What do you do?",
+                "ans": {
+                    "Tell him to keep his gold; you have helped because it was the right thing to do. ": [
+                        "Good",
+                        "",
+                        "->done"
+                    ],
+                    "Accept your hard-earned coin.": [
+                        "Neutral",
+                        "",
+                        "->done"
+                    ],
+                    "Demand that he pay double the promised amount, or else.": [
+                        "Evil",
+                        "",
+                        "->done"
+                    ]
+                }
+            }
         }
     },
     "equipment": {
@@ -563,7 +652,41 @@
         "bonuses": "For example, playing as a dwarf might provide bonuses to resilience or Constitution, while selecting a wizard class can grant bonuses related to spellcasting and intelligence. These racial and class-based bonuses can influence your character's strengths, weaknesses, and overall playstyle within the game, but you won't be restrcited to a playstyle based only on race.",
         "divine magic": "Divine magic, as the name suggests, is the power of the gods, flowing from them into the world.",
         "primary ability": "A primary ability is the ability that influences a class's special abilities. For example, for spell casters, the primary ability determines the highest spell level that can be cast.",
-        "saving throws": "A saving throw, also called a save, represents an attempt to resist a spell, a trap, a poison, a disease, or a similar threat. You don't normally decide to make a saving throw; you are forced to make one because your character is at risk of harm."
+        "saving throws": "A saving throw, also called a save, represents an attempt to resist a spell, a trap, a poison, a disease, or a similar threat. You don't normally decide to make a saving throw; you are forced to make one because your character is at risk of harm.",
+        "patrons": "testing",
+        "alignment": "Alignment in a fantasy role-playing context reflects a character's moral and ethical compass, describing their beliefs and guiding principles. It is typically represented on two axes: the ethical axis (ranging from good to evil) and the moral axis (ranging from lawful to chaotic). This combination results in nine alignments, such as Lawful Good, Neutral Evil, or Chaotic Neutral, each defining a character's worldview and guiding their actions within a narrative.",
+        "city secrets": "You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would miss. When you are not in combat, you (and companions you lead) can travel between any two locations in the city twice as fast as your speed would normally allow.",
+        "military rank": "You have a military rank from your career as a soldier. Soldiers loyal to your former military organization still recognize your authority and influence, and they defer to you if they are of a lower rank. You can invoke your rank to exert influence over other soldiers and requisition simple equipment or horses for temporary use. You can also usually gain access to friendly military encampments and fortresses where your rank is recognized.",
+        "ship's passage": "When you need to, you can secure free passage on a sailing ship for yourself and your adventuring companions. You might sail on the ship you served on, or another ship you have good relations with (perhaps one captained by a former crewmate). Because you're calling in a favor, you can't be certain of a schedule or route that will meet your every need. Your Dungeon Master will determine how long it takes to get where you need to go. In return for your free passage, you and your companions are expected to assist the crew during the voyage.",
+        "researcher": "When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this information comes from a library, scriptorium, university, or a sage or other learned person or creature. Your DM might rule that the knowledge you seek is secreted away in an almost inaccessible place, or that it simply cannot be found. Unearthing the deepest secrets of the multiverse can require an adventure or even a whole campaign.",
+        "wanderer": "You have an excellent memory for maps and geography, and you can always recall the general layout of terrain, settlements, and other features around you. In addition, you can find food and fresh water for yourself and up to five other people each day, provided that the land offers berries, small game, water, and so forth.",
+        "position of priviledge": "Thanks to your noble birth, people are inclined to think the best of you. You are welcome in high society, and people assume you have the right to be wherever you are. The common folk make every effort to accommodate you and avoid your displeasure, and other people of high birth treat you as a member of the same social sphere. You can secure an audience with a local noble if you need to.",
+        "discovery": "The quiet seclusion of your extended hermitage gave you access to a unique and powerful discovery. The exact nature of this revelation depends on the nature of your seclusion. It might be a great truth about the cosmos, the deities, the powerful beings of the outer planes, or the forces of nature.",
+        "guild membership": "As an established and respected member of a guild, you can rely on certain benefits that membership provides. Your fellow guild members will provide you with lodging and food if necessary, and pay for your funeral if needed. In some cities and towns, a guildhall offers a central place to meet other members of your profession, which can be a good place to meet potential patrons, allies, or hirelings.",
+        "by popular demand": "You can always find a place to perform, usually in an inn or tavern but possibly with a circus, at a theater, or even in a noble's court. At such a place, you receive free lodging and food of a modest or comfortable standard (depending on the quality of the establishment), as long as you perform each night. In addition, your performance makes you something of a local figure. When strangers recognize you in a town where you have performed, they typically take a liking to you.",
+        "criminal contact": "You have a reliable and trustworthy contact who acts as your liaison to a network of other criminals. You know how to get messages to and from your contact, even over great distances; specifically, you know the local messengers, corrupt caravan masters, and seedy sailors who can deliver messages for you.",
+        "false identity": "You have created a second identity that includes documentation, established acquaintances, and disguises that allow you to assume that persona. Additionally, you can forge documents, including official papers and personal letters, as long as you have seen an example of the kind of document or the handwriting you are trying to copy.",
+        "shelter of the faithful": "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple.",
+        "rustic hospitality": "Since you come from the ranks of the common folk, you fit in among them with ease. You can find a place to hide, rest, or recuperate among other commoners, unless you have shown yourself to be a danger to them. They will shield you from the law or anyone else searching for you, though they will not risk their lives for you.",
+        "acrobatics": "The ability to perform agile and precise physical maneuvers, often involving balance and coordination.",
+        "animal Handling": "The skill to interact with animals, calm them, and understand their behaviors.",
+        "arcana": "Knowledge of magic, spells, and the mystical forces that shape the world.",
+        "athletics": "Physical prowess and ability in activities such as running, jumping, and climbing.",
+        "deception": "The art of concealing one's true intentions and misleading others through speech or action.",
+        "history": "Knowledge of past events, cultures, and historical figures.",
+        "insight": "The ability to read people, discern their motives, and understand their true feelings.",
+        "intimidation": "The skill of inducing fear or awe in others through words, demeanor, or presence.",
+        "investigation": "The talent for examining details, scrutinizing evidence, and solving puzzles.",
+        "medicine": "The ability to provide medical care, treat injuries, and diagnose illnesses.",
+        "nature": "Knowledge of the natural world, including plants, animals, and the environment.",
+        "perception": "Keen awareness of one's surroundings, allowing the detection of hidden or subtle details.",
+        "performance": "The skill to captivate an audience through various forms of artistic expression.",
+        "persuasion": "The art of convincing others to adopt a certain point of view or take a specific action.",
+        "religion": "Understanding of divine magic, religious traditions, and knowledge of deities.",
+        "sleight of hand": "The ability to perform manual tricks, pick pockets, and manipulate small objects with dexterity.",
+        "stealth": "The skill to move quietly and avoid detection, whether through shadows or disguise.",
+        "survival": "Knowledge and ability to thrive in the wilderness, including tracking, foraging, and navigating.",
+        "temp_ignore120123": "this will never be called, i put this here for a weird reason, don't worry about it lol."
     },
     "races": {
         "Human": {
@@ -785,14 +908,53 @@
         },
         "Gnome": {
             "maleNames": [
+                "Alston",
+                "Alvyn",
+                "Boddynock",
+                "Brocc",
+                "Burgell",
+                "Dimble",
+                "Eldon",
+                "Erky",
+                "Fonkin",
+                "Frug",
+                "Gerbo",
+                "Gimble",
                 "Glim",
-                "Ziggy",
-                "Snigg"
+                "Jebeddo",
+                "Kellen",
+                "Namfoodle",
+                "Orryn",
+                "Roondar",
+                "Seebo",
+                "Sindri",
+                "Warryn",
+                "Wrenn",
+                "Zook"
             ],
             "femaleNames": [
-                "Tinker",
-                "Pixie",
-                "Glimmer"
+                "Bimpnollin",
+                "Breena",
+                "Caramip",
+                "Carlin",
+                "Donella",
+                "Duvamil",
+                "Ella",
+                "Ellyjobell",
+                "Ellywick",
+                "Lilli",
+                "Loopmottin",
+                "Lorilla",
+                "Mardnab",
+                "Nissa",
+                "Nyx",
+                "Oda",
+                "Orla",
+                "Roywyn",
+                "Shamil",
+                "Tana",
+                "Waywocket",
+                "Zanna"
             ]
         },
         "Half-Elf": {
@@ -809,27 +971,359 @@
         },
         "Half-Orc": {
             "maleNames": [
-                "Grommash",
-                "Thokk",
-                "Durotan"
+                "Deneh",
+                "Feng",
+                "Gell",
+                "Henk",
+                "Holg",
+                "Imsh",
+                "Kelh",
+                "Krusk",
+                "Mhurren",
+                "Ront",
+                "Shump",
+                "Thokk"
             ],
             "femaleNames": [
-                "Grulk",
-                "Luthra",
-                "Sharn"
+                "Baggi",
+                "Emen",
+                "Engong",
+                "Kansif",
+                "Myev",
+                "Neega",
+                "Ovak",
+                "Ownka",
+                "Shaulha",
+                "Sulha",
+                "Vola",
+                "Volen",
+                "Yevelda"
             ]
         },
         "Tiefling": {
             "maleNames": [
-                "Mephistopheles",
-                "Belial",
-                "Asmodeus"
+                "Akmenos",
+                "Amnon",
+                "Barakas",
+                "Damakos",
+                "Ekemon",
+                "Iados",
+                "Kairon",
+                "Leucis",
+                "Melech",
+                "Mordai",
+                "Morthos",
+                "Pelaios",
+                "Skamos",
+                "Therai"
             ],
             "femaleNames": [
-                "Lilith",
-                "Astaroth",
-                "Moloch"
+                "Akta",
+                "Anakis",
+                "Bryseis",
+                "Criella",
+                "Damaia",
+                "Ea",
+                "Kallista",
+                "Lerissa",
+                "Makaria",
+                "Nemeia",
+                "Orianna",
+                "Phelaia",
+                "Rieta"
             ]
         }
+    },
+    "Acolyte": {
+        "Description": "You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, performing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine. You are not necessarily a cleric—performing sacred rites is not the same thing as channeling divine power.",
+        "Skill Proficiencies": "Insight and Religion",
+        "Languages": "Two of your choice",
+        "Equipment": [
+            "A holy symbol (a gift to you when you entered the priesthood)",
+            "A prayer book or prayer wheel",
+            "5 sticks of incense",
+            "Vestments",
+            "A set of common clothes",
+            "A belt pouch containing 15 gp"
+        ],
+        "Feature": "Shelter of the Faithful",
+        "Suggested Characteristics": "Acolytes are shaped by their experience in temples or other religious communities. Their study of the history and tenets of their faith and their relationships to temples, shrines, or hierarchies affect their mannerisms and ideals. Their flaws might be some hidden hypocrisy or heretical idea, or an ideal or bond taken to an extreme."
+    },
+    "Charlatan": {
+        "Description": "What makes them tick. You can tease out their hearts' desires after a few minutes of conversation, and with a few leading questions, you can read them like they were children's books. It's a useful talent, and one that you're perfectly willing to use for your advantage. You know what people want and you deliver, or rather, you promise to deliver. Common sense should steer people away from things that sound too good to be true, but common sense seems to be in short supply when you're around. The bottle of pink-colored liquid will surely cure that unseemly rash, this ointment—nothing more than a bit of fat with a sprinkle of silver dust—can restore youth and vigor, and there's a bridge in the city that just happens to be for sale. These marvels sound implausible, but you make them sound like the real deal.",
+        "Skill Proficiencies": [
+            "Deception",
+            "Sleight of Hand"
+        ],
+        "Tool Proficiencies": [
+            "Disguise kit",
+            "Forgery kit"
+        ],
+        "Equipment": [
+            "A set of fine clothes",
+            "A disguise kit",
+            "Tools of the con of your choice (ten stoppered bottles filled with colored liquid, a set of weighted dice, a deck of marked cards, or a signet ring of an imaginary duke)",
+            "A belt pouch containing 15 gp"
+        ],
+        "Favorite Schemes": [
+            "I cheat at games of chance.",
+            "I shave coins or forge documents.",
+            "I insinuate myself into people's lives to prey on their weakness and secure their fortunes.",
+            "I put on new identities like clothes.",
+            "I run sleight-of-hand cons on street corners.",
+            "I convince people that worthless junk is worth their hard-earned money."
+        ],
+        "Feature": "False Identity",
+        "Suggested Characteristics": "Charlatans are colorful characters who conceal their true selves behind the masks they construct. They reflect what people want to see, what they want to believe, and how they see the world. But their true selves are sometimes plagued by an uneasy conscience, an old enemy, or deep-seated trust issues."
+    },
+    "Criminal": {
+        "Description": "You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld. You're far closer than most people to the world of murder, theft, and violence that pervades the underbelly of civilization, and you have survived up to this point by flouting the rules and regulations of society.",
+        "Skills and Proficiencies": [
+            "Deception",
+            "Stealth"
+        ],
+        "Tool Proficiencies": [
+            "One type of gaming set",
+            "Thieves' tools"
+        ],
+        "Equipment": [
+            "A crowbar",
+            "A set of dark common clothes including a hood",
+            "A belt pouch containing 15 gp"
+        ],
+        "Criminal Specialty": [
+            "Blackmailer",
+            "Burglar",
+            "Enforcer",
+            "Fence",
+            "Highway robber",
+            "Hired killer",
+            "Pickpocket",
+            "Smuggler"
+        ],
+        "Feature": "Criminal Contact",
+        "Suggested Characteristics": "Criminals might seem like villains on the surface, and many of them are villainous to the core. But some have an abundance of endearing, if not redeeming, characteristics. There might be honor among thieves, but criminals rarely show any respect for law or authority."
+    },
+    "Entertainer": {
+        "Description": "You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them. Your poetics can stir the hearts of those who hear you, awakening grief or joy, laughter or anger. Your music raises their spirits or captures their sorrow. Your dance steps captivate, your humor cuts to the quick. Whatever techniques you use, your art is your life.",
+        "Skill Proficiencies": [
+            "Acrobatics",
+            "Performance"
+        ],
+        "Tool Proficiencies": [
+            "Disguise kit",
+            "One type of musical instrument"
+        ],
+        "Equipment": [
+            "A musical instrument (one of your choice)",
+            "The favor of an admirer (love letter, lock of hair, or trinket)",
+            "A costume",
+            "A belt pouch containing 15 gp"
+        ],
+        "Entertainer Routines": [
+            "Actor",
+            "Dancer",
+            "Fire-eater",
+            "Jester",
+            "Instrumentalist",
+            "Poet",
+            "Singer",
+            "Storyteller",
+            "Juggler",
+            "Tumbler"
+        ],
+        "Feature": "By Popular Demand",
+        "Suggested Characteristics": "Successful entertainers have to be able to capture and hold an audience's attention, so they tend to have flamboyant or forceful personalities. They're inclined toward the romantic and often cling to high-minded ideals about the practice of art and the appreciation of beauty."
+    },
+    "Guild Artisan": {
+        "Description": "You are a member of an artisan's guild, skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth from the constraints of a feudal social order. You learned your skills as an apprentice to a master artisan, under the sponsorship of your guild, until you became a master in your own right.",
+        "Skill Proficiencies": [
+            "Insight",
+            "Persuasion"
+        ],
+        "Tool Proficiencies": [
+            "One type of artisan's tools"
+        ],
+        "Languages": [
+            "One of your choice"
+        ],
+        "Equipment": [
+            "A set of artisan's tools (one of your choice)",
+            "A letter of introduction from your guild",
+            "A set of traveler's clothes",
+            "A belt pouch containing 15 gp"
+        ],
+        "Feature": "Guild Membership",
+        "Suggested Characteristics": "Guild artisans are among the most ordinary people in the world until they set down their tools and take up an adventuring career. They understand the value of hard work and the importance of community, but they're vulnerable to sins of greed and covetousness."
+    },
+    "Hermit": {
+        "Description": "You lived in seclusion—either in a sheltered community such as a monastery or entirely alone—for a formative part of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for.",
+        "Skill Proficiencies": [
+            "Medicine",
+            "Religion"
+        ],
+        "Tool Proficiencies": [
+            "Herbalism kit"
+        ],
+        "Languages": [
+            "One of your choice"
+        ],
+        "Equipment": [
+            "A scroll case stuffed full of notes from your studies or prayers",
+            "A winter blanket",
+            "A set of common clothes",
+            "An herbalism kit",
+            "5 gp"
+        ],
+        "Feature": "Discovery",
+        "Suggested Characteristics": "Some hermits are well suited to a life of seclusion, whereas others chafe against it and long for company. Whether they embrace solitude or long to escape it, the solitary life shapes their attitudes and ideals. A few are driven slightly mad by their years apart from society."
+    },
+    "Noble": {
+        "Description": "You understand wealth, power, and privilege. You carry a noble title, and your family owns land, collects taxes, and wields significant political influence. You might be a pampered aristocrat unfamiliar with work or discomfort, a former merchant just elevated to the nobility, or a disinherited scoundrel with a disproportionate sense of entitlement. Work with your DM to come up with an appropriate title and determine how much authority that title carries.",
+        "Details": "A noble title doesn't stand on its own—it's connected to an entire family, and whatever title you hold, you will pass it down to your own children. Work with the DM to describe your family and their influence on you. Is your family old and established, or was your title only recently bestowed? How much influence do they wield, and over what area? What kind of reputation does your family have among the other aristocrats of the region? How do the common people regard them? What's your position in the family? Are you the heir to the head of the family? Have you already inherited the title? How do you feel about that responsibility? Or are you so far down the line of inheritance that no one cares what you do, as long as you don't embarrass the family? How does the head of your family feel about your adventuring career? Are you in your family's good graces, or shunned by the rest of your family? Does your family have a coat of arms? An insignia you might wear on a signet ring? Particular colors you wear all the time? An animal you regard as a symbol of your line or even a spiritual member of the family? These details help establish your family and your title as features of the world of the campaign.",
+        "Skill Proficiencies": [
+            "History",
+            "Persuasion"
+        ],
+        "Tool Proficiencies": [
+            "One type of gaming set"
+        ],
+        "Languages": [
+            "One of your choice"
+        ],
+        "Equipment": [
+            "A set of fine clothes",
+            "A signet ring",
+            "A scroll of pedigree",
+            "A purse containing 25 gp"
+        ],
+        "Feature": "Position of Priviledge",
+        "Suggested Characteristics": "Nobles are born and raised to a very different lifestyle than most people ever experience, and their personalities reflect that upbringing. A noble title comes with a plethora of bonds—responsibilities to family, to other nobles (including the sovereign), to the people entrusted to the family's care, or even to the title itself. But this responsibility is often a good way to undermine a noble."
+    },
+    "Outlander": {
+        "Description": "You grew up in the wilds, far from civilization and the comforts of town and technology. You've witnessed the migration of herds larger than forests, survived weather more extreme than any city-dweller could comprehend, and enjoyed the solitude of being the only thinking creature for miles in any direction. The wilds are in your blood, whether you were a nomad, an explorer, a recluse, a hunter-gatherer, or even a marauder. Even in places where you don't know the specific features of the terrain, you know the ways of the wild.",
+        "Details": "You've been to strange places and seen things that others cannot begin to fathom. Consider some of the distant lands you have visited, and how they impacted you. You can roll on the following table to determine your occupation during your time in the wild, or choose one that best fits your character.",
+        "Skill Proficiencies": [
+            "Athletics",
+            "Survival"
+        ],
+        "Tool Proficiencies": [
+            "One type of musical instrument"
+        ],
+        "Languages": [
+            "One of your choice"
+        ],
+        "Equipment": [
+            "A staff",
+            "A hunting trap",
+            "A trophy from an animal you killed",
+            "A set of traveler's clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Feature": "Wanderer",
+        "Suggested Characteristics": "Often considered rude and uncouth among civilized folk, outlanders have little respect for the niceties of life in the cities. The ties of tribe, clan, family, and the natural world of which they are a part are the most important bonds to most outlanders."
+    },
+    "Sage": {
+        "Description": "You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you. Your efforts have made you a master in your fields of study.",
+        "Skill Proficiencies": [
+            "Arcana",
+            "History"
+        ],
+        "Languages": [
+            "Two of your choice"
+        ],
+        "Equipment": [
+            "A bottle of black ink",
+            "A quill",
+            "A small knife",
+            "A letter from a dead colleague posing a question you have not yet been able to answer",
+            "A set of common clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Specialty": "To determine the nature of your scholarly training, roll a d8 or choose from the options in the table below.",
+        "Feature": "Researcher",
+        "Suggested Characteristics": "Sages are defined by their extensive studies, and their characteristics reflect this life of study. Devoted to scholarly pursuits, a sage values knowledge highly-sometimes in its own right, sometimes as a means toward other ideals."
+    },
+    "Sailor": {
+        "Description": "You sailed on a seagoing vessel for years. In that time, you faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottomless depths. Your first love is the distant line of the horizon, but the time has come to try your hand at something new.",
+        "Details": "Discuss the nature of the ship you previously sailed with your Dungeon Master. Was it a merchant ship, a naval vessel, a ship of discovery, or a pirate ship? How famous (or infamous) is it? Is it widely traveled? Is it still sailing, or is it missing and presumed lost with all hands? What were your duties on board - boatswain, captain, navigator, cook, or some other position? Who were the captain and first mate? Did you leave your ship on good terms with your fellows, or on the run?",
+        "Skill Proficiencies": [
+            "Athletics",
+            "Perception"
+        ],
+        "Tool Proficiencies": [
+            "Navigator's tools",
+            "Vehicles (water)"
+        ],
+        "Equipment": [
+            "A belaying pin (club)",
+            "50 feet of silk rope",
+            "A lucky charm such as a rabbit foot or a small stone with a hole in the center (or you may roll for a random trinket on the Trinkets table in chapter 5)",
+            "A set of common clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Feature": "Ship's Passage",
+        "Suggested Characteristics": "Sailors can be a rough lot, but the responsibilities of life on a ship make them generally reliable as well. Life aboard a ship shapes their outlook and forms their most important attachments."
+    },
+    "Soldier": {
+        "Description": "War has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, and learned basic survival techniques, including how to stay alive on the battlefield. You might have been part of a standing national army or a mercenary company, or perhaps a member of a local militia who rose to prominence during a recent war. When you choose this background, work with your DM to determine which military organization you were a part of, how far through its ranks you progressed, and what kind of experiences you had during your military career.",
+        "Skill Proficiencies": [
+            "Athletics",
+            "Intimidation"
+        ],
+        "Tool Proficiencies": [
+            "One type of gaming set",
+            "Vehicles (land)"
+        ],
+        "Equipment": [
+            "An insignia of rank",
+            "A trophy taken from a fallen enemy (a dagger, broken blade, or piece of a banner)",
+            "A set of bone dice or deck of cards",
+            "A set of common clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Feature": "Military Rank",
+        "suggestedCharacteristics": "The horrors of war combined with the rigid discipline of military service leave their mark on all soldiers, shaping their ideals, creating strong bonds, and often leaving them scarred and vulnerable to fear, shame, and hatred."
+    },
+    "Urchin": {
+        "Description": "You grew up on the streets alone, orphaned, and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself. You fought fiercely over food and kept a constant watch out for other desperate souls who might steal from you. You slept on rooftops and in alleyways, exposed to the elements, and endured sickness without the advantage of medicine or a place to recuperate. You've survived despite all odds, and did so through cunning, strength, speed, or some combination of each. You begin your adventuring career with enough money to live modestly but securely for at least ten days. How did you come by that money? What allowed you to break free of your desperate circumstances and embark on a better life?",
+        "Skill Proficiencies": [
+            "Sleight of Hand",
+            "Stealth"
+        ],
+        "Tool Proficiencies": [
+            "Disguise kit",
+            "Thieves' tools"
+        ],
+        "Equipment": [
+            "A small knife",
+            "A map of the city you grew up in",
+            "A pet mouse",
+            "A token to remember your parents by",
+            "A set of common clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Feature": "City Secrets",
+        "Suggested Characteristics": "Urchins are shaped by lives of desperate poverty, for good and for ill. They tend to be driven either by a commitment to the people with whom they shared life on the street or by a burning desire to find a better life-and maybe get some payback on all the rich people who treated them badly."
+    },
+    "Folk Hero": {
+        "Description": "You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the common folk everywhere.",
+        "Skill Proficiencies": [
+            "Animal Handling",
+            "Survival"
+        ],
+        "Tool Proficiencies": [
+            "One type of artisan's tools",
+            "vehicles (land)"
+        ],
+        "Equipment": [
+            "A set of artisan's tools (one of your choice)",
+            "A shovel",
+            "An iron pot",
+            "A set of common clothes",
+            "A belt pouch containing 10 gp"
+        ],
+        "Feature": "Rustic Hospitality",
+        "Suggested Characteristics": "A folk hero is one of the common people, for better or for worse. Most folk heroes look on their humble origins as a virtue, not a shortcoming, and their home communities remain very important to them."
     }
 }

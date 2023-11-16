@@ -61,8 +61,9 @@ table {
     margin-top: 40px;
     align-items: baseline;
     border-collapse: collapse;
-    width: 60%;  
+    width: 60%;
 }
+
 /* Use this for every question */
 .question {
     margin-bottom: 50px;
@@ -194,12 +195,13 @@ button {
     backface-visibility: hidden;
     border-radius: 6px;
     border-width: 0;
+    height: fit-content;
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .1) 0 2px 5px 0, rgba(0, 0, 0, .07) 0 1px 1px 0;
     box-sizing: border-box;
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
     font-size: 100%;
-    height: 58px;
+    /* height: 58px; */
     line-height: 1.15;
     /* margin: 12px 0 0; */
     outline: none;
@@ -264,7 +266,7 @@ button:focus {
     overflow-y: auto;
     max-height: 50vh;
     position: relative;
-    
+
 }
 
 /* Left column for questions */
@@ -274,8 +276,10 @@ button:focus {
     max-width: 60%;
     min-width: 50%;
     min-height: 70vh;
-    /* margin-left: 17vw; */
     background-color: rgb(39, 39, 39);
+    /* padding: 30px 0; */
+    row-gap: 20px;
+
 }
 
 /* Right column for info */
@@ -408,17 +412,61 @@ img {
 
   } */
 
+
+
 #standardDiv {
-    display:grid;
+    display: grid;
     align-items: center;
-    justify-content: center;
-    height: 10vh;
+    /* justify-content: center; */
+    /* height: 10vh; */
     position: relative;
+    /* margin: auto; */
+    display: block;
+    flex: auto;
+    /* margin-bottom: 10px; */
+    padding: 20px;
+    margin: 20;
 
 }
+
 
 #continueBtn {
     position: absolute;
     bottom: 10px;
     right: 10px;
-  }
+}
+
+#backgroundInfo h1 {
+    font-size: 80%;
+    margin: 0;
+    padding: 0;
+
+}
+
+#backgroundInfo p {
+    font-size: 80%;
+    margin: 0;
+    padding: 0;
+    text-indent: 5%;
+
+}
+
+#backgroundInfo h3 {
+    text-align: left;
+    margin: 4px;
+    /* padding: 0; */
+    font-size: 80%;
+}
+
+/* #backgroundInfo button {
+    scale: 80%;
+    align-items: center;
+
+} */
+
+
+#innerInfo {
+    text-align: left;
+    font-size: 80%;
+    margin: 2px;
+}
