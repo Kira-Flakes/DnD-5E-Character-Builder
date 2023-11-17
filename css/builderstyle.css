@@ -497,3 +497,7 @@ img {
     display: grid;
     
 }
+
+#abilBtn{
+    min-width: 5%;
+}

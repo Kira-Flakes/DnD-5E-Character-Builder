@@ -1209,6 +1209,37 @@ function getRealms() {
         });
 }
 
+function parseRaceFeatures(race, column) {
+    var filePath = '../misc/raceFeatures.csv';
+    return fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            return new Promise(resolve => {
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function (results) {
+                        const matchingRow = results.data.find(row => row['Race'].includes(race));
+                        if (matchingRow) {
+                            resolve(matchingRow[column]);
+                        } else {
+                            resolve(null); // Race not found
+                        }
+                    }
+                });
+            });
+        });
+}
+
+// // Example usage:
+// parseRaceFeatures('Elf', 'Ability Score Increase (Race)')
+//     .then(value => {
+//         console.log(value);
+//     });
+
+
+
+
+
 
 function initClericDieties() {
     // main div
@@ -1532,6 +1563,7 @@ function characterName() {
     cBtn.onclick = function () {
         storeKeyFromInput('_name')
         window.location.href = '../html/equipment.html'
+        rollForAbilities()
     }
     fetch('/guide.json')
         .then(response => response.json())
@@ -1720,7 +1752,7 @@ function chooseIdeals() {
             inpDiv.appendChild(inp)
             subButton = document.createElement('button')
             subButton.innerText = "Submit"
-            subButton.setAttribute('type','submit')
+            subButton.setAttribute('type', 'submit')
             inpDiv.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_ideals', inp.value)
@@ -1737,13 +1769,13 @@ function chooseBonds() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "As an "+ localStorage.getItem('_background') + ", your bonds represent a character's connections to people, places, and events in the world. They tie you to things from your background. Choose one of the following, or write your own."
+    main.innerText = "As an " + localStorage.getItem('_background') + ", your bonds represent a character's connections to people, places, and events in the world. They tie you to things from your background. Choose one of the following, or write your own."
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             allBonds = data[bkgnd]['-bonds']
             console.log("id " + allBonds)
-            optDiv = appendToContent('div','standardDiv')
+            optDiv = appendToContent('div', 'standardDiv')
             for (id in allBonds) {
                 const btn = appendToContent('button')
                 btn.innerText = allBonds[id]
@@ -1762,7 +1794,7 @@ function chooseBonds() {
             content.appendChild(inp)
             subButton = document.createElement('button')
             subButton.innerText = "Submit"
-            subButton.setAttribute('type','submit')
+            subButton.setAttribute('type', 'submit')
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_bonds', inp.value)
@@ -1785,7 +1817,7 @@ function chooseFlaws() {
         .then(data => {
             allFlaws = data[bkgnd]['-flaws']
             console.log("id " + allFlaws)
-            optDiv = appendToContent('div','standardDiv')
+            optDiv = appendToContent('div', 'standardDiv')
             for (id in allFlaws) {
                 const btn = appendToContent('button')
                 btn.innerText = allFlaws[id]
@@ -1804,7 +1836,7 @@ function chooseFlaws() {
             content.appendChild(inp)
             subButton = document.createElement('button')
             subButton.innerText = "Submit"
-            subButton.setAttribute('type','submit')
+            subButton.setAttribute('type', 'submit')
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_flaws', inp.value)
@@ -1821,13 +1853,13 @@ function choosePersonality() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
     main = appendToContent('div', 'standardDiv')
-    main.innerText = ""
+    main.innerText = "A character's perosnality trait can help when you make decisions during the game. Please select one or write your own."
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             allPT = data[bkgnd]['-personalityTrait']
             console.log("id " + allPT)
-            optDiv = appendToContent('div','standardDiv')
+            optDiv = appendToContent('div', 'standardDiv')
             for (id in allPT) {
                 const btn = appendToContent('button')
                 btn.innerText = allPT[id]
@@ -1835,7 +1867,9 @@ function choosePersonality() {
                 btn.onclick = function () {
                     localStorage.setItem('_personalityTraits', btn.innerText)
                     localStorage.setItem("backgroundState", "1")
-                    window.location.href = '../html/equipment.html'
+                    // window.location.href = '../html/equipment.html'
+                    characterName()
+                    // rollForAbilities()
                 }
             }
             content.appendChild(optDiv)
@@ -1846,13 +1880,14 @@ function choosePersonality() {
             content.appendChild(inp)
             subButton = document.createElement('button')
             subButton.innerText = "Submit"
-            subButton.setAttribute('type','submit')
+            subButton.setAttribute('type', 'submit')
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_personalityTraits', inp.value)
                 localStorage.setItem("backgroundState", "1")
                 // window.location.href = '../html/equipment.html'
-                rollForAbilities()
+                characterName()
+                // initRolling()
             }
         })
         .catch(error => {
@@ -1860,12 +1895,298 @@ function choosePersonality() {
         });
 }
 
+function initRolling() {
+    rollForAbilities()
+}
+
 function rollForAbilities() {
-    window.location.href = '../html/rollDemo.html'
-    content = document.getElementById('content')
-    
+    console.log('here')
+    // window.location.href = '../html/rollDemo.html'
+
+    content = clearContentAndGet()
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "It's time to assign your ability scores."
+    stdArray = document.createElement('button')
+    stdArray.innerText = "Standard Array"
+    stdArray.onclick = function () {
+        standardArray()
+    }
+    main.appendChild(stdArray)
 
 }
+
+vals = [8, 10, 12, 13, 14, 15]
+assignedAbils = []
+
+function standardArray() {
+    if (assignedAbils.length == 6) {
+        content = clearContentAndGet()
+        content.innerText = 'If your happy with your scores, your character sheet is now complete.'
+        contBtn = document.createElement('button')
+        contBtn.innerText = 'Continue'
+        contBtn.onclick = function () {
+            calculateValsFromAbilityScores()
+            fullDebrief()
+            // window.location.href = '../html/charactersheet.html'
+        }
+        content.appendChild(contBtn)
+    }
+    else {
+        content = clearContentAndGet()
+        main = appendToContent('div', 'standardDiv')
+        main.innerText = 'Assign any of these values to an ability:'
+
+        if (!assignedAbils.includes('strength')) {
+            const abil1 = document.createElement('div')
+            abil1.innerText = 'Strength: '
+            // input1 = document.createElement('input')
+            appendAbilityValues(abil1, vals, 'strength')
+            main.appendChild(abil1)
+        }
+
+        if (!assignedAbils.includes('dex')) {
+            const abil2 = document.createElement('div')
+            abil2.innerText = 'Dexterity: '
+            appendAbilityValues(abil2, vals, 'dex')
+            main.appendChild(abil2)
+        }
+
+        if (!assignedAbils.includes('constitution')) {
+            const abil3 = document.createElement('div')
+            abil3.innerText = 'Constitution'
+            appendAbilityValues(abil3, vals, 'constitution')
+            main.appendChild(abil3)
+        }
+
+        if (!assignedAbils.includes('wisdom')) {
+            const abil4 = document.createElement('div')
+            abil4.innerText = 'Wisdom'
+            appendAbilityValues(abil4, vals, 'wisdom')
+            main.appendChild(abil4)
+        }
+
+        if (!assignedAbils.includes('intellegence')) {
+            const abil5 = document.createElement('div')
+            abil5.innerText = 'Intelligence'
+            appendAbilityValues(abil5, vals, 'intellegence')
+            main.appendChild(abil5)
+        }
+
+        if (!assignedAbils.includes('charisma')) {
+            const abil6 = document.createElement('div')
+            abil6.innerText = 'Charisma'
+            appendAbilityValues(abil6, vals, 'charisma')
+            main.appendChild(abil6)
+        }
+
+    }
+    resetBtn = document.createElement('button')
+    resetBtn.innerText = 'Reset'
+    resetBtn.onclick = function () {
+        vals = [8, 10, 12, 13, 14, 15]
+        assignedAbils = []
+        standardArray()
+    }
+    content.appendChild(resetBtn)
+}
+
+function fullDebrief() {
+    content = clearContentAndGet()
+    main = appendToContent('div','standardDiv')
+    main.innerText = "Your character creation process is complete. You can now view your detailed character sheet to explore your character's abilities, skills, and traits."
+    charSheetViewDiv = appendToContent('div')
+    charSheetViewDiv.innerHTML = "<button onclick=\"window.location.href = 'charsheet.html';\">Character Sheet</button>"
+}
+
+function appendAbilityValues(divAbil, vals, abil) {
+    for (i = 0; i < vals.length; i++) {
+        const toAppend = document.createElement('button')
+        toAppend.setAttribute('id', 'abilBtn')
+        toAppend.innerText = vals[i]
+        divAbil.appendChild(toAppend)
+        toAppend.onclick = function () {
+            // divAbil.innerHTML = ''
+            assignedAbils.push(abil)
+            localStorage.setItem('_' + abil.toLowerCase(), toAppend.innerText)
+            vals = removeValue(vals, parseInt(toAppend.innerText));
+            // console.log('valsn ow: ' +vals)
+
+
+            standardArray()
+
+        }
+    }
+}
+
+function calculateValsFromAbilityScores() {
+    localStorage.setItem(
+        '_armorClass',
+        parseInt(localStorage.getItem('_dex')) + 10
+        )
+
+    localStorage.setItem(
+        '_strengthMod',
+        parseInt((parseInt(localStorage.getItem('_strength'))-10)/2)
+    )
+    localStorage.setItem(
+        '_dexMod',
+        parseInt((parseInt(localStorage.getItem('_dex'))-10)/2)
+    )
+    localStorage.setItem(
+        '_constitutionMod',
+        parseInt((parseInt(localStorage.getItem('_constitution'))-10)/2)
+    )
+    localStorage.setItem(
+        '_intellegenceMod',
+        parseInt((parseInt(localStorage.getItem('_intellegence'))-10)/2)
+    )
+    localStorage.setItem(
+        '_wisdomMod',
+        parseInt((parseInt(localStorage.getItem('_wisdom'))-10)/2)
+    )
+    localStorage.setItem(
+        '_charismaMod',
+        parseInt((parseInt(localStorage.getItem('_charisma'))-10)/2)
+    )
+
+    localStorage.setItem(
+        '_initiative',
+        '+'+localStorage.getItem('_dexMod')
+    )
+
+    // parseRaceFeatures('Elf (High)', 'Ability Score Increase (Race)')
+    // .then(value => {
+    //     console.log(value);
+    // });
+
+    applyRaceBenifits()
+
+
+    // window.location.href = 'charsheet.html'
+}
+
+function applyRaceBenifits() {
+    plRace = localStorage.getItem('_race')
+    plSubRace = localStorage.getItem('_subRace')
+    console.log('pl subrace: '+plSubRace)
+    parseRaceFeatures(plRace,'Ability Score Increase (Race)').then(value => {
+        console.log(value)
+        splitVal = value.split(' ')
+        var currentInt = parseInt(localStorage.getItem('_'+splitVal[0].toLowerCase()))
+        currentInt += parseInt(splitVal[1])
+        console.log('New value: '+ currentInt)
+        localStorage.setItem('_'+splitVal[0].toLowerCase(),currentInt)
+    })
+
+    parseRaceFeatures(plSubRace, 'Ability Score Increase (Subrace)').then(value => {
+        console.log("subrace val: "+value)
+        splitVal = value.split(' ')
+        var currentInt = parseInt(localStorage.getItem('_'+splitVal[0].toLowerCase()))
+        currentInt += parseInt(splitVal[1])
+        console.log('New value: '+ currentInt)
+        localStorage.setItem('_'+splitVal[0].toLowerCase(),currentInt)
+    })
+
+    parseRaceFeatures(plRace, 'Traits (Race)').then(value=>{
+        localStorage.setItem('_featuresandtraits',value)
+    })
+
+    parseRaceFeatures(plSubRace, 'Traits (Subrace)').then(value =>{
+        curr = localStorage.getItem('_featuresandtraits')
+        curr += " " + value
+        console.log(curr)
+        localStorage.setItem('_featuresandtraits',curr)
+    })
+
+    updateModifiers()
+    updateSkillLocalStorageValues()
+    // calculateSkills() 
+}
+
+function updateModifiers() {
+    const abilityScores = ['strength', 'dex', 'constitution', 'intellegence', 'wisdom', 'charisma'];
+
+    abilityScores.forEach(score => {
+        const abilityScoreKey = `_${score}`;
+        const abilityScoreValue = parseInt(localStorage.getItem(abilityScoreKey), 10);
+
+        if (!isNaN(abilityScoreValue)) {
+            const modifiedValue = Math.floor((abilityScoreValue - 10) / 2);
+            const modifiedKey = `_${score}ST`;
+
+            localStorage.setItem(modifiedKey, modifiedValue.toString());
+        }
+    });
+}
+
+// Call the function to update the modifiers
+// updateModifiers();
+
+
+function removeValue(arr, valueToRemove) {
+    const index = arr.indexOf(valueToRemove);
+    if (index !== -1) {
+        arr.splice(index, 1);
+    }
+}
+
+
+function updateSkillLocalStorageValues() {
+    const skills = [
+        'Acrobatics', 'Animalhandling', 'Arcana', 'Athletics',
+        'Deception', 'History', 'Insight', 'Intimidation',
+        'Investigation', 'Medicine', 'Nature', 'Perception',
+        'Performance', 'Persuasion', 'Religion', 'Sleightofhand',
+        'Stealth', 'Survival'
+    ];
+
+    skills.forEach(skill => {
+        const skillKey = `_${skill.toLowerCase()}`;
+        const abilityScoreKey = `_${getRelevantAbilityScore(skill)}`;
+        console.log("Abilityscore key: "+abilityScoreKey)
+        
+        // Get the value from localStorage for the ability score
+        const abilityScoreValue = localStorage.getItem(abilityScoreKey);
+
+        // Set the value in localStorage for the skill
+        console.log("ABSCORE VAL:" + abilityScoreValue)
+        localStorage.setItem(skillKey, abilityScoreValue);
+    });
+}
+
+// Helper function to get the relevant ability score for a skill
+function getRelevantAbilityScore(skill) {
+    // Implement your logic here to map each skill to its relevant ability score
+    // This is just a placeholder example
+    const skillToAbilityScore = {
+        'Acrobatics': 'dexMod',
+        'Animalhandling': 'wisdomMod',
+        'Arcana': 'intellegenceMod',
+        'Athletics': 'strengthMod',
+        'Deception': 'charismaMod',
+        'History': 'intellegenceMod',
+        'Insight': 'wisdomMod',
+        'Intimidation': 'charismaMod',
+        'Investigation': 'intellegenceMod',
+        'Medicine': 'wisdomMod',
+        'Nature': 'intellegenceMod',
+        'Perception': 'wisdomMod',
+        'Performance': 'charismaMod',
+        'Persuasion': 'charismaMod',
+        'Religion': 'intellegenceMod',
+        'Sleightofhand': 'dexMod',
+        'Stealth': 'dexMod',
+        'Survival': 'wisdomMod'
+    };
+    
+
+    return skillToAbilityScore[skill] || 'Unknown';
+}
+
+// Example usage:
+// updateSkillLocalStorageValues();
+
+
 
 
 function clearContentAndGet() {
