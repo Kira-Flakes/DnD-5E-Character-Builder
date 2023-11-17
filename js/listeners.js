@@ -697,10 +697,14 @@ function raceChoices(options, tempButtons, div, page) {
                 console.log("optionsR: " + options[r])
                 localStorage.setItem('_subrace', options[r])
                 localStorage.setItem('_race', 'Dragonborn')
+                loadLanguages('Dragonborn')
+                loadSpeed('Dragonborn')
             }
             else {
                 console.log("optionsR: " + options[r])
                 localStorage.setItem('_' + page, options[r])
+                loadLanguages(options[r])
+                loadSpeed(options[r])
             }
 
             for (btn in tempButtons) { // delete all buttons, since we are done with this question
@@ -714,13 +718,52 @@ function raceChoices(options, tempButtons, div, page) {
             console.log("MOUSEDOVER")
             clearHelperInfo()
             document.getElementById('helperInfo').appendChild(divCache[r].val)
-            // button.style.backgroundColor = 'rgb(119, 45, 45)';
         })
         tempButtons.push(choice)
-        // div.appendChild(raceDiscreptionDiv(options[r]))
         div.appendChild(choice)
         // TODO: add listeners for mousover and 
     }
+}
+
+function loadLanguages(race) {
+    console.log("Loading languages for " + race)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var languageString = "Languages: "
+            languages = data.races[race].lang
+            for (const lan in languages) {
+                languageString = languageString + languages[lan] + " "
+            }
+            appendToCharacterSheet('_otherproficiencieslanguages', languageString)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function loadSpeed(race) {
+    console.log("Loading speed for " + race)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            spd = data.races[race].speed
+            appendToCharacterSheet('_speed', spd)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function appendToCharacterSheet(item, string) {
+    i = localStorage.getItem(item)
+    if (i == null) {
+        localStorage.setItem(item, string)
+        return
+    }
+    i = i + string
+    console.log(i)
+    localStorage.setItem(item, i)
 }
 
 function classChoices(options, tempButtons, div, page) {
@@ -1107,7 +1150,10 @@ function beginBackground(specialCaseHandled = false) {
     if (state != null || sInt == 1) {
         console.log("initting background qs")
         if (sInt == 2) backgroundQuestions()
-        if (sInt == 3) characterName()
+        if (sInt == 3) chooseIdeals()
+        if (sInt == 4) chooseBonds()
+        if (sInt == 5) chooseFlaws()
+        if (sInt == 6) choosePersonality()
     }
     else {
         if (!specialCaseHandled) checkForSpecialBackgroundCase();
@@ -1389,7 +1435,7 @@ function alignDebrief() {
     cont.innerText = 'Continue'
     cont.onclick = function () {
         backgroundQuestions()
-        localStorage.setItem("backgroundState","2")
+        localStorage.setItem("backgroundState", "2")
     }
 
 
@@ -1544,7 +1590,7 @@ function backgroundQuestions(questionNum = 1) {
     if (questionNum == 1) {
         explainer = appendToContent('div', 'standardDiv')
         explainer.innerHTML = "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background."
-        
+
         // explainer2 = appendToContent('div','standardDiv')
         // explainer2.innerHTML = highlightTextWithMouseover(
         //     "",
@@ -1604,6 +1650,7 @@ function loadAllBackgroundInfo(choice) {
                 const label = document.createElement('h3')
                 label.innerText = el
                 const info = document.createElement('p')
+                if (el[0] == '-') continue
                 if (bgData[el] instanceof Object) {
                     info.setAttribute('id', 'innerInfo')
                     console.log("Object found")
@@ -1631,8 +1678,9 @@ function loadAllBackgroundInfo(choice) {
                 localStorage.setItem("_background", choice)
                 // move to next sequence
                 console.log("Chose " + choice + " as background")
-                localStorage.setItem("backgroundState","3")
-                characterName()
+                localStorage.setItem("backgroundState", "3")
+                chooseIdeals()
+                // characterName()
             }
             bgDiv.appendChild(select)
             document.getElementById('content').appendChild(bgDiv)
@@ -1641,11 +1689,181 @@ function loadAllBackgroundInfo(choice) {
             console.error('Error:', error);
         });
 
-
+    // "_otherproficiencieslanguages"
 }
 
-function pickLanguages() {
+function chooseIdeals() {
     content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    console.log(bkgnd)
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "Characters in DnD have a set of ideals that essentially define your character's philosophy and outlook on life. As a " + localStorage.getItem('_background') + ", you can pick one of these standard ideals, or just create your own."
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allIdeals = data[bkgnd]['-ideals']
+            console.log("id " + allIdeals)
+            for (id in allIdeals) {
+                const btn = appendToContent('button')
+                btn.innerText = allIdeals[id]
+                content.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_ideals', btn.innerText)
+                    localStorage.setItem("backgroundState", "4")
+                    chooseBonds()
+                }
+            }
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            inpDiv.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            inpDiv.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_ideals', inp.value)
+                localStorage.setItem("backgroundState", "4")
+                chooseBonds()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function chooseBonds() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "As an "+ localStorage.getItem('_background') + ", your bonds represent a character's connections to people, places, and events in the world. They tie you to things from your background. Choose one of the following, or write your own."
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allBonds = data[bkgnd]['-bonds']
+            console.log("id " + allBonds)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allBonds) {
+                const btn = appendToContent('button')
+                btn.innerText = allBonds[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_bonds', btn.innerText)
+                    localStorage.setItem("backgroundState", "5")
+                    chooseFlaws()
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_bonds', inp.value)
+                localStorage.setItem("backgroundState", "5")
+                chooseFlaws()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function chooseFlaws() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "A flaw is a piece of your character's personality that makes them believable by adding real emotional depth. Flaws vary. They can be anything from an irrational fear to a corrupted world view. Either way, these are generally bad things that keep your character from being \"perfect.\""
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allFlaws = data[bkgnd]['-flaws']
+            console.log("id " + allFlaws)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allFlaws) {
+                const btn = appendToContent('button')
+                btn.innerText = allFlaws[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_flaws', btn.innerText)
+                    localStorage.setItem("backgroundState", "6")
+                    choosePersonality()
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_flaws', inp.value)
+                localStorage.setItem("backgroundState", "6")
+                choosePersonality()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function choosePersonality() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = ""
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allPT = data[bkgnd]['-personalityTrait']
+            console.log("id " + allPT)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allPT) {
+                const btn = appendToContent('button')
+                btn.innerText = allPT[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_personalityTraits', btn.innerText)
+                    localStorage.setItem("backgroundState", "1")
+                    window.location.href = '../html/equipment.html'
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_personalityTraits', inp.value)
+                localStorage.setItem("backgroundState", "1")
+                // window.location.href = '../html/equipment.html'
+                rollForAbilities()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function rollForAbilities() {
+    window.location.href = '../html/rollDemo.html'
+    content = document.getElementById('content')
+    
 
 }
 
@@ -1671,10 +1889,10 @@ function newContinueButton(append = false) {
     return res
 }
 
-function appendToCharacterSheet(box, item) {
-    val = localStorage.getItem('_' + box)
-    localStorage.setItem('_' + box, val + '\n' + item)
-}
+// function appendToCharacterSheet(box, item) {
+//     val = localStorage.getItem('_' + box)
+//     localStorage.setItem('_' + box, val + '\n' + item)
+// }
 
 
 
