@@ -45,7 +45,7 @@ h1 {
     color: rgb(250, 135, 135);
     text-align: center;
     margin-bottom: 35px;
-    max-width: 80vw;
+    padding-left: 8vw;
 }
 
 /* Use this for every question */
@@ -77,9 +77,10 @@ input[type="radio"]:checked+label {
 }
 
 .textinput {
+    font-size: 2vh;
     border: 0; 
-    padding: 7px 15px; 
-    margin-bottom: 10px;
+    padding: 0.7vh 1vh; 
+    margin: 1vh 0vh;
     border: 1px solid #ccc; 
     position: relative;
     background: transparent;
@@ -135,7 +136,6 @@ button {
     /*display: inline-block;*/
     font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
     
-    line-height: 44px;
     outline: 0;
     overflow: hidden;
     pointer-events: auto;
@@ -162,10 +162,10 @@ label {
     cursor: pointer;
     background-color: #454545;
     color: white;
-    padding: 5px 10px;
+    padding: 1vh 1.5vh;
     margin-bottom: 10px;
     border-radius: 3px;
-    font-size: 1.6vw;
+    font-size: 2.4vh;
 }
 
 /* CSS */
@@ -178,8 +178,9 @@ button {
     box-sizing: border-box;
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
-    font-size: 1.6vh;
-    height: 5vh;
+    font-size: 2.4vh;
+    height: auto;
+    padding: 1.25vh 2vh;
     line-height: 1.15;
     /* margin: 12px 0 0; */
     outline: none;
@@ -201,7 +202,7 @@ button {
     background-color: #454545;
     color: white;
     
-    margin-bottom: 10px;
+    margin-bottom: 1.5vh;
     border-radius: 3px;
 }
 
@@ -250,7 +251,7 @@ button:focus {
 .left {
     flex: 1;
     flex-grow: 1.6;
-    padding: 8px;
+    padding: 1vh;
     
     min-height: 70vh;
     /* margin-left: 17vw; */
@@ -260,9 +261,26 @@ button:focus {
 /* Right column for info */
 .right {
     flex: 1;
-    padding: 10px;
+    padding: 1vh;
     min-height: 70vh;
     background-color: rgb(39, 39, 39);
+}
+
+/* Mobile screen settings */
+@media screen and (max-width: 700px) {
+    .right {
+        flex: 1;
+        min-height: 10vh;
+        bottom: 0;
+    }
+    
+    .container {
+        flex-direction: column;
+    }
+
+    h1 {
+        padding-left: 0;
+    }
 }
 
 /* For p tags inside right column */
@@ -281,7 +299,7 @@ button:focus {
     margin-bottom: 1px;
     color: aliceblue;
     text-align: center;
-    padding: 10px 0px;
+    padding: 1vh 0px;
     border-radius: 10px;
     width:auto;
     max-width: 50%;
