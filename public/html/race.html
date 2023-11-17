@@ -4,10 +4,10 @@
 <script src="../js/listeners.js"></script>
 <script src="../js/characterUtils.js"></script>
 <script src="../js/main.js"></script>
-<script type="module" src="../js/d20Logo.js"></script>
+<!-- <script type="module" src="../js/d20Logo.js"></script> -->
 <!-- <script src="../js/api.js"></script> -->
 <script>
-    localStorage.setItem("currentRef", "../html/race.html")
+
     var character; // global scope
 
     // Initialize the character object, all remaining script calls should reference this object.
@@ -26,14 +26,11 @@
 
     <title>Race</title>
 </head>
-
+<!-- <canvas class="webgl"></canvas> -->
 <body>
-    <h1>Wiz-Rad!
-        <div style="display:inline;">
-            <canvas class="webgl"></canvas>
-        </div>
+    <h1>Wiz-Rad!</h1>
+    
     </h1>
-
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
@@ -72,11 +69,8 @@
                 <p id="responseTitle"></p>
             </div>
             <footer id="foot">
-                <div id="continueBtn">
-
-                </div>
+                
             </footer>
-
             <!-- <p id="stat"></p>
             <p id="statdesc"></p>
             <p id="statdesc2"></p>			
@@ -93,6 +87,7 @@
         <p>Monstrous: Too many to list.</p> -->
             <div>
                 <p id="helperInfo"></p>
+</p>
             </div>
 
             <footer>
@@ -107,7 +102,7 @@
         <script>
             // races();
             // init()
-            initPageInfo("race", parseInt(localStorage.getItem("raceState")));
+            initPageInfo("race", 0);
 
         </script>
 

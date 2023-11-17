@@ -1,13 +1,12 @@
 <!doctype html>
 <html>
-<script src="../js/characterSheet.js"></script>
-<script src="../js/listeners.js"></script>
-<script src="../js/characterUtils.js"></script>
-<script src="../js/main.js"></script>
-<script type="module" src="../js/d20Logo.js"></script>
-<!-- <script src="../js/api.js"></script> -->
+    <script src="../js/characterSheet.js"></script>
+    <script src="../js/listeners.js"></script>
+    <script src="../js/characterUtils.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/api.js"></script>
 <script>
-    localStorage.setItem("currentRef", "../html/race.html")
+
     var character; // global scope
 
     // Initialize the character object, all remaining script calls should reference this object.
@@ -24,25 +23,21 @@
     <meta name="keywords" content="html tutorial template">
     <link rel="stylesheet" href="../css/builderstyle.css">
 
-    <title>Race</title>
+    <title>Class</title>
 </head>
 
 <body>
-    <h1>Wiz-Rad!
-        <div style="display:inline;">
-            <canvas class="webgl"></canvas>
-        </div>
-    </h1>
+    <h1>Wiz-Rad!</h1>
 
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab">
                 <a href="./gettingstarted.html">Getting Started</a>
             </div>
-            <div class="tab current">
+            <div class="tab">
                 <a href="./race.html">Race</a>
             </div>
-            <div class="tab">
+            <div class="tab current">
                 <a href="./class.html">Class</a>
             </div>
             <div class="tab">
@@ -60,7 +55,7 @@
     <!--Container for 2-column layout-->
     <div class="container">
         <div class="column left" id="content">
-            <p id="title">Race</p>
+            <p id="title">Class</p>
             <!-- Add a brief race explanation -->
             <div id="explainer">
             </div>
@@ -71,20 +66,6 @@
             <div class="response" id="response">
                 <p id="responseTitle"></p>
             </div>
-            <footer id="foot">
-                <div id="continueBtn">
-
-                </div>
-            </footer>
-
-            <!-- <p id="stat"></p>
-            <p id="statdesc"></p>
-            <p id="statdesc2"></p>			
-            <p id="statdesc3"></p>
-            <p id="statdesc4"></p>			
-            <p id="statdesc5"></p>			
-            <p id="statdesc6"></p>	
-			<p id="statdesc7"></p>	 -->
         </div>
 
         <div class="column right">
@@ -92,14 +73,14 @@
         <p>Exotic: Too many to list.</p>
         <p>Monstrous: Too many to list.</p> -->
             <div>
-                <p id="helperInfo"></p>
+                <p id="helperInfo">help goes here</p>
             </div>
 
             <footer>
                 <button onclick="window.location.href = 'charsheet.html';">
                     Character Sheet
                 </button>
-                <button onclick="init(); location.reload()">
+                <button onclick="init()">
                     Reset
                 </button>
             </footer>
@@ -107,19 +88,10 @@
         <script>
             // races();
             // init()
-            initPageInfo("race", parseInt(localStorage.getItem("raceState")));
+            initPageInfo("class", 0);
 
         </script>
-
     </div>
-    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
-        }
-    </script>
 </body>
 
 </html>
