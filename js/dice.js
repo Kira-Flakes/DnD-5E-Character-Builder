@@ -13,6 +13,7 @@ let divSize = document.getElementById('content');
 let maxWidth = divSize.width
 let divFitHeight = .5
 const walls = [];
+const scores = [];
 
 
 
@@ -326,13 +327,41 @@ function addDiceEvents(dice) {
     });
 }
 
+
+
 function showRollResults(score) {
     if (scoreResult.innerHTML === '') {
-        scoreResult.innerHTML += score;
+        scores.push(score)
+        // scoreResult.innerHTML += score;
     } else {
-        scoreResult.innerHTML += ('+' + score);
+        scores.push(score)
+        // scoreResult.innerHTML += ('+' + score);
+    }
+    if (scores.length >= 4) {
+        scoreResult.innerHTML = sumOfThreeLargest(scores)
+        // while (scores.length > 0) {
+        //     scores.pop();
+        //   }
     }
 }
+
+function sumOfThreeLargest(arr) {
+    // Sort the array in descending order
+    console.log("Score:" + scores)
+    arr.sort((a, b) => b - a);
+  
+    // Check if the first two numbers are the same (tied for the lowest)
+    if (arr[0] === arr[1]) {
+      // Remove one of the tied lowest numbers
+      arr.splice(2, 1);
+    }
+    
+    // Calculate and return the sum of the three largest numbers
+    return arr[0] + arr[1] + arr[2];
+  }
+  
+ 
+  
 
 function render() {
     physicsWorld.fixedStep();
@@ -354,6 +383,9 @@ function updateSceneSize() {
 
 function throwDice() {
     scoreResult.innerHTML = '';
+    while (scores.length > 0) {
+        scores.pop();
+      }
 
 
     diceArray.forEach((d, dIdx) => {
