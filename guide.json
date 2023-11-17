@@ -699,6 +699,10 @@
                 "Alice",
                 "Emily",
                 "Sophia"
+            ],
+            "lang": [
+                "Common",
+                "->pick1"
             ]
         },
         "Elf": {
@@ -764,7 +768,8 @@
                 "Vadania",
                 "Valanthe",
                 "Xanaphia"
-            ]
+            ],
+            "lang": ["Common","Elvish"]
         },
         "Dwarf": {
             "maleNames": [
@@ -823,7 +828,8 @@
                 "Torbera",
                 "Torgga",
                 "Vistra"
-            ]
+            ],
+            "lang":["Common","Dwarvish"]
         },
         "Halfling": {
             "maleNames": [
@@ -864,6 +870,10 @@
                 "Trym",
                 "Vani",
                 "Verna"
+            ],
+            "lang": [
+                "Common",
+                "Halfling"
             ]
         },
         "Dragonborn": {
@@ -904,6 +914,10 @@
                 "Surina",
                 "Thava",
                 "Uadjit"
+            ],
+            "lang": [
+                "Draconic",
+                "Common"
             ]
         },
         "Gnome": {
@@ -955,7 +969,8 @@
                 "Tana",
                 "Waywocket",
                 "Zanna"
-            ]
+            ],
+            "lang":["Common","Gnomish"]
         },
         "Half-Elf": {
             "maleNames": [
@@ -967,7 +982,8 @@
                 "Lirael",
                 "Elara",
                 "Sariel"
-            ]
+            ],
+            "lang":["Common","Elvish"]
         },
         "Half-Orc": {
             "maleNames": [
@@ -998,7 +1014,8 @@
                 "Vola",
                 "Volen",
                 "Yevelda"
-            ]
+            ],
+            "lang":["Common","Orc"]
         },
         "Tiefling": {
             "maleNames": [
@@ -1031,7 +1048,8 @@
                 "Orianna",
                 "Phelaia",
                 "Rieta"
-            ]
+            ],
+            "lang":["Common","Infernal"]
         }
     },
     "Acolyte": {
@@ -1078,7 +1096,7 @@
     },
     "Criminal": {
         "Description": "You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld. You're far closer than most people to the world of murder, theft, and violence that pervades the underbelly of civilization, and you have survived up to this point by flouting the rules and regulations of society.",
-        "Skills and Proficiencies": [
+        "Skills Proficiencies": [
             "Deception",
             "Stealth"
         ],

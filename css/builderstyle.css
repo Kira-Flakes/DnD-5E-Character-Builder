@@ -470,3 +470,8 @@ img {
     font-size: 80%;
     margin: 2px;
 }
+
+#realmOption {
+    display: grid;
+    
+}

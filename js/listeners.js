@@ -30,6 +30,35 @@ fetch('/guide.json')
         console.error('Error loading JSON:', error);
     });
 
+
+function init() {
+
+    // initialize localStorage values
+    localStorage.clear()
+    // races = "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0";
+    races = "Dwarf,Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc,Halfling,Gnome";
+    classes = "Barbarian,Bard,Cleric,Druid,Fighter,Monk,Paladin,Ranger,Rogue,Sorcerer,Warlock,Wizard"
+    localStorage.setItem("$race", races); // working set
+    localStorage.setItem("%race", races);
+    localStorage.setItem("class", classes)
+    localStorage.setItem("$class", classes)
+    localStorage.setItem("_race", '')
+    localStorage.setItem('_subRace', '')
+
+    localStorage.setItem('currentRef', '../html/gettingStarted.html');
+    // States are directly associated with the questions. 
+    // Example: chainging race to state 2 will mean question 2 of the state will be asked.
+    localStorage.setItem("state", '0'); // saves the state of the program, set to zero
+    localStorage.setItem("raceState", "0");
+    localStorage.setItem("classState", "0");
+    localStorage.setItem("raceIter", "0")
+
+    localStorage.setItem("gettingstartedState", "0");
+    localStorage.setItem("init", '1')
+    localStorage.setItem("possibleAlignments", "")
+
+}   // end init
+
 function getAllDetails() {
     // Use the fetch API to retrieve the JSON data
     fetch('/guide.json')
@@ -47,6 +76,7 @@ function getAllDetails() {
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
+    // init()
     const welcomeTxt = document.getElementById('welcomeMessage');
     const info = document.getElementById('info')
     fetch('/guide.json')
@@ -802,7 +832,7 @@ function pickSubrace(race) {
             // console.log('Json test: ' + data['race'].subRace[race])
             // if no subrace is to be chosen.
             console.log("Value here: " + data['race'].subRace[race])
-            if (data['race'].subRace[race] === 'null') {
+            if (data['race'].subRace[race] === undefined) {
                 localStorage.setItem("_race", race)
                 localStorage.setItem('_subRace', '')
 
@@ -818,6 +848,7 @@ function pickSubrace(race) {
             })
             opts = data['race'].subRace[race]
             for (const o in opts) {
+                // console.log("o: "+o)
                 btn = document.createElement('button')
                 btn.setAttribute('id', o)
                 btn.innerText = o
@@ -1070,13 +1101,20 @@ function loadHelperInfoFromMisc(text) {
 }
 
 function beginBackground(specialCaseHandled = false) {
-
-    // add a boo param, if true then skip special background case
-    if (!specialCaseHandled) checkForSpecialBackgroundCase();
-    else {
-        chooseAlignment()
+    var state = localStorage.getItem("backgroundState")
+    var sInt = parseInt(state)
+    console.log("state: " + state)
+    if (state != null || sInt == 1) {
+        console.log("initting background qs")
+        if (sInt == 2) backgroundQuestions()
+        if (sInt == 3) characterName()
     }
-
+    else {
+        if (!specialCaseHandled) checkForSpecialBackgroundCase();
+        else {
+            chooseAlignment()
+        }
+    }
 
 }
 
@@ -1277,7 +1315,7 @@ function chooseAlignment() {
                 const ansBtn = appendToContent('button')
                 ansBtn.innerText = ans
                 ansBtn.onclick = function () {
-                    console.log("qans: "+quest1.ans[ans][0])
+                    console.log("qans: " + quest1.ans[ans][0])
                     localStorage.setItem("alignAxis1", quest1.ans[ans][0])
                     alignQuestion2(data)
                 }
@@ -1338,7 +1376,7 @@ function alignQuestion2(data) {
             localStorage.setItem("alignAxis2", quest2.ans[ans][0])
             // goto to next step
             // chooseDevineDomain()
-            localStorage.setItem('_alignment',localStorage.getItem('alignAxis1') + " "+ localStorage.getItem('alignAxis2'))
+            localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
             alignDebrief()
         }
     }
@@ -1346,14 +1384,15 @@ function alignQuestion2(data) {
 
 function alignDebrief() {
     content = clearContentAndGet()
-    appendToContent('div','standardDiv').innerHTML = highlightTextWithMouseover("You have been aligned with "+localStorage.getItem('_alignment')+ ".",allDetails)
+    appendToContent('div', 'standardDiv').innerHTML = highlightTextWithMouseover("You have been aligned with " + localStorage.getItem('_alignment') + ".", allDetails)
     cont = appendToContent('button')
     cont.innerText = 'Continue'
     cont.onclick = function () {
         backgroundQuestions()
+        localStorage.setItem("backgroundState","2")
     }
 
-    
+
 }
 
 function chooseDiety(alignment) {
@@ -1441,9 +1480,13 @@ function characterName() {
     appendToContent('h2').innerText = "Character Name"
     appendToContent('div', 'standardDiv').innerHTML = "It's time to choose what you would like to be called throughout your campaign."
 
-    appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" onclick="storeKeyFromInput(\'_name\')" role="button">Submit</button>'
+    appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" id="continueButton" role="button">Submit</button>'
     appendToContent('div').innerHTML = "You can choose any name you please, but if you do want to pick a standard name for a " + localStorage.getItem("_race") + ", these are some examples."
-
+    cBtn = document.getElementById('continueButton')
+    cBtn.onclick = function () {
+        storeKeyFromInput('_name')
+        window.location.href = '../html/equipment.html'
+    }
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -1496,13 +1539,12 @@ function createNameTable(race, maleValues, femaleValues) {
 }
 
 function backgroundQuestions(questionNum = 1) {
+    console.log("In bgq")
     content = clearContentAndGet()
     if (questionNum == 1) {
         explainer = appendToContent('div', 'standardDiv')
-        explainer.innerHTML = highlightTextWithMouseover(
-            "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background.",
-            allDetails
-        )
+        explainer.innerHTML = "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background."
+        
         // explainer2 = appendToContent('div','standardDiv')
         // explainer2.innerHTML = highlightTextWithMouseover(
         //     "",
@@ -1551,7 +1593,7 @@ function loadAllBackgroundInfo(choice) {
         .then(response => response.json())
         .then(data => {
             const bgDiv = document.createElement('div')
-            bgDiv.setAttribute('id','backgroundInfo')
+            bgDiv.setAttribute('id', 'backgroundInfo')
             const title = document.createElement('h2')
             title.innerText = choice
             bgDiv.appendChild(title)
@@ -1562,33 +1604,34 @@ function loadAllBackgroundInfo(choice) {
                 const label = document.createElement('h3')
                 label.innerText = el
                 const info = document.createElement('p')
-                if ( bgData[el] instanceof Object) {
-                    info.setAttribute('id','innerInfo')
+                if (bgData[el] instanceof Object) {
+                    info.setAttribute('id', 'innerInfo')
                     console.log("Object found")
                     for (var thing in bgData[el]) {
                         const tng = document.createElement('p')
-                        tng.innerText = bgData[el][thing]
+                        tng.innerHTML = highlightTextWithMouseover(bgData[el][thing], allDetails)
                         info.appendChild(tng)
                     }
                 }
                 else {
-                    if (el == 'Description' || el == 'Suggested Characteristics') {
+                    if (el == 'Description' || el == 'Suggested Characteristics' || el == 'Details') {
                         info.innerHTML = bgData[el]
                     }
                     else {
-                        info.innerHTML = highlightTextWithMouseover(bgData[el],allDetails)
+                        info.innerHTML = highlightTextWithMouseover(bgData[el], allDetails)
                     }
                 }
-                
+
                 bgDiv.appendChild(label)
                 bgDiv.appendChild(info)
             }
             select = document.createElement('button')
-            select.innerText = "Select "+choice
+            select.innerText = "Select " + choice
             select.onclick = function () {
-                localStorage.setItem("_background",choice)
+                localStorage.setItem("_background", choice)
                 // move to next sequence
-                console.log("Chose "+choice+" as background")
+                console.log("Chose " + choice + " as background")
+                localStorage.setItem("backgroundState","3")
                 characterName()
             }
             bgDiv.appendChild(select)
@@ -1598,7 +1641,12 @@ function loadAllBackgroundInfo(choice) {
             console.error('Error:', error);
         });
 
-    
+
+}
+
+function pickLanguages() {
+    content = clearContentAndGet()
+
 }
 
 
@@ -1621,6 +1669,11 @@ function newContinueButton(append = false) {
     res.setAttribute('id', 'continueBtn')
     if (append) document.getElementById('content').appendChild(res)
     return res
+}
+
+function appendToCharacterSheet(box, item) {
+    val = localStorage.getItem('_' + box)
+    localStorage.setItem('_' + box, val + '\n' + item)
 }
 
 
