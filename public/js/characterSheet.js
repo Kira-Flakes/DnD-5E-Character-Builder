@@ -60,7 +60,7 @@ class characterSheet {
     this._intellegenceST = 0;
     this._charismaST = 0;
     this._acrobatics = 0;
-    this._animalHandling = 0;
+    this._animalhandling = 0;
     this._arcana = 0;
     this._athletics = 0;
     this._deception = 0;
@@ -74,7 +74,7 @@ class characterSheet {
     this._performance = 0;
     this._persuasion = 0;
     this._religion = 0;
-    this._sleightOfHand = 0;
+    this._sleightofhand = 0;
     this._stealth = 0;
     this._survival = 0;
     this._passiveWisdom = 0;
@@ -391,12 +391,12 @@ class characterSheet {
     this._acrobatics = value;
   }
 
-  // Getter and Setter for _animalHandling
+  // Getter and Setter for _animalhandling
   get animalHandling() {
-    return this._animalHandling;
+    return this._animalhandling;
   }
   set animalHandling(value) {
-    this._animalHandling = value;
+    this._animalhandling = value;
   }
 
   // Getter and Setter for _arcana
@@ -503,12 +503,12 @@ class characterSheet {
     this._religion = value;
   }
 
-  // Getter and Setter for _sleightOfHand
+  // Getter and Setter for _sleightofhand
   get sleightOfHand() {
-    return this._sleightOfHand;
+    return this._sleightofhand;
   }
   set sleightOfHand(value) {
-    this._sleightOfHand = value;
+    this._sleightofhand = value;
   }
 
   // Getter and Setter for _stealth
@@ -762,7 +762,7 @@ const HalfOrcPreset = new characterSheet()
 const ForestGnomePreset = new characterSheet()
 const HumanPreset = new characterSheet()
 
-const allPresets = [DwarfPreset,DarkElfPreset,HalfOrcPreset,ForestGnomePreset,HumanPreset]
+const allPresets = [DwarfPreset, DarkElfPreset, HalfOrcPreset, ForestGnomePreset, HumanPreset]
 
 
 DwarfPreset._name = "Ulfgar Rumnaheim"
@@ -793,7 +793,7 @@ DwarfPreset._wisdomST = '5';
 DwarfPreset._intellegenceST = '-1';
 DwarfPreset._charismaST = '3';
 DwarfPreset._acrobatics = '1';
-DwarfPreset._animalHandling = '3';
+DwarfPreset._animalhandling = '3';
 DwarfPreset._arcana = '-1';
 DwarfPreset._athletics = '0';
 DwarfPreset._deception = '1';
@@ -807,7 +807,7 @@ DwarfPreset._perception = '3';
 DwarfPreset._performance = '1';
 DwarfPreset._persuasion = '1';
 DwarfPreset._religion = '1';
-DwarfPreset._sleightOfHand = '1';
+DwarfPreset._sleightofhand = '1';
 DwarfPreset._stealth = '1';
 DwarfPreset._survival = '3';
 DwarfPreset._passiveWisdom = '13';
@@ -869,7 +869,7 @@ DarkElfPreset._wisdomST = '1';
 DarkElfPreset._intellegenceST = '2';
 DarkElfPreset._charismaST = '2';
 DarkElfPreset._acrobatics = '5';
-DarkElfPreset._animalHandling = '1';
+DarkElfPreset._animalhandling = '1';
 DarkElfPreset._arcana = '0';
 DarkElfPreset._athletics = '0';
 DarkElfPreset._deception = '6';
@@ -883,7 +883,7 @@ DarkElfPreset._perception = '3';
 DarkElfPreset._performance = '2';
 DarkElfPreset._persuasion = '6';
 DarkElfPreset._religion = '0';
-DarkElfPreset._sleightOfHand = '5';
+DarkElfPreset._sleightofhand = '5';
 DarkElfPreset._stealth = '5';
 DarkElfPreset._survival = '1';
 DarkElfPreset._passiveWisdom = '13';
@@ -945,7 +945,7 @@ HalfOrcPreset._wisdomST = '0';
 HalfOrcPreset._intellegenceST = '-1';
 HalfOrcPreset._charismaST = '0';
 HalfOrcPreset._acrobatics = '2';
-HalfOrcPreset._animalHandling = '0';
+HalfOrcPreset._animalhandling = '0';
 HalfOrcPreset._arcana = '-1';
 HalfOrcPreset._athletics = '5';
 HalfOrcPreset._deception = '0';
@@ -959,7 +959,7 @@ HalfOrcPreset._perception = '2';
 HalfOrcPreset._performance = '0';
 HalfOrcPreset._persuasion = '0';
 HalfOrcPreset._religion = '-1';
-HalfOrcPreset._sleightOfHand = '2';
+HalfOrcPreset._sleightofhand = '2';
 HalfOrcPreset._stealth = '2';
 HalfOrcPreset._survival = '2';
 HalfOrcPreset._passiveWisdom = '12';
@@ -1021,7 +1021,7 @@ ForestGnomePreset._wisdomST = '4';
 ForestGnomePreset._intellegenceST = '5';
 ForestGnomePreset._charismaST = '1';
 ForestGnomePreset._acrobatics = '2';
-ForestGnomePreset._animalHandling = '2';
+ForestGnomePreset._animalhandling = '2';
 ForestGnomePreset._arcana = '5';
 ForestGnomePreset._athletics = '-1';
 ForestGnomePreset._deception = '1';
@@ -1035,7 +1035,7 @@ ForestGnomePreset._perception = '2';
 ForestGnomePreset._performance = '1';
 ForestGnomePreset._persuasion = '1';
 ForestGnomePreset._religion = '3';
-ForestGnomePreset._sleightOfHand = '2';
+ForestGnomePreset._sleightofhand = '2';
 ForestGnomePreset._stealth = '2';
 ForestGnomePreset._survival = '2';
 ForestGnomePreset._passiveWisdom = '12';
@@ -1098,7 +1098,7 @@ HumanPreset._wisdomST = '1';
 HumanPreset._intellegenceST = '-1';
 HumanPreset._charismaST = '5';
 HumanPreset._acrobatics = '4';
-HumanPreset._animalHandling = '1';
+HumanPreset._animalhandling = '1';
 HumanPreset._arcana = '-1';
 HumanPreset._athletics = '0';
 HumanPreset._deception = '3';
@@ -1112,7 +1112,7 @@ HumanPreset._perception = '-1';
 HumanPreset._performance = '5';
 HumanPreset._persuasion = '5';
 HumanPreset._religion = '-1';
-HumanPreset._sleightOfHand = '2';
+HumanPreset._sleightofhand = '2';
 HumanPreset._stealth = '2';
 HumanPreset._survival = '1';
 HumanPreset._passiveWisdom = '11';
