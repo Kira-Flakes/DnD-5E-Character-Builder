@@ -708,7 +708,7 @@ class characterSheet {
     console.log("Updating character sheet from localStorage")
     var keys = character.keyNames(); // grabs all keys associated with a character sheet
     // var unkowns = "Variabls not assigned: ";
-    console.log("KEYS: " + keys)
+    // console.log("KEYS: " + keys)
     for (const key in keys) { // set all attributes on the character sheet based on the keys.
       var flag = 0
       if (localStorage.getItem(keys[key]) != null) {// if it's in local storage, set it on the html sheet.

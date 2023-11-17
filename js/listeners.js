@@ -1,3 +1,8 @@
+// TODO:
+// 1. Fix dieties to present multiple options
+// 2 fix highlight text with mousover. Just rewrite it.
+
+
 // import { API } from './api.js';
 // Scipts that allow for us to listen to html pages and update the pages based on 
 // user actions.
@@ -7,8 +12,10 @@
 
 // const { nextTick } = require("process");
 const divCache = []
-let allDetails
+var allDetails
 let racePrev = 0
+
+const sd = "standardDiv"
 
 
 // Use the fetch API to retrieve the JSON data
@@ -17,14 +24,59 @@ fetch('/guide.json')
     .then(data => {
         // Data is the parsed JSON object
         allDetails = Object.keys(data.misc);
-        console.log(allDetails);
+        console.log(allDetails.type);
     })
     .catch(error => {
         console.error('Error loading JSON:', error);
     });
 
+
+function init() {
+
+    // initialize localStorage values
+    localStorage.clear()
+    // races = "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0";
+    races = "Dwarf,Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc,Halfling,Gnome";
+    classes = "Barbarian,Bard,Cleric,Druid,Fighter,Monk,Paladin,Ranger,Rogue,Sorcerer,Warlock,Wizard"
+    localStorage.setItem("$race", races); // working set
+    localStorage.setItem("%race", races);
+    localStorage.setItem("class", classes)
+    localStorage.setItem("$class", classes)
+    localStorage.setItem("_race", '')
+    localStorage.setItem('_subRace', '')
+
+    localStorage.setItem('currentRef', '../html/gettingStarted.html');
+    // States are directly associated with the questions. 
+    // Example: chainging race to state 2 will mean question 2 of the state will be asked.
+    localStorage.setItem("state", '0'); // saves the state of the program, set to zero
+    localStorage.setItem("raceState", "0");
+    localStorage.setItem("classState", "0");
+    localStorage.setItem("raceIter", "0")
+
+    localStorage.setItem("gettingstartedState", "0");
+    localStorage.setItem("init", '1')
+    localStorage.setItem("possibleAlignments", "")
+
+}   // end init
+
+function getAllDetails() {
+    // Use the fetch API to retrieve the JSON data
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            // Data is the parsed JSON object
+            res = Object.keys(data.misc);
+            console.log("in getAllDetails: " + res);
+            return res
+        })
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+        });
+}
+
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
+    // init()
     const welcomeTxt = document.getElementById('welcomeMessage');
     const info = document.getElementById('info')
     fetch('/guide.json')
@@ -39,7 +91,9 @@ function setWelcomeInfo(page) {
         });
 }
 
+
 function presentPreset() {
+    clearHelperInfo()
     localStorage.setItem('gettingstartedState', '1')
     colLeft = document.getElementById("colLeft")
     // console.log("Content:::: "+document.getElementById('_playername').value)
@@ -195,6 +249,7 @@ function loadExplainer(page, iter) {
 
 }
 
+// Given a div, remove all children.
 function clearDiv(div) {
     while (div.firstChild) { // delete all buttons, since we are done with this question
         div.removeChild(div.firstChild)
@@ -206,14 +261,14 @@ function setAlignmentInfo() {
     const alignButtons = Array.from(document.getElementsByName('_alignment'));
     console.log("Alignbuttons: " + alignButtons);
 
-    for (const b of alignButtons) {
-        // console.log("SFUSDNF");
-        console.log(b);
-    }
+    // for (const b of alignButtons) {
+    //     // console.log("SFUSDNF");
+    //     console.log(b);
+    // }
     alignButtons.forEach((button, index) => {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
-            button.style.backgroundColor = 'red'; // Change background color, for example
+            // button.style.backgroundColor = 'rgb(119, 45, 45)'; // Change background color, for example
             fetch('/guide.json')
                 .then(response => response.json())
                 .then(data => {
@@ -259,9 +314,9 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function loadPageInfo() {
+// function loadPageInfo() {
 
-}
+// }
 
 function initPageInfo(page, iter) {
     // const continueButton = document.createElement('button')
@@ -276,7 +331,7 @@ function initPageInfo(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
+            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
@@ -316,6 +371,13 @@ function handleSpecialCase(page) {
                 loadResponse(page, 'subRace')
             }
             break;
+        case 'class':
+            console.log("In class case\n")
+            loadResponse(page)
+        // conclusion('class');
+        // case 'background':
+        //     console.log('In background case');
+        //     loadResponse(page);
         default: return
     }
 }
@@ -387,14 +449,14 @@ function loadQuestion(page) {
 
                 document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-                console.log("ANSWERS: " + answers[ans][2])
+                // console.log("ANSWERS: " + answers[ans][2])
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
                     // racePrev = localStorage.getItem(page+"State")
-                    console.log("RacePrev: " + racePrev)
+                    // console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
@@ -415,6 +477,7 @@ function loadQuestion(page) {
                 document.getElementById('backbutton').remove()
                 if (questionJSON.back == 'beginning') {
                     // localStorage.setItem("raceState","1");
+                    alterState(page, "0")
                     loadExplainer(page, 0)
                 }
                 else {
@@ -432,7 +495,11 @@ function loadQuestion(page) {
 }
 
 function nextQuestion(previousAnswer) {
-    // console.log("PREV ANS: "+previousAnswer[2])
+    console.log("PREV ANS: " + previousAnswer[2])
+    if (previousAnswer[2] == '->more') {
+        console.log("In more case")
+        // TODO: Add more logic here
+    }
     return parseInt(previousAnswer[2])
 }
 
@@ -528,7 +595,7 @@ function checkAnswerViability(title, currentPage, qNumber) {
 function loadHelperInfoFromButton(button, jsonData) {
     button.addEventListener('mouseenter', function () {
         // Code to run when the button is hovered over
-        button.style.backgroundColor = 'red'; // Change background color, for example
+        // button.style.backgroundColor = 'rgb(119, 45, 45)'; // Change background color, for example
         fetch('/guide.json')
             .then(response => response.json())
             .then(data => {
@@ -587,57 +654,165 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Choose',
+                explanation: 'Your answers indicate that this would be a good fit for your playstyle.',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
             let options = set.split(',')
-            for (const r in options) {
-                const choice = document.createElement('button');
-                const raceD = {}
-                raceD.id = options[r]
-                if (options[r].includes('Dragonborn')) {
-                    raceD.val = raceDiscreptionDiv('Dragonborn')
-                }
-                else {
-                    raceD.val = raceDiscreptionDiv(options[r])
-                }
-                divCache.push(raceD)
-                choice.setAttribute('id', 'choiceButton')
-                choice.innerText = options[r]
-                choice.onclick = function () {
-                    localStorage.setItem('_' + page, options[r])
-                    for (btn in tempButtons) { // delete all buttons, since we are done with this question
-                        document.getElementById('choiceButton').remove()
-                    }
-                    if (page == 'race') pickSubrace(options[r])
-
-                }; // set actions for the buttons
-                // button.addEventListener('mouseenter', function () {
-                choice.addEventListener('mouseenter', function () {
-                    console.log("MOUSEDOVER")
-                    clearHelperInfo()
-                    document.getElementById('helperInfo').appendChild(divCache[r].val)
-                })
-                tempButtons.push(choice)
-                // div.appendChild(raceDiscreptionDiv(options[r]))
-                div.appendChild(choice)
-                // TODO: add listeners for mousover and 
+            switch (page) {
+                case "race":
+                    raceChoices(options, tempButtons, div, page);
+                    break;
+                case "class":
+                    classChoices(options, tempButtons, div, page);
+                    break;
+                default:
+                    console.log("Case not handled in giveChoices()")
             }
-            // Add reset logic here if needed.
-            // backBtn = document.createElement('button')
-            // backBtn.setAttribute('id','backButton')
-            // backBtn.onclick = function () {
-
-            // }
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function raceChoices() {
+function raceChoices(options, tempButtons, div, page) {
+    console.log("In race choices")
+    for (const r in options) {
+        const choice = document.createElement('button');
+        const raceD = {}
+        raceD.id = options[r]
 
+        if (options[r].includes('Dragonborn')) {
+            raceD.val = raceDiscreptionDiv('Dragonborn')
+        }
+        else {
+            raceD.val = raceDiscreptionDiv(options[r])
+        }
+        console.log("divcache: " + raceD.val)
+        divCache.push(raceD)
+        choice.setAttribute('id', 'choiceButton')
+        choice.innerText = options[r]
+        choice.onclick = function () {
+            if (options[r].includes('Dragonborn')) {
+                console.log("optionsR: " + options[r])
+                localStorage.setItem('_subrace', options[r])
+                localStorage.setItem('_race', 'Dragonborn')
+                loadLanguages('Dragonborn')
+                loadSpeed('Dragonborn')
+            }
+            else {
+                console.log("optionsR: " + options[r])
+                localStorage.setItem('_' + page, options[r])
+                loadLanguages(options[r])
+                loadSpeed(options[r])
+            }
+
+            for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                document.getElementById('choiceButton').remove()
+            }
+            if (page == 'race') pickSubrace(options[r])
+
+        }; // set actions for the buttons
+        // button.addEventListener('mouseenter', function () {
+        choice.addEventListener('mouseenter', function () {
+            console.log("MOUSEDOVER")
+            clearHelperInfo()
+            document.getElementById('helperInfo').appendChild(divCache[r].val)
+        })
+        tempButtons.push(choice)
+        div.appendChild(choice)
+        // TODO: add listeners for mousover and 
+    }
+}
+
+function loadLanguages(race) {
+    console.log("Loading languages for " + race)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var languageString = "Languages: "
+            languages = data.races[race].lang
+            for (const lan in languages) {
+                languageString = languageString + languages[lan] + " "
+            }
+            appendToCharacterSheet('_otherproficiencieslanguages', languageString)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function loadSpeed(race) {
+    console.log("Loading speed for " + race)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            spd = data.races[race].speed
+            appendToCharacterSheet('_speed', spd)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function appendToCharacterSheet(item, string) {
+    i = localStorage.getItem(item)
+    if (i == null) {
+        localStorage.setItem(item, string)
+        return
+    }
+    i = i + string
+    console.log(i)
+    localStorage.setItem(item, i)
+}
+
+function classChoices(options, tempButtons, div, page) {
+    // while (divCache.length > 0) {
+    //     divCache.pop(); // Remove the last element
+    // }
+    for (const c in options) {
+        const choice = document.createElement('button');
+        classD = {}
+        classD.id = options[c]
+        // console.log("opts: " + c)
+
+        classD.val = classDescriptionDiv(options[c])
+
+        // classD.val = DiscreptionDiv(options[c])
+        // console.log("classD.val.innerHtml:" + classD.val.innerHTML)
+
+        divCache.push(classD)
+        // console.log("DIVCHACHA: "+divCache)
+        // console.log("divcache[0]: " + divCache[0].val.innerHTML)
+        // console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
+        choice.setAttribute('id', 'choiceButton')
+        choice.innerText = options[c]
+        choice.onclick = function () {
+            localStorage.setItem('_' + page, options[c])
+            for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                document.getElementById('choiceButton').remove()
+            }
+            // Set the class
+            // console.log("optsc " +options[c])
+            setClass(options[c]);
+            conclusion(page);
+
+        }; // set actions for the buttons
+        // button.addEventListener('mouseenter', function () {
+        choice.addEventListener('mouseenter', function () {
+            console.log("current Class" + divCache[c])
+            clearHelperInfo()
+            console.log("divCache[" + c + "]: " + divCache[c].val.innerHTML)
+            document.getElementById('helperInfo').appendChild(divCache[c].val)
+        })
+        tempButtons.push(choice)
+        // div.appendChild(raceDiscreptionDiv(options[r]))
+        div.appendChild(choice)
+    }
+}
+
+function setClass(_class) {
+    localStorage.setItem("_classlevel", _class + " 1");
 }
 
 function clearHelperInfo() {
@@ -665,6 +840,32 @@ function raceDiscreptionDiv(race) {
 
 }
 
+function classDescriptionDiv(_class) {
+    const res = document.createElement('div')
+    res.setAttribute('id', 'raceDesc' + _class)
+    console.log("class: " + _class)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            info = data.class.classes[_class]
+            // console.log("Info " + info.desc)
+            res.innerHTML = '<h2>' + _class + '</h2>' +
+                '<div>' + info.desc + '<div>' +
+                '<div>Primary Ability: ' + info.primaryAbility + '<div>' +
+                '<div>Saving Throws: ' + info.savingThrows + '<div>' +
+                '<div>Armor & Weapon Proficiencies: ' + info.ArmorWeaponProf + '<div>', allDetails
+            // console.log("RESINNER: " + res.innerHTML)
+            return res
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    // res = classes(_class.toLowerCase());
+
+    return res
+}
+
 function pickSubrace(race) {
     console.log("Race is " + race)
     const tempButtonsId = []
@@ -674,7 +875,7 @@ function pickSubrace(race) {
             // console.log('Json test: ' + data['race'].subRace[race])
             // if no subrace is to be chosen.
             console.log("Value here: " + data['race'].subRace[race])
-            if (data['race'].subRace[race] === 'null') {
+            if (data['race'].subRace[race] === undefined) {
                 localStorage.setItem("_race", race)
                 localStorage.setItem('_subRace', '')
 
@@ -690,6 +891,7 @@ function pickSubrace(race) {
             })
             opts = data['race'].subRace[race]
             for (const o in opts) {
+                // console.log("o: "+o)
                 btn = document.createElement('button')
                 btn.setAttribute('id', o)
                 btn.innerText = o
@@ -750,9 +952,12 @@ function continueToNextPage(currentPage, nextPage) {
     btn.innerText = "Continue"
     btn.onclick = function () {
         window.location.href = "../html/" + nextPage + ".html"
+        // for (c in divCache) {
+        //     divCache.pop()
+        // }
     }
     document.getElementById('content').appendChild(btn)
-    console.log("WHats up?")
+    // console.log("WHats up?")
 }
 
 function loadRaceCompletionDiv() {
@@ -881,20 +1086,20 @@ function getIntersection(set1, set2) {
 function alterState(topic, change) {
     var storageItem = topic + "State"
     // s = parseInt(localStorage.getItem(storageItem)) + change
-    console.log("Storage item: " + change)
+    // console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
-// function alterState(topic, change) {
-//     var storageItem = topic + "State"
-//     s = parseInt(localStorage.getItem(storageItem)) + change
-//     localStorage.setItem(storageItem, s)
-// }
+
 
 function highlightTextWithMouseover(inputString, textsToHighlight) {
+
+    console.log("Texts to highlight: " + textsToHighlight)
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
+
         const strEl = inputString.split("**")
         // console.log("STREL: " + strEl)
         const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
+        console.log(!Array.isArray(textsToHighlight))
         return newString;
     }
 
@@ -907,7 +1112,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     const newString = strEl[0] + localStorage.getItem("_") + strEl[strEl.length]
 
     textsToHighlight.forEach(textToHighlight => {
-        const regex = new RegExp(textToHighlight, 'g');
+        const regex = new RegExp(textToHighlight, 'gi');
         highlightedString = highlightedString.replace(regex, match => {
             if (!encounteredTexts.has(match)) {
                 encounteredTexts.add(match);
@@ -918,7 +1123,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
             return match; // Return the match without highlighting if it's encountered again
         });
     });
-
+    console.log("Highlighted String: " + highlightedString)
     return highlightedString;
 }
 
@@ -926,9 +1131,9 @@ function loadHelperInfoFromMisc(text) {
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            response = data["misc"][text]
+            response = data["misc"][text.toLowerCase()]
             document.getElementById('helperInfo').innerText = response
-            console.log(response)
+            // console.log(response)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -938,14 +1143,762 @@ function loadHelperInfoFromMisc(text) {
     document.getElementById('helperInfo').innerText = text
 }
 
-function test() {
-    console.log(backgrounds("Human"))
+function beginBackground(specialCaseHandled = false) {
+    var state = localStorage.getItem("backgroundState")
+    var sInt = parseInt(state)
+    console.log("state: " + state)
+    if (state != null || sInt == 1) {
+        console.log("initting background qs")
+        if (sInt == 2) backgroundQuestions()
+        if (sInt == 3) chooseIdeals()
+        if (sInt == 4) chooseBonds()
+        if (sInt == 5) chooseFlaws()
+        if (sInt == 6) choosePersonality()
+    }
+    else {
+        if (!specialCaseHandled) checkForSpecialBackgroundCase();
+        else {
+            chooseAlignment()
+        }
+    }
+
+}
+
+// Before we give the generic backround sequence, we need to handle special cases
+function checkForSpecialBackgroundCase() {
+    const cl = localStorage.getItem("_class")
+    // cleric case - dieties are tied to alignment
+    if (cl == "Cleric") {
+        console.log("Cleric background special case. Handling...")
+        initClericDieties();
+    }
+    else if (cl == 'Warlock') {
+        console.log("Warlock background special case. Handling...")
+        warlockDetails()
+    }
+
+    else {
+        beginBackground(true)
+    }
+
+}
+
+function warlockDetails() {
+    content = clearContentAndGet()
+    wlDetailDiv = appendToContent('div', 'standardDiv')
+    wlDetailDiv.innerHTML = highlightTextWithMouseover(
+        "Warlocks in D&D form pacts with powerful beings from other planes, resembling godlike entities. Patrons grant diverse powers and demand favors, with varying attitudes toward sharing knowledge or forming exclusive pacts. Warlocks sharing a patron can see each other as allies, siblings, or rivals, fostering unique relationships.", allDetails
+    )
+
+}
+
+function getRealms() {
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
+                }
+            });
+        });
 }
 
 
-function displayRaceDetails(race) {
+function initClericDieties() {
+    // main div
+    const contentDiv = document.getElementById('content')
+    clearDiv(contentDiv);
+    const dietyDiv = document.createElement('div');
+
+    const explainerDiv = document.createElement('div');
+    var explainer = "Since you've chosen cleric as your background, you need to pick which diety you follow.\n\nDo you happen to know which devine realm your campaign takes place in?";
+    explainerDiv.innerHTML = explainer;
+    dietyDiv.appendChild(explainerDiv);
+    contentDiv.appendChild(dietyDiv);
+
+    yesBtn = document.createElement('button');
+    noBtn = document.createElement('button');
+    yesBtn.innerText = "Yes"
+    noBtn.innerText = "No"
+
+    yesBtn.onclick = function () {
+        chooseRealm();
+    }
+    noBtn.onclick = function () {
+        localStorage.setItem('possibleAlignments', 'Lawful Good,Neutral Good,Chaotic Good,Lawful Neutral,True Neutral,Chaotic Neutral,Lawful Evil,Neutral Evil,Chaotic Evil')
+        chooseAlignment();
+    }
+
+    dietyDiv.appendChild(yesBtn);
+    dietyDiv.appendChild(noBtn);
 
 }
+
+function chooseRealm() {
+    content = document.getElementById('content');
+    clearDiv(content);
+    const realmChoicesExplainer = document.createElement('div')
+    realmChoicesExplainer.innerHTML = highlightTextWithMouseover("Please choose your devine realm:", allDetails)
+    content.appendChild(realmChoicesExplainer);
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
+                    for (const realm in uniqueCategories) {
+                        const realmOpt = document.createElement('button');
+                        realmOpt.setAttribute('id', 'realmOption')
+                        realmOpt.innerText = uniqueCategories[realm];
+                        content.appendChild(realmOpt)
+                        realmOpt.onclick = function () {
+                            // console.log("Setting realm to " + realmOpt.innerText)
+                            localStorage.setItem("realm", realmOpt.innerText)
+                            limitAlighment(realmOpt.innerText);
+                        }
+                    }
+                }
+            });
+        });
+}
+
+function limitAlighment(realm) {
+    // console.log(realm)
+    var filePath = '../misc/clericDieties.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const data = results.data;
+
+                    // Replace 'YourCategory' with the desired category
+                    const desiredCategory = 'YourCategory';
+
+                    // Filter data for the desired category
+                    const categoryData = data.filter(row => row['Category'] === realm);
+                    // Extract 'Order' and 'Morality' for each line in the category
+                    const orderAndMorality = categoryData.map(row => {
+                        return {
+                            Order: row['Order'],
+                            Morality: row['Morality']
+                        };
+                    });
+                    // console.log(orderAndMorality);
+                    limitAlighmentHelper(orderAndMorality);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching the CSV file:', error));
+}
+
+// compare alignments together, store the 'illegal' options in localstorage under
+// 
+function limitAlighmentHelper(options) {
+    var possibleAlignments = []
+
+    var lsValue = ""
+    for (var opt in options) {
+        console.log(options[opt])
+        var fullName = getFullAlighnmentName(options[opt])
+        if (possibleAlignments.indexOf(fullName) === -1) {
+            possibleAlignments.push(fullName);
+            lsValue = lsValue + fullName + ","
+        }
+    }
+    lsValue = lsValue.slice(0, -1);
+    console.log(lsValue)
+    localStorage.setItem("possibleAlignments", lsValue)
+
+    chooseAlignment()
+}
+
+function getFullAlighnmentName(AlignAcronymObject) {
+    var al1
+    var al2
+    if (AlignAcronymObject.Order == 'L') al1 = 'Lawful '
+    if (AlignAcronymObject.Order == 'N') al1 = 'Neutral '
+    if (AlignAcronymObject.Order == 'C') al1 = 'Chaotic '
+    if (AlignAcronymObject.Morality == 'G') al2 = 'Good'
+    if (AlignAcronymObject.Morality == 'N') al2 = 'Neutral'
+    if (AlignAcronymObject.Morality == 'E') al2 = 'Evil'
+    var result = al1 + al2
+    if (result == 'Neutral Neutral') {
+        return "True Neutral"
+    }
+    else return result
+}
+
+// </p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)\">Lawful Neutral</button><button name=\"_alignment\" value=\"True Neutral\" onclick=\"character.setAlignment(value)\">True Neutral</button><button name=\"_alignment\" value=\"Chaotic Neutral\" onclick=\"character.setAlignment(value)\">Chaotic Neutral</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Evil\" onclick=\"character.setAlignment(value)\">Lawful Evil</button><button name=\"_alignment\" value=\"Neutral Evil\" onclick=\"character.setAlignment(value)\">Neutral Evil</button><button name=\"_alignment\" value=\"Chaotic Evil\" onclick=\"character.setAlignment(value)\">Chaotic Evil</button></div>"
+
+function chooseAlignment() {
+    content = document.getElementById("content")
+    console.log("allDetails: " + allDetails)
+    clearDiv(content)
+    appendToContent('div', "standardDiv").innerHTML = "<h2>Alignment</h2>"
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose an alignment, representing the nature of your character's actions. How would your character respond to the following scenarios?"
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var quest1 = data.background.questionsAlign.q1
+            appendToContent('div', 'standardDiv').innerText = quest1.q
+            // console.log(response)
+            for (const ans in quest1.ans) {
+                console.log(ans)
+                const ansBtn = appendToContent('button')
+                ansBtn.innerText = ans
+                ansBtn.onclick = function () {
+                    console.log("qans: " + quest1.ans[ans][0])
+                    localStorage.setItem("alignAxis1", quest1.ans[ans][0])
+                    alignQuestion2(data)
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+    // get all children from content
+    // children = content.children
+    // allowedAlignments = localStorage.getItem("possibleAlignments").split(',')
+    // // console.log("Allowed align: " + allowedAlignments)
+    // for (let i = 0; i < children.length; i++) {
+    //     const child = children[i];
+    //     const childsChild = child.children
+    //     for (let j = 0; j < childsChild.length; j++) {
+    //         const cc = childsChild[j]
+    //         // console.log("cval: " + cc.innerText)
+    //         // Do something with each child element
+    //         if (!allowedAlignments.includes(cc.value)) {
+    //             // console.log("Grey out: " + child.innerText)
+    //             cc.setAttribute('id', 'greyOut')
+    //         }
+    //         else cc.setAttribute('id', '')
+
+    //         cc.onclick = function () {
+    //             localStorage.setItem("_alignment", cc.innerText)
+    //             if (localStorage.getItem("_class") == "Cleric") {
+    //                 chooseDiety(localStorage.getItem("_alignment"))
+    //                     .then(chosenDeity => {
+
+    //                         console.log("Chosen Deity:", chosenDeity);
+    //                         localStorage.setItem("_diety", chosenDeity)
+    //                         addDietyInfo(chosenDeity)
+    //                     })
+    //                     .catch(error => {
+    //                         console.error("Error:", error);
+    //                     });
+    //             }
+    //             // dietyDebrief()
+    //         }
+    //     }
+    // }
+}
+
+function alignQuestion2(data) {
+    content = clearContentAndGet()
+    var quest2 = data.background.questionsAlign.q2
+    appendToContent('div', 'standardDiv').innerText = quest2.q
+    // console.log(response)
+    for (ans in quest2.ans) {
+        console.log(ans)
+        var ansBtn = appendToContent('button')
+        ansBtn.innerText = ans
+        ansBtn.onclick = function () {
+            localStorage.setItem("alignAxis2", quest2.ans[ans][0])
+            // goto to next step
+            // chooseDevineDomain()
+            localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
+            alignDebrief()
+        }
+    }
+}
+
+function alignDebrief() {
+    content = clearContentAndGet()
+    appendToContent('div', 'standardDiv').innerHTML = highlightTextWithMouseover("You have been aligned with " + localStorage.getItem('_alignment') + ".", allDetails)
+    cont = appendToContent('button')
+    cont.innerText = 'Continue'
+    cont.onclick = function () {
+        backgroundQuestions()
+        localStorage.setItem("backgroundState", "2")
+    }
+
+
+}
+
+function chooseDiety(alignment) {
+    alignchars = alignment.split(" ")
+    var alignKey = []
+    alignKey.push(alignchars[0].charAt(0))
+    if (alignKey[0] == 'T') alignKey[0] = 'N'
+    alignKey.push(alignchars[1].charAt(0))
+    var filePath = '../misc/clericDieties.csv';
+
+    return new Promise((resolve, reject) => {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(csvText => {
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function (results) {
+                        const data = results.data;
+
+                        // Replace 'YourCategory' with the desired category
+                        // const desiredCategory = 'YourCategory';
+
+                        // Filter data for the desired category
+                        const categoryData = data.filter(row => row['Category'] === localStorage.getItem("realm"));
+
+                        // Find all deities that match the conditions
+                        const matchingDeities = categoryData
+                            .filter(row => row['Order'] === alignKey[0] && row['Morality'] === alignKey[1])
+                            .map(row => row['Deity']);
+
+                        // Resolve with the array of deities if found, otherwise, reject
+                        if (matchingDeities.length > 0) {
+                            resolve(matchingDeities);
+                        } else {
+                            reject("No deities found for the specified alignment.");
+                        }
+                    }
+                });
+            })
+            .catch(error => reject('Error fetching the CSV file: ' + error));
+    });
+}
+
+function addDietyInfo(listOfDieties) {
+    content = clearContentAndGet()
+
+
+    if (listOfDieties.length == 1) {
+        d = appendToContent('div', "standardDiv")
+        d.innerHTML = highlightTextWithMouseover("You have been assigned " + listOfDieties[0] + ".", allDetails)
+        // content.appendChild(d)
+        localStorage.setItem("_diety", listOfDieties[0])
+    }
+    else {
+        var explain = appendToContent('div', 'standardDiv')
+        possibleDietiesDiv = appendToContent('div', 'standardDiv')
+        explain.innerHTML = highlightTextWithMouseover("Choose a Diety to worship:\n", allDetails)
+        for (const d in listOfDieties) {
+            const diety = listOfDieties[d]
+            const dietyInfo = document.createElement('button')
+            dietyInfo.setAttribute('id', 'standardDiv')
+            dietyInfo.innerHTML = highlightTextWithMouseover(
+                listOfDieties[d],
+                allDetails)
+            possibleDietiesDiv.appendChild(dietyInfo)
+        }
+    }
+    cBtn = newContinueButton(true)
+    cBtn.onclick = function () {
+        console.log("TBT button action in function addDietyInfo")
+        pickJob()
+    }
+}
+
+function dietyDebrief() {
+    content = clearContentAndGet()
+    dietyOutro = appendToContent('div', 'standardDiv')
+    dietyOutro.innerHTML = highlightTextWithMouseover('Your cleric worships ' + localStorage.getItem("_diety"), allDetails)
+}
+
+
+// TODO: For humans we need to get region
+function characterName() {
+    content = clearContentAndGet()
+    appendToContent('h2').innerText = "Character Name"
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose what you would like to be called throughout your campaign."
+
+    appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" id="continueButton" role="button">Submit</button>'
+    appendToContent('div').innerHTML = "You can choose any name you please, but if you do want to pick a standard name for a " + localStorage.getItem("_race") + ", these are some examples."
+    cBtn = document.getElementById('continueButton')
+    cBtn.onclick = function () {
+        storeKeyFromInput('_name')
+        window.location.href = '../html/equipment.html'
+    }
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var race = localStorage.getItem("_race")
+            console.log(race)
+            var males = data.races[race].maleNames
+            var females = data.races[race].femaleNames
+            console.log(males)
+            document.getElementById('content').appendChild(createNameTable(race, males, females))
+        })
+
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function createNameTable(race, maleValues, femaleValues) {
+    // Create a table element
+    const table = document.createElement('table');
+
+    // Create a table header row
+    const headerRow = table.insertRow();
+
+    // Create header cells for "Male" and "Female"
+    const maleHeader = headerRow.insertCell(0);
+    maleHeader.textContent = "Male";
+
+    const femaleHeader = headerRow.insertCell(1);
+    femaleHeader.textContent = "Female";
+
+    // Determine the maximum number of rows needed based on the lengths of the input arrays
+    const maxRows = Math.max(maleValues.length, femaleValues.length);
+
+    // Populate the table rows
+    for (let i = 0; i < maxRows; i++) {
+        // Create a new row
+        const row = table.insertRow();
+
+        // Create cells for "Male" and "Female" columns
+        const maleCell = row.insertCell(0);
+        const femaleCell = row.insertCell(1);
+
+        // Assign values from the arrays if available
+        maleCell.textContent = i < maleValues.length ? maleValues[i] : '';
+        femaleCell.textContent = i < femaleValues.length ? femaleValues[i] : '';
+    }
+
+    // Append the table to the document body or any desired container
+    return table
+}
+
+function backgroundQuestions(questionNum = 1) {
+    console.log("In bgq")
+    content = clearContentAndGet()
+    if (questionNum == 1) {
+        explainer = appendToContent('div', 'standardDiv')
+        explainer.innerHTML = "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background."
+
+        // explainer2 = appendToContent('div','standardDiv')
+        // explainer2.innerHTML = highlightTextWithMouseover(
+        //     "",
+        //     allDetails
+        // )
+    }
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            var quest = data.background.questions['q' + questionNum.toString()]
+            console.log(quest)
+            appendToContent('div', 'standardDiv').innerHTML = quest.q
+            for (const ans in quest.ans) {
+                const btn = appendToContent('button')
+                btn.innerText = ans
+                btn.onclick = function () {
+                    console.log(quest.ans[ans][2])
+                    if (quest.ans[ans][2].charAt(0) == '-') {
+                        clearContentAndGet()
+                        pickBackgroundFromQuestions(quest.ans[ans][0])
+                    }
+                    else {
+                        backgroundQuestions(quest.ans[ans][2].toString())
+                    }
+                }
+            }
+        })
+
+        .catch(error => {
+            console.error('Error:', error);
+        });
+} // backgroundQuestions
+
+function pickBackgroundFromQuestions(optionsAsString) {
+    possibleChoices = optionsAsString.split(',')
+    for (const choice in possibleChoices) {
+        // console.log("Choice: "+possibleChoices[choice])
+        // console.log(possibleChoices[choice].toLowerCase())
+        loadAllBackgroundInfo(possibleChoices[choice])
+    }
+}
+
+function loadAllBackgroundInfo(choice) {
+    // var bgData
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            const bgDiv = document.createElement('div')
+            bgDiv.setAttribute('id', 'backgroundInfo')
+            const title = document.createElement('h2')
+            title.innerText = choice
+            bgDiv.appendChild(title)
+            const bgData = data[choice]
+            // console.log("bgDATA: " + bgData)
+            for (el in bgData) {
+                console.log(el)
+                const label = document.createElement('h3')
+                label.innerText = el
+                const info = document.createElement('p')
+                if (el[0] == '-') continue
+                if (bgData[el] instanceof Object) {
+                    info.setAttribute('id', 'innerInfo')
+                    console.log("Object found")
+                    for (var thing in bgData[el]) {
+                        const tng = document.createElement('p')
+                        tng.innerHTML = highlightTextWithMouseover(bgData[el][thing], allDetails)
+                        info.appendChild(tng)
+                    }
+                }
+                else {
+                    if (el == 'Description' || el == 'Suggested Characteristics' || el == 'Details') {
+                        info.innerHTML = bgData[el]
+                    }
+                    else {
+                        info.innerHTML = highlightTextWithMouseover(bgData[el], allDetails)
+                    }
+                }
+
+                bgDiv.appendChild(label)
+                bgDiv.appendChild(info)
+            }
+            select = document.createElement('button')
+            select.innerText = "Select " + choice
+            select.onclick = function () {
+                localStorage.setItem("_background", choice)
+                // move to next sequence
+                console.log("Chose " + choice + " as background")
+                localStorage.setItem("backgroundState", "3")
+                chooseIdeals()
+                // characterName()
+            }
+            bgDiv.appendChild(select)
+            document.getElementById('content').appendChild(bgDiv)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    // "_otherproficiencieslanguages"
+}
+
+function chooseIdeals() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    console.log(bkgnd)
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "Characters in DnD have a set of ideals that essentially define your character's philosophy and outlook on life. As a " + localStorage.getItem('_background') + ", you can pick one of these standard ideals, or just create your own."
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allIdeals = data[bkgnd]['-ideals']
+            console.log("id " + allIdeals)
+            for (id in allIdeals) {
+                const btn = appendToContent('button')
+                btn.innerText = allIdeals[id]
+                content.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_ideals', btn.innerText)
+                    localStorage.setItem("backgroundState", "4")
+                    chooseBonds()
+                }
+            }
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            inpDiv.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            inpDiv.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_ideals', inp.value)
+                localStorage.setItem("backgroundState", "4")
+                chooseBonds()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function chooseBonds() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "As an "+ localStorage.getItem('_background') + ", your bonds represent a character's connections to people, places, and events in the world. They tie you to things from your background. Choose one of the following, or write your own."
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allBonds = data[bkgnd]['-bonds']
+            console.log("id " + allBonds)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allBonds) {
+                const btn = appendToContent('button')
+                btn.innerText = allBonds[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_bonds', btn.innerText)
+                    localStorage.setItem("backgroundState", "5")
+                    chooseFlaws()
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_bonds', inp.value)
+                localStorage.setItem("backgroundState", "5")
+                chooseFlaws()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function chooseFlaws() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = "A flaw is a piece of your character's personality that makes them believable by adding real emotional depth. Flaws vary. They can be anything from an irrational fear to a corrupted world view. Either way, these are generally bad things that keep your character from being \"perfect.\""
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allFlaws = data[bkgnd]['-flaws']
+            console.log("id " + allFlaws)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allFlaws) {
+                const btn = appendToContent('button')
+                btn.innerText = allFlaws[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_flaws', btn.innerText)
+                    localStorage.setItem("backgroundState", "6")
+                    choosePersonality()
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_flaws', inp.value)
+                localStorage.setItem("backgroundState", "6")
+                choosePersonality()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function choosePersonality() {
+    content = clearContentAndGet()
+    bkgnd = localStorage.getItem('_background')
+    main = appendToContent('div', 'standardDiv')
+    main.innerText = ""
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allPT = data[bkgnd]['-personalityTrait']
+            console.log("id " + allPT)
+            optDiv = appendToContent('div','standardDiv')
+            for (id in allPT) {
+                const btn = appendToContent('button')
+                btn.innerText = allPT[id]
+                optDiv.appendChild(btn)
+                btn.onclick = function () {
+                    localStorage.setItem('_personalityTraits', btn.innerText)
+                    localStorage.setItem("backgroundState", "1")
+                    window.location.href = '../html/equipment.html'
+                }
+            }
+            content.appendChild(optDiv)
+            inp = document.createElement('input')
+            inpDiv = appendToContent('div', 'standardDiv')
+            inpDiv.innerText = "You can write your own here:"
+            inp.setAttribute('class', 'textinput')
+            content.appendChild(inp)
+            subButton = document.createElement('button')
+            subButton.innerText = "Submit"
+            subButton.setAttribute('type','submit')
+            content.appendChild(subButton)
+            subButton.onclick = function () {
+                localStorage.setItem('_personalityTraits', inp.value)
+                localStorage.setItem("backgroundState", "1")
+                // window.location.href = '../html/equipment.html'
+                rollForAbilities()
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function rollForAbilities() {
+    window.location.href = '../html/rollDemo.html'
+    content = document.getElementById('content')
+    
+
+}
+
+
+function clearContentAndGet() {
+    clearDiv(document.getElementById('content'))
+    return document.getElementById('content')
+}
+
+function appendToContent(type, id = null) {
+    res = document.createElement(type)
+    document.getElementById('content').appendChild(res)
+    if (id != null) res.setAttribute('id', id)
+    return res
+
+}
+
+function newContinueButton(append = false) {
+    res = document.createElement('button')
+    res.innerText = "Continue"
+    res.setAttribute('id', 'continueBtn')
+    if (append) document.getElementById('content').appendChild(res)
+    return res
+}
+
+// function appendToCharacterSheet(box, item) {
+//     val = localStorage.getItem('_' + box)
+//     localStorage.setItem('_' + box, val + '\n' + item)
+// }
+
+
+
+
+
+
 
 
 

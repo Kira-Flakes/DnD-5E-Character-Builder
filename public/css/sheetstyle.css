@@ -614,4 +614,279 @@ form.charsheet main section.features div textarea {
   height: 43em;
 }
 
+/* .page2 {
+
+} */
+
+
+form.charsheet .page2 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+/* form.charsheet .page2 div.label-container {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  margin-top: 6px;
+  border: 1px solid black;
+  border-left: 0;
+  text-align: center;
+}
+form.charsheet .page2 div.label-container > label {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  transform: translate(0%, 50%);
+  width: 100%;
+  font-size: 8px;
+} */
+form.charsheet .page2 > section.backstoryAndAppearance {
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+}
+
+form.charsheet .page2 > section.p2RS {
+  width: 66%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+form.charsheet .page2 > section.p2RS div {
+  height: 285px;
+}
+
+form.charsheet .page2 > section.backstoryAndAppearance div {
+  height: 450px;
+}
+
+/* form.charsheet .page2 section {
+  width:32%;
+} */
+
+form.charsheet section.appearance {
+  padding: 10px;
+}
+form.charsheet section.appearance div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  /* width: 33%; */
+  flex-direction: column-reverse;
+}
+form.charsheet section.appearance div label {
+  text-align: center;
+}
+form.charsheet section.appearance div textarea {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+form.charsheet section.alliesorgs {
+  padding: 10px;
+}
+form.charsheet section.alliesorgs div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+form.charsheet section.alliesorgs label {
+  text-align: center;
+}
+form.charsheet section.alliesorgs div textarea {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+form.charsheet section.backstory {
+  padding: 10px;
+}
+form.charsheet section.backstory div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+form.charsheet section.backstory label {
+  text-align: center;
+}
+form.charsheet section.backstory div textarea {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+form.charsheet section.additional {
+  padding: 10px;
+}
+form.charsheet section.additional div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+form.charsheet section.additional label {
+  text-align: center;
+}
+
+form.charsheet section.additional div textarea {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+form.charsheet section.treasure {
+  padding: 10px;
+}
+
+form.charsheet section.treasure div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+form.charsheet section.treasure label {
+  text-align: center;
+}
+form.charsheet section.treasure div textarea {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+/* form.charsheet section.backstoryAndAppearance div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+} */
+
+
+
+/* page 3 */
+
+form.charsheet header section.spClass {
+  border: 1px solid black;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+  padding: 5px 0;
+  background-color: #eee;
+  width: 30%;
+  display: flex;
+  flex-direction: column-reverse;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
+form.charsheet header section.spClass label {
+  padding-left: 1em;
+}
+form.charsheet header section.spClass label[for=_charname] {
+  font-size: 110%;
+  padding-left: 1em;
+}
+
+form.charsheet header section.misc {
+  width: 70%;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+form.charsheet header section.misc ul {
+  padding: 10px 0px 5px 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+form.charsheet header section.misc ul li {
+  width: 33.33333%;
+  display: flex;
+  flex-direction: column-reverse;
+}
+form.charsheet header section.misc ul li label {
+  margin-bottom: 5px;
+  font-size: 90%;
+}
+form.charsheet header section.misc ul li label[for=miscfield] {
+  font-size: 115%;
+}
+
+form.charsheet section.cantrips {
+  padding: 10px;
+}
+
+form.charsheet section.cantrips div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+form.charsheet section.cantrips label {
+  margin-top: 5px;
+  text-align: center;
+}
+
+form.charsheet section.cantrips div text {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+form.charactersheet .page2 main section.cantrips div li {
+  width: 30px;
+  font-size: 12px;
+  text-align: center;
+  border: 0;
+  border-bottom: 1px solid black;
+  order: 2;
+}
+
+
+
+
+
+form.charsheet section.spellLevel {
+  padding: 10px;
+}
+
+form.charsheet section.spellLevel div {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+form.charsheet section.spellLevel label {
+  margin-top: 5px;
+  text-align: center;
+}
+
+form.charsheet section.spellLevel div text {
+  border: 0;
+  padding: 5px;
+  height: 43em;
+}
+
+form.charactersheet .page2 main section.spellLevel div li {
+  width: 30px;
+  font-size: 12px;
+  text-align: center;
+  border: 0;
+  border-bottom: 1px solid black;
+  order: 2;
+}
+
+
+
 /*# sourceMappingURL=sheetstyle.css.map */
