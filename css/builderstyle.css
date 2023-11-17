@@ -5,6 +5,7 @@
     font-family: 'Franchise';
     src: url(../fonts/Franchise.ttf);
 }
+
 @font-face {
     font-family: 'Nougat-ExtraBlack';
     src: url(../fonts/Nougat-ExtraBlack.ttf);
@@ -44,6 +45,25 @@ h1 {
     margin-bottom: 35px;
 }
 
+h2 {
+    font-family: 'Nougat';
+    font-size: 60px;
+    font-style: italic;
+    color: rgb(250, 135, 135);
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+table {
+    font-style: italic;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 40px;
+    align-items: baseline;
+    border-collapse: collapse;
+    width: 60%;
+}
+
 /* Use this for every question */
 .question {
     margin-bottom: 50px;
@@ -73,39 +93,44 @@ input[type="radio"]:checked+label {
 }
 
 .textinput {
-    border: 0; 
-    padding: 7px 15px; 
+    border: 0;
+    padding: 7px 15px;
     margin-bottom: 10px;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     position: relative;
     background: transparent;
     color: white;
 }
 
 /* Gets rid of ugly blue selection outline */
-.textinput:focus {outline:0;}
-.textinput ~ .focus-bg {
-    position: absolute; 
-    left: 0; 
-    top: 0; 
-    width: 100%; 
-    height: 100%; 
-    background-color: #ededed; 
-    opacity: 0; 
-    transition: 0.5s; 
+.textinput:focus {
+    outline: 0;
+}
+
+.textinput~.focus-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ededed;
+    opacity: 0;
+    transition: 0.5s;
     z-index: -1;
 }
-.textinput:focus ~ .focus-bg {
-    transition: 0.5s; 
+
+.textinput:focus~.focus-bg {
+    transition: 0.5s;
     opacity: 1;
 }
+
 ::placeholder {
-  color: rgb(149, 149, 149);
+    color: rgb(149, 149, 149);
 }
 
 canvas {
-    margin-top:-150px;
-    margin-bottom:-78px;
+    margin-top: -150px;
+    margin-bottom: -78px;
 }
 
 /* For input tags of the button type inside container,
@@ -128,7 +153,7 @@ button {
     color: #FFFFFF;
     cursor: pointer;
     /*display: inline-block;*/
-    font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
     height: 58px;
     line-height: 44px;
     outline: 0;
@@ -146,6 +171,7 @@ button {
     z-index: 9;
     border: 0;
 }
+
 .submitButton:hover {
     background: #822f2f;
 }
@@ -169,12 +195,13 @@ button {
     backface-visibility: hidden;
     border-radius: 6px;
     border-width: 0;
+    height: fit-content;
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .1) 0 2px 5px 0, rgba(0, 0, 0, .07) 0 1px 1px 0;
     box-sizing: border-box;
     cursor: pointer;
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
     font-size: 100%;
-    height: 58px;
+    /* height: 58px; */
     line-height: 1.15;
     /* margin: 12px 0 0; */
     outline: none;
@@ -223,7 +250,7 @@ button:focus {
 
 .box {
     margin: 40px 0;
-    width: fit-content; 
+    width: fit-content;
 }
 
 
@@ -238,6 +265,8 @@ button:focus {
     overflow-x: hidden;
     overflow-y: auto;
     max-height: 50vh;
+    position: relative;
+
 }
 
 /* Left column for questions */
@@ -247,8 +276,10 @@ button:focus {
     max-width: 60%;
     min-width: 50%;
     min-height: 70vh;
-    /* margin-left: 17vw; */
     background-color: rgb(39, 39, 39);
+    /* padding: 30px 0; */
+    row-gap: 20px;
+
 }
 
 /* Right column for info */
@@ -273,7 +304,7 @@ button:focus {
 .tab {
     flex: 1;
     justify-content: left;
-    font-size:2.8vh;
+    font-size: 2.8vh;
     background-color: rgb(79, 47, 47);
     height: auto;
     border: 4px solid #1f1f1f;
@@ -293,8 +324,19 @@ button:focus {
     max-width: 80%;
 }
 
+/* Add this rule to your CSS file */
+#greyOut {
+    color: #5d5a5a;
+    /* Set a grey background color */
+    pointer-events: none;
+    /* Disable pointer events, making the button not clickable */
+}
+
+
 button:hover {
-    background-color: rgb(119, 45, 45);; /* Set your desired background color here */
+    background-color: rgb(119, 45, 45);
+    ;
+    /* Set your desired background color here */
     color: white;
 }
 
@@ -310,7 +352,8 @@ button:hover {
 mark {
     background-color: transparent;
     color: #ba8c10;
-    transition: color 0.3s; /* Smooth transition over 0.3 seconds */
+    transition: color 0.3s;
+    /* Smooth transition over 0.3 seconds */
 }
 
 .raceInfoDiv {
@@ -340,27 +383,95 @@ mark {
 }
 
 .brighten-on-hover {
-    color: #333; /* Initial text color */
-    transition: color 0.3s; /* Smooth transition over 0.3 seconds */
-  }
-  
-  mark:hover {
-    color: rgb(156, 53, 53); /* Brightened text color on hover */
-  }
+    color: #333;
+    /* Initial text color */
+    transition: color 0.3s;
+    /* Smooth transition over 0.3 seconds */
+}
 
-  img {
+mark:hover {
+    color: rgb(156, 53, 53);
+    /* Brightened text color on hover */
+}
+
+img {
     width: 60%;
     /* height: 20%; */
     height: auto;
     object-fit: cover;
     filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%);
-  }
+}
 
 #viewSheetBtn {
     bottom: 0;
     right: 0;
 }
-  /* .box{
+
+/* .box{
     display: flex;
 
   } */
+
+
+
+#standardDiv {
+    display: grid;
+    align-items: center;
+    /* justify-content: center; */
+    /* height: 10vh; */
+    position: relative;
+    /* margin: auto; */
+    display: block;
+    flex: auto;
+    /* margin-bottom: 10px; */
+    padding: 20px;
+    margin: 20;
+
+}
+
+
+#continueBtn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#backgroundInfo h1 {
+    font-size: 80%;
+    margin: 0;
+    padding: 0;
+
+}
+
+#backgroundInfo p {
+    font-size: 80%;
+    margin: 0;
+    padding: 0;
+    text-indent: 5%;
+
+}
+
+#backgroundInfo h3 {
+    text-align: left;
+    margin: 4px;
+    /* padding: 0; */
+    font-size: 80%;
+}
+
+/* #backgroundInfo button {
+    scale: 80%;
+    align-items: center;
+
+} */
+
+
+#innerInfo {
+    text-align: left;
+    font-size: 80%;
+    margin: 2px;
+}
+
+#realmOption {
+    display: grid;
+    
+}

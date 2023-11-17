@@ -1,22 +1,35 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
 
-<head>
-	<script src="/js/characterSheet.js"></script>
-	<script src="/js/listeners.js"></script>
+<!-- <head> -->
+	<script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
+        }
+    </script>
+	<script src="../js/characterSheet.js"></script>
+	<script src="../js/listeners.js"></script>
+	<script src="../js/characterUtils.js"></script>
+	<script src="../js/main.js"></script>
 	<script type="module" src="../js/d20Logo.js"></script>
-	<!-- <script>
+	<script src="../js/api.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+	<script>
 		var character; // global scope
 		// Initialize the character object, all remaining script calls should reference this object.
 		window.addEventListener('load', function () {
 			character = new characterSheet();
 			character.updateSheet(); // local storage attributes fill the sheet
 		}); // end listener
-		setAlignmentInfo();
-	</script> -->
-	<script>
-		localStorage.setItem("currentRef","../html/background.html")
+		// setAlignmentInfo();
 	</script>
+	<script>
+		localStorage.setItem("currentRef", "../html/background.html")
+	</script>
+
+<head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="Our first page">
@@ -29,11 +42,11 @@
 
 <body>
 	<h1>Wiz-Rad!
-        <div style="display:inline;">
-            <canvas class="webgl"></canvas>
-        </div> 
-    </h1>
-    
+		<div style="display:inline;">
+			<canvas class="webgl"></canvas>
+		</div>
+	</h1>
+
 	<div class="tabs">
 		<div style="flex-direction: row" ; class="container" ;>
 			<div class="tab">
@@ -52,13 +65,13 @@
 				<a href="./equipment.html">Equipment</a>
 			</div>
 			<div class="tab">
-                <a href="./rollDemo.html">Roll Demo</a>
-            </div>
+				<a href="./rollDemo.html">Roll Demo</a>
+			</div>
 		</div>
 	</div>
 	<!--Container for 3-column layout-->
 	<div class="container">
-		<div class="column left">
+		<div class="column left" id="content">
 			<p>Questions go here...</p>
 			<div class="question">
 				<p>Enter your character's whole name.</p>
@@ -126,7 +139,7 @@
 			<div class="question">
 				<p>Choose alignment.</p>
 				<div class="container">
-					<button name="_alignment"  value="Lawful Good" onclick="character.setAlignment(value)">Lawful
+					<button name="_alignment" value="Lawful Good" onclick="character.setAlignment(value)">Lawful
 						Good</button>
 					<button name="_alignment" value="Neutral Good" onclick="character.setAlignment(value)">Neutral
 						Good</button>
@@ -163,27 +176,22 @@
 		</div>
 
 		<div class="column right">
-			<p>
-				List of backgrounds will show up here. Expandable descriptions
-				for each background perhaps?
-			</p>
-			<p id = alignmentSelection>
-				
-			</p>
+			<div>
+                <p id="helperInfo"></p>
+            </div>
+			<!-- <p id=alignmentSelection>
+
+			</p> -->
 			<button onclick="window.location.href = '/html/charsheet.html';">
 				Character Sheet
 			</button>
 		</div>
+		<script>
+			//  initPageInfo("class", parseInt(localStorage.getItem("classState")));
+			// fetchAllDetails();
+			beginBackground();
+		</script>
 	</div>
 	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
-        }
-    </script>
 
 </body>
-
-</html>
