@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-	<script type="module" src="../js/d20Logo.js"></script>
+<script type="module" src="../js/d20Logo.js"></script>
+<script src="../js/characterSheet.js"></script>
+<script src="../js/listeners.js"></script>
+<script src="../js/characterUtils.js"></script>
+<script src="../js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
 
 <!-- <head> -->
 <meta charset="UTF-8" />
@@ -16,22 +22,22 @@
 		<script src="//tympanus.net/codrops/adpacks/analytics.js"></script> -->
 <!-- </head>  -->
 <script>
-	localStorage.setItem("currentRef","../html/rollDemo.html")
+	localStorage.setItem("currentRef", "../html/rollDemo.html")
 </script>
 
 <body>
 	<h1>Wiz-Rad!
-        <div style="display:inline;">
-            <canvas class="webgl"></canvas>
-        </div> 
-    </h1>
-    
+		<div style="display:inline;">
+			<canvas class="webgl"></canvas>
+		</div>
+	</h1>
+
 	<div class="tabs">
 		<div style="flex-direction: row" ; class="container" ;>
 			<div class="tab">
 				<a href="./gettingstarted.html">Getting Started</a>
 			</div>
-			<div class="tab current">
+			<div class="tab">
 				<a href="./race.html">Race</a>
 			</div>
 			<div class="tab">
@@ -43,16 +49,18 @@
 			<div class="tab">
 				<a href="./equipment.html">Equipment</a>
 			</div>
-			<div class="tab">
-                <a href="./rollDemo.html">Roll Demo</a>
-            </div>
+
+			<div class="tab current">
+				<a href="./rollDemo.html">Abilities</a>
+			</div>
+
 		</div>
 	</div>
 
 	<!-- Container for 2-column layout -->
 	<div class="container">
 		<div class="column left" id="content">
-			<p id="title">Dice Demo</p>
+			<p id="title">Abilities</p>
 			<!-- Add a brief race explanation -->
 
 			<!-- <div class="frame__title"> -->
@@ -66,11 +74,11 @@
 			<!-- <a class="frame__prev" href="https://tympanus.net/Development/TwistedText/">Previous demo</a> -->
 			<!-- </div> -->
 			<!-- <div class="content"> -->
-			<canvas id="canvas"></canvas>
-			<div class="ui-controls">
-				<div class="score">Score: <span id="score-result"></span></div>
-				<!-- <button id="roll-btn">Throw the dice</button> -->
-			</div>
+			<!-- <canvas id="canvas"></canvas> -->
+			<!-- <div class="ui-controls"> -->
+			<!-- <div class="score">Score: <span id="score-result"></span></div> -->
+			<!-- <button id="roll-btn">Throw the dice</button> -->
+			<!-- </div> -->
 			<!-- </div> -->
 		</div>
 
@@ -92,7 +100,7 @@
         <p>Exotic: Too many to list.</p>
         <p>Monstrous: Too many to list.</p> -->
 				<div>
-					<p id="helperInfo">help goes here</p>
+					<p id="helperInfo"></p>
 				</div>
 
 				<footer>
@@ -102,9 +110,9 @@
 					<button onclick="init()">
 						Reset
 					</button>
-					<button id="roll-btn">
+					<!-- <button id="roll-btn">
 						Roll
-					</button>
+					</button> -->
 				</footer>
 			</div>
 			<script>
@@ -115,6 +123,7 @@
 			</script>
 		</div>
 </body>
+<script>initRolling()</script>
 
 <!-- <body>
 <main>
@@ -137,14 +146,14 @@
 	</div>
 </div> -->
 <!-- </main> -->
-<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-<script type="importmap">
+<!-- <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script> -->
+<!-- <script type="importmap">
 		  {
 			"imports": {
 			  "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
 			  "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
 		  }
-		</script>
+		</script> -->
 <!-- <script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script> -->
 <script type="module" src="../js/dice.js"></script>
 </body>

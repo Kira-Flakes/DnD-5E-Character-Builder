@@ -25,7 +25,9 @@ function init() {
 
     localStorage.setItem("gettingstartedState","0");
     localStorage.setItem("init",'1')
-}  
+    localStorage.setItem("possibleAlignments","")
+
+}   // end init
 
 function progressBar() {
     
