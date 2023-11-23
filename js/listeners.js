@@ -1923,7 +1923,6 @@ function initRolling() {
 
 function rollForAbilities() {
     console.log('here')
-    // window.location.href = '../html/rollDemo.html'
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
@@ -2118,6 +2117,23 @@ function appendAbilityValues(divAbil, vals, abil) {
     }
 }
 
+function applyProficiencies() {
+    var filePath = '../misc/raceFeatures.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
+                }
+            });
+        });
+}
+
 function calculateValsFromAbilityScores() {
     localStorage.setItem(
         '_armorClass',
@@ -2161,6 +2177,14 @@ function calculateValsFromAbilityScores() {
 
     applyRaceBenifits()
 
+    // Dependant stats
+
+    // TODO: if proficient in perception add that score to this stat
+    localStorage.setItem(
+        '_passiveWisdom',
+        parseInt(localStorage.getItem('__wisdomMod')) + 10
+        )
+
 
     // window.location.href = 'charsheet.html'
 }
@@ -2201,6 +2225,17 @@ function applyRaceBenifits() {
     updateModifiers()
     updateSkillLocalStorageValues()
     // calculateSkills() 
+}
+
+function addToLocalStorageInt(key,value) {
+    try {
+        currVal = parseInt(localStorage.getItem(key))
+        newVal = currVal + value
+        localStorage.setItem(key,newVal)
+    }
+    catch {
+        console.error("Could not parse the local storage value in addToLocalStorage.")
+    }
 }
 
 function updateModifiers() {
