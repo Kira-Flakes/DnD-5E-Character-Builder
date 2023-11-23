@@ -1951,7 +1951,8 @@ function rollTheDice(abil) {
     rollDiv.style.display = 'block'
     content = clearContentAndGet()
     explainer = document.createElement('div')
-    explainer.innerText = abil
+    abilTitle = abil.slice(1)
+    explainer.innerHTML = '<h2>'+abilTitle.charAt(0).toUpperCase()+abilTitle.slice(1)+'</h2>'
 
     content.insertBefore(explainer, document.getElementById('rolling'))
     // if (localStorage.getItem('nextRoll') == 'true') {
