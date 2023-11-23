@@ -32,7 +32,7 @@ initPhysics();
 initScene();
 
 window.addEventListener('resize', updateSceneSize);
-window.addEventListener('dblclick', throwDice);
+// window.addEventListener('dblclick', throwDice);
 rollBtn.addEventListener('click', throwDice);
 
 function initScene() {
@@ -196,7 +196,7 @@ function createBoxGeometry() {
     for (let i = 0; i < positionAttr.count; i++) {
 
         let position = new THREE.Vector3().fromBufferAttribute(positionAttr, i);
-        
+
         const subCube = new THREE.Vector3(Math.sign(position.x), Math.sign(position.y), Math.sign(position.z)).multiplyScalar(subCubeHalfSize);
         const addition = new THREE.Vector3().subVectors(position, subCube);
 
@@ -338,10 +338,16 @@ function showRollResults(score) {
         // scoreResult.innerHTML += ('+' + score);
     }
     if (scores.length >= 4) {
-        scoreResult.innerHTML = sumOfThreeLargest(scores)
+        const summation = sumOfThreeLargest(scores)
+        scoreResult.innerHTML = summation
         // while (scores.length > 0) {
         //     scores.pop();
         //   }
+        if (summation != NaN) {
+            localStorage.setItem(localStorage.getItem('currentRoll'), summation.toString())
+            localStorage.setItem('nextRoll', true)
+            document.getElementById('nextButton').style.display = 'block';
+        }
     }
 }
 
@@ -349,19 +355,19 @@ function sumOfThreeLargest(arr) {
     // Sort the array in descending order
     console.log("Score:" + scores)
     arr.sort((a, b) => b - a);
-  
+
     // Check if the first two numbers are the same (tied for the lowest)
     if (arr[0] === arr[1]) {
-      // Remove one of the tied lowest numbers
-      arr.splice(2, 1);
+        // Remove one of the tied lowest numbers
+        arr.splice(2, 1);
     }
-    
+    console.log("sumaation: " + (arr[0] + arr[1] + arr[2]))
     // Calculate and return the sum of the three largest numbers
     return arr[0] + arr[1] + arr[2];
-  }
-  
- 
-  
+}
+
+
+
 
 function render() {
     physicsWorld.fixedStep();
@@ -385,7 +391,7 @@ function throwDice() {
     scoreResult.innerHTML = '';
     while (scores.length > 0) {
         scores.pop();
-      }
+    }
 
 
     diceArray.forEach((d, dIdx) => {
@@ -401,7 +407,7 @@ function throwDice() {
 
         const force = 3 + 5 * Math.random();
         d.body.applyImpulse(
-            new CANNON.Vec3(force*2, force*1.7,-6),
+            new CANNON.Vec3(force * 2, force * 1.7, -6),
             new CANNON.Vec3(0, 0, .15)
         );
 
