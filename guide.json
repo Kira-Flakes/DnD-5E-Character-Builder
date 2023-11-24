@@ -1,44 +1,44 @@
 {
     "presetChoice": {
-        "explainer": "In Dungeons & Dragons, a character preset is a pre-designed character with predefined race, class, abilities, and background. Players might opt for a character preset to save time and simplify the character creation process, making it easier to jump into the game.",
+        "explainer": "If you don't have time to use the character creator or don't want the hassle of making your own character, we have five preset characters to choose from. These 'presets' are completed character sheets with their own race, class, background, and more.",
         "questions": {
-            "q": "Do you want to choose from a few presets, or would you rather build a character from scratch?",
+            "q": "Would you like to use the Wiz-Rad character creator, or would you rather choose from a list of preset characters?",
             "ans": [
-                "Preset",
-                "From Scratch"
+                "Choose a Preset",
+                "Use Character Creator"
             ]
         },
         "presets": {
             "Dwarf": {
                 "id": "DwarfPreset",
-                "race": "Hill-Dwarf",
-                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Ulfgar Rumnaheim",
+                "bio": "Ulfgar Rumnaheim is a Hill Dwarf Cleric that uses his mighty warhammer to bludgeon foes in combat while also serving as an invaluable healer to his allies. He worships the War god Tyr with fervour, and is unquestioningly loyal to the temple where he once served, sometimes to a fault. Ulfgar idolizes Tyr and seeks to please him by serving the greater good, whether that means healing the wounded or destroying evildoers."
             },
             "Half-Orc": {
                 "id": "HalfOrcPreset",
-                "race": "Half-Orc",
-                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Holg",
+                "bio": "Holg is a Half-Orc Fighter that spent many years serving as a soldier for his tribe. Reserved and mysterious, he now chooses the path of an adventurer to escape the horror and guilt of a mistake that resulted in a crushing defeat. While he will do anything to keep that mistake a secret, he will never forget the men lost, nor the enemies that brought their demise..."
             },
             "Gnome": {
                 "id": "ForestGnomePreset",
-                "race": "Forest Gnome",
-                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Lorilla 'Filchbatter' Scheppen",
+                "bio": "Lorilla 'Filchbatter' Scheppen is a Forest Gnome Wizard that loves all things alchemical. She's extremely well read, loves to teach others, and is always excited to help solve problems. While good-natured, many of her 'solutions' often end up with disasterous or comically unexpected results. Although Lorilla is easily distracted and can be found vexing by some, her party knows that her heart is in the right place."
             },
             "Human": {
                 "id": "HumanPreset",
-                "race": "Human - Turami",
-                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Diero Marivaldi",
+                "bio": "Diero Marivaldi is a Human Bard, and the glue that keeps the party together. He spent his adolescence captivating audiences with his renditions of famous stories, and soon began wanting to have a story of his own to tell. It was this desire that led him to gather a group of unlikely adventurers, in the hopes of having incredible adventures of his own. Lorilla often encourages Diero's wild and precarious plans of adventure, usually to the chagrin of the other party members. That being said, no one can stay mad at him for long, and his unassailable optimism keeps the party working together even at the worst of times."
             },
             "Dark Elf": {
                 "id": "DarkElfPreset",
-                "race": "Dark Elf (Drow)",
-                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Shava Naïlo (Nightbreeze)",
+                "bio": "Shava Naïlo is a Drow Rogue with complex motivations. For many years she made a living through flattery and manipulation, swindling nobles and getting whatever she wanted by any means necessary. Her priorities changed when her son was born. Unable to live with the guilt of her past, Shava abandoned her child in the hopes that someone else could be the parent she could not. Now an adventurer, she intends to make the world a better place the only way she knows how; by stealing from those she deems most deserving of punishment."
             }
         }
     },
     "gettingStarted": {
-        "welcome": "Welcome to Wiz-Rad, a D&D Character Creator.",
-        "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."
+        "welcome": "Welcome to Wiz-Rad, a D&D Character Creator!",
+        "explainer": "    Our tool is designed to make character creation a breeze all while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of simple questions to help determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks, browse forums, or worry about all of the nitty-gritty details. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play! If you change your mind about the answers you've given in a certain section (such as 'Race' or 'Background'), just click the RESET button to start that section over."
     },
     "race": {
         "explainer": {
@@ -63,15 +63,15 @@
                 "back": "beginning"
             },
             "q2": {
-                "q": "Do you want to play as both a human/half-human?",
+                "q": "Do you want to play as a human/half-human, or a non-human?",
                 "ans": {
                     "Human/Half-Human": [
                         "Human,Half-Elf,Half-Orc",
                         "Characters with more human-like qualities in D&D tend to exhibit a balance of physical and mental attributes. They often adapt well to diverse roles and situations.",
                         "->subRace"
                     ],
-                    "Something Different": [
-                        "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
+                    "Non-Human": [
+                        "Elf,Tiefling,Dragonborn,Halfling,Gnome",
                         "Individuals with unique qualities that possess traits which deviate from the typical human characteristics. These non-human attributes often come with distinct abilities and backgrounds, setting them apart from the common human experience.",
                         "3"
                     ]
@@ -82,7 +82,7 @@
                 "q": "Would you rather:",
                 "ans": {
                     "See in the dark": [
-                        "Dwarf,Elf,Tiefling",
+                        "Elf,Tiefling",
                         "Darkvision is a powerful ability that allows the player to see in the dark. Many cnosider it one of the most important abilities.",
                         "->subRace"
                     ],
@@ -95,7 +95,7 @@
                 "back": "2"
             },
             "q4": {
-                "q": "Do you destroy your foes up close or from afar?",
+                "q": "Does your character destroy foes up close or from afar?",
                 "ans": {
                     "Up Close": [
                         "Dragonborn(fire),Dragonborn(Poison),Dragonborn(Cold)",
@@ -240,7 +240,7 @@
                         "Support spells are designed to aid allies or provide healing, protection, and other positive effects. For example, casting \"Heal\" to restore a wounded party member's hit points.",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Wizard",
                         "",
                         "->conclusion"
@@ -293,7 +293,7 @@
                         "",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Bard",
                         "",
                         "->conclusion"
@@ -340,7 +340,7 @@
                         "",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Bard,Wizard",
                         "",
                         "->conclusion"
@@ -415,14 +415,14 @@
                 "back": "10"
             },
             "q12": {
-                "q": "What is the origin of your magical powers? Do they come from a might draconic force, or a wild force of chaos that underlie the order of creation?",
+                "q": "What is the origin of your magical powers? Do they come from a Draconic Bloodline, or Wild Magic?",
                 "ans": {
-                    "Draconic Force": [
+                    "Draconic Bloodline": [
                         "Sorcerer",
                         "",
                         "->conclusion"
                     ],
-                    "Wild Force": [
+                    "Wild Magic": [
                         "Sorcerer",
                         "",
                         "->conclusion"
