@@ -676,7 +676,7 @@ function giveChoices(page) {
             //reset the page elements in left column
             setElementsInColumnOne({
                 title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Your answers indicate that this would be a good fit for your playstyle.',
+                explanation: 'Please choose one of the following races:',
             })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
@@ -906,8 +906,8 @@ function pickSubrace(race) {
                 return
             }
             setElementsInColumnOne({
-                title: 'Choose a Subrace for your ' + race,
-                explanation: 'A subrace will give your character more depth and personality.',
+                title: 'Race: ' + race,
+                explanation: 'Now choose your ' + race + '\'s subrace:',
                 // prompt: 'Select your race:',
                 responseTitle: ''
             })
@@ -1401,7 +1401,7 @@ function chooseAlignment() {
     console.log("allDetails: " + allDetails)
     clearDiv(content)
     appendToContent('div', "standardDiv").innerHTML = "<h2>Alignment</h2>"
-    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose an alignment, representing the nature of your character's actions. How would your character respond to the following scenarios?"
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose an alignment, representing the nature of your character's actions. How would your character respond to the following scenario?"
 
     fetch('/guide.json')
         .then(response => response.json())
@@ -1483,7 +1483,7 @@ function alignQuestion2(data) {
 
 function alignDebrief() {
     content = clearContentAndGet()
-    appendToContent('div', 'standardDiv').innerHTML = highlightTextWithMouseover("You have been aligned with " + localStorage.getItem('_alignment') + ".", allDetails)
+    appendToContent('div', 'standardDiv').innerHTML = highlightTextWithMouseover("Your character's alignment is " + localStorage.getItem('_alignment') + ".", allDetails)
     cont = appendToContent('button')
     cont.innerText = 'Continue'
     cont.onclick = function () {
@@ -1577,7 +1577,7 @@ function dietyDebrief() {
 function characterName() {
     content = clearContentAndGet()
     appendToContent('h2').innerText = "Character Name"
-    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose what you would like to be called throughout your campaign."
+    appendToContent('div', 'standardDiv').innerHTML = "It's time to choose your character's name."
 
     appendToContent('div').innerHTML = '<input id="_name" class="textinput" type="text" placeholder="Enter name"><br><button class="submitButton" id="continueButton" role="button">Submit</button>'
     appendToContent('div').innerHTML = "You can choose any name you please, but if you do want to pick a standard name for a " + localStorage.getItem("_race") + ", these are some examples."
@@ -1935,7 +1935,7 @@ function rollForAbilities() {
     }
     content.appendChild(stdArray)
     rollDice = document.createElement('button')
-    rollDice.innerText = "Roll Dice"
+    rollDice.innerText = "Rolling for Stats"
     rollDice.onclick = function () {
         rollTheDice('_strength')
     }
@@ -2021,7 +2021,7 @@ assignedAbils = []
 function standardArray() {
     if (assignedAbils.length == 6) {
         content = clearContentAndGet()
-        content.innerText = 'If your happy with your scores, your character sheet is now complete.'
+        content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
         contBtn = document.createElement('button')
         contBtn.innerText = 'Continue'
         contBtn.onclick = function () {

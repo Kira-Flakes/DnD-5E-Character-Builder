@@ -1935,7 +1935,7 @@ function rollForAbilities() {
     }
     content.appendChild(stdArray)
     rollDice = document.createElement('button')
-    rollDice.innerText = "Roll Dice"
+    rollDice.innerText = "Rolling for Stats"
     rollDice.onclick = function () {
         rollTheDice('_strength')
     }
