@@ -252,9 +252,31 @@ function loadExplainer(page, iter) {
 // Given a div, remove all children.
 function clearDiv(div) {
     while (div.firstChild) { // delete all buttons, since we are done with this question
+        // if (div.firstChild.id != 'rolling') {
+        //     console.log("here in clear div")
+        //     div.removeChild(div.firstChild)
+        // }
         div.removeChild(div.firstChild)
     }
 }
+
+function removeAllChildrenExceptOne(divIdToKeep) {
+    var parentDiv = document.getElementById('content'); // replace with your actual parent div id
+    var children = parentDiv.children;
+
+    for (var i = children.length - 1; i >= 0; i--) {
+        var child = children[i];
+
+        // Check if the child has the relevant id to keep
+        if (child.id !== divIdToKeep) {
+            console.log('Keeping this')
+            parentDiv.removeChild(child);
+        }
+    }
+}
+
+
+
 
 // Sets alignment information
 function setAlignmentInfo() {
@@ -1911,8 +1933,86 @@ function rollForAbilities() {
     stdArray.onclick = function () {
         standardArray()
     }
-    main.appendChild(stdArray)
+    content.appendChild(stdArray)
+    rollDice = document.createElement('button')
+    rollDice.innerText = "Roll Dice"
+    rollDice.onclick = function () {
+        rollTheDice('_strength')
+    }
+    content.appendChild(rollDice)
 
+}
+
+
+function rollTheDice(abil) {
+    localStorage.setItem('currentRoll', abil)
+    localStorage.setItem('nextRoll', 'false')
+    rollDiv = document.getElementById('rolling')
+    rollDiv.style.display = 'block'
+    content = clearContentAndGet()
+    explainer = document.createElement('div')
+    abilTitle = abil.slice(1)
+    explainer.innerHTML = '<h2>'+abilTitle.charAt(0).toUpperCase()+abilTitle.slice(1)+'</h2>'
+
+    content.insertBefore(explainer, document.getElementById('rolling'))
+    // if (localStorage.getItem('nextRoll') == 'true') {
+    nextBtn = document.createElement('button')
+    nextBtn.setAttribute('id','nextButton')
+    nextBtn.style.display = 'none'
+    nextBtn.innerText = "Next"
+    content.appendChild(nextBtn)
+
+    nextBtn.onclick = function () {
+        next = getNextRoll(abil)
+        if (next != 'done') {
+            rollTheDice(next)
+        }
+        else {
+            fullDebrief()
+        }
+        // rollTheDice(getNextRoll(abil))
+    }
+    // }
+    // canvas = document.createElement('canvas')
+    // canvas.setAttribute('id', 'canvas')
+    // content.appendChild(canvas)
+
+    // uiControls = document.createElement('div')
+    // uiControls.setAttribute('id', 'ui-controls')
+
+    // score = document.createElement('div')
+    // score.class = 'score'
+    // score.innerHTML = 'Score: <span id="score-result"></span>'
+    // uiControls.appendChild(score)
+
+    // rollBtn = document.createElement('button')
+    // rollBtn.innerText = "Throw Dice"
+    // uiControls.appendChild(rollBtn)
+
+    // content.appendChild(uiControls)
+
+    // beginBtn = document.createElement('div')
+    // beginBtn.innerHTML = '<button onclick="initScene()">WORK!</button>'
+    // content.appendChild(beginBtn)
+
+}
+
+function getNextRoll(currentScore) {
+    console.log(currentScore + "Current score")
+    const abilityScores = ['_strength', '_dex', '_constitution', '_intellegence', '_wisdom', '_charisma'];
+    
+    // Find the index of the current score
+    const currentIndex = abilityScores.indexOf(currentScore);
+    console.log(currentIndex + "currindex")
+
+    // If the current score is not found or is the last one, return 'done'
+    if (currentIndex === -1 || currentIndex === abilityScores.length - 1) {
+        return 'done';
+    }
+
+    localStorage.setItem('currentRoll',abilityScores[currentIndex + 1])
+    // Return the next ability score
+    return abilityScores[currentIndex + 1];
 }
 
 vals = [8, 10, 12, 13, 14, 15]
@@ -1992,7 +2092,7 @@ function standardArray() {
 
 function fullDebrief() {
     content = clearContentAndGet()
-    main = appendToContent('div','standardDiv')
+    main = appendToContent('div', 'standardDiv')
     main.innerText = "Your character creation process is complete. You can now view your detailed character sheet to explore your character's abilities, skills, and traits."
     charSheetViewDiv = appendToContent('div')
     charSheetViewDiv.innerHTML = "<button onclick=\"window.location.href = 'charsheet.html';\">Character Sheet</button>"
@@ -2022,36 +2122,36 @@ function calculateValsFromAbilityScores() {
     localStorage.setItem(
         '_armorClass',
         parseInt(localStorage.getItem('_dex')) + 10
-        )
+    )
 
     localStorage.setItem(
         '_strengthMod',
-        parseInt((parseInt(localStorage.getItem('_strength'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_strength')) - 10) / 2)
     )
     localStorage.setItem(
         '_dexMod',
-        parseInt((parseInt(localStorage.getItem('_dex'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_dex')) - 10) / 2)
     )
     localStorage.setItem(
         '_constitutionMod',
-        parseInt((parseInt(localStorage.getItem('_constitution'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_constitution')) - 10) / 2)
     )
     localStorage.setItem(
         '_intellegenceMod',
-        parseInt((parseInt(localStorage.getItem('_intellegence'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_intellegence')) - 10) / 2)
     )
     localStorage.setItem(
         '_wisdomMod',
-        parseInt((parseInt(localStorage.getItem('_wisdom'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_wisdom')) - 10) / 2)
     )
     localStorage.setItem(
         '_charismaMod',
-        parseInt((parseInt(localStorage.getItem('_charisma'))-10)/2)
+        parseInt((parseInt(localStorage.getItem('_charisma')) - 10) / 2)
     )
 
     localStorage.setItem(
         '_initiative',
-        '+'+localStorage.getItem('_dexMod')
+        '+' + localStorage.getItem('_dexMod')
     )
 
     // parseRaceFeatures('Elf (High)', 'Ability Score Increase (Race)')
@@ -2068,34 +2168,34 @@ function calculateValsFromAbilityScores() {
 function applyRaceBenifits() {
     plRace = localStorage.getItem('_race')
     plSubRace = localStorage.getItem('_subRace')
-    console.log('pl subrace: '+plSubRace)
-    parseRaceFeatures(plRace,'Ability Score Increase (Race)').then(value => {
+    console.log('pl subrace: ' + plSubRace)
+    parseRaceFeatures(plRace, 'Ability Score Increase (Race)').then(value => {
         console.log(value)
         splitVal = value.split(' ')
-        var currentInt = parseInt(localStorage.getItem('_'+splitVal[0].toLowerCase()))
+        var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
         currentInt += parseInt(splitVal[1])
-        console.log('New value: '+ currentInt)
-        localStorage.setItem('_'+splitVal[0].toLowerCase(),currentInt)
+        console.log('New value: ' + currentInt)
+        localStorage.setItem('_' + splitVal[0].toLowerCase(), currentInt)
     })
 
     parseRaceFeatures(plSubRace, 'Ability Score Increase (Subrace)').then(value => {
-        console.log("subrace val: "+value)
+        console.log("subrace val: " + value)
         splitVal = value.split(' ')
-        var currentInt = parseInt(localStorage.getItem('_'+splitVal[0].toLowerCase()))
+        var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
         currentInt += parseInt(splitVal[1])
-        console.log('New value: '+ currentInt)
-        localStorage.setItem('_'+splitVal[0].toLowerCase(),currentInt)
+        console.log('New value: ' + currentInt)
+        localStorage.setItem('_' + splitVal[0].toLowerCase(), currentInt)
     })
 
-    parseRaceFeatures(plRace, 'Traits (Race)').then(value=>{
-        localStorage.setItem('_featuresandtraits',value)
+    parseRaceFeatures(plRace, 'Traits (Race)').then(value => {
+        localStorage.setItem('_featuresandtraits', value)
     })
 
-    parseRaceFeatures(plSubRace, 'Traits (Subrace)').then(value =>{
+    parseRaceFeatures(plSubRace, 'Traits (Subrace)').then(value => {
         curr = localStorage.getItem('_featuresandtraits')
         curr += " " + value
         console.log(curr)
-        localStorage.setItem('_featuresandtraits',curr)
+        localStorage.setItem('_featuresandtraits', curr)
     })
 
     updateModifiers()
@@ -2143,8 +2243,8 @@ function updateSkillLocalStorageValues() {
     skills.forEach(skill => {
         const skillKey = `_${skill.toLowerCase()}`;
         const abilityScoreKey = `_${getRelevantAbilityScore(skill)}`;
-        console.log("Abilityscore key: "+abilityScoreKey)
-        
+        console.log("Abilityscore key: " + abilityScoreKey)
+
         // Get the value from localStorage for the ability score
         const abilityScoreValue = localStorage.getItem(abilityScoreKey);
 
@@ -2178,7 +2278,7 @@ function getRelevantAbilityScore(skill) {
         'Stealth': 'dexMod',
         'Survival': 'wisdomMod'
     };
-    
+
 
     return skillToAbilityScore[skill] || 'Unknown';
 }
@@ -2189,9 +2289,39 @@ function getRelevantAbilityScore(skill) {
 
 
 
+// function clearContentAndGet() {
+//     clearDiv(document.getElementById('content'))
+//     return document.getElementById('content')
+// }
+
 function clearContentAndGet() {
-    clearDiv(document.getElementById('content'))
-    return document.getElementById('content')
+    const contentDiv = document.getElementById('content');
+
+    // Get all children of the 'content' div
+    const children = contentDiv.children;
+
+    // Loop through the children and remove them, excluding the one with id 'rolling'
+    for (let i = children.length - 1; i >= 0; i--) {
+        const child = children[i];
+        if (child.id !== 'rolling') {
+            contentDiv.removeChild(child);
+        }
+    }
+
+    // Return the 'content' div
+    return contentDiv;
+}
+
+function toggleRollDisplay() {
+    rolling = document.getElementById('rolling')
+    console.log('rolling info: ' + rolling.style.display)
+    if (rolling.style.display === 'none') {
+        console.log('sdfgsbd')
+        rolling.style.display = "block"
+    }
+    else {
+        rolling.style.display = 'none'
+    }
 }
 
 function appendToContent(type, id = null) {
