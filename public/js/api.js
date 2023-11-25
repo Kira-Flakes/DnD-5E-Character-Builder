@@ -537,7 +537,7 @@ function proficiencies(Class, background){												 //Function that takes a f
 		
 		rData = (term.slice(0, term.length - 1) + "\n").slice(1);
 		rData = rData + ", " + (termdesc.slice(0, termdesc.length - 1) + "\n").slice(1)
-		document.getElementById("statdesc2").innerHTML = rData;
+		//document.getElementById("statdesc2").innerHTML = rData;
 		
 		return rData;
 		
@@ -596,7 +596,7 @@ function proficienciesC(Class){												 //Function that takes a class and ma
 		//document.getElementById("statdesc4").innerHTML = termdesc4;
 
 		cData = termdesc2 + "- " + termdesc4 + "- " + termdesc3;
-		document.getElementById("statdesc5").innerHTML = cData;
+		//document.getElementById("statdesc5").innerHTML = cData;
 		return cData;
   })
 	}

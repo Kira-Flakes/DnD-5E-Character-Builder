@@ -1,44 +1,44 @@
 {
     "presetChoice": {
-        "explainer": "In Dungeons & Dragons, a character preset is a pre-designed character with predefined race, class, abilities, and background. Players might opt for a character preset to save time and simplify the character creation process, making it easier to jump into the game.",
+        "explainer": "If you don't have time to use the character creator or don't want the hassle of making your own character, we have five preset characters to choose from. These 'presets' are completed character sheets with their own race, class, background, and more.",
         "questions": {
-            "q": "Do you want to choose from a few presets, or would you rather build a character from scratch?",
+            "q": "Would you like to use the Wiz-Rad character creator, or would you rather choose from a list of preset characters?",
             "ans": [
-                "Preset",
-                "From Scratch"
+                "Choose a Preset",
+                "Use Character Creator"
             ]
         },
         "presets": {
             "Dwarf": {
                 "id": "DwarfPreset",
-                "race": "Hill-Dwarf",
-                "bio": "Dwarf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Ulfgar Rumnaheim",
+                "bio": "Ulfgar Rumnaheim is a Hill Dwarf Cleric that uses his mighty warhammer to bludgeon foes in combat while also serving as an invaluable healer to his allies. He worships the War god Tyr with fervour, and is unquestioningly loyal to the temple where he once served, sometimes to a fault. Ulfgar idolizes Tyr and seeks to please him by serving the greater good, whether that means healing the wounded or destroying evildoers."
             },
             "Half-Orc": {
                 "id": "HalfOrcPreset",
-                "race": "Half-Orc",
-                "bio": "Haalf ORc This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Holg",
+                "bio": "Holg is a Half-Orc Fighter that spent many years serving as a soldier for his tribe. Reserved and mysterious, he now chooses the path of an adventurer to escape the horror and guilt of a mistake that resulted in a crushing defeat. While he will do anything to keep that mistake a secret, he will never forget the men lost, nor the enemies that brought their demise..."
             },
             "Gnome": {
                 "id": "ForestGnomePreset",
-                "race": "Forest Gnome",
-                "bio": "Forest Gnmoe This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Lorilla 'Filchbatter' Scheppen",
+                "bio": "Lorilla 'Filchbatter' Scheppen is a Forest Gnome Wizard that loves all things alchemical. She's extremely well read, loves to teach others, and is always excited to help solve problems. While good-natured, many of her 'solutions' often end up with disasterous or comically unexpected results. Although Lorilla is easily distracted and can be found vexing by some, her party knows that her heart is in the right place."
             },
             "Human": {
                 "id": "HumanPreset",
-                "race": "Human - Turami",
-                "bio": "Human This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Diero Marivaldi",
+                "bio": "Diero Marivaldi is a Human Bard, and the glue that keeps the party together. He spent his adolescence captivating audiences with his renditions of famous stories, and soon began wanting to have a story of his own to tell. It was this desire that led him to gather a group of unlikely adventurers, in the hopes of having incredible adventures of his own. Lorilla often encourages Diero's wild and precarious plans of adventure, usually to the chagrin of the other party members. That being said, no one can stay mad at him for long, and his unassailable optimism keeps the party working together even at the worst of times."
             },
             "Dark Elf": {
                 "id": "DarkElfPreset",
-                "race": "Dark Elf (Drow)",
-                "bio": "Dark Elf This is temporary bio Lorum ipsum doltrinek zorbatify gobbledygook blibberblabber quoxalicious. Wibber wobber snazzlefrazz twiddledee sprocketeer yoodleoodle bippitybop. Quibberflibber wigglywoggle jibberjabber zippityzappity fiddlefaddle!"
+                "race": "Shava Naïlo (Nightbreeze)",
+                "bio": "Shava Naïlo is a Drow Rogue with complex motivations. For many years she made a living through flattery and manipulation, swindling nobles and getting whatever she wanted by any means necessary. Her priorities changed when her son was born. Unable to live with the guilt of her past, Shava abandoned her child in the hopes that someone else could be the parent she could not. Now an adventurer, she intends to make the world a better place the only way she knows how; by stealing from those she deems most deserving of punishment."
             }
         }
     },
     "gettingStarted": {
-        "welcome": "Welcome to Wiz-Rad, a D&D Character Creator.",
-        "explainer": "    Our tool is designed to make character creation a breeze while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of questions that help you determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks or worry about all the details. Instead, you'll focus on shaping your character's story and personality. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play."
+        "welcome": "Welcome to Wiz-Rad, a D&D Character Creator!",
+        "explainer": "    Our tool is designed to make character creation a breeze all while ensuring your character is unique and well-defined. Wiz-Rad guides you through a series of simple questions to help determine your character's race, class, ability scores, personality, and equipment. \n\n   With Wiz-Rad, you won't need to flip through rulebooks, browse forums, or worry about all of the nitty-gritty details. \n\nYour character sheet will be filled out automatically as you answer questions about the role you want to play! If you change your mind about the answers you've given in a certain section (such as 'Race' or 'Background'), just click the RESET button to start that section over."
     },
     "race": {
         "explainer": {
@@ -63,15 +63,15 @@
                 "back": "beginning"
             },
             "q2": {
-                "q": "Do you want to play as both a human/half-human?",
+                "q": "Do you want to play as a human/half-human, or a non-human?",
                 "ans": {
                     "Human/Half-Human": [
                         "Human,Half-Elf,Half-Orc",
                         "Characters with more human-like qualities in D&D tend to exhibit a balance of physical and mental attributes. They often adapt well to diverse roles and situations.",
                         "->subRace"
                     ],
-                    "Something Different": [
-                        "Dwarf,Elf,Tiefling,Dragonborn,Halfling,Gnome",
+                    "Non-Human": [
+                        "Elf,Tiefling,Dragonborn,Halfling,Gnome",
                         "Individuals with unique qualities that possess traits which deviate from the typical human characteristics. These non-human attributes often come with distinct abilities and backgrounds, setting them apart from the common human experience.",
                         "3"
                     ]
@@ -82,7 +82,7 @@
                 "q": "Would you rather:",
                 "ans": {
                     "See in the dark": [
-                        "Dwarf,Elf,Tiefling",
+                        "Elf,Tiefling",
                         "Darkvision is a powerful ability that allows the player to see in the dark. Many cnosider it one of the most important abilities.",
                         "->subRace"
                     ],
@@ -95,7 +95,7 @@
                 "back": "2"
             },
             "q4": {
-                "q": "Do you destroy your foes up close or from afar?",
+                "q": "Does your character destroy foes up close or from afar?",
                 "ans": {
                     "Up Close": [
                         "Dragonborn(fire),Dragonborn(Poison),Dragonborn(Cold)",
@@ -168,7 +168,6 @@
                 "Wood Elf": "<h2>Wood Elf</h2> <p>As a wood elf, you have keen senses and intuition, and your fleet feet carry you quickly and stealthily through your native forests. This category includes the wild elves (grugach) of Greyhawk and the Kagonesli of Dragonlance, as well as the races called wood elves in Greyhawk and the Forgotten Realms. In Faerun, wood elves (also called wild elves, green elves, or forest elves) are reclusive and distrustful of non-elves. </p> <p><strong>Ability Score Increase:</strong> Your Wisdom score increases by 1. </p> <p><strong>Elf Weapon Training:</strong> You have proficiency with the longsword, shortsword, shortbow, and longbow. </p> <p><strong>Fleet of Foot:</strong> Your base walking speed increases to 35 feet. </p> <p><strong>Mask of the Wild:</strong> You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.</p>",
                 "Dark Elf (Drow)": "<h2>Dark Elf (Drow)</h2><p>Descended from an earlier subrace of dark-skinned elves, the drow were banished from the surface world for following the goddess Lolth down the path to evil and corruption. Now they have built their own civilization in the depths of the Underdark, patterned after the Way of Lolth. Also called dark elves, the drow have black skin that resembles polished obsidian and stark white or pale yellow hair. They commonly have very pale eyes (so pale as to be mistaken for white) in shades of lilac, silver, pink, red, and blue. They tend to be smaller and thinner than most elves.</p><p>Drow adventurers are rare, and the race does not exist in all worlds. Check with your Dungeon Master to see if you can play a drow character.</p><p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1.</p><p><strong>Superior Darkvision:</strong> Your darkvision has a radius of 120 feet.</p><p><strong>Sunlight Sensitivity:</strong> You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p><p><strong>Drow Magic:</strong> You know the dancing lights cantrip. When you reach 3rd level, you can cast the faerie fire spell once per day. When you reach 5th level, you can also cast the darkness spell once per day. Charisma is your spellcasting ability for these spells.</p><p><strong>Drow Weapon Training:</strong> You have proficiency with rapiers, shortswords, and hand crossbows.</p>"
             },
-            
             "Dragonborn": "null",
             "Halfling": {
                 "Lightfoot Halfling": "<h2>Lightfoot Halfling</h2> <p>Lightfoot halflings are more prone to wanderlust than other halflings and often dwell alongside other races or take up a nomadic life. In the world of Greyhawk, these halflings are called hairfeet or tallfellows. They are known to be affable and get along well with others. In the Forgotten Realms, lightfoot halflings have spread the farthest and thus are the most common variety. </p> <p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1. </p> <p><strong>Naturally Stealthy:</strong> You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you. </p>",
@@ -240,7 +239,7 @@
                         "Support spells are designed to aid allies or provide healing, protection, and other positive effects. For example, casting \"Heal\" to restore a wounded party member's hit points.",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Wizard",
                         "",
                         "->conclusion"
@@ -293,7 +292,7 @@
                         "",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Bard",
                         "",
                         "->conclusion"
@@ -340,7 +339,7 @@
                         "",
                         "->conclusion"
                     ],
-                    "No Preference": [
+                    "All Kinds": [
                         "Bard,Wizard",
                         "",
                         "->conclusion"
@@ -415,14 +414,14 @@
                 "back": "10"
             },
             "q12": {
-                "q": "What is the origin of your magical powers? Do they come from a might draconic force, or a wild force of chaos that underlie the order of creation?",
+                "q": "What is the origin of your magical powers? Do they come from a Draconic Bloodline, or Wild Magic?",
                 "ans": {
-                    "Draconic Force": [
+                    "Draconic Bloodline": [
                         "Sorcerer",
                         "",
                         "->conclusion"
                     ],
-                    "Wild Force": [
+                    "Wild Magic": [
                         "Sorcerer",
                         "",
                         "->conclusion"
@@ -1809,5 +1808,87 @@
             "Secretly, I believe that things would be better if I were a tyrant lording over the land.",
             "I have trouble trusting in my allies."
         ]
-    }
+    },
+    "standardLanguages": [
+        {
+            "language": "Common",
+            "typicalSpeakers": "Humans",
+            "script": "Common"
+        },
+        {
+            "language": "Dwarvish",
+            "typicalSpeakers": "Dwarves",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Elvish",
+            "typicalSpeakers": "Elves",
+            "script": "Elvish"
+        },
+        {
+            "language": "Giant",
+            "typicalSpeakers": "Ogres, giants",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Gnomish",
+            "typicalSpeakers": "Gnomes",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Goblin",
+            "typicalSpeakers": "Goblinoids",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Halfling",
+            "typicalSpeakers": "Halflings",
+            "script": "Common"
+        },
+        {
+            "language": "Orc",
+            "typicalSpeakers": "Orcs",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Abyssal",
+            "typicalSpeakers": "Demons",
+            "script": "Infernal"
+        },
+        {
+            "language": "Celestial",
+            "typicalSpeakers": "Celestials",
+            "script": "Celestial"
+        },
+        {
+            "language": "Draconic",
+            "typicalSpeakers": "Dragons, dragonborn",
+            "script": "Draconic"
+        },
+        {
+            "language": "Deep Speech",
+            "typicalSpeakers": "Mind flayers, beholders",
+            "script": "Infernal"
+        },
+        {
+            "language": "Infernal",
+            "typicalSpeakers": "Devils",
+            "script": "Infernal"
+        },
+        {
+            "language": "Primordial",
+            "typicalSpeakers": "Elementals",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Sylvan",
+            "typicalSpeakers": "Fey creatures",
+            "script": "Elvish"
+        },
+        {
+            "language": "Undercommon",
+            "typicalSpeakers": "Underdark traders",
+            "script": "Elvish"
+        }
+    ]
 }
