@@ -12,7 +12,7 @@
 
 // const { nextTick } = require("process");
 const divCache = []
-var allDetails
+var allDetails = []
 let racePrev = 0
 
 const sd = "standardDiv"
@@ -59,20 +59,20 @@ function init() {
 
 }   // end init
 
-function getAllDetails() {
-    // Use the fetch API to retrieve the JSON data
-    fetch('/guide.json')
-        .then(response => response.json())
-        .then(data => {
-            // Data is the parsed JSON object
-            res = Object.keys(data.misc);
-            console.log("in getAllDetails: " + res);
-            return res
-        })
-        .catch(error => {
-            console.error('Error loading JSON:', error);
-        });
-}
+// function getAllDetails() {
+//     // Use the fetch API to retrieve the JSON data
+//     fetch('/guide.json')
+//         .then(response => response.json())
+//         .then(data => {
+//             // Data is the parsed JSON object
+//             res = Object.keys(data.misc);
+//             console.log("in getAllDetails: " + res);
+//             return res
+//         })
+//         .catch(error => {
+//             console.error('Error loading JSON:', error);
+//         });
+// }
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -252,10 +252,6 @@ function loadExplainer(page, iter) {
 // Given a div, remove all children.
 function clearDiv(div) {
     while (div.firstChild) { // delete all buttons, since we are done with this question
-        // if (div.firstChild.id != 'rolling') {
-        //     console.log("here in clear div")
-        //     div.removeChild(div.firstChild)
-        // }
         div.removeChild(div.firstChild)
     }
 }
@@ -275,18 +271,11 @@ function removeAllChildrenExceptOne(divIdToKeep) {
     }
 }
 
-
-
-
 // Sets alignment information
 function setAlignmentInfo() {
     const alignButtons = Array.from(document.getElementsByName('_alignment'));
     console.log("Alignbuttons: " + alignButtons);
 
-    // for (const b of alignButtons) {
-    //     // console.log("SFUSDNF");
-    //     console.log(b);
-    // }
     alignButtons.forEach((button, index) => {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
@@ -336,9 +325,6 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// function loadPageInfo() {
-
-// }
 
 function initPageInfo(page, iter) {
     // const continueButton = document.createElement('button')
@@ -719,13 +705,13 @@ function raceChoices(options, tempButtons, div, page) {
                 console.log("optionsR: " + options[r])
                 localStorage.setItem('_subrace', options[r])
                 localStorage.setItem('_race', 'Dragonborn')
-                loadLanguages('Dragonborn')
+                // loadLanguages('Dragonborn')
                 loadSpeed('Dragonborn')
             }
             else {
                 console.log("optionsR: " + options[r])
                 localStorage.setItem('_' + page, options[r])
-                loadLanguages(options[r])
+                // loadLanguages(options[r])
                 loadSpeed(options[r])
             }
 
@@ -747,22 +733,22 @@ function raceChoices(options, tempButtons, div, page) {
     }
 }
 
-function loadLanguages(race) {
-    console.log("Loading languages for " + race)
-    fetch('/guide.json')
-        .then(response => response.json())
-        .then(data => {
-            var languageString = "Languages: "
-            languages = data.races[race].lang
-            for (const lan in languages) {
-                languageString = languageString + languages[lan] + " "
-            }
-            appendToCharacterSheet('_otherproficiencieslanguages', languageString)
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+// function loadLanguages(race) {
+//     console.log("Loading languages for " + race)
+//     fetch('/guide.json')
+//         .then(response => response.json())
+//         .then(data => {
+//             var languageString = "Languages: "
+//             languages = data.races[race].lang
+//             for (const lan in languages) {
+//                 languageString = languageString + languages[lan] + " "
+//             }
+//             appendToCharacterSheet('_otherproficiencieslanguages', languageString)
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
 
 function loadSpeed(race) {
     console.log("Loading speed for " + race)
@@ -1117,12 +1103,13 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
 
     console.log("Texts to highlight: " + textsToHighlight)
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
-
-        const strEl = inputString.split("**")
-        // console.log("STREL: " + strEl)
-        const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
-        console.log(!Array.isArray(textsToHighlight))
-        return newString;
+        if (inputString.includes('**')) {
+            const strEl = inputString.split("**")
+            // console.log("STREL: " + strEl)
+            const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
+            console.log(!Array.isArray(textsToHighlight))
+            return newString;
+        }
     }
 
     const closeTag = '</mark>';
@@ -1171,6 +1158,7 @@ function beginBackground(specialCaseHandled = false) {
     console.log("state: " + state)
     if (state != null || sInt == 1) {
         console.log("initting background qs")
+        if (sInt == 1) chooseLanguages()
         if (sInt == 2) backgroundQuestions()
         if (sInt == 3) chooseIdeals()
         if (sInt == 4) chooseBonds()
@@ -1734,6 +1722,15 @@ function loadAllBackgroundInfo(choice) {
                 console.log("Chose " + choice + " as background")
                 localStorage.setItem("backgroundState", "3")
                 chooseIdeals()
+                getNumLanguagesFromBackground().then(data => {
+                    fromBck = data
+                    console.log('fromBack: ' + fromBck)
+                    localStorage.setItem('langsFromBackground', fromBck)
+                    console.log('fombck' + fromBck)
+                })
+                    .catch(error => {
+                        console.log(error)
+                    })
                 // characterName()
             }
             bgDiv.appendChild(select)
@@ -1829,6 +1826,101 @@ function chooseBonds() {
         });
 }
 
+function createLanguageTables() {
+    // Create the main div
+    const mainDiv = document.createElement('div');
+
+    // Fetch JSON data from 'guide.json'
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            // Create a table for standard languages
+            const standardTable = createTable('Standard Languages', data.standardLanguages);
+            mainDiv.appendChild(standardTable);
+
+            // Create a table for exotic languages
+            // const exoticTable = createTable('Exotic Languages', data.exoticLanguages);
+            // mainDiv.appendChild(exoticTable);
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        });
+
+    return mainDiv;
+}
+
+// Rest of the code remains the same...
+
+
+// Helper function to create a table
+function createTable(title, languages) {
+    const table = document.createElement('table');
+    const caption = table.createCaption();
+    caption.textContent = title;
+
+    // Create header row
+    const headerRow = table.insertRow();
+    const languageHeader = headerRow.insertCell();
+    const speakersHeader = headerRow.insertCell();
+    const scriptHeader = headerRow.insertCell();
+    languageHeader.textContent = 'Language';
+    speakersHeader.textContent = 'Typical Speakers';
+    scriptHeader.textContent = 'Script';
+
+    // Create rows for each language
+    const allowed = parseInt(localStorage.getItem('extraLangs'))
+    let selected = 0
+    let selectedLangs = []
+    contBtn = appendToContent('button')
+    contBtn.style.display = 'none'
+    contBtn.innerText = "Continue"
+    contBtn.onclick = function () {
+        characterName()
+    }
+    languages.forEach((language, index) => {
+
+        const row = table.insertRow();
+        row.addEventListener('click', () => {
+            // Change background color on row click
+            if (selected < allowed && row.style.backgroundColor != 'lightblue') {
+                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
+                selected += 1
+                selectedLangs.push(row.cells[0].textContent)
+                console.log(selectedLangs)
+            } else if (row.style.backgroundColor == 'lightblue') {
+                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
+                selected -= 1
+                console.log(selectedLangs.indexOf(row.cells[0].textContent))
+                selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
+                console.log(selectedLangs)
+            }
+            if (allowed == selectedLangs.length) {
+                contBtn.style.display = 'block'
+            } else {
+                contBtn.style.display = 'none'
+            }
+            
+        });
+
+        const languageCell = row.insertCell();
+        const speakersCell = row.insertCell();
+        const scriptCell = row.insertCell();
+
+        languageCell.textContent = language.language;
+        speakersCell.textContent = language.typicalSpeakers;
+        scriptCell.textContent = language.script;
+    });
+
+    return table;
+}
+
+// Example usage: Append the created div to the body
+//   document.body.appendChild(createLanguageTables());
+
+function beginEquipment() {
+
+}
+
 function chooseFlaws() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -1870,12 +1962,13 @@ function chooseFlaws() {
             console.error('Error:', error);
         });
 }
-
+var numberOfPersonalityTraits = 0
+var personalityTraits = ''
 function choosePersonality() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "A character's perosnality trait can help when you make decisions during the game. Please select one or write your own."
+    main.innerText = "A character's perosnality trait can help when you make decisions during the game. Please select one or write your own. Choose two traits from below."
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -1884,15 +1977,32 @@ function choosePersonality() {
             optDiv = appendToContent('div', 'standardDiv')
             for (id in allPT) {
                 const btn = appendToContent('button')
+                btn.setAttribute('id', 'personalityBtn')
+                btn.addEventListener('click', function () {
+                    // Toggle the 'clicked' class when the button is clicked
+
+                    if (numberOfPersonalityTraits < 2) {
+                        numberOfPersonalityTraits += 1
+                        this.classList.toggle('clicked');
+                        personalityTraits += numberOfPersonalityTraits + '. ' + btn.innerText + '  '
+                        console.log("PT: +" + personalityTraits)
+                    }
+                    if (numberOfPersonalityTraits == 2) {
+                        localStorage.setItem("backgroundState", "1")
+                        localStorage.setItem('_personalityTraits', personalityTraits)
+                        // characterName()
+                        chooseLanguages()
+                    }
+                });
                 btn.innerText = allPT[id]
                 optDiv.appendChild(btn)
-                btn.onclick = function () {
-                    localStorage.setItem('_personalityTraits', btn.innerText)
-                    localStorage.setItem("backgroundState", "1")
-                    // window.location.href = '../html/equipment.html'
-                    characterName()
-                    // rollForAbilities()
-                }
+                // btn.onclick = function () {
+                //     localStorage.setItem('_personalityTraits', btn.innerText)
+                //     localStorage.setItem("backgroundState", "1")
+                //     // window.location.href = '../html/equipment.html'
+                //     // characterName()
+                //     // rollForAbilities()
+                // }
             }
             content.appendChild(optDiv)
             inp = document.createElement('input')
@@ -1908,8 +2018,9 @@ function choosePersonality() {
                 localStorage.setItem('_personalityTraits', inp.value)
                 localStorage.setItem("backgroundState", "1")
                 // window.location.href = '../html/equipment.html'
-                characterName()
+                // characterName()
                 // initRolling()
+                chooseLanguages()
             }
         })
         .catch(error => {
@@ -1917,13 +2028,88 @@ function choosePersonality() {
         });
 }
 
+function chooseLanguages() {
+    // set extra languages to 0
+    localStorage.setItem('extraLangs', '0')
+    content = clearContentAndGet()
+    explainer = appendToContent('div', 'standardDiv')
+    console.log('All details are here: ' + allDetails)
+    // explainer.innerHTML = highlightTextWithMouseover(
+    //     'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
+    //     allDetails
+    // )
+
+
+    currLangDiv = appendToContent()
+    getFromCSV('raceFeatures.csv', localStorage.getItem('_subRace'), 'Languages')
+        .then(data => {
+            if (data !== null) {
+                numExtraLangs = 0
+
+                langs = data.split(',')
+                if (langs[langs.length - 1].includes('extra')) {
+                    txt = ''
+                    for (var i = 0; i < langs.length - 1; i++) {
+                        txt += langs[i]
+                    }
+                    currLangDiv.innerText = txt
+                    addToLocalStorageInt('extraLangs', 1)
+                    numExtraLangs++;
+
+                } else {
+                    currLangDiv.innerText = data
+                }
+                
+                console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
+                numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
+                if (numExtraLangs == 0) {
+                    chooseBonds()
+                }
+
+                explainer.innerHTML = highlightTextWithMouseover(
+                    'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
+                    allDetails
+                )
+                localStorage.setItem('extraLangs', numExtraLangs)
+                moreExplainer = appendToContent('div', 'standardDiv')
+                if (numExtraLangs == 1) {
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra language.'
+                }
+                moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
+                langTables = createLanguageTables()
+                content.appendChild(langTables)
+
+            } else {
+                console.log("Target Not Found for chooseLanguages");
+            }
+        })
+
+    // console.log('currLang '+ currentLang)
+
+}
+
+async function getNumLanguagesFromBackground() {
+    try {
+        const data = await getFromCSV('background.csv', localStorage.getItem('_background'), 'Languages');
+        if (data !== null && data !== '') {
+            return parseInt(data.charAt(0));
+        } else {
+            return 0;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return 0; // Handle the error and return a default value
+    }
+}
+
+
+
 function initRolling() {
     rollForAbilities()
 }
 
 function rollForAbilities() {
     console.log('here')
-    // window.location.href = '../html/rollDemo.html'
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
@@ -1952,12 +2138,12 @@ function rollTheDice(abil) {
     content = clearContentAndGet()
     explainer = document.createElement('div')
     abilTitle = abil.slice(1)
-    explainer.innerHTML = '<h2>'+abilTitle.charAt(0).toUpperCase()+abilTitle.slice(1)+'</h2>'
+    explainer.innerHTML = '<h2>' + abilTitle.charAt(0).toUpperCase() + abilTitle.slice(1) + '</h2>'
 
     content.insertBefore(explainer, document.getElementById('rolling'))
     // if (localStorage.getItem('nextRoll') == 'true') {
     nextBtn = document.createElement('button')
-    nextBtn.setAttribute('id','nextButton')
+    nextBtn.setAttribute('id', 'nextButton')
     nextBtn.style.display = 'none'
     nextBtn.innerText = "Next"
     content.appendChild(nextBtn)
@@ -1968,7 +2154,8 @@ function rollTheDice(abil) {
             rollTheDice(next)
         }
         else {
-            fullDebrief()
+            assignProficiencies()
+            // fullDebrief()
         }
         // rollTheDice(getNextRoll(abil))
     }
@@ -1997,10 +2184,29 @@ function rollTheDice(abil) {
 
 }
 
+function assignProficiencies() {
+    var savingThrowProfs = []
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'),'Saving Throw Proficiencies')
+    .then(data => {
+        if (data !== null) {
+            rmSpace = data.replace(/\s/g, '');
+            console.log('rmSpace: ' + rmSpace)
+            profArr = data.split(',')
+            for (prof in profArr) {
+                console.log(profArr[prof])
+                target = profArr[prof].toLowerCase()
+                // if ()
+            }
+        } else {
+            console.log("Target Not Found for assignProficiencies");
+        }
+    })
+}
+
 function getNextRoll(currentScore) {
     console.log(currentScore + "Current score")
     const abilityScores = ['_strength', '_dex', '_constitution', '_intellegence', '_wisdom', '_charisma'];
-    
+
     // Find the index of the current score
     const currentIndex = abilityScores.indexOf(currentScore);
     console.log(currentIndex + "currindex")
@@ -2010,13 +2216,34 @@ function getNextRoll(currentScore) {
         return 'done';
     }
 
-    localStorage.setItem('currentRoll',abilityScores[currentIndex + 1])
+    localStorage.setItem('currentRoll', abilityScores[currentIndex + 1])
     // Return the next ability score
     return abilityScores[currentIndex + 1];
 }
 
 vals = [8, 10, 12, 13, 14, 15]
 assignedAbils = []
+
+function getFromCSV(fileName, target, column) {
+    return fetch('../misc/' + fileName)
+        .then(response => response.text())
+        .then(csvText => {
+            return new Promise(resolve => {
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function (results) {
+                        const matchingRow = results.data.find(row => row[results.meta.fields[0]] === target);
+                        if (matchingRow) {
+                            resolve(matchingRow[column]);
+                        } else {
+                            resolve(null); // Target not found
+                        }
+                    }
+                });
+            });
+        });
+}
+
 
 function standardArray() {
     if (assignedAbils.length == 6) {
@@ -2110,12 +2337,31 @@ function appendAbilityValues(divAbil, vals, abil) {
             localStorage.setItem('_' + abil.toLowerCase(), toAppend.innerText)
             vals = removeValue(vals, parseInt(toAppend.innerText));
             // console.log('valsn ow: ' +vals)
-
-
             standardArray()
 
         }
     }
+}
+
+function flagProficiencies() {
+    getFromCSV('')
+}
+
+function applyProficiencies() {
+    var filePath = '../misc/raceFeatures.csv';
+    fetch(filePath)
+        .then(response => response.text())
+        .then(csvText => {
+            Papa.parse(csvText, {
+                header: true,
+                complete: function (results) {
+                    const categoryIndex = results.meta.fields.indexOf('Category');
+                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+                    const uniqueCategories = Array.from(new Set(categories));
+                    console.log(uniqueCategories);
+                }
+            });
+        });
 }
 
 function calculateValsFromAbilityScores() {
@@ -2123,6 +2369,8 @@ function calculateValsFromAbilityScores() {
         '_armorClass',
         parseInt(localStorage.getItem('_dex')) + 10
     )
+
+    localStorage.setItem('_proficiencyBonus', '2')
 
     localStorage.setItem(
         '_strengthMod',
@@ -2154,15 +2402,18 @@ function calculateValsFromAbilityScores() {
         '+' + localStorage.getItem('_dexMod')
     )
 
-    // parseRaceFeatures('Elf (High)', 'Ability Score Increase (Race)')
-    // .then(value => {
-    //     console.log(value);
-    // });
 
     applyRaceBenifits()
 
 
-    // window.location.href = 'charsheet.html'
+    // Dependant stats
+
+    // TODO: if proficient in perception add that score to this stat
+    localStorage.setItem(
+        '_passiveWisdom',
+        parseInt(localStorage.getItem('__wisdomMod')) + 10
+    )
+
 }
 
 function applyRaceBenifits() {
@@ -2171,11 +2422,18 @@ function applyRaceBenifits() {
     console.log('pl subrace: ' + plSubRace)
     parseRaceFeatures(plRace, 'Ability Score Increase (Race)').then(value => {
         console.log(value)
-        splitVal = value.split(' ')
-        var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
-        currentInt += parseInt(splitVal[1])
-        console.log('New value: ' + currentInt)
-        localStorage.setItem('_' + splitVal[0].toLowerCase(), currentInt)
+        scores = value.split(',')
+        for (sc in scores) {
+            if (localStorage.getItem('_race') == 'Half-Elf') {
+                handleHalfElfAbilityScores()
+            }
+            splitVal = scores[sc].split(' ')
+            var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
+            currentInt += parseInt(splitVal[1])
+            console.log('New value: ' + currentInt)
+            localStorage.setItem('_' + splitVal[0].toLowerCase(), currentInt)
+        }
+
     })
 
     parseRaceFeatures(plSubRace, 'Ability Score Increase (Subrace)').then(value => {
@@ -2200,7 +2458,121 @@ function applyRaceBenifits() {
 
     updateModifiers()
     updateSkillLocalStorageValues()
+    console.log('Class: ' + localStorage.getItem('_class'))
+
+
+    // GET 
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Class Features (Level 1)')
+        .then(data => {
+            if (data !== null) {
+                console.log(data);
+                addToLocalStorageString(
+                    '_featuresandtraits',
+                    data
+                )
+            } else {
+                console.log("Target Not Found for Class Features");
+            }
+        })
+        .catch(error => console.error('Error: ', error));
     // calculateSkills() 
+    calculateMaxHP()
+
+
+}
+
+function calculateMaxHP() {
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Hit Points')
+        .then(data => {
+            if (data !== null) {
+                console.log(data)
+                var HPMax = data.split(' ')
+                localStorage.setItem('_hitPointMaximum', HPMax[0])
+                localStorage.setItem('_currentHitPoints', HPMax[0])
+            } else {
+                console.log("Target Not Found for Max HP");
+            }
+        })
+}
+
+function handleHalfElfAbilityScores() {
+    q = 'As a Half-Elf, you get to choose two more ability scores to increase by 1.'
+    ansBtns = []
+    const abilityScores = ['Strength', 'Dex', 'Constitution', 'Intelligence', 'Wisdom']
+    for (abilScrs in abilityScores) {
+        btn = document.createElement('button')
+        btn.innerText = abilityScores[abilScrs]
+        key = '_' + abilityScores[abilScrs].toLowerCase()
+        if (abilityScores[abilScrs] == 'Intelligence') {
+            key = '_intellegence'
+        }
+        btn.onclick = function () {
+            addToLocalStorageInt(key, 1)
+            btn.remove()
+        }
+        ansBtn.push(btn)
+    }
+    basicQuestionAnswer(q, ansBtns)
+    contBtn = document.createElement('button')
+    contBtn.innerText = "Continue"
+    contBtn.onclick = function () {
+        fullDebrief()
+    }
+}
+
+// Clears and begins another sequence
+function basicQuestionAnswer(question, answers, explainer = '') {
+    content = clearContentAndGet()
+    if (explainer !== '') {
+        explain = appendToContent('div', 'standardDiv')
+        explain.innerText = explainer
+    }
+    q = appendToContent('div', 'standardDiv')
+    q.innerText = question
+    for (ans in answers) {
+        appendToContent(answers[ans])
+    }
+}
+
+function setGold() {
+    getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
+        .then(data => {
+            if (data !== null) {
+                console.log(data)
+                gpArr = data.split(' ')
+                localStorage.setItem('_eqGP')
+            } else {
+                console.log("Target Not Found for Gold");
+            }
+        })
+}
+
+function addToLocalStorageInt(key, value) {
+
+    if (localStorage.getItem(key) == 'NaN') {
+        console.log("value here: " + localStorage.getItem(key))
+        localStorage.setItem(key, '0')
+    }
+    try {
+        currVal = parseInt(localStorage.getItem(key))
+        newVal = currVal + value
+        localStorage.setItem(key, newVal)
+        console.log(newVal + " newVAl")
+    }
+    catch {
+        console.error("Could not parse the local storage value in addToLocalStorage.")
+    }
+}
+
+function addToLocalStorageString(key, value) {
+    try {
+        currVal = localStorage.getItem(key)
+        newVal = currVal + '  ' + value
+        localStorage.setItem(key, newVal)
+    }
+    catch {
+        console.error("Could not parse the local storage value in addToLocalStorage.")
+    }
 }
 
 function updateModifiers() {

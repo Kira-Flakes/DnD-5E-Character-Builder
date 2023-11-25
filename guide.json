@@ -168,7 +168,6 @@
                 "Wood Elf": "<h2>Wood Elf</h2> <p>As a wood elf, you have keen senses and intuition, and your fleet feet carry you quickly and stealthily through your native forests. This category includes the wild elves (grugach) of Greyhawk and the Kagonesli of Dragonlance, as well as the races called wood elves in Greyhawk and the Forgotten Realms. In Faerun, wood elves (also called wild elves, green elves, or forest elves) are reclusive and distrustful of non-elves. </p> <p><strong>Ability Score Increase:</strong> Your Wisdom score increases by 1. </p> <p><strong>Elf Weapon Training:</strong> You have proficiency with the longsword, shortsword, shortbow, and longbow. </p> <p><strong>Fleet of Foot:</strong> Your base walking speed increases to 35 feet. </p> <p><strong>Mask of the Wild:</strong> You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.</p>",
                 "Dark Elf (Drow)": "<h2>Dark Elf (Drow)</h2><p>Descended from an earlier subrace of dark-skinned elves, the drow were banished from the surface world for following the goddess Lolth down the path to evil and corruption. Now they have built their own civilization in the depths of the Underdark, patterned after the Way of Lolth. Also called dark elves, the drow have black skin that resembles polished obsidian and stark white or pale yellow hair. They commonly have very pale eyes (so pale as to be mistaken for white) in shades of lilac, silver, pink, red, and blue. They tend to be smaller and thinner than most elves.</p><p>Drow adventurers are rare, and the race does not exist in all worlds. Check with your Dungeon Master to see if you can play a drow character.</p><p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1.</p><p><strong>Superior Darkvision:</strong> Your darkvision has a radius of 120 feet.</p><p><strong>Sunlight Sensitivity:</strong> You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p><p><strong>Drow Magic:</strong> You know the dancing lights cantrip. When you reach 3rd level, you can cast the faerie fire spell once per day. When you reach 5th level, you can also cast the darkness spell once per day. Charisma is your spellcasting ability for these spells.</p><p><strong>Drow Weapon Training:</strong> You have proficiency with rapiers, shortswords, and hand crossbows.</p>"
             },
-            
             "Dragonborn": "null",
             "Halfling": {
                 "Lightfoot Halfling": "<h2>Lightfoot Halfling</h2> <p>Lightfoot halflings are more prone to wanderlust than other halflings and often dwell alongside other races or take up a nomadic life. In the world of Greyhawk, these halflings are called hairfeet or tallfellows. They are known to be affable and get along well with others. In the Forgotten Realms, lightfoot halflings have spread the farthest and thus are the most common variety. </p> <p><strong>Ability Score Increase:</strong> Your Charisma score increases by 1. </p> <p><strong>Naturally Stealthy:</strong> You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you. </p>",
@@ -1809,5 +1808,87 @@
             "Secretly, I believe that things would be better if I were a tyrant lording over the land.",
             "I have trouble trusting in my allies."
         ]
-    }
+    },
+    "standardLanguages": [
+        {
+            "language": "Common",
+            "typicalSpeakers": "Humans",
+            "script": "Common"
+        },
+        {
+            "language": "Dwarvish",
+            "typicalSpeakers": "Dwarves",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Elvish",
+            "typicalSpeakers": "Elves",
+            "script": "Elvish"
+        },
+        {
+            "language": "Giant",
+            "typicalSpeakers": "Ogres, giants",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Gnomish",
+            "typicalSpeakers": "Gnomes",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Goblin",
+            "typicalSpeakers": "Goblinoids",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Halfling",
+            "typicalSpeakers": "Halflings",
+            "script": "Common"
+        },
+        {
+            "language": "Orc",
+            "typicalSpeakers": "Orcs",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Abyssal",
+            "typicalSpeakers": "Demons",
+            "script": "Infernal"
+        },
+        {
+            "language": "Celestial",
+            "typicalSpeakers": "Celestials",
+            "script": "Celestial"
+        },
+        {
+            "language": "Draconic",
+            "typicalSpeakers": "Dragons, dragonborn",
+            "script": "Draconic"
+        },
+        {
+            "language": "Deep Speech",
+            "typicalSpeakers": "Mind flayers, beholders",
+            "script": "Infernal"
+        },
+        {
+            "language": "Infernal",
+            "typicalSpeakers": "Devils",
+            "script": "Infernal"
+        },
+        {
+            "language": "Primordial",
+            "typicalSpeakers": "Elementals",
+            "script": "Dwarvish"
+        },
+        {
+            "language": "Sylvan",
+            "typicalSpeakers": "Fey creatures",
+            "script": "Elvish"
+        },
+        {
+            "language": "Undercommon",
+            "typicalSpeakers": "Underdark traders",
+            "script": "Elvish"
+        }
+    ]
 }
