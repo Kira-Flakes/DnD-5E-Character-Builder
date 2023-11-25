@@ -505,3 +505,8 @@ img {
 #rolling {
     display: none;
 }
+
+#personalityBtn.clicked {
+    background-color: green; /* Change to the desired color */
+    color: white; /* Change to the desired text color */
+}
