@@ -179,7 +179,7 @@
             }
         },
         "conclusion": {
-            "header": "<h3>You've chosen **_race** as your character's race<h3>",
+            "header": "<h3>You've chosen **_subRace** as your character's race<h3>",
             "next": "class"
         }
     },

@@ -660,10 +660,10 @@ function giveChoices(page) {
         .then(response => response.json())
         .then(data => {
             //reset the page elements in left column
-            setElementsInColumnOne({
-                title: page.charAt(0).toUpperCase() + page.slice(1),
-                explanation: 'Please choose one of the following races:',
-            })
+            // setElementsInColumnOne({
+            //     title: page.charAt(0).toUpperCase() + page.slice(1),
+            //     explanation: 'Please choose one of the following races:',
+            // })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
             let options = set.split(',')
@@ -778,44 +778,56 @@ function classChoices(options, tempButtons, div, page) {
     // while (divCache.length > 0) {
     //     divCache.pop(); // Remove the last element
     // }
-    for (const c in options) {
-        const choice = document.createElement('button');
-        classD = {}
-        classD.id = options[c]
-        // console.log("opts: " + c)
+    console.log('Options: '+ options)
+    if (options > 0) {
 
-        classD.val = classDescriptionDiv(options[c])
-
-        // classD.val = DiscreptionDiv(options[c])
-        // console.log("classD.val.innerHtml:" + classD.val.innerHTML)
-
-        divCache.push(classD)
-        // console.log("DIVCHACHA: "+divCache)
-        // console.log("divcache[0]: " + divCache[0].val.innerHTML)
-        // console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
-        choice.setAttribute('id', 'choiceButton')
-        choice.innerText = options[c]
-        choice.onclick = function () {
-            localStorage.setItem('_' + page, options[c])
-            for (btn in tempButtons) { // delete all buttons, since we are done with this question
-                document.getElementById('choiceButton').remove()
-            }
-            // Set the class
-            // console.log("optsc " +options[c])
-            setClass(options[c]);
-            conclusion(page);
-
-        }; // set actions for the buttons
-        // button.addEventListener('mouseenter', function () {
-        choice.addEventListener('mouseenter', function () {
-            console.log("current Class" + divCache[c])
-            clearHelperInfo()
-            console.log("divCache[" + c + "]: " + divCache[c].val.innerHTML)
-            document.getElementById('helperInfo').appendChild(divCache[c].val)
+        setElementsInColumnOne({
+            title: page.charAt(0).toUpperCase() + page.slice(1),
+            explanation: 'Please choose one of the following races:',
         })
-        tempButtons.push(choice)
-        // div.appendChild(raceDiscreptionDiv(options[r]))
-        div.appendChild(choice)
+
+        for (const c in options) {
+            const choice = document.createElement('button');
+            classD = {}
+            classD.id = options[c]
+            // console.log("opts: " + c)
+
+            classD.val = classDescriptionDiv(options[c])
+
+            // classD.val = DiscreptionDiv(options[c])
+            // console.log("classD.val.innerHtml:" + classD.val.innerHTML)
+
+            divCache.push(classD)
+            // console.log("DIVCHACHA: "+divCache)
+            // console.log("divcache[0]: " + divCache[0].val.innerHTML)
+            // console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
+            choice.setAttribute('id', 'choiceButton')
+            choice.innerText = options[c]
+            choice.onclick = function () {
+                localStorage.setItem('_' + page, options[c])
+                for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                    document.getElementById('choiceButton').remove()
+                }
+                // Set the class
+                // console.log("optsc " +options[c])
+                setClass(options[c]);
+                conclusion(page);
+
+            }; // set actions for the buttons
+            // button.addEventListener('mouseenter', function () {
+            choice.addEventListener('mouseenter', function () {
+                console.log("current Class" + divCache[c])
+                clearHelperInfo()
+                console.log("divCache[" + c + "]: " + divCache[c].val.innerHTML)
+                document.getElementById('helperInfo').appendChild(divCache[c].val)
+            })
+            tempButtons.push(choice)
+            // div.appendChild(raceDiscreptionDiv(options[r]))
+            div.appendChild(choice)
+        }
+    } else {
+        content = clearContentAndGet()
+
     }
 }
 
@@ -885,7 +897,7 @@ function pickSubrace(race) {
             console.log("Value here: " + data['race'].subRace[race])
             if (data['race'].subRace[race] === undefined) {
                 localStorage.setItem("_race", race)
-                localStorage.setItem('_subRace', '')
+                localStorage.setItem('_subRace', race)
 
                 clearMainInfo()
                 conclusion("race")
@@ -929,28 +941,39 @@ function pickSubrace(race) {
         });
 }
 
-function conclusion(page) {
-    const conclusionDiv = document.createElement('div')
-    conclusionDiv.setAttribute('id', 'conclusionDiv')
-    fetch('/guide.json')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
-            // const continueBtn = document.createElement('button')
-            // continueBtn.innerText = "Continue"
-            // document.getElementById('footerButton').innerText = 'Continue'
-            continueToNextPage(page, data[page].conclusion.next)
-            try {
-                document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
-            }
-            catch {
-                console.log("No explainer do get rid of")
-            }
-        })
+function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
+    if (specialCase) {
+        if (typeOfSpecialCase === 'Fighter') {
+            content = clearContentAndGet()
+            content
 
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+            conclusion(page)
+        }
+    }
+    else {
+        const conclusionDiv = document.createElement('div')
+        conclusionDiv.setAttribute('id', 'conclusionDiv')
+        fetch('/guide.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
+                // const continueBtn = document.createElement('button')
+                // continueBtn.innerText = "Continue"
+                // document.getElementById('footerButton').innerText = 'Continue'
+                continueToNextPage(page, data[page].conclusion.next)
+                try {
+                    document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
+                }
+                catch {
+                    console.log("No explainer do get rid of")
+                }
+            })
+
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
 }
 
@@ -1899,7 +1922,7 @@ function createTable(title, languages) {
             } else {
                 contBtn.style.display = 'none'
             }
-            
+
         });
 
         const languageCell = row.insertCell();
@@ -2059,7 +2082,7 @@ function chooseLanguages() {
                 } else {
                     currLangDiv.innerText = data
                 }
-                
+
                 console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
                 numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
                 if (numExtraLangs == 0) {
@@ -2186,21 +2209,21 @@ function rollTheDice(abil) {
 
 function assignProficiencies() {
     var savingThrowProfs = []
-    getFromCSV('classFeatures.csv', localStorage.getItem('_class'),'Saving Throw Proficiencies')
-    .then(data => {
-        if (data !== null) {
-            rmSpace = data.replace(/\s/g, '');
-            console.log('rmSpace: ' + rmSpace)
-            profArr = data.split(',')
-            for (prof in profArr) {
-                console.log(profArr[prof])
-                target = profArr[prof].toLowerCase()
-                // if ()
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Saving Throw Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                rmSpace = data.replace(/\s/g, '');
+                console.log('rmSpace: ' + rmSpace)
+                profArr = data.split(',')
+                for (prof in profArr) {
+                    console.log(profArr[prof])
+                    target = profArr[prof].toLowerCase()
+                    // if ()
+                }
+            } else {
+                console.log("Target Not Found for assignProficiencies");
             }
-        } else {
-            console.log("Target Not Found for assignProficiencies");
-        }
-    })
+        })
 }
 
 function getNextRoll(currentScore) {
