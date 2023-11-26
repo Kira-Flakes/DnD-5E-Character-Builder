@@ -660,10 +660,10 @@ function giveChoices(page) {
         .then(response => response.json())
         .then(data => {
             //reset the page elements in left column
-            // setElementsInColumnOne({
-            //     title: page.charAt(0).toUpperCase() + page.slice(1),
-            //     explanation: 'Please choose one of the following races:',
-            // })
+            setElementsInColumnOne({
+                title: page.charAt(0).toUpperCase() + page.slice(1),
+                explanation: 'Please choose one of the following options:',
+            })
             responses = data[page].questions.response
             set = localStorage.getItem(responses.options)
             let options = set.split(',')
