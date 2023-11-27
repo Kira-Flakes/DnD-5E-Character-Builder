@@ -59,20 +59,6 @@ function init() {
 
 }   // end init
 
-// function getAllDetails() {
-//     // Use the fetch API to retrieve the JSON data
-//     fetch('/guide.json')
-//         .then(response => response.json())
-//         .then(data => {
-//             // Data is the parsed JSON object
-//             res = Object.keys(data.misc);
-//             console.log("in getAllDetails: " + res);
-//             return res
-//         })
-//         .catch(error => {
-//             console.error('Error loading JSON:', error);
-//         });
-// }
 
 // Sets the message for the user to be greeted with
 function setWelcomeInfo(page) {
@@ -96,7 +82,6 @@ function presentPreset() {
     clearHelperInfo()
     localStorage.setItem('gettingstartedState', '1')
     colLeft = document.getElementById("colLeft")
-    // console.log("Content:::: "+document.getElementById('_playername').value)
     if (document.getElementById('_playername').value === null) {
         localStorage.setItem('_playername', '')
     }
@@ -147,20 +132,65 @@ function presentPreset() {
 
 }
 
+function initEquipment() {
+    content = clearContentAndGet()
+    title = appendToContent('h2')
+    title.innerText = "Equipment"
+    equipmentExplainer = appendToContent('div')
+    equipmentExplainer.innerHTML = highlightTextWithMouseover(
+        'Your class, race and background determine what equipment your character can carry.',
+        allDetails
+    )
+    cBtn = newContinueButton(true)
+    cBtn.onclick = function () {
+        beginEquipment()
+    }
+}
+
+function beginEquipment() {
+    content = clearContentAndGet()
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Equipment')
+        .then(data => {
+            elements = data.split(';')
+            for (var e in elements) {
+                itemDiv = appendToContent('div')
+                console.log("elE; "+elements[e])
+                item = elements[e].split('*')
+                if (item.length > 1) {
+                    
+                    q = document.createElement('div')
+                    q.innerText = "Choose between: "
+                    itemDiv.appendChild(q)
+                    for (i in item) {
+                        iBtn = document.createElement('button')
+                        iBtn.innerText = item[i]
+                        itemDiv.appendChild(iBtn)
+                    }                        
+                }
+                else {
+                    itemDiv.innerHTML = highlightTextWithMouseover(
+                        'You also recieve ' + item[0],
+                        allDetails
+                    )
+                }
+
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 function flushSheet(ignore) {
     for (var i = 0; i < localStorage.length; i++) {
         item = localStorage.key(i);
-        // console.log("Item: " + item)
         if (item.charAt(0) != '_') {
-            // console.log(item + " doesnt start with _")
             continue
         }
         if (contains(ignore, item)) {
-            // console.log("Item: "+ item+" is to be ignored")
             continue
         }
         localStorage.setItem(localStorage.key(i), '')
-        // console.log("LS now: " + localStorage.key(i))
 
     }
 }
@@ -181,7 +211,6 @@ function loadPresetBios() {
             colLeft = document.getElementById("colLeft")
             presets = data['presetChoice'].presets
             for (const p in presets) {
-                console.log("P: " + p)
                 bioContainer = document.createElement('div')
                 // bioContainer.setAttribute('class','container')
                 bioContainer.setAttribute('id', 'bio')
@@ -207,7 +236,6 @@ function loadPresetBios() {
                 var viewSheet = document.createElement('button')
                 viewSheet.setAttribute('id', 'viewSheetBtn' + p)
                 viewSheet.innerText = "View Character Sheet"
-                // console.log("DSFDFDSF:  " + presets[p].id)
                 var funcHelper = presets[p].id
                 viewSheet.onclick = function () {
                     loadPreset(presets[p].id)
@@ -224,12 +252,12 @@ function loadPresetBios() {
 
 // Put all explainer information on the page
 function loadExplainer(page, iter) {
+    console.log("Loading explainer...")
     explainerDiv = document.getElementById("explainer")
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            // console.log("setting details")
             explainerDiv.innerHTML = highlightTextWithMouseover(currentPage.explainer.details, allDetails)
             continueBtn = document.createElement('button')
             continueBtn.setAttribute('id', 'beginButton')
@@ -265,7 +293,6 @@ function removeAllChildrenExceptOne(divIdToKeep) {
 
         // Check if the child has the relevant id to keep
         if (child.id !== divIdToKeep) {
-            console.log('Keeping this')
             parentDiv.removeChild(child);
         }
     }
@@ -274,8 +301,6 @@ function removeAllChildrenExceptOne(divIdToKeep) {
 // Sets alignment information
 function setAlignmentInfo() {
     const alignButtons = Array.from(document.getElementsByName('_alignment'));
-    console.log("Alignbuttons: " + alignButtons);
-
     alignButtons.forEach((button, index) => {
         button.addEventListener('mouseenter', function () {
             // Code to run when the button is hovered over
@@ -285,10 +310,8 @@ function setAlignmentInfo() {
                 .then(data => {
                     // Use the JSON data here
                     const v = button.value;
-                    console.log(v);
                     const desc = data.background.alignment.options[v];
                     document.getElementById('alignmentSelection').innerText = v + ": " + desc;
-                    console.log(desc);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -328,7 +351,7 @@ function capitalize(str) {
 
 function initPageInfo(page, iter) {
     // const continueButton = document.createElement('button')
-    const mainContent = document.getElementsByClassName('content')
+    // const mainContent = document.getElementsByClassName('content')
     console.log("Initializing page \'" + page + "\'")
 
     if (localStorage.getItem('_' + page) != "") {
@@ -339,20 +362,18 @@ function initPageInfo(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            // console.log("Looking for: \'" + Object.keys(currentPage)[iter] + '\' message at iter: ' + iter)
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
                     setWelcomeInfo(page) // adds continue button on return
                     break;
                 case "explainer":
-                    // console.log("In explainer")
+                    console.log("In explainer for " + page)
                     // test()
                     loadExplainer(page, iter)
                     break;
                 case "questions":
                     console.log("Setting questions info for " + page)
-                    // console.log("In questions")
                     loadQuestion(page)
                     break;
                 default:
@@ -380,29 +401,11 @@ function handleSpecialCase(page) {
             }
             break;
         case 'class':
-            console.log("In class case\n")
+            console.log("In class case, state is ", localStorage.getItem('classState'))
             loadResponse(page)
-        // conclusion('class');
-        // case 'background':
-        //     console.log('In background case');
-        //     loadResponse(page);
         default: return
     }
 }
-
-// function decisionTree(page) {
-//     state = localStorage.getItem(page + 'State')
-//     console.log("Init decision tree at state "+state)
-//     fetch('/guide.json') // open json data
-//         .then(response => response.json())
-//         .then(data => {
-//             const currentPage = data[page]; // seek data from the current page (race, class, etc)
-//             const questionJSON = currentPage.questions[q]; // get question based on state
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-// }
 
 // Recursively calls all question in the json data.
 // Once the final question is answered (using button listeners),
@@ -423,25 +426,26 @@ function loadQuestion(page) {
                 question.innerText = questionJSON.q;
             }
             catch { // question is null, we are at the end of the sequence
-                // console.log("End of questions for this section")
-                const qDiv = document.getElementById('question'); // get question div
-                // Get all elements within the div
-                const childElements = qDiv.getElementsByTagName('*');
-                // Initialize an index for the while loop
-                let i = 0;
-                // Use a while loop to set inner text to ''
-                while (i < childElements.length) {
-                    const element = childElements[i];
-                    element.innerText = '';
-                    i++;
-                }
+                if (page == 'race') {
+                    const qDiv = document.getElementById('question'); // get question div
+                    // Get all elements within the div
+                    const childElements = qDiv.getElementsByTagName('*');
+                    // Initialize an index for the while loop
+                    let i = 0;
+                    // Use a while loop to set inner text to ''
+                    while (i < childElements.length) {
+                        const element = childElements[i];
+                        element.innerText = '';
+                        i++;
+                    }
 
-                // Remove all test elements within the div, since we are done with the questions
-                // while (qDiv.firstChild) {
-                //     qDiv.removeChild(qDiv.firstChild);
-                // }
-                loadResponse(page, currentPage.questions.response.type) // move on to the response to the questions, if it exists
-                return
+                    // Remove all test elements within the div, since we are done with the questions
+                    // while (qDiv.firstChild) {
+                    //     qDiv.removeChild(qDiv.firstChild);
+                    // }
+                    loadResponse(page, currentPage.questions.response.type) // move on to the response to the questions, if it exists
+                    return
+                }
             }
             answers = currentPage.questions[q].ans // get array of possible answers to the question
 
@@ -457,21 +461,28 @@ function loadQuestion(page) {
 
                 document.getElementById('answers').appendChild(answerButton); // add button to the answers div
                 document.getElementById(ans).setAttribute('value', answers[ans])
-                // console.log("ANSWERS: " + answers[ans][2])
                 tempButtonsId.push(ans) // add button to array that will be deleted when the user has answered the question
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
                     // nextQuestion(answers[ans])
                     // racePrev = localStorage.getItem(page+"State")
-                    // console.log("RacePrev: " + racePrev)
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
-                    // console.log("State changed to: " + localStorage.getItem("raceState"))
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
                     }
                     document.getElementById('backbutton').remove()
-                    loadQuestion(page) // load the next question
+
+                    if (page == 'class' && answers[ans][2].charAt(0) == '-') {
+                        setClass(answers[ans][0])
+                        console.log("Class tree decision handling...")
+                        classResponseHandler(answers[ans][2])
+
+                    } else {
+                        loadQuestion(page) // load the next question
+
+                    }
+
                 }; // set actions for the buttons
                 loadHelperInfoFromButton(answerButton, answers[ans]) // add the helper information to the page, explaining the implications of the choice.
             }
@@ -502,8 +513,276 @@ function loadQuestion(page) {
         });
 }
 
+function classResponseHandler(type) {
+    if (type == '->fighter') {
+        console.log("Handling fighter case...")
+        handleFighter()
+    }
+    else if (type == '->ranger') {
+        console.log('Handling Rogue case...')
+        handleRanger()
+    }
+    else if (type == '->warlock') {
+        handleWarlock()
+    }
+    else if (type == '->sorcerer') {
+        handleSorcerer()
+    }
+    else {
+        classDebrief()
+    }
+}
+
+function handleSorcerer() {
+    const originsOpts = [
+        "Draconic Bloodline",
+        "Wild Magic"
+    ]
+    choice = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            origin = data.origins
+            // Use the JSON data here
+            for (o in originsOpts) {
+                const ori = originsOpts[o]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = originsOpts[o]
+                sBtn.onclick = function () {
+                    localStorage.setItem("_origin", sBtn.innerText)
+                    classDebrief()
+                }
+                choice.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    document.getElementById('helperInfo').innerText = origin[ori]
+                })
+            }
+            basicQuestionAnswer(
+                "Warlock patrons are powerful beings from other planes, almost godlike in their might. These entities grant their warlocks unique powers and invocations, expecting significant favors in return. Some freely share mystic knowledge, while others are more selective, making pacts with only a single warlock. Warlocks serving the same patron may see each other as allies, siblings, or rivals.",
+                choice,
+                "You have been assigned Warlock, and you need to pick a patron."
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function handleWarlock() {
+    const patrons = [
+        "The Archfey",
+        "The Fiend",
+        "The Great Old One"
+    ]
+    choice = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            pats = data.patrons
+            // Use the JSON data here
+            for (p in patrons) {
+                const pat = patrons[p]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = patrons[p]
+                sBtn.onclick = function () {
+                    localStorage.setItem("_patron", sBtn.innerText)
+                    classDebrief()
+                }
+                choice.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    document.getElementById('helperInfo').innerText = pats[pat]
+                })
+            }
+            basicQuestionAnswer(
+                "Warlock patrons are powerful beings from other planes, almost godlike in their might. These entities grant their warlocks unique powers and invocations, expecting significant favors in return. Some freely share mystic knowledge, while others are more selective, making pacts with only a single warlock. Warlocks serving the same patron may see each other as allies, siblings, or rivals.",
+                choice,
+                "You have been assigned Warlock, and you need to pick a patron."
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function handleRanger() {
+    const creatureTypes = [
+        "Aberrations",
+        "Beasts",
+        "Celestials",
+        "Constructs",
+        "Dragons",
+        "Elementals",
+        "Fey",
+        "Fiends",
+        "Giants",
+        "Monstrosities",
+        "Oozes",
+        "Plants",
+        "Undead"
+    ];
+    prefEnemies = []
+
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            creatures = data.preferredEnemies
+            // Use the JSON data here
+            for (cr in creatureTypes) {
+                const ct = creatureTypes[cr]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = creatureTypes[cr]
+                sBtn.onclick = function () {
+                    localStorage.setItem("_preferredEnemy", sBtn.innerText)
+                    classDebrief()
+                }
+                prefEnemies.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    document.getElementById('helperInfo').innerText = creatures[ct]
+                })
+            }
+            basicQuestionAnswer(
+                "You have been assigned the Ranger class. As a Ranger, you are required to choose a favored enemy. You'll have advantages when fighting or tracking them.",
+                prefEnemies
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function handleFighter() {
+    fightingStyles = ["Archery", "Defense", "Dueling", "Great Weapon Fighting", "Protection", "Two-Weapon Fighting"]
+    choices = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            fighterDesc = data.fightingStyles
+            console.log("fighdesc: " + fighterDesc.Archery)
+            // Use the JSON data here
+            for (style in fightingStyles) {
+                console.log("Style is " + fightingStyles[style])
+                const fs = fightingStyles[style]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = fightingStyles[style]
+                sBtn.onclick = function () {
+                    localStorage.setItem("_fightingStyle", sBtn.innerText)
+                    classDebrief()
+                }
+                choices.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    document.getElementById('helperInfo').innerText = fighterDesc[fs]
+                })
+            }
+            basicQuestionAnswer(
+                "You have been assigned the Fighter class. As a Fighter, you are required to choose a fighting style. This will impact your combat strategy and the equipment you have.",
+                choices
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function classDebrief() {
+    _class = localStorage.getItem('_class')
+    showSavingThrows(_class)
+}
+
+
+function showSavingThrows(_class) {
+    content = clearContentAndGet()
+    var savingThrows = appendToContent('div')
+    console.log('class: ' + _class)
+    getFromCSV('classFeatures.csv', _class, 'Saving Throw Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                opts = data.split(',')
+                savingThrows.innerHTML = highlightTextWithMouseover(
+                    "You have been assigned the class " + _class + ". You have " + opts[0] + " and " + opts[1] + " saving throws.",
+                    allDetails
+                )
+                st1 = opts[0] + "-save-prof"
+                st2 = opts[1] + "-save-prof"
+                localStorage.setItem("_trueSavingThrows", st1 + "," + st2)
+            }
+            else {
+                console.log("Target Not Found for showSavingThrows");
+            }
+        })
+
+    contBtn = newContinueButton(true)
+    contBtn.onclick = function () {
+        chooseSkills(_class)
+    }
+}
+
+function chooseSkills(_class) {
+
+    var chosenProfs = []
+    content = clearContentAndGet()
+    skillChoices = appendToContent('div')
+    getFromCSV('classFeatures.csv', _class, 'Skills')
+        .then(data => {
+            if (data !== null) {
+                opts = data.split(';')
+                numChoices = opts[0].split(' ') // index 1
+
+                skillChoices.innerHTML = highlightTextWithMouseover(
+                    "You also get to choose " + numChoices[1] + " of the following skills to become a proficiency.",
+                    allDetails
+                )
+                cBtn = newContinueButton(false)
+                cBtn.disabled = true
+                profs = opts[1].split(",")
+                console.log("profs: " + profs)
+                var avail = 0
+                for (p in profs) {
+                    const btn = appendToContent('button')
+                    btn.setAttribute('id', 'smallBtn')
+                    btn.innerText = profs[p]
+                    clicked = 0
+                    let isClicked = false;
+                    btn.onclick = function () {
+
+                        isClicked = !isClicked; // Toggle the state
+                        console.log("Is clicked: " + isClicked)
+                        if (isClicked) {
+                            if (clicked >= numChoices[1]) {
+                                isClicked = !isClicked
+                                return
+                            }
+                            btn.style.backgroundColor = "rgb(119, 45, 45)";
+                            clicked++
+                            chosenProfs.push(btn.innerText)
+                        } else {
+                            btn.style.backgroundColor = "#454545";
+                            clicked--
+                            chosenProfs = chosenProfs.filter(item => item !== btn.innerText);
+                        }
+                        console.log(clicked + ' num choices: ' + numChoices[1])
+                        if (clicked == numChoices[1]) cBtn.disabled = false
+                    };
+                }
+                content.appendChild(cBtn)
+                cBtn.onclick = function () {
+                    res = ""
+                    console.log(chosenProfs)
+                    for (p in chosenProfs) {
+                        res = res + chosenProfs[p] + ","
+                    }
+                    console.log(res.slice(0, -1))
+                    localStorage.setItem('_profFromClass', res.slice(0, -1))
+                    beginBackground()
+                }
+            }
+            else {
+                console.log("Target Not Found for chooseSkills");
+            }
+        })
+}
+
 function nextQuestion(previousAnswer) {
-    console.log("PREV ANS: " + previousAnswer[2])
     if (previousAnswer[2] == '->more') {
         console.log("In more case")
         // TODO: Add more logic here
@@ -574,7 +853,6 @@ function combineValues(string1, string2) {
     parseString(string2);
 
     const combinedString = Array.from(result, ([name, value]) => `${name};${value}`).join(',');
-    console.log(combinedString)
     return combinedString;
 }
 
@@ -584,14 +862,8 @@ function checkAnswerViability(title, currentPage, qNumber) {
     var nextQ = currentPage.questions['q' + (qNumber + 1)];
     if (nextQ === undefined) return 1
     workingSet = localStorage.getItem('$' + title)
-    console.log("Working set: " + workingSet)
     for (var ans in nextQ.ans) {
-        // console.log("Set func results: " + setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])))
-        // console.log("ans: " + nextQ.ans[ans][0])
         if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
-
-            // if (setFunctions("intersection", extractNames(workingSet), extractNames(nextQ.ans[ans][0])).length == 0) {
-            // console.log("Intersection: " + setFunctions("intersection", workingSet, nextQ.ans[ans][0]))
             return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
         }
     }
@@ -628,12 +900,10 @@ function loadHelperInfoFromButton(button, jsonData) {
 // those options are loaded here.
 function loadResponse(page, type) {
     fetch('/guide.json')
-        // console.log("TYPE: " +type)
         .then(response => response.json())
         .then(data => {
             switch (type) {
                 case "set": // we present user with options
-                    // console.log("We are in a choice from a set")
                     giveChoices(page)
 
                     break;
@@ -672,7 +942,7 @@ function giveChoices(page) {
                     raceChoices(options, tempButtons, div, page);
                     break;
                 case "class":
-                    classChoices(options, tempButtons, div, page);
+                    // classChoices(options, tempButtons, div, page);
                     break;
                 default:
                     console.log("Case not handled in giveChoices()")
@@ -696,20 +966,17 @@ function raceChoices(options, tempButtons, div, page) {
         else {
             raceD.val = raceDiscreptionDiv(options[r])
         }
-        console.log("divcache: " + raceD.val)
         divCache.push(raceD)
         choice.setAttribute('id', 'choiceButton')
         choice.innerText = options[r]
         choice.onclick = function () {
             if (options[r].includes('Dragonborn')) {
-                console.log("optionsR: " + options[r])
                 localStorage.setItem('_subrace', options[r])
-                localStorage.setItem('_race', 'Dragonborn')
+                localStorage.setItem('_race', options[r])
                 // loadLanguages('Dragonborn')
                 loadSpeed('Dragonborn')
             }
             else {
-                console.log("optionsR: " + options[r])
                 localStorage.setItem('_' + page, options[r])
                 // loadLanguages(options[r])
                 loadSpeed(options[r])
@@ -723,7 +990,6 @@ function raceChoices(options, tempButtons, div, page) {
         }; // set actions for the buttons
         // button.addEventListener('mouseenter', function () {
         choice.addEventListener('mouseenter', function () {
-            console.log("MOUSEDOVER")
             clearHelperInfo()
             document.getElementById('helperInfo').appendChild(divCache[r].val)
         })
@@ -733,22 +999,6 @@ function raceChoices(options, tempButtons, div, page) {
     }
 }
 
-// function loadLanguages(race) {
-//     console.log("Loading languages for " + race)
-//     fetch('/guide.json')
-//         .then(response => response.json())
-//         .then(data => {
-//             var languageString = "Languages: "
-//             languages = data.races[race].lang
-//             for (const lan in languages) {
-//                 languageString = languageString + languages[lan] + " "
-//             }
-//             appendToCharacterSheet('_otherproficiencieslanguages', languageString)
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-// }
 
 function loadSpeed(race) {
     console.log("Loading speed for " + race)
@@ -770,7 +1020,6 @@ function appendToCharacterSheet(item, string) {
         return
     }
     i = i + string
-    console.log(i)
     localStorage.setItem(item, i)
 }
 
@@ -778,49 +1027,53 @@ function classChoices(options, tempButtons, div, page) {
     // while (divCache.length > 0) {
     //     divCache.pop(); // Remove the last element
     // }
-    for (const c in options) {
-        const choice = document.createElement('button');
-        classD = {}
-        classD.id = options[c]
-        // console.log("opts: " + c)
+    if (options > 0) {
 
-        classD.val = classDescriptionDiv(options[c])
-
-        // classD.val = DiscreptionDiv(options[c])
-        // console.log("classD.val.innerHtml:" + classD.val.innerHTML)
-
-        divCache.push(classD)
-        // console.log("DIVCHACHA: "+divCache)
-        // console.log("divcache[0]: " + divCache[0].val.innerHTML)
-        // console.log("cache at "+c+ " "+divCache[c].val.innerHTML)
-        choice.setAttribute('id', 'choiceButton')
-        choice.innerText = options[c]
-        choice.onclick = function () {
-            localStorage.setItem('_' + page, options[c])
-            for (btn in tempButtons) { // delete all buttons, since we are done with this question
-                document.getElementById('choiceButton').remove()
-            }
-            // Set the class
-            // console.log("optsc " +options[c])
-            setClass(options[c]);
-            conclusion(page);
-
-        }; // set actions for the buttons
-        // button.addEventListener('mouseenter', function () {
-        choice.addEventListener('mouseenter', function () {
-            console.log("current Class" + divCache[c])
-            clearHelperInfo()
-            console.log("divCache[" + c + "]: " + divCache[c].val.innerHTML)
-            document.getElementById('helperInfo').appendChild(divCache[c].val)
+        setElementsInColumnOne({
+            title: page.charAt(0).toUpperCase() + page.slice(1),
+            explanation: 'Please choose one of the following races:',
         })
-        tempButtons.push(choice)
-        // div.appendChild(raceDiscreptionDiv(options[r]))
-        div.appendChild(choice)
+
+        for (const c in options) {
+            const choice = document.createElement('button');
+            classD = {}
+            classD.id = options[c]
+
+            classD.val = classDescriptionDiv(options[c])
+
+            // classD.val = DiscreptionDiv(options[c])
+
+            divCache.push(classD)
+            choice.setAttribute('id', 'choiceButton')
+            choice.innerText = options[c]
+            choice.onclick = function () {
+                localStorage.setItem('_' + page, options[c])
+                for (btn in tempButtons) { // delete all buttons, since we are done with this question
+                    document.getElementById('choiceButton').remove()
+                }
+                // Set the class
+                setClass(options[c]);
+                // conclusion(page);
+
+            }; // set actions for the buttons
+            // button.addEventListener('mouseenter', function () {
+            choice.addEventListener('mouseenter', function () {
+                clearHelperInfo()
+                document.getElementById('helperInfo').appendChild(divCache[c].val)
+            })
+            tempButtons.push(choice)
+            // div.appendChild(raceDiscreptionDiv(options[r]))
+            div.appendChild(choice)
+        }
+    } else {
+        content = clearContentAndGet()
+
     }
 }
 
 function setClass(_class) {
     localStorage.setItem("_classlevel", _class + " 1");
+    localStorage.setItem("_class", _class)
 }
 
 function clearHelperInfo() {
@@ -851,18 +1104,15 @@ function raceDiscreptionDiv(race) {
 function classDescriptionDiv(_class) {
     const res = document.createElement('div')
     res.setAttribute('id', 'raceDesc' + _class)
-    console.log("class: " + _class)
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             info = data.class.classes[_class]
-            // console.log("Info " + info.desc)
             res.innerHTML = '<h2>' + _class + '</h2>' +
                 '<div>' + info.desc + '<div>' +
                 '<div>Primary Ability: ' + info.primaryAbility + '<div>' +
                 '<div>Saving Throws: ' + info.savingThrows + '<div>' +
                 '<div>Armor & Weapon Proficiencies: ' + info.ArmorWeaponProf + '<div>', allDetails
-            // console.log("RESINNER: " + res.innerHTML)
             return res
         })
         .catch(error => {
@@ -875,17 +1125,14 @@ function classDescriptionDiv(_class) {
 }
 
 function pickSubrace(race) {
-    console.log("Race is " + race)
     const tempButtonsId = []
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            // console.log('Json test: ' + data['race'].subRace[race])
             // if no subrace is to be chosen.
-            console.log("Value here: " + data['race'].subRace[race])
             if (data['race'].subRace[race] === undefined) {
                 localStorage.setItem("_race", race)
-                localStorage.setItem('_subRace', '')
+                localStorage.setItem('_subRace', race)
 
                 clearMainInfo()
                 conclusion("race")
@@ -899,7 +1146,6 @@ function pickSubrace(race) {
             })
             opts = data['race'].subRace[race]
             for (const o in opts) {
-                // console.log("o: "+o)
                 btn = document.createElement('button')
                 btn.setAttribute('id', o)
                 btn.innerText = o
@@ -909,7 +1155,6 @@ function pickSubrace(race) {
                     clearMainInfo()
 
                     for (const b in tempButtonsId) {
-                        console.log("B: " + tempButtonsId[b])
                         document.getElementById(tempButtonsId[b]).remove()
                     }
                     localStorage.setItem('subRaceDone', '1')
@@ -929,7 +1174,9 @@ function pickSubrace(race) {
         });
 }
 
-function conclusion(page) {
+function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
+
+
     const conclusionDiv = document.createElement('div')
     conclusionDiv.setAttribute('id', 'conclusionDiv')
     fetch('/guide.json')
@@ -952,6 +1199,7 @@ function conclusion(page) {
             console.error('Error:', error);
         });
 
+
 }
 
 function continueToNextPage(currentPage, nextPage) {
@@ -960,12 +1208,9 @@ function continueToNextPage(currentPage, nextPage) {
     btn.innerText = "Continue"
     btn.onclick = function () {
         window.location.href = "../html/" + nextPage + ".html"
-        // for (c in divCache) {
-        //     divCache.pop()
-        // }
+
     }
     document.getElementById('content').appendChild(btn)
-    // console.log("WHats up?")
 }
 
 function loadRaceCompletionDiv() {
@@ -1041,7 +1286,6 @@ function getItemsWithHighestValues(inputString) {
     if (highestValueRaces.length === 1) {
         return [...highestValueRaces, ...secondHighestValueRaces];
     }
-    console.log("Highest value races: " + highestValueRaces)
     return highestValueRaces;
 }
 
@@ -1065,7 +1309,6 @@ function setFunctions(action, setone, settwo) {
     switch (action) {
         case "intersection":
             res = getIntersection(s1, s2)
-            // console.log("Res "+Array.from(res).join(','))
             return Array.from(res).join(',')
         // break;
         default:
@@ -1075,14 +1318,12 @@ function setFunctions(action, setone, settwo) {
 
 // Performs an interseciton on a set.
 function getIntersection(set1, set2) {
-    // console.log("IN intersection - Set1: " + Array.from(set1) + " set2" + Array.from(set2))
     const ans = new Set();
     for (let i of set2) {
         if (set1.has(i)) {
             ans.add(i);
         }
     }
-    // console.log("Intersection: " + ans);
     return ans;
 }
 
@@ -1093,21 +1334,16 @@ function getIntersection(set1, set2) {
 //                  the number that corresponds to the response state.
 function alterState(topic, change) {
     var storageItem = topic + "State"
-    // s = parseInt(localStorage.getItem(storageItem)) + change
-    // console.log("Storage item: " + change)
     localStorage.setItem(storageItem, change)
 }
 
 
 function highlightTextWithMouseover(inputString, textsToHighlight) {
 
-    console.log("Texts to highlight: " + textsToHighlight)
     if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
         if (inputString.includes('**')) {
             const strEl = inputString.split("**")
-            // console.log("STREL: " + strEl)
             const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
-            console.log(!Array.isArray(textsToHighlight))
             return newString;
         }
     }
@@ -1117,7 +1353,6 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     let highlightedString = inputString;
     const encounteredTexts = new Set();
     const strEl = inputString.split("**")
-    // console.log("STREL: " + strEl)
     const newString = strEl[0] + localStorage.getItem("_") + strEl[strEl.length]
 
     textsToHighlight.forEach(textToHighlight => {
@@ -1132,17 +1367,15 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
             return match; // Return the match without highlighting if it's encountered again
         });
     });
-    console.log("Highlighted String: " + highlightedString)
     return highlightedString;
 }
 
 function loadHelperInfoFromMisc(text) {
-    fetch('/guide.json')
+    fetch('../guide.json')
         .then(response => response.json())
         .then(data => {
             response = data["misc"][text.toLowerCase()]
             document.getElementById('helperInfo').innerText = response
-            // console.log(response)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1155,9 +1388,9 @@ function loadHelperInfoFromMisc(text) {
 function beginBackground(specialCaseHandled = false) {
     var state = localStorage.getItem("backgroundState")
     var sInt = parseInt(state)
-    console.log("state: " + state)
+    console.log("BG state: " + sInt)
     if (state != null || sInt == 1) {
-        console.log("initting background qs")
+        if (sInt == 0) chooseAlignment()
         if (sInt == 1) chooseLanguages()
         if (sInt == 2) backgroundQuestions()
         if (sInt == 3) chooseIdeals()
@@ -1166,32 +1399,57 @@ function beginBackground(specialCaseHandled = false) {
         if (sInt == 6) choosePersonality()
     }
     else {
-        if (!specialCaseHandled) checkForSpecialBackgroundCase();
-        else {
-            chooseAlignment()
-        }
+        loadBackgroundExplainer()
     }
 
+}
+
+function setBackgroundProfs() {
+    getFromCSV('background.csv', localStorage.getItem('_background'), 'Skill Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                profs = data.split(',')
+                res = profs[0] + ',' + profs[1]
+                localStorage.setItem('_profFromBackground', res)
+            } else {
+                console.log("Target Not Found for setBackgroundProfs");
+            }
+        })
+}
+
+function loadBackgroundExplainer() {
+    content = clearContentAndGet()
+    title = appendToContent('h2')
+    title.innerText = "Background"
+    exp = appendToContent('div')
+    exp.innerHTML = highlightTextWithMouseover(
+        "A well-developed background not only enhances the player's immersion but also provides the Dungeon Master with narrative hooks and opportunities to weave the character seamlessly into the broader campaign. It adds richness to the storytelling, making the character more relatable and compelling, and can contribute to collaborative storytelling as other players and the DM incorporate these details into the shared narrative.",
+        allDetails
+    )
+    cBtn = newContinueButton(true)
+    cBtn.onclick = function () {
+        chooseAlignment()
+    }
 }
 
 // Before we give the generic backround sequence, we need to handle special cases
-function checkForSpecialBackgroundCase() {
-    const cl = localStorage.getItem("_class")
-    // cleric case - dieties are tied to alignment
-    if (cl == "Cleric") {
-        console.log("Cleric background special case. Handling...")
-        initClericDieties();
-    }
-    else if (cl == 'Warlock') {
-        console.log("Warlock background special case. Handling...")
-        warlockDetails()
-    }
+// function checkForSpecialBackgroundCase() {
+//     const cl = localStorage.getItem("_class")
+//     // cleric case - dieties are tied to alignment
+//     if (cl == "Cleric") {
+//         console.log("Cleric background special case. Handling...")
+//         initClericDieties();
+//     }
+//     else if (cl == 'Warlock') {
+//         console.log("Warlock background special case. Handling...")
+//         warlockDetails()
+//     }
 
-    else {
-        beginBackground(true)
-    }
+//     else {
+//         beginBackground(true)
+//     }
 
-}
+// }
 
 function warlockDetails() {
     content = clearContentAndGet()
@@ -1386,7 +1644,6 @@ function getFullAlighnmentName(AlignAcronymObject) {
 
 function chooseAlignment() {
     content = document.getElementById("content")
-    console.log("allDetails: " + allDetails)
     clearDiv(content)
     appendToContent('div', "standardDiv").innerHTML = "<h2>Alignment</h2>"
     appendToContent('div', 'standardDiv').innerHTML = "It's time to choose an alignment, representing the nature of your character's actions. How would your character respond to the following scenario?"
@@ -1572,8 +1829,8 @@ function characterName() {
     cBtn = document.getElementById('continueButton')
     cBtn.onclick = function () {
         storeKeyFromInput('_name')
-        window.location.href = '../html/equipment.html'
-        rollForAbilities()
+        determineProfs()
+
     }
     fetch('/guide.json')
         .then(response => response.json())
@@ -1590,6 +1847,26 @@ function characterName() {
             console.error('Error:', error);
         });
 }
+
+function determineProfs() {
+    fromClass = localStorage.getItem('_profFromClass').split(',')
+    fromBackground = localStorage.getItem('_profFromBackground').split(',')
+
+    res = arrayUnion(fromClass, fromBackground)
+    console.log("RES: " + res)
+    localStorage.setItem('_skillProfs', res)
+    window.location.href = '../html/equipment.html'
+
+}
+
+function arrayUnion(arr1, arr2) {
+    // Use Set to eliminate duplicates
+    const set = new Set([...arr1, ...arr2]);
+
+    // Convert Set back to array
+    return [...set];
+}
+
 
 function createNameTable(race, maleValues, femaleValues) {
     // Create a table element
@@ -1718,6 +1995,7 @@ function loadAllBackgroundInfo(choice) {
             select.innerText = "Select " + choice
             select.onclick = function () {
                 localStorage.setItem("_background", choice)
+                setBackgroundProfs()
                 // move to next sequence
                 console.log("Chose " + choice + " as background")
                 localStorage.setItem("backgroundState", "3")
@@ -1899,7 +2177,7 @@ function createTable(title, languages) {
             } else {
                 contBtn.style.display = 'none'
             }
-            
+
         });
 
         const languageCell = row.insertCell();
@@ -1917,9 +2195,7 @@ function createTable(title, languages) {
 // Example usage: Append the created div to the body
 //   document.body.appendChild(createLanguageTables());
 
-function beginEquipment() {
 
-}
 
 function chooseFlaws() {
     content = clearContentAndGet()
@@ -2059,15 +2335,16 @@ function chooseLanguages() {
                 } else {
                     currLangDiv.innerText = data
                 }
-                
+
                 console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
                 numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
                 if (numExtraLangs == 0) {
                     chooseBonds()
+                    return
                 }
 
                 explainer.innerHTML = highlightTextWithMouseover(
-                    'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
+                    'As a ' + localStorage.getItem('_subRace') + ' you can already speak these languages: ',
                     allDetails
                 )
                 localStorage.setItem('extraLangs', numExtraLangs)
@@ -2080,7 +2357,7 @@ function chooseLanguages() {
                 content.appendChild(langTables)
 
             } else {
-                console.log("Target Not Found for chooseLanguages");
+                console.log("Target Not Found for chooseLanguages: " + localStorage.getItem('_subRace'));
             }
         })
 
@@ -2186,21 +2463,21 @@ function rollTheDice(abil) {
 
 function assignProficiencies() {
     var savingThrowProfs = []
-    getFromCSV('classFeatures.csv', localStorage.getItem('_class'),'Saving Throw Proficiencies')
-    .then(data => {
-        if (data !== null) {
-            rmSpace = data.replace(/\s/g, '');
-            console.log('rmSpace: ' + rmSpace)
-            profArr = data.split(',')
-            for (prof in profArr) {
-                console.log(profArr[prof])
-                target = profArr[prof].toLowerCase()
-                // if ()
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Saving Throw Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                rmSpace = data.replace(/\s/g, '');
+                console.log('rmSpace: ' + rmSpace)
+                profArr = data.split(',')
+                for (prof in profArr) {
+                    console.log(profArr[prof])
+                    target = profArr[prof].toLowerCase()
+                    // if ()
+                }
+            } else {
+                console.log("Target Not Found for assignProficiencies");
             }
-        } else {
-            console.log("Target Not Found for assignProficiencies");
-        }
-    })
+        })
 }
 
 function getNextRoll(currentScore) {
@@ -2521,8 +2798,9 @@ function handleHalfElfAbilityScores() {
 }
 
 // Clears and begins another sequence
-function basicQuestionAnswer(question, answers, explainer = '') {
-    content = clearContentAndGet()
+function basicQuestionAnswer(question, answers, explainer = '', clear = true) {
+    if (clear) content = clearContentAndGet()
+    else content = document.getElementById('content')
     if (explainer !== '') {
         explain = appendToContent('div', 'standardDiv')
         explain.innerText = explainer
@@ -2530,7 +2808,7 @@ function basicQuestionAnswer(question, answers, explainer = '') {
     q = appendToContent('div', 'standardDiv')
     q.innerText = question
     for (ans in answers) {
-        appendToContent(answers[ans])
+        content.appendChild(answers[ans])
     }
 }
 
@@ -2696,7 +2974,7 @@ function toggleRollDisplay() {
     }
 }
 
-function appendToContent(type, id = null) {
+function appendToContent(type, id = 'standardDiv') {
     res = document.createElement(type)
     document.getElementById('content').appendChild(res)
     if (id != null) res.setAttribute('id', id)
