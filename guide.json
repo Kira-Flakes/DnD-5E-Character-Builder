@@ -219,7 +219,7 @@
                         "->continue"
                     ],
                     "Martial": [
-                        "",
+                        "Barbarian,Monk,Rogue",
                         "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
                         "7"
                     ]
@@ -235,9 +235,9 @@
                         "4"
                     ],
                     "Support": [
-                        "Rogue",
+                        "Ranger",
                         "Support spells are designed to aid allies or provide healing, protection, and other positive effects. For example, casting \"Heal\" to restore a wounded party member's hit points.",
-                        "->conclusion"
+                        "->ranger"
                     ],
                     "All Kinds": [
                         "Wizard",
@@ -251,14 +251,14 @@
                 "q": "Are you someone who inherited powers from a long line of magic weilders, or are you controlled by dark forces most men could never understand?",
                 "ans": {
                     "Sorcerer": [
-                        "",
-                        "jfknsdfjsdkl",
-                        "12"
+                        "Sorcerer",
+                        "Sorcerers wield the magical essence flowing within them, be it dragonfire, elemental power, or otherworldly forces. In moments of intensity, they manifest extraordinary abilities like soaring with leathery wings or unleashing powerful blasts of lightning or fire. Unlike learned skills, sorcery is an innate and unpredictable gift, bestowed upon individuals through exotic bloodlines or encounters with cosmic forces.",
+                        "->sorcerer"
                     ],
                     "Warlock": [
                         "Warlock",
-                        "wproweropwertj",
-                        "->Warlock"
+                        "Warlocks, adorned in various scenes, wield magical influence through pacts with supernatural entities. Whether charming with a pseudodragon, invoking fiendish magic, or performing mystical rituals, warlocks seek hidden knowledge from beings like fey nobles, demons, and entities from the Far Realm. Their powers, drawn from these enigmatic pacts, grant warlocks a range of magical effects, both subtle and spectacular, as they piece together arcane secrets to enhance their own prowess.",
+                        "->warlock"
                     ]
                 },
                 "back": "3"
@@ -269,7 +269,7 @@
                     "Martial": [
                         "Fighter",
                         "Martial prowess encompasses combat skills, physical strength, and weapon expertise.",
-                        "->conclusion"
+                        "->fighter"
                     ],
                     "Magical": [
                         "",
@@ -682,6 +682,7 @@
         "sleight of hand": "The ability to perform manual tricks, pick pockets, and manipulate small objects with dexterity.",
         "stealth": "The skill to move quietly and avoid detection, whether through shadows or disguise.",
         "survival": "Knowledge and ability to thrive in the wilderness, including tracking, foraging, and navigating.",
+        "proficiency": "Characters and monsters in the game have a proficiency bonus, determined by their level, which is used in ability checks, saving throws, and attack rolls. Proficiency bonuses are not added more than once to a single roll, even if multiple rules suggest adding them to the same type of roll. However, circumstances might occasionally multiply or divide the proficiency bonus, such as the rogue's Expertise feature doubling it for specific ability checks. Generally, proficiency bonuses are not multiplied for attack rolls or saving throws unless specified by a feature or effect.",
         "temp_ignore120123": "this will never be called, i put this here for a weird reason, don't worry about it lol."
     },
     "races": {
@@ -1890,5 +1891,37 @@
             "typicalSpeakers": "Underdark traders",
             "script": "Elvish"
         }
-    ]
+    ],
+    "fightingStyles": {
+        "Archery": "This style enhances ranged combat proficiency, providing increased accuracy and damage when using bows or crossbows.",
+        "Defense": "Focused on protecting oneself, this style emphasizes improved armor techniques and heightened defensive capabilities.",
+        "Dueling": "Perfect for one-on-one engagements, dueling emphasizes precision and control, granting additional damage when wielding a single one-handed weapon.",
+        "Great Weapon Fighting": "Suited for wielders of large weapons, this style maximizes the effectiveness of powerful two-handed strikes, allowing for rerolls of certain damage dice.",
+        "Protection": "A defensive approach, this style enables a fighter to shield allies by imposing disadvantage on attacks against them when wielding a shield.",
+        "Two-Weapon Fighting": "Ideal for dual-wielding combatants, this style enhances the ability to strike with both weapons, adding proficiency to the off-hand attack and increasing overall damage output."
+    },
+    "preferredEnemies": {
+        "Aberrations": "Otherworldly entities with bizarre forms and alien minds, aberrations often dwell in the depths of forgotten realms and use mind-twisting abilities to confound and subdue their foes.",
+        "Beasts": "Natural creatures of various shapes and sizes, beasts are found in every corner of the world, from dense forests to expansive plains, and they typically rely on their natural weapons and instincts to survive.",
+        "Celestials": "Noble beings from the higher planes, celestials embody goodness and virtue. They are often encountered in celestial realms, where they protect the forces of light, using divine powers to combat evil.",
+        "Constructs": "Artificial creations, constructs are crafted entities with no inherent life force. Found in ancient ruins and the workshops of skilled artificers, they attack using their built-in weaponry or tools.",
+        "Dragons": "Majestic and powerful creatures, dragons are often guardians of vast hoards and lairs. They can be encountered in a variety of environments and unleash devastating breath attacks upon their foes.",
+        "Elementals": "Embodiments of the natural elements, elementals are found in their respective planes. They wield the power of fire, water, air, or earth to overwhelm their adversaries.",
+        "Fey": "Mischievous and ethereal beings, fey inhabit enchanted forests and mystical realms. They employ magical abilities, illusions, and trickery to confuse and outwit those who trespass into their domains.",
+        "Fiends": "Dark and malevolent entities from the lower planes, fiends seek to spread chaos and corruption. Found in infernal realms, they use demonic or devilish powers to sow destruction.",
+        "Giants": "Massive humanoid creatures, giants inhabit remote mountains, hills, or hidden valleys. They rely on their immense strength and size to crush opponents in battle.",
+        "Monstrosities": "Creatures with unnatural forms and abilities, monstrosities are often the result of magical experiments or mutations. They can be encountered in a variety of environments and pose unique challenges.",
+        "Oozes": "Shapeless, amorphous creatures, oozes lurk in dark and damp places. They attack by engulfing and dissolving their prey with corrosive substances.",
+        "Plants": "Living vegetation with often hostile tendencies, plants are found in forests, swamps, and jungles. They may attack using entangling vines, poisonous spores, or other natural hazards.",
+        "Undead": "Risen from death and driven by dark forces, undead creatures roam graveyards, crypts, and haunted places. They attack with a variety of necrotic powers, draining life from the living."
+    },
+    "patrons": {
+        "The Archfey": "Your patron is a lord or lady of the fey, a creature of legend with inscrutable motivations. It might strive for greater magical power or settle age-old grudges. Beings include the Prince of Frost, the Queen of Air and Darkness, Titania, Oberon, Hyrsam, and ancient hags.",
+        "The Fiend": "You've made a pact with a fiend from the lower planes, a being with evil aims. These beings desire the corruption or destruction of all things, including you. Fiends include demon lords like Demogorgon, Orcus, Fraz'Urb-luu, and Baphomet, as well as archdevils like Asmodeus, Dispater, Mephistopheles, and Belial.",
+        "The Great Old One": "Your patron is a mysterious entity with a nature foreign to reality, possibly from the Far Realm or legendary elder gods. Its motives are incomprehensible, and its knowledge immense. The Great Old One might be unaware of you, but the secrets you've learned allow you to draw magic from it. Entities include Ghaunadar, Tharizdun, Dendar, Zargon, Great Cthulhu, and other unfathomable beings."
+    },
+    "origins": {
+        "Draconic Bloodline": "Your innate magic stems from draconic blood mingled with yours or your ancestors', often traced back to a dragon-related pact or ancestry. Some bloodlines are well-known, while others are obscure, and any sorcerer could be the first of a new bloodline.",
+        "Wild Magic": "Your innate magic originates from the chaotic forces underlying creation. Exposure to raw magic, encounters with fey creatures, demonic blessings, or unexplained birth anomalies may have triggered this unpredictable magic within you."
+    }
 }
