@@ -1923,5 +1923,105 @@
     "origins": {
         "Draconic Bloodline": "Your innate magic stems from draconic blood mingled with yours or your ancestors', often traced back to a dragon-related pact or ancestry. Some bloodlines are well-known, while others are obscure, and any sorcerer could be the first of a new bloodline.",
         "Wild Magic": "Your innate magic originates from the chaotic forces underlying creation. Exposure to raw magic, encounters with fey creatures, demonic blessings, or unexplained birth anomalies may have triggered this unpredictable magic within you."
+    },
+    "weapons": {
+        "simpleMeleeWeapons": [
+            {
+                "name": "Club",
+                "cost": "1 sp",
+                "damage": "1d4 bludgeoning",
+                "weight": "2 lb.",
+                "properties": [
+                    "Light"
+                ]
+            },
+            {
+                "name": "Dagger",
+                "cost": "2 gp",
+                "damage": "1d4 piercing",
+                "weight": "1 lb.",
+                "properties": [
+                    "Finesse",
+                    "Light",
+                    "Thrown (range 20/60)"
+                ]
+            },
+            {
+                "name": "Greatclub",
+                "cost": "2 sp",
+                "damage": "1d8 bludgeoning",
+                "weight": "10 lb.",
+                "properties": [
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Handaxe",
+                "cost": "5 gp",
+                "damage": "1d6 slashing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Light",
+                    "Thrown (range 20/60)"
+                ]
+            },
+            {
+                "name": "Javelin",
+                "cost": "5 sp",
+                "damage": "1d6 piercing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Thrown (range 30/120)"
+                ]
+            },
+            {
+                "name": "Light hammer",
+                "cost": "2 gp",
+                "damage": "1d4 bludgeoning",
+                "weight": "2 lb.",
+                "properties": [
+                    "Light",
+                    "Thrown (range 20/60)"
+                ]
+            },
+            {
+                "name": "Mace",
+                "cost": "5 gp",
+                "damage": "1d6 bludgeoning",
+                "weight": "4 lb."
+            },
+            {
+                "name": "Quarterstaff",
+                "cost": "2 sp",
+                "damage": "1d6 bludgeoning",
+                "weight": "4 lb.",
+                "properties": [
+                    "Versatile (1d8)"
+                ]
+            },
+            {
+                "name": "Sickle",
+                "cost": "1 gp",
+                "damage": "1d4 slashing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Light"
+                ]
+            },
+            {
+                "name": "Spear",
+                "cost": "1 gp",
+                "damage": "1d6 piercing",
+                "weight": "3 lb.",
+                "properties": [
+                    "Thrown (range 20/60)",
+                    "Versatile (1d8)"
+                ]
+            },
+            {
+                "name": "Unarmed strike",
+                "damage": "1 bludgeoning"
+            }
+        ]
     }
 }
