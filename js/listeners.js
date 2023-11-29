@@ -1770,9 +1770,9 @@ function chooseAlignmentLimited(aligns) {
     for (a in als) {
         b = appendToContent('button')
         b.innerText = als[a]
-        b.onclick = function() {
-            localStorage.setItem('_alignment',b.innerText)
-            localStorage.setItem('backgroundState','2')
+        b.onclick = function () {
+            localStorage.setItem('_alignment', b.innerText)
+            localStorage.setItem('backgroundState', '2')
             beginBackground(true)
         }
     }
@@ -1866,15 +1866,20 @@ function alignQuestion2(data) {
     var quest2 = data.background.questionsAlign.q2
     appendToContent('div', 'standardDiv').innerText = quest2.q
     // console.log(response)
-    for (ans in quest2.ans) {
+    for (const ans in quest2.ans) {
         console.log(ans)
-        var ansBtn = appendToContent('button')
+        const ansBtn = appendToContent('button')
         ansBtn.innerText = ans
         ansBtn.onclick = function () {
             localStorage.setItem("alignAxis2", quest2.ans[ans][0])
             // goto to next step
             // chooseDevineDomain()
-            localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
+            if (localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2') == 'Neutral Neutral') {
+                localStorage.setItem('_alignment', 'True Neutral')
+            }
+            else {
+                localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
+            }
             alignDebrief()
         }
     }
@@ -2583,7 +2588,7 @@ function rollTheDice(abil) {
     nextBtn.onclick = function () {
         next = getNextRoll(abil)
         if (next != 'done') {
-            localStorage.setItem('canThrow','true')
+            localStorage.setItem('canThrow', 'true')
             rollTheDice(next)
         }
         else {
