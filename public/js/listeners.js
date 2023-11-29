@@ -132,7 +132,16 @@ function presentPreset() {
 
 }
 
+var equipmentQuestions = []
+var givenEquipment = []
+var weaponChoices = []
+
 function initEquipment() {
+    equipmentQuestions = []
+    givenEquipment = []
+    gatherEQQuestionsClass()
+    gatherEQQuestionsBackground()
+
     content = clearContentAndGet()
     title = appendToContent('h2')
     title.innerText = "Equipment"
@@ -147,39 +156,79 @@ function initEquipment() {
     }
 }
 
+
 function beginEquipment() {
     content = clearContentAndGet()
+    explain = appendToContent('div')
+    explain.innerText = 'You have already been given this starting equipment: '
+    for (e in givenEquipment) {
+        const eDiv = appendToContent('div', 'smallDiv')
+        eDiv.innerHTML = highlightTextWithMouseover(
+            givenEquipment[e],
+            allDetails
+        )
+        // eDiv.style.margin = '-15px'
+        // eDiv.style.fontsize = '10%'
+    }
+    contDiv = appendToContent('div')
+    contDiv.innerText = "\nContinue on to choose the rest of your equipment."
+    cBtn = newContinueButton(true)
+    cBtn.onclick = function () {
+        chooseEquipment()
+    }
+}
+
+function chooseEquipment(iter = 0) {
+    content = clearContentAndGet()
+    choiceDiv = appendToContent('div')
+    choiceDiv.innerText = "Choose Between: "
+    currentQuestion = equipmentQuestions[iter].split('*')
+    for (c in currentQuestion) {
+        oBtn = document.createElement('button')
+        oBtn.innerText = currentQuestion[c]
+        choiceDiv.appendChild(oBtn)
+    }
+}
+
+function gatherEQQuestionsClass() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Equipment')
         .then(data => {
-            elements = data.split(';')
-            for (var e in elements) {
-                itemDiv = appendToContent('div')
-                console.log("elE; "+elements[e])
-                item = elements[e].split('*')
-                if (item.length > 1) {
-                    
-                    q = document.createElement('div')
-                    q.innerText = "Choose between: "
-                    itemDiv.appendChild(q)
-                    for (i in item) {
-                        iBtn = document.createElement('button')
-                        iBtn.innerText = item[i]
-                        itemDiv.appendChild(iBtn)
-                    }                        
+            elements = data.split(';');
+            for (e in elements) {
+                q = elements[e]
+                if (!q.includes('*')) {
+                    givenEquipment.push(q)
                 }
                 else {
-                    itemDiv.innerHTML = highlightTextWithMouseover(
-                        'You also recieve ' + item[0],
-                        allDetails
-                    )
+                    equipmentQuestions.push(q)
                 }
-
             }
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+function gatherEQQuestionsBackground() {
+    console.log(localStorage.getItem('_background'))
+    getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
+        .then(data => {
+            elements = data.split(';');
+            for (e = 0; e < elements.length - 1; e++) {
+                q = elements[e]
+                if (!q.includes('*')) {
+                    givenEquipment.push(q)
+                }
+                else {
+                    equipmentQuestions.push(q)
+                }
+            }
+            console.log(equipmentQuestions)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 
 function flushSheet(ignore) {
     for (var i = 0; i < localStorage.length; i++) {
@@ -265,7 +314,6 @@ function loadExplainer(page, iter) {
             continueBtn.onclick = function () {
                 clearDiv(explainerDiv)
                 alterState(page, 1)
-                // initPageInfo(page, iter + 1)
                 loadQuestion(page)
                 document.getElementById('content').removeChild(continueBtn)
             }
@@ -357,11 +405,30 @@ function initPageInfo(page, iter) {
     if (localStorage.getItem('_' + page) != "") {
         console.log("In special case on page")
     }
-
+    if (localStorage.getItem(page + 'Done') == 'true') {
+        if (page == 'class') localStorage.setItem('_classState', '0')
+        conclusion(page)
+    }
+    // if (page == 'gettingStarted' && localStorage.getItem('gettingStartedState') == '1') {
+    //     content = clearContentAndGet()
+    //     askName = appendToContent('div')
+    //     askName.innerText = 'Would you like to start over?'
+    //     loseProg = appendToContent('div')
+    //     loseProg.innerText = 'If you restart, you will lose all progress for your current character.'
+    //     resetBtn = appendToContent('button')
+    //     resetBtn.innerText = 'Reset'
+    //     resetBtn.onclick = function () {
+    //         localStorage.setItem('gettingStartedState', '0')
+    //         init()
+    //         initPageInfo(page,0)
+    //     }
+    // } 
+    // else {
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
+            console.log("HERERER: " + Object.keys(currentPage)[iter])
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
@@ -386,6 +453,7 @@ function initPageInfo(page, iter) {
         .catch(error => {
             console.error('Error:', error);
         });
+    // }
     // initPageInfo(page, iter+1)
 }
 
@@ -402,7 +470,8 @@ function handleSpecialCase(page) {
             break;
         case 'class':
             console.log("In class case, state is ", localStorage.getItem('classState'))
-            loadResponse(page)
+        // loadResponse(page)
+        // setToCurrentClassState(localStorage.getItem('classState'))
         default: return
     }
 }
@@ -558,9 +627,9 @@ function handleSorcerer() {
                 })
             }
             basicQuestionAnswer(
-                "Warlock patrons are powerful beings from other planes, almost godlike in their might. These entities grant their warlocks unique powers and invocations, expecting significant favors in return. Some freely share mystic knowledge, while others are more selective, making pacts with only a single warlock. Warlocks serving the same patron may see each other as allies, siblings, or rivals.",
+                "If you pick wild, then your magic stems from ancient bargains with dragons or mingling with draconic blood. You may be part of an established bloodline or the pioneer of a new one. Or alternatively you can pick a dragonic bloodline, and your magic arises from chaotic forces, influenced by exposure to raw magic, encounters with fey or demons, or simply as a fluke of birth. This unpredictable magic awaits expression through you.",
                 choice,
-                "You have been assigned Warlock, and you need to pick a patron."
+                "Sorcerers harness innate magic, and their origins broadly fall into two categories: draconic bloodline and wild magic."
             )
         })
         .catch(error => {
@@ -686,6 +755,7 @@ function handleFighter() {
 
 function classDebrief() {
     _class = localStorage.getItem('_class')
+    localStorage.setItem('classDone', 'true')
     showSavingThrows(_class)
 }
 
@@ -772,7 +842,9 @@ function chooseSkills(_class) {
                         res = res + chosenProfs[p] + ","
                     }
                     console.log(res.slice(0, -1))
+                    localStorage.setItem('classDone', 'true')
                     localStorage.setItem('_profFromClass', res.slice(0, -1))
+                    window.location.href = '../html/background.html'
                     beginBackground()
                 }
             }
@@ -783,6 +855,7 @@ function chooseSkills(_class) {
 }
 
 function nextQuestion(previousAnswer) {
+    console.log("Previous answer: " + previousAnswer[2])
     if (previousAnswer[2] == '->more') {
         console.log("In more case")
         // TODO: Add more logic here
@@ -1027,13 +1100,13 @@ function classChoices(options, tempButtons, div, page) {
     // while (divCache.length > 0) {
     //     divCache.pop(); // Remove the last element
     // }
+    console.log("In class choices")
     if (options > 0) {
 
         setElementsInColumnOne({
             title: page.charAt(0).toUpperCase() + page.slice(1),
             explanation: 'Please choose one of the following races:',
         })
-
         for (const c in options) {
             const choice = document.createElement('button');
             classD = {}
@@ -1151,6 +1224,8 @@ function pickSubrace(race) {
                 btn.innerText = o
                 btn.onclick = function () {
                     localStorage.setItem('_subRace', o)
+                    localStorage.setItem('_race', o)
+
                     // localStorage.setItem('_race', o)
                     clearMainInfo()
 
@@ -1174,8 +1249,14 @@ function pickSubrace(race) {
         });
 }
 
-function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
+function classConclusion() {
+    content = clearContentAndGet()
+    classDoneDiv = appendToContent('div')
+    classDoneDiv.innerText = 'You have choosen ' + localStorage.getItem('_class') + ' as your class. If you\'d like to reset your class, you\'ll lose all progress after this section and need to do it again.'
+}
 
+function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
+    if (page == 'class') classConclusion()
 
     const conclusionDiv = document.createElement('div')
     conclusionDiv.setAttribute('id', 'conclusionDiv')
@@ -1183,6 +1264,16 @@ function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
         .then(response => response.json())
         .then(data => {
             document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
+            if (localStorage.getItem(page + 'Done') == 'true') {
+                doneDiv = appendToContent('div')
+                doneDiv.innerText = 'If you want to reset your ' + page + ' you will lose all progress on your character after this point.'
+                resetBtn = appendToContent('button')
+                resetBtn.innerText = 'Reset'
+                resetBtn.onclick = function () {
+                    console.log('implement this reset button')
+                    resetProgress(page)
+                }
+            }
             // const continueBtn = document.createElement('button')
             // continueBtn.innerText = "Continue"
             // document.getElementById('footerButton').innerText = 'Continue'
@@ -1208,9 +1299,37 @@ function continueToNextPage(currentPage, nextPage) {
     btn.innerText = "Continue"
     btn.onclick = function () {
         window.location.href = "../html/" + nextPage + ".html"
-
+        localStorage.setItem(currentPage + 'Done', 'true')
     }
     document.getElementById('content').appendChild(btn)
+}
+
+function resetProgress(current) {
+    if (current == 'race') {
+        currName = localStorage.getItem('_playername')
+        init()
+        localStorage.setItem('_playername', currName)
+        location.reload()
+    } else if (current == 'class') {
+        localStorage.setItem('_class', '')
+        localStorage.setItem('_classlevel', '')
+        // todo: remove all items required to reset class
+        resetProgress('background')
+        resetProgress('equipment')
+        localStorage.setItem('classState', '0')
+        localStorage.setItem('classDone', 'false')
+        location.reload()
+
+        initPageInfo('class', '0')
+    }
+    else if (current == 'background') {
+        console.log("Removing background items...")
+        // ...
+        localStorage.setItem('backgroundState', '0')
+    }
+    else if (current == 'equipment') {
+        console.log('Removing equipment items...')
+    }
 }
 
 function loadRaceCompletionDiv() {
@@ -1386,22 +1505,41 @@ function loadHelperInfoFromMisc(text) {
 }
 
 function beginBackground(specialCaseHandled = false) {
-    var state = localStorage.getItem("backgroundState")
-    var sInt = parseInt(state)
-    console.log("BG state: " + sInt)
-    if (state != null || sInt == 1) {
-        if (sInt == 0) chooseAlignment()
-        if (sInt == 1) chooseLanguages()
-        if (sInt == 2) backgroundQuestions()
-        if (sInt == 3) chooseIdeals()
-        if (sInt == 4) chooseBonds()
-        if (sInt == 5) chooseFlaws()
-        if (sInt == 6) choosePersonality()
-    }
-    else {
-        loadBackgroundExplainer()
+    console.log("BEGINNING BACKGROUnd, class is: " + localStorage.getItem('_class'))
+    if (localStorage.getItem('_class') == 'Cleric' && !specialCaseHandled) {
+        initClericDieties()
+    } else {
+        var state = localStorage.getItem("backgroundState")
+        var sInt = parseInt(state)
+        console.log("BG state: " + sInt)
+        if (state != null || sInt == 1) {
+            if (sInt == 0) chooseAlignment()
+            // if (sInt == 1) chooseLanguages()
+            if (sInt == 2) backgroundQuestions()
+            if (sInt == 3) choosePersonality()
+            if (sInt == 4) chooseIdeals()
+            if (sInt == 5) chooseBonds()
+            if (sInt == 6) chooseFlaws()
+            if (sInt == 7) chooseLanguages()
+            if (sInt == 8) characterName()
+            if (sInt == 10) askForBackgroundReset()
+        }
+        else {
+            loadBackgroundExplainer()
+        }
     }
 
+}
+
+function askForBackgroundReset() {
+    content = clearContentAndGet()
+    ask = appendToContent('div')
+    ask.innerText = "You have already completed the background sequence. If you'd like to reset the background you will lose all progress for equipment and ability scores."
+    resetBtn = appendToContent('button')
+    resetBtn.innerText = 'Reset'
+    resetBtn.onclick = function () {
+        resetProgress('background')
+    }
 }
 
 function setBackgroundProfs() {
@@ -1618,10 +1756,26 @@ function limitAlighmentHelper(options) {
         }
     }
     lsValue = lsValue.slice(0, -1);
-    console.log(lsValue)
     localStorage.setItem("possibleAlignments", lsValue)
 
-    chooseAlignment()
+    chooseAlignmentLimited(lsValue)
+}
+
+function chooseAlignmentLimited(aligns) {
+    console.log(localStorage.getItem("possibleAlignments"))
+    content = clearContentAndGet()
+    explain = appendToContent('div')
+    explain.innerText = "Since your devine realm is " + localStorage.getItem("realm") + " you may have limited alignment options. Please select from the following:"
+    als = aligns.split(',')
+    for (a in als) {
+        b = appendToContent('button')
+        b.innerText = als[a]
+        b.onclick = function () {
+            localStorage.setItem('_alignment', b.innerText)
+            localStorage.setItem('backgroundState', '2')
+            beginBackground(true)
+        }
+    }
 }
 
 function getFullAlighnmentName(AlignAcronymObject) {
@@ -1712,15 +1866,20 @@ function alignQuestion2(data) {
     var quest2 = data.background.questionsAlign.q2
     appendToContent('div', 'standardDiv').innerText = quest2.q
     // console.log(response)
-    for (ans in quest2.ans) {
+    for (const ans in quest2.ans) {
         console.log(ans)
-        var ansBtn = appendToContent('button')
+        const ansBtn = appendToContent('button')
         ansBtn.innerText = ans
         ansBtn.onclick = function () {
             localStorage.setItem("alignAxis2", quest2.ans[ans][0])
             // goto to next step
             // chooseDevineDomain()
-            localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
+            if (localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2') == 'Neutral Neutral') {
+                localStorage.setItem('_alignment', 'True Neutral')
+            }
+            else {
+                localStorage.setItem('_alignment', localStorage.getItem('alignAxis1') + " " + localStorage.getItem('alignAxis2'))
+            }
             alignDebrief()
         }
     }
@@ -1733,7 +1892,7 @@ function alignDebrief() {
     cont.innerText = 'Continue'
     cont.onclick = function () {
         backgroundQuestions()
-        localStorage.setItem("backgroundState", "2")
+        localStorage.setItem('backgroundState', '2')
     }
 
 
@@ -1995,21 +2154,19 @@ function loadAllBackgroundInfo(choice) {
             select.innerText = "Select " + choice
             select.onclick = function () {
                 localStorage.setItem("_background", choice)
+                localStorage.setItem('backgroundState', '3')
                 setBackgroundProfs()
                 // move to next sequence
                 console.log("Chose " + choice + " as background")
                 localStorage.setItem("backgroundState", "3")
-                chooseIdeals()
+                choosePersonality()
                 getNumLanguagesFromBackground().then(data => {
                     fromBck = data
-                    console.log('fromBack: ' + fromBck)
                     localStorage.setItem('langsFromBackground', fromBck)
-                    console.log('fombck' + fromBck)
                 })
                     .catch(error => {
                         console.log(error)
                     })
-                // characterName()
             }
             bgDiv.appendChild(select)
             document.getElementById('content').appendChild(bgDiv)
@@ -2038,7 +2195,7 @@ function chooseIdeals() {
                 content.appendChild(btn)
                 btn.onclick = function () {
                     localStorage.setItem('_ideals', btn.innerText)
-                    localStorage.setItem("backgroundState", "4")
+                    localStorage.setItem("backgroundState", "5")
                     chooseBonds()
                 }
             }
@@ -2053,7 +2210,7 @@ function chooseIdeals() {
             inpDiv.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_ideals', inp.value)
-                localStorage.setItem("backgroundState", "4")
+                localStorage.setItem("backgroundState", "5")
                 chooseBonds()
             }
         })
@@ -2079,7 +2236,7 @@ function chooseBonds() {
                 optDiv.appendChild(btn)
                 btn.onclick = function () {
                     localStorage.setItem('_bonds', btn.innerText)
-                    localStorage.setItem("backgroundState", "5")
+                    localStorage.setItem("backgroundState", "6")
                     chooseFlaws()
                 }
             }
@@ -2095,7 +2252,7 @@ function chooseBonds() {
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_bonds', inp.value)
-                localStorage.setItem("backgroundState", "5")
+                localStorage.setItem("backgroundState", "6")
                 chooseFlaws()
             }
         })
@@ -2153,7 +2310,9 @@ function createTable(title, languages) {
     contBtn.style.display = 'none'
     contBtn.innerText = "Continue"
     contBtn.onclick = function () {
+        localStorage.setItem('backgroundState', '8')
         characterName()
+        localStorage.setItem('backgroundDone', 'true')
     }
     languages.forEach((language, index) => {
 
@@ -2214,8 +2373,8 @@ function chooseFlaws() {
                 optDiv.appendChild(btn)
                 btn.onclick = function () {
                     localStorage.setItem('_flaws', btn.innerText)
-                    localStorage.setItem("backgroundState", "6")
-                    choosePersonality()
+                    localStorage.setItem("backgroundState", "7")
+                    chooseLanguages()
                 }
             }
             content.appendChild(optDiv)
@@ -2230,8 +2389,8 @@ function chooseFlaws() {
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_flaws', inp.value)
-                localStorage.setItem("backgroundState", "6")
-                choosePersonality()
+                localStorage.setItem("backgroundState", "7")
+                chooseLanguages()
             }
         })
         .catch(error => {
@@ -2264,10 +2423,10 @@ function choosePersonality() {
                         console.log("PT: +" + personalityTraits)
                     }
                     if (numberOfPersonalityTraits == 2) {
-                        localStorage.setItem("backgroundState", "1")
+                        localStorage.setItem("backgroundState", "4")
                         localStorage.setItem('_personalityTraits', personalityTraits)
                         // characterName()
-                        chooseLanguages()
+                        chooseIdeals()
                     }
                 });
                 btn.innerText = allPT[id]
@@ -2292,11 +2451,11 @@ function choosePersonality() {
             content.appendChild(subButton)
             subButton.onclick = function () {
                 localStorage.setItem('_personalityTraits', inp.value)
-                localStorage.setItem("backgroundState", "1")
+                localStorage.setItem("backgroundState", "4")
                 // window.location.href = '../html/equipment.html'
                 // characterName()
                 // initRolling()
-                chooseLanguages()
+                chooseIdeals()
             }
         })
         .catch(error => {
@@ -2339,6 +2498,7 @@ function chooseLanguages() {
                 console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
                 numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
                 if (numExtraLangs == 0) {
+                    localStorage.setItem('backgroundState', '2')
                     chooseBonds()
                     return
                 }
@@ -2428,6 +2588,7 @@ function rollTheDice(abil) {
     nextBtn.onclick = function () {
         next = getNextRoll(abil)
         if (next != 'done') {
+            localStorage.setItem('canThrow', 'true')
             rollTheDice(next)
         }
         else {
@@ -2490,6 +2651,7 @@ function getNextRoll(currentScore) {
 
     // If the current score is not found or is the last one, return 'done'
     if (currentIndex === -1 || currentIndex === abilityScores.length - 1) {
+        console.log('done')
         return 'done';
     }
 
@@ -2688,7 +2850,7 @@ function calculateValsFromAbilityScores() {
     // TODO: if proficient in perception add that score to this stat
     localStorage.setItem(
         '_passiveWisdom',
-        parseInt(localStorage.getItem('__wisdomMod')) + 10
+        parseInt(localStorage.getItem('_wisdomMod')) + 10
     )
 
 }

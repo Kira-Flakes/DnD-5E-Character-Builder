@@ -176,7 +176,7 @@ class characterSheet {
   }
 
   getRace() {
-    return characterSheet._race;
+    return this._race;
   }
 
   setRace(newRace) {

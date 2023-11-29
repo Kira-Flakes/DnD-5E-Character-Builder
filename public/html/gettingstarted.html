@@ -70,7 +70,7 @@
                     <button>Make my own</button>
                 </div> -->
                 <div class="question">
-                    <p>First, please enter YOUR name as you'd like it to appear on the character sheet:</p>
+                    <p>First, please enter YOUR real name as you'd like it to appear on the character sheet:</p>
 
                     <input id="_playername" type="text" class="textinput" placeholder="Enter Your Name"/><br>
                     <button onclick="presentPreset()" type="submit" class="submitButton">Submit</button>
@@ -78,6 +78,7 @@
                         function next() {
                             character.setPlayername(document.getElementById('_playername').value)
                             localStorage.setItem('_playername',document.getElementById("_playername").value)
+                            localStorage.setItem('gettingStartedState','1')
                             window.location.href = "../html/race.html"
                         }
                     </script>
