@@ -84,6 +84,7 @@ input[type="checkbox"] {
     visibility: hidden;
     height: 0;
     width: 0;
+    
 }
 
 /* Selected checkboxes */
@@ -188,7 +189,7 @@ label {
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
-    background-color: #454545;
+    /* background-color: #454545; */
     color: white;
     padding: 1vh 1.5vh;
     margin-bottom: 10px;

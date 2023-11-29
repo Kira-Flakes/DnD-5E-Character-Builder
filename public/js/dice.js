@@ -33,7 +33,15 @@ initScene();
 
 window.addEventListener('resize', updateSceneSize);
 // window.addEventListener('dblclick', throwDice);
-rollBtn.addEventListener('click', throwDice);
+
+rollBtn.onclick = function() {
+    if (localStorage.getItem('canThrow') == 'true') {
+        throwDice()
+        localStorage.setItem('canThrow','false')
+    }
+}
+
+// rollBtn.addEventListener('click', throwDice);
 
 function initScene() {
 
@@ -328,6 +336,7 @@ function addDiceEvents(dice) {
 }
 
 
+var summation = ''
 
 function showRollResults(score) {
     if (scoreResult.innerHTML === '') {
@@ -338,15 +347,17 @@ function showRollResults(score) {
         // scoreResult.innerHTML += ('+' + score);
     }
     if (scores.length >= 4) {
-        const summation = sumOfThreeLargest(scores)
+        summation = sumOfThreeLargest(scores)
         scoreResult.innerHTML = summation
         // while (scores.length > 0) {
         //     scores.pop();
         //   }
-        if (summation != NaN) {
+        if (summation != '') {
             localStorage.setItem(localStorage.getItem('currentRoll'), summation.toString())
-            localStorage.setItem('nextRoll', true)
+            localStorage.setItem('canThrow','false')
             document.getElementById('nextButton').style.display = 'block';
+        } else {
+            localStorage.setItem('canThrow','true')
         }
     }
 }
@@ -387,7 +398,15 @@ function updateSceneSize() {
     renderer.setSize(window.innerWidth * .6, (window.innerHeight * divFitHeight));
 }
 
+function mulligan() {
+    if (summation == '')
+    localStorage.setItem('canThrow','true')
+    
+}
+
 function throwDice() {
+    summation = ''
+    setTimeout(mulligan, 3*1000)
     scoreResult.innerHTML = '';
     while (scores.length > 0) {
         scores.pop();
