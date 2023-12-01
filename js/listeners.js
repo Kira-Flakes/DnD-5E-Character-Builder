@@ -15,6 +15,7 @@ const divCache = []
 var allDetails = []
 let racePrev = 0
 
+
 const sd = "standardDiv"
 
 
@@ -132,11 +133,29 @@ function presentPreset() {
 
 }
 
+function clearEquipmentChoices() {
+    localStorage.removeItem('_eqList')
+
+    localStorage.removeItem('_attSp1Name')
+    localStorage.removeItem('_attSp1AtkB')
+    localStorage.removeItem('_attSp1Dam')
+
+    localStorage.removeItem('_attSp2Name')
+    localStorage.removeItem('_attSp2AtkB')
+    localStorage.removeItem('_attSp2Dam')
+
+    localStorage.removeItem('_attSp3Name')
+    localStorage.removeItem('_attSp3AtkB')
+    localStorage.removeItem('_attSp3Dam')
+    weaponsChosen = 1
+}
+
 var equipmentQuestions = []
 var givenEquipment = []
 var weaponChoices = []
 
 function initEquipment() {
+    clearEquipmentChoices()
     equipmentQuestions = []
     givenEquipment = []
     gatherEQQuestionsClass()
@@ -158,15 +177,20 @@ function initEquipment() {
 
 
 function beginEquipment() {
+    console.log(equipmentQuestions)
     content = clearContentAndGet()
     explain = appendToContent('div')
+    localStorage.removeItem('_eqList') // remove equipment if they already tried something else before.
     explain.innerText = 'You have already been given this starting equipment: '
     for (e in givenEquipment) {
+        console.log('giceneq: ' + givenEquipment[e])
         const eDiv = appendToContent('div', 'smallDiv')
         eDiv.innerHTML = highlightTextWithMouseover(
             givenEquipment[e],
             allDetails
         )
+        if (givenEquipment[e] !== null)
+            addToLocalStorageString('_eqList', givenEquipment[e] + '\n')
         // eDiv.style.margin = '-15px'
         // eDiv.style.fontsize = '10%'
     }
@@ -179,16 +203,124 @@ function beginEquipment() {
 }
 
 function chooseEquipment(iter = 0) {
-    content = clearContentAndGet()
-    choiceDiv = appendToContent('div')
-    choiceDiv.innerText = "Choose Between: "
-    currentQuestion = equipmentQuestions[iter].split('*')
-    for (c in currentQuestion) {
-        oBtn = document.createElement('button')
-        oBtn.innerText = currentQuestion[c]
-        choiceDiv.appendChild(oBtn)
+    if (iter >= equipmentQuestions.length) {
+        console.log("Done with equipment questions...")
+        window.location.href = '../html/rollDemo.html'
+        rollForAbilities()
+    }
+    else {
+        console.log(iter + ' iter')
+        content = clearContentAndGet()
+        choiceDiv = appendToContent('div')
+        choiceDiv.innerText = "Choose Between: "
+        currentQuestion = equipmentQuestions[iter].split('*')
+        for (let c in currentQuestion) {
+            const oBtn = document.createElement('button')
+            oBtn.innerText = stripEQChoice(currentQuestion[c])
+            choiceDiv.appendChild(oBtn)
+            oBtn.onclick = function () {
+                if (oBtn.innerText.includes('Any')) {
+                    parseWeaponChoices(oBtn.innerText, iter)
+                }
+                else if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('[Two]')) {
+                    parseWeaponChoicesTwo(oBtn.innerText, iter)
+
+                }
+                else {
+                    extracted = extractWeaponSubstring(currentQuestion[c])
+                    if (extracted == currentQuestion[c])
+                        addToLocalStorageString('_eqList', oBtn.innerText)
+                    else {
+                        console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
+                        storeChosenWeapon(extracted, weaponsChosen)
+                        // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
+                        weaponsChosen++
+                        // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                        // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                    }
+
+                    chooseEquipment(++iter)
+                }
+            }
+        }
     }
 }
+
+function storeChosenWeapon(wpn, currNumChosen) {
+    console.log('in store Chosen weapon')
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allWeapons = data.weapons
+            for (type in allWeapons) {
+                console.log(type + ' type')
+                for (n in allWeapons[type]) {
+                    if (allWeapons[type][n].name == wpn) {
+                        console.log('found!')
+                         localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
+                         localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
+                         return
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function extractWeaponSubstring(inputString) {
+    const startIdx = inputString.indexOf('{');
+    const endIdx = inputString.indexOf('}');
+
+    if (startIdx !== -1 && endIdx !== -1 && startIdx < endIdx) {
+        console.log('extracted: ' + inputString.substring(startIdx + 1, endIdx))
+        return inputString.substring(startIdx + 1, endIdx);
+    } else {
+        return inputString;
+    }
+}
+
+function stripEQChoice(inputString) {
+    var res = inputString;
+    console.log('input string initially: ' + res);
+    const regex = /\([^)]*\)|\{|\}|\[|\]/g;
+    res = res.replace(regex, '');
+    console.log(res + ' :input string');
+    return res;
+}
+
+// Function that handles a limit of two choices
+function parseWeaponChoicesTwo(str, iter) {
+    if (str.includes('Any')) {
+        // call parseWeaponChoices with two options allowed
+        parseWeaponChoices(str, iter, 2)
+    } else {
+
+    }
+}
+
+function parseWeaponChoices(str, iter, numOptions = 1) {
+    type = str.split(' ')[1]
+    console.log(type)
+    console.log('about to aprse srting')
+    switch (type) {
+        case "martial":
+            console.log('martial weapon type')
+            anyWeaponChoice('martialMeleeWeapons', iter, numOptions)
+            anyWeaponChoice('martialRangedWeapons', iter, numOptions)
+            break;
+        case 'simple':
+            console.log("Simple weapon type")
+            anyWeaponChoice('simpleMeleeWeapons', iter, numOptions)
+            anyWeaponChoice('simpleRangedWeapons', iter, numOptions)
+            break;
+        default:
+            console.log('in defailt case')
+    }
+}
+
 
 function gatherEQQuestionsClass() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Equipment')
@@ -759,8 +891,85 @@ function classDebrief() {
     showSavingThrows(_class)
 }
 
+// Requests weapon profs from the class CSV to be displayed and loaded to the character sheet.
+var weaponProfs = []
+function getWeaponProfs() {
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Weapon Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                profs = data.split(',')
+                for (p in profs) {
+                    weaponProfs.push(profs[p])
+                    addToLocalStorageString('_weaponProfs', profs[p])
+                }
+            }
+        })
+}
+
+// function createWeaponsTable(columnLabels, data) {
+//     // Create a table element
+//     var table = document.createElement("table");
+
+//     // Create a header row
+//     var headerRow = table.insertRow();
+//     for (var i = 0; i < columnLabels.length; i++) {
+//       var headerCell = headerRow.insertCell(i);
+//       headerCell.textContent = columnLabels[i];
+//     }
+
+//     // Parse and add data rows
+//     for (var j = 0; j < data.length; j++) {
+//       var rowData = data[j].split(',');
+//       var dataRow = table.insertRow();
+
+//       for (var k = 0; k < rowData.length; k++) {
+//         var dataCell = dataRow.insertCell(k);
+//         dataCell.textContent = rowData[k];
+//       }
+//     }
+
+//     // Return the created table
+//     return table;
+//   }
+
+var weaponsChosen = 1
+
+// call this function to give options for selecting weapons and equipment 
+// from the weapons tables.
+function anyWeaponChoice(type, iter, numChoices) {
+    console.log("In any weapon choice, type: " + type)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            wpns = data.weapons[type]
+            console.log(wpns)
+            for (let w in wpns) {
+                // console.log(wpns[w] +' Weapons w')
+                const weapon = wpns[w]
+                const wBtn = appendToContent('button', 'smallDiv')
+                wBtn.innerText = wpns[w].name
+                wBtn.onclick = function () {
+                    // addToLocalStorageString('_weapons', wBtn.innerText)
+                    // console.log(wpns[w].name+ " weapon added to local storage.")
+                    localStorage.setItem('_attSp' + weaponsChosen + 'Name', weapon.name)
+                    // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                    localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+
+                    if (++weaponsChosen > numChoices) {
+                        console.log("weapon limit reached TODO")
+                        chooseEquipment(++iter)
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 
 function showSavingThrows(_class) {
+    getWeaponProfs()
     content = clearContentAndGet()
     var savingThrows = appendToContent('div')
     console.log('class: ' + _class)
@@ -772,6 +981,18 @@ function showSavingThrows(_class) {
                     "You have been assigned the class " + _class + ". You have " + opts[0] + " and " + opts[1] + " saving throws.",
                     allDetails
                 )
+                weaponProfsDiv = appendToContent('div')
+                weaponProfsDiv.innerHTML = highlightTextWithMouseover(
+                    'Also, you have the following weapon proficiencies:',
+                    allDetails
+                )
+                for (const pr in weaponProfs) {
+                    const pDiv = appendToContent('div', 'smallDiv')
+                    pDiv.innerHTML = highlightTextWithMouseover(
+                        weaponProfs[pr],
+                        allDetails
+                    )
+                }
                 st1 = opts[0] + "-save-prof"
                 st2 = opts[1] + "-save-prof"
                 localStorage.setItem("_trueSavingThrows", st1 + "," + st2)
@@ -780,6 +1001,9 @@ function showSavingThrows(_class) {
                 console.log("Target Not Found for showSavingThrows");
             }
         })
+
+
+
 
     contBtn = newContinueButton(true)
     contBtn.onclick = function () {
@@ -1521,7 +1745,8 @@ function beginBackground(specialCaseHandled = false) {
             if (sInt == 5) chooseBonds()
             if (sInt == 6) chooseFlaws()
             if (sInt == 7) chooseLanguages()
-            if (sInt == 8) characterName()
+            if (sInt == 8) otherBackgroundTraits()
+            if (sInt == 9) characterName()
             if (sInt == 10) askForBackgroundReset()
         }
         else {
@@ -1529,6 +1754,82 @@ function beginBackground(specialCaseHandled = false) {
         }
     }
 
+}
+
+
+
+function otherBackgroundTraits() {
+    console.log('in other backgorund traits')
+    content = clearContentAndGet()
+    explainer = appendToContent('div')
+    getFromCSV('background.csv', localStorage.getItem('_background'), 'Other Background/Trait')
+        .then(dataCSV => {
+            if (dataCSV !== null) {
+                // // caseOf = 
+                // content = clearContentAndGet()
+                // console.log("Case is: " + data)
+                // switch (data) {
+                //     case 'Favorite Schemes':
+                //         break;
+                //     case 'Criminal Specialty':
+                //         break;
+                //     case 'Entertainer Routines':
+                //         break;
+                //     case 'Defining Event':
+                //         break;
+                //     case 'Guild Business':
+                //         break;
+                //     case 'Life of Seclusion':
+                //         break;
+                //     case 'Origin':
+                //         break;
+                //     case 'Specialty':
+                //         break;
+
+                // }
+
+                console.log('datacsv: ' + dataCSV)
+                fetch('/guide.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        otherBg = data.otherBackgroundTraits[dataCSV]
+                        if (otherBg === undefined) {
+                            localStorage.setItem('backgroundState', '10')
+                                characterName()
+                        }
+
+                        explainer.innerHTML = highlightTextWithMouseover(
+                            'As a ' + localStorage.getItem('_background') + ', you need to pick this special trait. ' + otherBg.desc,
+                            allDetails
+                        )
+
+                        console.log("OTHER BG: " + otherBg.opts)
+                        allOpts = otherBg.opts
+                        for (const opt in allOpts) {
+
+                            btn = appendToContent('button', 'smallDiv')
+                            btn.innerText = allOpts[opt].name
+                            btn.addEventListener('mouseenter', function () {
+                                const helperInfo = document.getElementById('helperInfo')
+                                helperInfo.innerText = allOpts[opt].description
+                            })
+                            btn.onclick = function () {
+                                localStorage.setItem('_otherSpecialTrait', dataCSV + ': ' + btn.innerText)
+                                localStorage.setItem('backgroundState', '10')
+                                characterName()
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+            else {
+                console.log("No other background traits to handle. Moving on to name")
+                localStorage.setItem('backgroundState', '10')
+                characterName()
+            }
+        })
 }
 
 function askForBackgroundReset() {
@@ -1988,7 +2289,9 @@ function characterName() {
     cBtn = document.getElementById('continueButton')
     cBtn.onclick = function () {
         storeKeyFromInput('_name')
+        localStorage.setItem('backgroundState', '10')
         determineProfs()
+
 
     }
     fetch('/guide.json')
@@ -2311,7 +2614,7 @@ function createTable(title, languages) {
     contBtn.innerText = "Continue"
     contBtn.onclick = function () {
         localStorage.setItem('backgroundState', '8')
-        characterName()
+        otherBackgroundTraits()
         localStorage.setItem('backgroundDone', 'true')
     }
     languages.forEach((language, index) => {
@@ -2399,6 +2702,7 @@ function chooseFlaws() {
 }
 var numberOfPersonalityTraits = 0
 var personalityTraits = ''
+var chosenTraitsArr = []
 function choosePersonality() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -2411,20 +2715,34 @@ function choosePersonality() {
             console.log("id " + allPT)
             optDiv = appendToContent('div', 'standardDiv')
             for (id in allPT) {
+                let clicked = false
                 const btn = appendToContent('button')
                 btn.setAttribute('id', 'personalityBtn')
                 btn.addEventListener('click', function () {
                     // Toggle the 'clicked' class when the button is clicked
+                    clicked = !clicked
+                    // if less that two picked
+                    // toggle color
+                    // if not clicked, clear trait from arr[numOfStraits]
+                    // if clicked, load trait arr[num]
+
+                    // if two chosen, load them and move on
 
                     if (numberOfPersonalityTraits < 2) {
-                        numberOfPersonalityTraits += 1
                         this.classList.toggle('clicked');
-                        personalityTraits += numberOfPersonalityTraits + '. ' + btn.innerText + '  '
-                        console.log("PT: +" + personalityTraits)
+                        if (clicked) {
+                            chosenTraitsArr[numberOfPersonalityTraits++] = btn.innerText
+                        }
+                        else {
+                            chosenTraitsArr[numberOfPersonalityTraits--] = ''
+                        }
+
+                        // personalityTraits += numberOfPersonalityTraits + '. ' + btn.innerText + '  '
+                        // console.log("PT: +" + personalityTraits)
                     }
                     if (numberOfPersonalityTraits == 2) {
                         localStorage.setItem("backgroundState", "4")
-                        localStorage.setItem('_personalityTraits', personalityTraits)
+                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0]+'\n'+chosenTraitsArr[1])
                         // characterName()
                         chooseIdeals()
                     }
@@ -2498,8 +2816,9 @@ function chooseLanguages() {
                 console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
                 numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
                 if (numExtraLangs == 0) {
-                    localStorage.setItem('backgroundState', '2')
-                    chooseBonds()
+                    localStorage.setItem('backgroundState', '8')
+                    // chooseBonds()
+                    otherBackgroundTraits()
                     return
                 }
 
@@ -2593,6 +2912,10 @@ function rollTheDice(abil) {
         }
         else {
             assignProficiencies()
+            if (localStorage.getItem('_race') == 'Half-Elf') {
+                handleHalfElfAbilityScores()
+            }
+
             // fullDebrief()
         }
         // rollTheDice(getNextRoll(abil))
@@ -2687,7 +3010,8 @@ function getFromCSV(fileName, target, column) {
 function standardArray() {
     if (assignedAbils.length == 6) {
         content = clearContentAndGet()
-        content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
+        if (localStorage.getItem('_race') != 'Half-Elf')
+            content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
         contBtn = document.createElement('button')
         contBtn.innerText = 'Continue'
         contBtn.onclick = function () {
@@ -2937,9 +3261,10 @@ function calculateMaxHP() {
 function handleHalfElfAbilityScores() {
     q = 'As a Half-Elf, you get to choose two more ability scores to increase by 1.'
     ansBtns = []
+    var choices = 0
     const abilityScores = ['Strength', 'Dex', 'Constitution', 'Intelligence', 'Wisdom']
-    for (abilScrs in abilityScores) {
-        btn = document.createElement('button')
+    for (const abilScrs in abilityScores) {
+        const btn = document.createElement('button')
         btn.innerText = abilityScores[abilScrs]
         key = '_' + abilityScores[abilScrs].toLowerCase()
         if (abilityScores[abilScrs] == 'Intelligence') {
@@ -2948,8 +3273,12 @@ function handleHalfElfAbilityScores() {
         btn.onclick = function () {
             addToLocalStorageInt(key, 1)
             btn.remove()
+            choices++
+            if (choices >= 2) {
+                fullDebrief()
+            }
         }
-        ansBtn.push(btn)
+        ansBtns.push(btn)
     }
     basicQuestionAnswer(q, ansBtns)
     contBtn = document.createElement('button')
@@ -3007,8 +3336,12 @@ function addToLocalStorageInt(key, value) {
 function addToLocalStorageString(key, value) {
     try {
         currVal = localStorage.getItem(key)
-        newVal = currVal + '  ' + value
-        localStorage.setItem(key, newVal)
+        if (currVal !== null) {
+            newVal = currVal + '  ' + value
+            localStorage.setItem(key, newVal)
+        } else {
+            localStorage.setItem(key, value)
+        }
     }
     catch {
         console.error("Could not parse the local storage value in addToLocalStorage.")
