@@ -2550,7 +2550,7 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "It's time to assign your ability scores."
+    main.innerText = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\nStrength, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
