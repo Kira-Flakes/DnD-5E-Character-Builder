@@ -176,7 +176,7 @@ class characterSheet {
   }
 
   getRace() {
-    return characterSheet._race;
+    return this._race;
   }
 
   setRace(newRace) {
@@ -740,6 +740,34 @@ class characterSheet {
         localStorage.setItem(keys[key], "");
         // unkowns = unkowns + " " + keys[key] + ", ";
       }
+    }
+    try {
+      console.log("truest "+localStorage.getItem("_trueSavingThrows"))
+      const savingThrowsToCheck = localStorage.getItem("_trueSavingThrows").split(',')
+      console.log(savingThrowsToCheck)
+      const st1 = document.getElementsByName(savingThrowsToCheck[0])
+      const st2 = document.getElementsByName(savingThrowsToCheck[1])
+      st1[0].checked = true
+      st2[0].checked = true
+
+    }
+    catch {
+      console.log("Saving throws either not yet selected or something is wrong.")
+    }
+
+    try {
+      const skillProfs = localStorage.getItem('_skillProfs').split(',')
+      console.log('Skillporfs: '+ skillProfs)
+      for (var sp in skillProfs) {
+        console.log(skillProfs[sp])
+        var p = document.getElementsByName(skillProfs[sp]+'-prof')
+        p[0].checked = true
+      }
+
+    }
+    catch {
+      console.log("Skill profs either not yet selected or something is wrong.")
+
     }
     // console.log(unkowns);
   }

@@ -51,9 +51,9 @@ h1 {
 
 h2 {
     font-family: 'Nougat';
-    font-size: 60px;
+    font-size: 40px;
     font-style: italic;
-    color: rgb(250, 135, 135);
+    color: rgb(189, 75, 75);
     text-align: center;
     margin-bottom: 35px;
 }
@@ -84,6 +84,7 @@ input[type="checkbox"] {
     visibility: hidden;
     height: 0;
     width: 0;
+    
 }
 
 /* Selected checkboxes */
@@ -188,7 +189,7 @@ label {
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
-    background-color: #454545;
+    /* background-color: #454545; */
     color: white;
     padding: 1vh 1.5vh;
     margin-bottom: 10px;
@@ -375,6 +376,8 @@ mark {
     background-color: transparent;
     color: #ba8c10;
     transition: color 0.3s;
+    border-bottom: 2px dotted #ba8c10;
+    text-decoration: none;
     /* Smooth transition over 0.3 seconds */
 }
 
