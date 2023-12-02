@@ -114,6 +114,23 @@ class characterSheet {
     this._eqList = '';
 
     this._etcAttacksAndSpells = '';
+    this._c1 = ''
+    this._c2 = ''
+    this._c3 = ''
+    this._c4 = ''
+    this._c5 = ''
+    this._c6 = ''
+    this._c7 = ''
+    this._c8 = ''
+  
+    this._1
+    this._2
+    this._3
+    this._4
+    this._5
+    this._6
+    this._7
+    this._8
 
   }
 

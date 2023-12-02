@@ -285,7 +285,7 @@
                     "Support": [
                         "Cleric",
                         "",
-                        "->conclusion"
+                        "->cleric"
                     ],
                     "Offensive": [
                         "Druid",

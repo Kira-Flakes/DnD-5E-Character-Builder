@@ -205,16 +205,23 @@ function beginEquipment() {
 function chooseEquipment(iter = 0) {
     if (iter >= equipmentQuestions.length) {
         console.log("Done with equipment questions...")
-        window.location.href = '../html/rollDemo.html'
-        rollForAbilities()
+        loadCantrips()
+        // window.location.href = '../html/rollDemo.html'
+        // rollForAbilities()
     }
     else {
         console.log(iter + ' iter')
         content = clearContentAndGet()
         choiceDiv = appendToContent('div')
         choiceDiv.innerText = "Choose Between: "
+
         currentQuestion = equipmentQuestions[iter].split('*')
         for (let c in currentQuestion) {
+            if (currentQuestion[c].charAt(0) == '_') {
+                console.log("Found a _")
+                choiceDiv.innerText = 'Choose ' + currentQuestion[c].slice(1) + ': '
+                continue;
+            }
             const oBtn = document.createElement('button')
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
@@ -246,6 +253,87 @@ function chooseEquipment(iter = 0) {
     }
 }
 
+function loadCantrips() {
+    content = clearContentAndGet()
+    title = appendToContent('h3')
+    title.innerText = 'Spells'
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Cantrips (Level 0 Spells)')
+        .then(data => {
+            if (data !== null) {
+                cantrips = data.split(',')
+                explainer = appendToContent('div')
+                explainer.innerHTML = highlightTextWithMouseover(
+                    'As a ' + localStorage.getItem('_class') + ' you have been assigned these cantrips:',
+                    allDetails
+                )
+                for (i = 0; i < cantrips.length; i++) {
+                    console.log('i ' + i)
+                    cantripDiv = appendToContent('div', 'smallDiv')
+                    cantripDiv.innerHTML = highlightTextWithMouseover(
+                        cantrips[i],
+                        allDetails
+                    )
+                    localStorage.setItem('_c' + (i + 1), cantrips[i])
+                }
+
+                if (localStorage.getItem('_class') == 'Cleric') {
+                    // continue on to cleric
+                    console.log("Here with cleric level one spells")
+                    loadClericLevel1Spells()
+                }
+                else {
+                    loadLevel1Spells()
+                }
+
+                continueBtn = newContinueButton(true)
+                continueBtn.onclick = function () {
+
+                }
+
+            }
+            else {
+                console.log('No cantrips for ' + localStorage.getItem('_class'))
+                window.location.href = '../html/rollDemo.html'
+                rollForAbilities()
+            }
+        })
+}
+
+function loadClericLevel1Spells() {
+    getFromCSV('spells.csv')
+}
+
+function loadLevel1Spells() {
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Level 1 Spells')
+        .then(data => {
+            if (data !== null) {
+                l1Spells = data.split(',')
+                if (l1Spells.length > 1) {
+                    level1SpellDiv = appendToContent('div')
+                    level1SpellDiv.innerHTML = highlightTextWithMouseover(
+                        'Additionally, you have the following level 1 spells:',
+                        allDetails
+                    )
+                    for (i = 0; i < l1Spells.length; i++) {
+                        console.log('i ' + i)
+                        levelDiv = appendToContent('div', 'smallDiv')
+                        levelDiv.innerHTML = highlightTextWithMouseover(
+                            l1Spells[i],
+                            allDetails
+                        )
+                        localStorage.setItem('_c' + (i + 1), l1Spells[i])
+                    }
+                }
+
+            }
+            else {
+                console.log('No level 1 spells for ' + localStorage.getItem('_class'))
+                // window.location.href = '../html/rollDemo.html'
+                // rollForAbilities()
+            }
+        })
+}
+
 function storeChosenWeapon(wpn, currNumChosen) {
     console.log('in store Chosen weapon')
     fetch('/guide.json')
@@ -257,9 +345,9 @@ function storeChosenWeapon(wpn, currNumChosen) {
                 for (n in allWeapons[type]) {
                     if (allWeapons[type][n].name == wpn) {
                         console.log('found!')
-                         localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
-                         localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
-                         return
+                        localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
+                        localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
+                        return
                     }
                 }
             }
@@ -729,9 +817,47 @@ function classResponseHandler(type) {
     else if (type == '->sorcerer') {
         handleSorcerer()
     }
+    else if (type == '->cleric') {
+        handleCleric()
+    }
     else {
         classDebrief()
     }
+}
+
+function handleCleric() {
+    const divineDomains = [
+        "Draconic Bloodline",
+        "Wild Magic"
+    ]
+    choice = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            origin = data.origins
+            // Use the JSON data here
+            for (o in divineDomains) {
+                const ori = divineDomains[o]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = divineDomains[o]
+                sBtn.onclick = function () {
+                    localStorage.setItem("_origin", sBtn.innerText)
+                    classDebrief()
+                }
+                choice.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    document.getElementById('helperInfo').innerText = origin[ori]
+                })
+            }
+            basicQuestionAnswer(
+                "If you pick wild, then your magic stems from ancient bargains with dragons or mingling with draconic blood. You may be part of an established bloodline or the pioneer of a new one. Or alternatively you can pick a dragonic bloodline, and your magic arises from chaotic forces, influenced by exposure to raw magic, encounters with fey or demons, or simply as a fluke of birth. This unpredictable magic awaits expression through you.",
+                choice,
+                "Sorcerers harness innate magic, and their origins broadly fall into two categories: draconic bloodline and wild magic."
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function handleSorcerer() {
@@ -1550,6 +1676,7 @@ function resetProgress(current) {
         console.log("Removing background items...")
         // ...
         localStorage.setItem('backgroundState', '0')
+        location.reload()
     }
     else if (current == 'equipment') {
         console.log('Removing equipment items...')
@@ -1795,7 +1922,7 @@ function otherBackgroundTraits() {
                         otherBg = data.otherBackgroundTraits[dataCSV]
                         if (otherBg === undefined) {
                             localStorage.setItem('backgroundState', '10')
-                                characterName()
+                            characterName()
                         }
 
                         explainer.innerHTML = highlightTextWithMouseover(
@@ -2742,7 +2869,7 @@ function choosePersonality() {
                     }
                     if (numberOfPersonalityTraits == 2) {
                         localStorage.setItem("backgroundState", "4")
-                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0]+'\n'+chosenTraitsArr[1])
+                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0] + '\n' + chosenTraitsArr[1])
                         // characterName()
                         chooseIdeals()
                     }
@@ -2869,7 +2996,7 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\nStrength, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
+    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\n<b>Strength</b>, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
