@@ -279,7 +279,7 @@ function loadCantrips() {
                 if (localStorage.getItem('_class') == 'Cleric') {
                     // continue on to cleric
                     console.log("Here with cleric level one spells")
-                    loadClericLevel1Spells()
+
                 }
                 else {
                     loadLevel1Spells()
@@ -300,7 +300,7 @@ function loadCantrips() {
 }
 
 function loadClericLevel1Spells() {
-    getFromCSV('spells.csv')
+    getFromCSV('spells.csv', '')
 }
 
 function loadLevel1Spells() {
@@ -827,32 +827,56 @@ function classResponseHandler(type) {
 
 function handleCleric() {
     const divineDomains = [
-        "Draconic Bloodline",
-        "Wild Magic"
-    ]
+        "Knowledge",
+        "Life",
+        "Light",
+        "Nature",
+        "Tempest",
+        "Trickery",
+        "War"
+    ];
+
     choice = []
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            origin = data.origins
+            dDomain = data.divineDomains
             // Use the JSON data here
-            for (o in divineDomains) {
-                const ori = divineDomains[o]
+            for (var d in divineDomains) {
+                const dom = divineDomains[d]
                 const sBtn = document.createElement('button')
-                sBtn.innerText = divineDomains[o]
+                sBtn.innerText = divineDomains[d]
+                spellsGiven = dDomain[dom].spells.split(',')
                 sBtn.onclick = function () {
-                    localStorage.setItem("_origin", sBtn.innerText)
+                    localStorage.setItem("_divineDomain", sBtn.innerText)
+                    // Set level one spells for the domain
+                    for (const s in spellsGiven) {
+
+                        num = parseInt(s) + 1
+                        console.log(num + '   s')
+                        localStorage.setItem('_' + (num), spellsGiven[s])
+                    }
                     classDebrief()
                 }
                 choice.push(sBtn)
                 sBtn.addEventListener('mouseenter', function () {
-                    document.getElementById('helperInfo').innerText = origin[ori]
+                    helperInfoDiv = document.getElementById('helperInfo')
+                    helperInfoDiv.innerText = dDomain[dom].desc
+
+                    spellExpDiv = document.createElement('div')
+                    spellExpDiv.innerText = "You will be given the following level one spells:"
+                    helperInfoDiv.appendChild(spellExpDiv)
+                    for (sp in spellsGiven) {
+                        var spDiv = document.createElement('div')
+                        helperInfoDiv.appendChild(spDiv)
+                        spDiv.innerText = spellsGiven[sp]
+                    }
                 })
             }
             basicQuestionAnswer(
-                "If you pick wild, then your magic stems from ancient bargains with dragons or mingling with draconic blood. You may be part of an established bloodline or the pioneer of a new one. Or alternatively you can pick a dragonic bloodline, and your magic arises from chaotic forces, influenced by exposure to raw magic, encounters with fey or demons, or simply as a fluke of birth. This unpredictable magic awaits expression through you.",
+                "Each domain comes with specific spells and features upon selection at 1st level. Gain enhanced Channel Divinity options at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
                 choice,
-                "Sorcerers harness innate magic, and their origins broadly fall into two categories: draconic bloodline and wild magic."
+                "Select a domain aligned with your deity: Knowledge, Life, Light, Nature, Tempest, Trickery, or War."
             )
         })
         .catch(error => {
@@ -1163,6 +1187,20 @@ function chooseSkills(_class) {
                     btn.innerText = profs[p]
                     clicked = 0
                     let isClicked = false;
+
+                    btn.addEventListener('mouseenter', function () {
+                        fetch('/guide.json')
+                            .then(response => response.json())
+                            .then(data => {
+                                skillDesc = data.skills[btn.innerText.toLowerCase()]
+                                helperInfo = document.getElementById('helperInfo')
+                                helperInfo.innerText = skillDesc
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    })
+
                     btn.onclick = function () {
 
                         isClicked = !isClicked; // Toggle the state
@@ -2691,7 +2729,7 @@ function chooseBonds() {
         });
 }
 
-function createLanguageTables() {
+function createLanguageTables(omit) {
     // Create the main div
     const mainDiv = document.createElement('div');
 
@@ -2700,7 +2738,7 @@ function createLanguageTables() {
         .then(response => response.json())
         .then(data => {
             // Create a table for standard languages
-            const standardTable = createTable('Standard Languages', data.standardLanguages);
+            const standardTable = createTable('Languages', data.standardLanguages, omit);
             mainDiv.appendChild(standardTable);
 
             // Create a table for exotic languages
@@ -2718,8 +2756,9 @@ function createLanguageTables() {
 
 
 // Helper function to create a table
-function createTable(title, languages) {
+function createTable(title, languages, omit) {
     const table = document.createElement('table');
+    table.setAttribute('id','langTable')
     const caption = table.createCaption();
     caption.textContent = title;
 
@@ -2745,41 +2784,43 @@ function createTable(title, languages) {
         localStorage.setItem('backgroundDone', 'true')
     }
     languages.forEach((language, index) => {
+        // Check if the language should be omitted
+        if (!omit.includes(language.language)) {
+            const row = table.insertRow();
+            row.addEventListener('click', () => {
+                // Change background color on row click
+                if (selected < allowed && row.style.backgroundColor != 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected += 1
+                    selectedLangs.push(row.cells[0].textContent)
+                    console.log(selectedLangs)
+                } else if (row.style.backgroundColor == 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected -= 1
+                    console.log(selectedLangs.indexOf(row.cells[0].textContent))
+                    selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
+                    console.log(selectedLangs)
+                }
+                if (allowed == selectedLangs.length) {
+                    contBtn.style.display = 'block'
+                } else {
+                    contBtn.style.display = 'none'
+                }
+            });
 
-        const row = table.insertRow();
-        row.addEventListener('click', () => {
-            // Change background color on row click
-            if (selected < allowed && row.style.backgroundColor != 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected += 1
-                selectedLangs.push(row.cells[0].textContent)
-                console.log(selectedLangs)
-            } else if (row.style.backgroundColor == 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected -= 1
-                console.log(selectedLangs.indexOf(row.cells[0].textContent))
-                selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
-                console.log(selectedLangs)
-            }
-            if (allowed == selectedLangs.length) {
-                contBtn.style.display = 'block'
-            } else {
-                contBtn.style.display = 'none'
-            }
+            const languageCell = row.insertCell();
+            const speakersCell = row.insertCell();
+            const scriptCell = row.insertCell();
 
-        });
-
-        const languageCell = row.insertCell();
-        const speakersCell = row.insertCell();
-        const scriptCell = row.insertCell();
-
-        languageCell.textContent = language.language;
-        speakersCell.textContent = language.typicalSpeakers;
-        scriptCell.textContent = language.script;
+            languageCell.textContent = language.language;
+            speakersCell.textContent = language.typicalSpeakers;
+            scriptCell.textContent = language.script;
+        }
     });
 
     return table;
 }
+
 
 // Example usage: Append the created div to the body
 //   document.body.appendChild(createLanguageTables());
@@ -2914,12 +2955,6 @@ function chooseLanguages() {
     content = clearContentAndGet()
     explainer = appendToContent('div', 'standardDiv')
     console.log('All details are here: ' + allDetails)
-    // explainer.innerHTML = highlightTextWithMouseover(
-    //     'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
-    //     allDetails
-    // )
-
-
     currLangDiv = appendToContent()
     getFromCSV('raceFeatures.csv', localStorage.getItem('_subRace'), 'Languages')
         .then(data => {
@@ -2957,9 +2992,10 @@ function chooseLanguages() {
                 moreExplainer = appendToContent('div', 'standardDiv')
                 if (numExtraLangs == 1) {
                     moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra language.'
+                } else {
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
                 }
-                moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
-                langTables = createLanguageTables()
+                langTables = createLanguageTables(langs)
                 content.appendChild(langTables)
 
             } else {

@@ -123,14 +123,14 @@ class characterSheet {
     this._c7 = ''
     this._c8 = ''
   
-    this._1
-    this._2
-    this._3
-    this._4
-    this._5
-    this._6
-    this._7
-    this._8
+    this._1 = ''
+    this._2 = ''
+    this._3 = ''
+    this._4 = ''
+    this._5 = ''
+    this._6 = ''
+    this._7 = ''
+    this._8 = ''
 
   }
 
