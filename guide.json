@@ -285,7 +285,7 @@
                     "Support": [
                         "Cleric",
                         "",
-                        "->conclusion"
+                        "->cleric"
                     ],
                     "Offensive": [
                         "Druid",
@@ -1924,6 +1924,36 @@
         "Draconic Bloodline": "Your innate magic stems from draconic blood mingled with yours or your ancestors', often traced back to a dragon-related pact or ancestry. Some bloodlines are well-known, while others are obscure, and any sorcerer could be the first of a new bloodline.",
         "Wild Magic": "Your innate magic originates from the chaotic forces underlying creation. Exposure to raw magic, encounters with fey creatures, demonic blessings, or unexplained birth anomalies may have triggered this unpredictable magic within you."
     },
+    "divineDomains": {
+        "Knowledge": {
+            "desc": "The gods of knowledge, including Oghma, Boccob, Gilean, Aureon, and Thoth, value learning and understanding above all. Followers of these gods study esoteric lore, collect old tomes, delve into the secret places of the earth, and learn all they can.",
+            "spells": "Command,Identify"
+        },
+        "Life": {
+            "desc": "The Life domain focuses on the vibrant positive energy, one of the fundamental forces of the universe, that sustains all life. Gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath.",
+            "spells": "Bless,Cure Wounds"
+        },
+        "Light": {
+            "desc": "Gods of light, including Hehn, Lathander, Pholtus, Branchala, the Silver Flame, Belenus, Apollo, and Re-Horakhty, promote the ideals of rebirth and renewal, truth, vigilance, and beauty, often using the symbol of the sun.",
+            "spells": "Burning Hands,Faerie Fire"
+        },
+        "Nature": {
+            "desc": "Gods of nature are as varied as the natural world itself, from inscrutable gods of the deep forests to friendly deities associated with particular springs and groves. These gods have clerics who might hunt evil monstrosities, bless harvests, or wither crops of those who anger their gods.",
+            "spells": "Animal Friendship,Speak with Animals"
+        },
+        "Tempest": {
+            "desc": "Gods whose portfolios include the Tempest domain, such as Talos, Umberlee, Kord, Zeboim, the Devourer, Zeus, and Thor, govern storms, sea, and sky. They include gods of lightning and thunder, gods of earthquakes, and certain gods of violence, physical strength, and courage.",
+            "spells": "Fog Cloud,Thunderwave"
+        },
+        "Trickery": {
+            "desc": "Gods of trickery, such as Tymora, Beshaba, Olidammara, the Traveler, Garl Glittergold, and Loki, are mischief-makers and instigators who challenge the accepted order among both gods and mortals. Their clerics are a disruptive force in the world, preferring subterfuge, pranks, deception, and theft.",
+            "spells": "Charm Person,Disguise Self"
+        },
+        "War": {
+            "desc": "War has many manifestations, making heroes of ordinary people or being desperate and horrific. Gods of war watch over warriors and reward them for their great deeds. The clerics of such gods excel in battle, inspiring others to fight the good fight or offering acts of violence as prayers.",
+            "spells": "Divine Favor,Shield of Faith"
+        }
+    },
     "weapons": {
         "simpleMeleeWeapons": [
             {
@@ -2657,5 +2687,25 @@
                 }
             ]
         }
+    },
+    "skills": {
+        "acrobatics": "The ability to perform agile and precise physical maneuvers, often involving balance and coordination.",
+        "animal handling": "The skill to interact with animals, calm them, and understand their behaviors.",
+        "arcana": "Knowledge of magic, spells, and the mystical forces that shape the world.",
+        "athletics": "Physical prowess and ability in activities such as running, jumping, and climbing.",
+        "deception": "The art of concealing one's true intentions and misleading others through speech or action.",
+        "history": "Knowledge of past events, cultures, and historical figures.",
+        "insight": "The ability to read people, discern their motives, and understand their true feelings.",
+        "intimidation": "The skill of inducing fear or awe in others through words, demeanor, or presence.",
+        "investigation": "The talent for examining details, scrutinizing evidence, and solving puzzles.",
+        "medicine": "The ability to provide medical care, treat injuries, and diagnose illnesses.",
+        "nature": "Knowledge of the natural world, including plants, animals, and the environment.",
+        "perception": "Keen awareness of one's surroundings, allowing the detection of hidden or subtle details.",
+        "performance": "The skill to captivate an audience through various forms of artistic expression.",
+        "persuasion": "The art of convincing others to adopt a certain point of view or take a specific action.",
+        "religion": "Understanding of divine magic, religious traditions, and knowledge of deities.",
+        "sleight of hand": "The ability to perform manual tricks, pick pockets, and manipulate small objects with dexterity.",
+        "stealth": "The skill to move quietly and avoid detection, whether through shadows or disguise.",
+        "survival": "Knowledge and ability to thrive in the wilderness, including tracking, foraging, and navigating."
     }
 }

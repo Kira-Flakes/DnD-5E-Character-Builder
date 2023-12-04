@@ -205,16 +205,23 @@ function beginEquipment() {
 function chooseEquipment(iter = 0) {
     if (iter >= equipmentQuestions.length) {
         console.log("Done with equipment questions...")
-        window.location.href = '../html/rollDemo.html'
-        rollForAbilities()
+        loadCantrips()
+        // window.location.href = '../html/rollDemo.html'
+        // rollForAbilities()
     }
     else {
         console.log(iter + ' iter')
         content = clearContentAndGet()
         choiceDiv = appendToContent('div')
         choiceDiv.innerText = "Choose Between: "
+
         currentQuestion = equipmentQuestions[iter].split('*')
         for (let c in currentQuestion) {
+            if (currentQuestion[c].charAt(0) == '_') {
+                console.log("Found a _")
+                choiceDiv.innerText = 'Choose ' + currentQuestion[c].slice(1) + ': '
+                continue;
+            }
             const oBtn = document.createElement('button')
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
@@ -246,6 +253,87 @@ function chooseEquipment(iter = 0) {
     }
 }
 
+function loadCantrips() {
+    content = clearContentAndGet()
+    title = appendToContent('h3')
+    title.innerText = 'Spells'
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Cantrips (Level 0 Spells)')
+        .then(data => {
+            if (data !== null) {
+                cantrips = data.split(',')
+                explainer = appendToContent('div')
+                explainer.innerHTML = highlightTextWithMouseover(
+                    'As a ' + localStorage.getItem('_class') + ' you have been assigned these cantrips:',
+                    allDetails
+                )
+                for (i = 0; i < cantrips.length; i++) {
+                    console.log('i ' + i)
+                    cantripDiv = appendToContent('div', 'smallDiv')
+                    cantripDiv.innerHTML = highlightTextWithMouseover(
+                        cantrips[i],
+                        allDetails
+                    )
+                    localStorage.setItem('_c' + (i + 1), cantrips[i])
+                }
+
+                if (localStorage.getItem('_class') == 'Cleric') {
+                    // continue on to cleric
+                    console.log("Here with cleric level one spells")
+
+                }
+                else {
+                    loadLevel1Spells()
+                }
+
+                continueBtn = newContinueButton(true)
+                continueBtn.onclick = function () {
+
+                }
+
+            }
+            else {
+                console.log('No cantrips for ' + localStorage.getItem('_class'))
+                window.location.href = '../html/rollDemo.html'
+                rollForAbilities()
+            }
+        })
+}
+
+function loadClericLevel1Spells() {
+    getFromCSV('spells.csv', '')
+}
+
+function loadLevel1Spells() {
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Level 1 Spells')
+        .then(data => {
+            if (data !== null) {
+                l1Spells = data.split(',')
+                if (l1Spells.length > 1) {
+                    level1SpellDiv = appendToContent('div')
+                    level1SpellDiv.innerHTML = highlightTextWithMouseover(
+                        'Additionally, you have the following level 1 spells:',
+                        allDetails
+                    )
+                    for (i = 0; i < l1Spells.length; i++) {
+                        console.log('i ' + i)
+                        levelDiv = appendToContent('div', 'smallDiv')
+                        levelDiv.innerHTML = highlightTextWithMouseover(
+                            l1Spells[i],
+                            allDetails
+                        )
+                        localStorage.setItem('_c' + (i + 1), l1Spells[i])
+                    }
+                }
+
+            }
+            else {
+                console.log('No level 1 spells for ' + localStorage.getItem('_class'))
+                // window.location.href = '../html/rollDemo.html'
+                // rollForAbilities()
+            }
+        })
+}
+
 function storeChosenWeapon(wpn, currNumChosen) {
     console.log('in store Chosen weapon')
     fetch('/guide.json')
@@ -257,9 +345,9 @@ function storeChosenWeapon(wpn, currNumChosen) {
                 for (n in allWeapons[type]) {
                     if (allWeapons[type][n].name == wpn) {
                         console.log('found!')
-                         localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
-                         localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
-                         return
+                        localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
+                        localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
+                        return
                     }
                 }
             }
@@ -729,9 +817,71 @@ function classResponseHandler(type) {
     else if (type == '->sorcerer') {
         handleSorcerer()
     }
+    else if (type == '->cleric') {
+        handleCleric()
+    }
     else {
         classDebrief()
     }
+}
+
+function handleCleric() {
+    const divineDomains = [
+        "Knowledge",
+        "Life",
+        "Light",
+        "Nature",
+        "Tempest",
+        "Trickery",
+        "War"
+    ];
+
+    choice = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            dDomain = data.divineDomains
+            // Use the JSON data here
+            for (var d in divineDomains) {
+                const dom = divineDomains[d]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = divineDomains[d]
+                spellsGiven = dDomain[dom].spells.split(',')
+                sBtn.onclick = function () {
+                    localStorage.setItem("_divineDomain", sBtn.innerText)
+                    // Set level one spells for the domain
+                    for (const s in spellsGiven) {
+
+                        num = parseInt(s) + 1
+                        console.log(num + '   s')
+                        localStorage.setItem('_' + (num), spellsGiven[s])
+                    }
+                    classDebrief()
+                }
+                choice.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    helperInfoDiv = document.getElementById('helperInfo')
+                    helperInfoDiv.innerText = dDomain[dom].desc
+
+                    spellExpDiv = document.createElement('div')
+                    spellExpDiv.innerText = "You will be given the following level one spells:"
+                    helperInfoDiv.appendChild(spellExpDiv)
+                    for (sp in spellsGiven) {
+                        var spDiv = document.createElement('div')
+                        helperInfoDiv.appendChild(spDiv)
+                        spDiv.innerText = spellsGiven[sp]
+                    }
+                })
+            }
+            basicQuestionAnswer(
+                "Each domain comes with specific spells and features upon selection at 1st level. Gain enhanced Channel Divinity options at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+                choice,
+                "Select a domain aligned with your deity: Knowledge, Life, Light, Nature, Tempest, Trickery, or War."
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function handleSorcerer() {
@@ -1037,6 +1187,20 @@ function chooseSkills(_class) {
                     btn.innerText = profs[p]
                     clicked = 0
                     let isClicked = false;
+
+                    btn.addEventListener('mouseenter', function () {
+                        fetch('/guide.json')
+                            .then(response => response.json())
+                            .then(data => {
+                                skillDesc = data.skills[btn.innerText.toLowerCase()]
+                                helperInfo = document.getElementById('helperInfo')
+                                helperInfo.innerText = skillDesc
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    })
+
                     btn.onclick = function () {
 
                         isClicked = !isClicked; // Toggle the state
@@ -1550,6 +1714,7 @@ function resetProgress(current) {
         console.log("Removing background items...")
         // ...
         localStorage.setItem('backgroundState', '0')
+        location.reload()
     }
     else if (current == 'equipment') {
         console.log('Removing equipment items...')
@@ -1795,7 +1960,7 @@ function otherBackgroundTraits() {
                         otherBg = data.otherBackgroundTraits[dataCSV]
                         if (otherBg === undefined) {
                             localStorage.setItem('backgroundState', '10')
-                                characterName()
+                            characterName()
                         }
 
                         explainer.innerHTML = highlightTextWithMouseover(
@@ -2564,7 +2729,7 @@ function chooseBonds() {
         });
 }
 
-function createLanguageTables() {
+function createLanguageTables(omit) {
     // Create the main div
     const mainDiv = document.createElement('div');
 
@@ -2573,7 +2738,7 @@ function createLanguageTables() {
         .then(response => response.json())
         .then(data => {
             // Create a table for standard languages
-            const standardTable = createTable('Standard Languages', data.standardLanguages);
+            const standardTable = createTable('Languages', data.standardLanguages, omit);
             mainDiv.appendChild(standardTable);
 
             // Create a table for exotic languages
@@ -2591,8 +2756,9 @@ function createLanguageTables() {
 
 
 // Helper function to create a table
-function createTable(title, languages) {
+function createTable(title, languages, omit) {
     const table = document.createElement('table');
+    table.setAttribute('id','langTable')
     const caption = table.createCaption();
     caption.textContent = title;
 
@@ -2618,41 +2784,43 @@ function createTable(title, languages) {
         localStorage.setItem('backgroundDone', 'true')
     }
     languages.forEach((language, index) => {
+        // Check if the language should be omitted
+        if (!omit.includes(language.language)) {
+            const row = table.insertRow();
+            row.addEventListener('click', () => {
+                // Change background color on row click
+                if (selected < allowed && row.style.backgroundColor != 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected += 1
+                    selectedLangs.push(row.cells[0].textContent)
+                    console.log(selectedLangs)
+                } else if (row.style.backgroundColor == 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected -= 1
+                    console.log(selectedLangs.indexOf(row.cells[0].textContent))
+                    selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
+                    console.log(selectedLangs)
+                }
+                if (allowed == selectedLangs.length) {
+                    contBtn.style.display = 'block'
+                } else {
+                    contBtn.style.display = 'none'
+                }
+            });
 
-        const row = table.insertRow();
-        row.addEventListener('click', () => {
-            // Change background color on row click
-            if (selected < allowed && row.style.backgroundColor != 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected += 1
-                selectedLangs.push(row.cells[0].textContent)
-                console.log(selectedLangs)
-            } else if (row.style.backgroundColor == 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected -= 1
-                console.log(selectedLangs.indexOf(row.cells[0].textContent))
-                selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
-                console.log(selectedLangs)
-            }
-            if (allowed == selectedLangs.length) {
-                contBtn.style.display = 'block'
-            } else {
-                contBtn.style.display = 'none'
-            }
+            const languageCell = row.insertCell();
+            const speakersCell = row.insertCell();
+            const scriptCell = row.insertCell();
 
-        });
-
-        const languageCell = row.insertCell();
-        const speakersCell = row.insertCell();
-        const scriptCell = row.insertCell();
-
-        languageCell.textContent = language.language;
-        speakersCell.textContent = language.typicalSpeakers;
-        scriptCell.textContent = language.script;
+            languageCell.textContent = language.language;
+            speakersCell.textContent = language.typicalSpeakers;
+            scriptCell.textContent = language.script;
+        }
     });
 
     return table;
 }
+
 
 // Example usage: Append the created div to the body
 //   document.body.appendChild(createLanguageTables());
@@ -2742,7 +2910,7 @@ function choosePersonality() {
                     }
                     if (numberOfPersonalityTraits == 2) {
                         localStorage.setItem("backgroundState", "4")
-                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0]+'\n'+chosenTraitsArr[1])
+                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0] + '\n' + chosenTraitsArr[1])
                         // characterName()
                         chooseIdeals()
                     }
@@ -2787,12 +2955,6 @@ function chooseLanguages() {
     content = clearContentAndGet()
     explainer = appendToContent('div', 'standardDiv')
     console.log('All details are here: ' + allDetails)
-    // explainer.innerHTML = highlightTextWithMouseover(
-    //     'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
-    //     allDetails
-    // )
-
-
     currLangDiv = appendToContent()
     getFromCSV('raceFeatures.csv', localStorage.getItem('_subRace'), 'Languages')
         .then(data => {
@@ -2830,9 +2992,10 @@ function chooseLanguages() {
                 moreExplainer = appendToContent('div', 'standardDiv')
                 if (numExtraLangs == 1) {
                     moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra language.'
+                } else {
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
                 }
-                moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
-                langTables = createLanguageTables()
+                langTables = createLanguageTables(langs)
                 content.appendChild(langTables)
 
             } else {
@@ -2869,7 +3032,7 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\nStrength, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
+    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\n<b>Strength</b>, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
