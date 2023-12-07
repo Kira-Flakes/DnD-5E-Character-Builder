@@ -15,6 +15,40 @@ const divCache = []
 var allDetails = []
 let racePrev = 0
 
+// Example usage
+const instrumentData = [
+    "Bagpipes",
+    "Drum",
+    "Dulcimer",
+    "Flute",
+    "Lute",
+    "Lyre",
+    "Horn",
+    "Pan Flute",
+    "Shawm",
+    "Viol"
+];
+
+const artisanToolData = [
+    "Alchemist's supplies",
+    "Brewer's supplies",
+    "Calligrapher's supplies",
+    "Carpenter's tools",
+    "Cartographer's tools",
+    "Cobbler's tools",
+    "Cook's utensils",
+    "Glassblower's tools",
+    "Jeweler's tools",
+    "Leatherworker's tools",
+    "Mason's tools",
+    "Painter's supplies",
+    "Potter's tools",
+    "Smith's tools",
+    "Tinker's tools",
+    "Weaver's tools",
+    "Woodcarver's tools"
+];
+
 
 const sd = "standardDiv"
 
@@ -648,7 +682,6 @@ function initPageInfo(page, iter) {
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            console.log("HERERER: " + Object.keys(currentPage)[iter])
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
@@ -801,6 +834,146 @@ function loadQuestion(page) {
             console.error('Error:', error);
         });
 }
+
+function handleTools() {
+    clss = localStorage.getItem('_class')
+    // content = document.getElementById('content')
+    const toolDiv = appendToContent('div')
+    explainer = document.createElement('div')
+    toolDiv.appendChild(explainer)
+
+    if (clss == 'Bard') {
+        // pick 3 lessons
+        explainer.innerText = 'As a Bard, you get to choose three musical instruments to be proficient with.'
+        const instrumentTable = createInstrumentTable('Musical Instruments', instrumentData);
+        explainer.appendChild(instrumentTable);
+
+    }
+    else if (clss == 'Druid') {
+        // Inform and load herbalism kit prof
+
+        explainer.innerText = 'As a Druid, you are proficient with an Herbalism Kit. This kit allows you to create remedies and potions which can help you and your team.'
+    }
+    else if (clss == 'Monk') {
+        // Choose one type of artisan's tools or one musical instrument
+        explainer.innerText = 'As a Monk, you need to choose one artisan tool OR one musical instrument.'
+        const instrumentTable = createInstrumentTable('Musical Instruments', instrumentData)
+        const artisanTools = createToolsTable('Artisan Tools', artisanToolData)
+        musicalInstBtn = document.createElement('button')
+        toolDiv.appendChild(musicalInstBtn)
+        musicalInstBtn.innerText = 'Musical Instruments'
+        artToolsBtn = document.createElement('button')
+        toolDiv.appendChild(artToolsBtn)
+        artToolsBtn.innerText = 'Artisan Tools'
+
+        musicalInstBtn.onclick = function () {
+            try {
+                toolDiv.removeChild(artisanTools)
+            }
+            catch {
+                console.log("Removed table")
+            }
+
+            toolDiv.appendChild(instrumentTable)
+        }
+        artToolsBtn.onclick = function () {
+            try {
+                toolDiv.removeChild(instrumentTable)
+            }
+            catch {
+                console.log("Removed table")
+            }
+            toolDiv.appendChild(artisanTools)
+        }
+
+    }
+    else if (clss == 'Rogue') {
+        // Inform and load Thieve's tools
+        explainer.innerText = 'As a Rogue, you are proficient with Thieve\'s tools. These tools give you a better change at opening locks and disarming traps you may encounter.'
+    }
+    contBtn = newContinueButton(true)
+    contBtn.onclick = function () {
+        chooseSkills(_class)
+    }
+}
+
+function createToolsTable(title, toolsList) {
+    const table = document.createElement('table');
+    table.setAttribute('id', 'langTable');
+    const caption = table.createCaption();
+    caption.textContent = title;
+
+    let selectedRow = null; // Variable to store the currently selected row
+
+    // Create header row
+    const headerRow = table.insertRow();
+    // const toolHeader = headerRow.insertCell();
+    // toolHeader.textContent = 'Tool';
+
+    // Create rows for each tool
+    toolsList.forEach((tool) => {
+        const row = table.insertRow();
+        row.addEventListener('click', () => {
+            // Toggle row color
+            if (selectedRow === row) {
+                row.style.backgroundColor = ''; // Unselect the row
+                selectedRow = null;
+            } else {
+                // Unselect the previously selected row
+                if (selectedRow) {
+                    selectedRow.style.backgroundColor = '';
+                }
+                row.style.backgroundColor = 'rgb(119, 45, 45)'; // Select the row
+                selectedRow = row;
+            }
+        });
+
+        const toolCell = row.insertCell();
+        toolCell.textContent = tool;
+    });
+
+    return table;
+}
+
+function createInstrumentTable(title, instruments) {
+    const table = document.createElement('table');
+    table.setAttribute('id', 'langTable');
+    const caption = table.createCaption();
+    caption.textContent = title;
+
+    let selectedRow = null; // Variable to store the currently selected row
+
+    // Create header row
+    const headerRow = table.insertRow();
+    // const instrumentHeader = headerRow.insertCell();
+    // instrumentHeader.textContent = 'Musical Instrument';
+
+    // Create rows for each instrument
+    instruments.forEach((instrument) => {
+        const row = table.insertRow();
+        row.addEventListener('click', () => {
+            // Toggle row color
+            if (selectedRow === row) {
+                row.style.backgroundColor = ''; // Unselect the row
+                selectedRow = null;
+            } else {
+                // Unselect the previously selected row
+                if (selectedRow) {
+                    selectedRow.style.backgroundColor = '';
+                }
+                row.style.backgroundColor = 'rgb(119, 45, 45)'; // Select the row
+                selectedRow = row;
+            }
+        });
+
+        const instrumentCell = row.insertCell();
+        instrumentCell.textContent = instrument;
+    });
+
+    return table;
+}
+
+
 
 function classResponseHandler(type) {
     if (type == '->fighter') {
@@ -1146,19 +1319,18 @@ function showSavingThrows(_class) {
                 st1 = opts[0] + "-save-prof"
                 st2 = opts[1] + "-save-prof"
                 localStorage.setItem("_trueSavingThrows", st1 + "," + st2)
+                handleTools()
             }
             else {
                 console.log("Target Not Found for showSavingThrows");
             }
         })
+    // handleTools()
 
-
-
-
-    contBtn = newContinueButton(true)
-    contBtn.onclick = function () {
-        chooseSkills(_class)
-    }
+    // contBtn = newContinueButton(true)
+    // contBtn.onclick = function () {
+    //     chooseSkills(_class)
+    // }
 }
 
 function chooseSkills(_class) {
@@ -1646,12 +1818,17 @@ function classConclusion() {
 function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
     if (page == 'class') classConclusion()
 
-    const conclusionDiv = document.createElement('div')
-    conclusionDiv.setAttribute('id', 'conclusionDiv')
+    // const conclusionDiv = document.createElement('div')
+    // conclusionDiv.setAttribute('id', 'conclusionDiv')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
+
+            if (page == 'race') {
+                addRaceImage(localStorage.getItem('_race'))
+            }
+
             if (localStorage.getItem(page + 'Done') == 'true') {
                 doneDiv = appendToContent('div')
                 doneDiv.innerText = 'If you want to reset your ' + page + ' you will lose all progress on your character after this point.'
@@ -1679,6 +1856,34 @@ function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
         });
 
 
+}
+
+function addRaceImage(race) {
+    parsedRace = parseForGenericRace(race)
+    if (parsedRace !== 'no image') {
+        console.log("Adding race image for " + parsedRace)
+        pImg = document.createElement('img')
+        pImg.setAttribute('src', '../img/raceImg/' + parsedRace + '.png')
+        content = document.getElementById('content')
+        content.appendChild(pImg)
+    }
+}
+
+function parseForGenericRace(race) {
+    // Halfling,Gnome,Dwarf
+    // Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc
+    if (race == 'Hill Dwarf') return 'Dwarf'
+    if (race == 'Mountain Dwarf') return 'Dwarf'
+    if (race == 'Lightfoot Halfling') return 'no image'
+    if (race == 'Stout Halfling') return 'no image'
+    if (race == 'Forest Gnome') return 'Gnome'
+    if (race == 'Rock Gnome') return 'Gnome'
+    if (race == 'High Elf') return 'Elf'
+    if (race == 'Wood Elf') return 'Elf'
+    if (race == 'Dark Elf (Drow)') return 'Elf'
+    if (race.includes('Dragonborn')) return 'Dragonborn'
+    if (race == 'Human') return 'no image'
+    return race
 }
 
 function continueToNextPage(currentPage, nextPage) {
@@ -1894,6 +2099,7 @@ function loadHelperInfoFromMisc(text) {
 }
 
 function beginBackground(specialCaseHandled = false) {
+
     console.log("BEGINNING BACKGROUnd, class is: " + localStorage.getItem('_class'))
     if (localStorage.getItem('_class') == 'Cleric' && !specialCaseHandled) {
         initClericDieties()
@@ -2758,7 +2964,7 @@ function createLanguageTables(omit) {
 // Helper function to create a table
 function createTable(title, languages, omit) {
     const table = document.createElement('table');
-    table.setAttribute('id','langTable')
+    table.setAttribute('id', 'langTable')
     const caption = table.createCaption();
     caption.textContent = title;
 
