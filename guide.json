@@ -2707,5 +2707,17 @@
         "sleight of hand": "The ability to perform manual tricks, pick pockets, and manipulate small objects with dexterity.",
         "stealth": "The skill to move quietly and avoid detection, whether through shadows or disguise.",
         "survival": "Knowledge and ability to thrive in the wilderness, including tracking, foraging, and navigating."
-    }
+    },
+    "musicalInstruments": [
+        "Bagpipes",
+        "Drum",
+        "Dulcimer",
+        "Flute",
+        "Lute",
+        "Lyre",
+        "Horn",
+        "Pan Flute",
+        "Shawm",
+        "Viol"
+    ]
 }
