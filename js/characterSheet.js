@@ -739,7 +739,8 @@ class characterSheet {
 
         }
         catch {
-          flag = 1        }
+          flag = 1
+        }
       }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key], "");
@@ -775,10 +776,52 @@ class characterSheet {
     }
 
     var otherFandT = localStorage.getItem('_weaponProfs')
-    console.log(localStorage.getItem('_selectedLangs') + '  dksdfjksdnmfjkdn')
     otherFandT += "        Languages: " + localStorage.getItem('_selectedLangs')
     console.log(otherFandT + ' other fandt')
-    localStorage.setItem('_otherproficiencieslanguages',otherFandT)
+    localStorage.setItem('_otherproficiencieslanguages', otherFandT)
+
+    try {
+      var classChosen = localStorage.getItem('_race')
+      if (classChosen.includes('Dragon')) {
+        console.log("Setting breath weapon for dragonborn")
+        var type = classChosen.split(' ')[0]
+        console.log('Type is ' + type)
+        if (type == 'Black')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Acid (5 by 30 ft. line, Dex. save)`);
+
+        if (type == 'Blue')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Lightning (5 by 30 ft. line, Dex. save)`);
+
+        if (type == 'Brass')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Fire (5 by 30 ft. line, Dex. save)`);
+
+        if (type == 'Bronze')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Lightning (5 by 30 ft. line, Dex. save)`);
+
+        if (type == 'Copper')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Acid (5 by 30 ft. line, Dex. save)`);
+
+        if (type == 'Gold')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Fire (15 ft. cone, Dex. save)`);
+
+        if (type == 'Green')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Poison (15 ft. cone, Con. save)`);
+
+        if(type == 'Red')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Fire (15 ft. cone, Dex. save)`);
+
+        if (type == 'Silver')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Cold (15 ft. cone, Con. save)`);
+
+        if (type = 'White')
+        localStorage.setItem('_etcAttacksAndSpells', `Breath Attack: Cold (15 ft. cone, Con. save)`);
+
+
+      }
+    }
+    catch {
+      console.log("Error getting dragonborn weapons")
+    }
 
   }
 

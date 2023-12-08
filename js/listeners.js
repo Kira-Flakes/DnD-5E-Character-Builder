@@ -259,30 +259,34 @@ function chooseEquipment(iter = 0) {
             const oBtn = document.createElement('button')
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
+            let btnClicked = false
             oBtn.onclick = function () {
-                console.log("clicked")
-                if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('Two')) {
-                    console.log("HERUKEHRKEJHRJKESBKEBKU")
-                    parseWeaponChoicesTwo(oBtn.innerText, iter)
-                }
-                else if (oBtn.innerText.includes('Any')) {
-                    parseWeaponChoices(oBtn.innerText, iter)
-                }
-                
-                else {
-                    extracted = extractWeaponSubstring(currentQuestion[c])
-                    if (extracted == currentQuestion[c])
-                        addToLocalStorageString('_eqList', oBtn.innerText)
-                    else {
-                        console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
-                        storeChosenWeapon(extracted, weaponsChosen)
-                        // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
-                        weaponsChosen++
-                        // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
-                        // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                if (!btnClicked) {
+                    console.log("clicked")
+
+                    if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('Two')) {
+                        parseWeaponChoicesTwo(oBtn.innerText, iter)
+                    }
+                    else if (oBtn.innerText.includes('Any')) {
+                        parseWeaponChoices(oBtn.innerText, iter)
                     }
 
-                    chooseEquipment(++iter)
+                    else {
+                        extracted = extractWeaponSubstring(currentQuestion[c])
+                        if (extracted == currentQuestion[c])
+                            addToLocalStorageString('_eqList', oBtn.innerText)
+                        else {
+                            console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
+                            storeChosenWeapon(extracted, weaponsChosen)
+                            // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
+                            weaponsChosen++
+                            // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                            // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                        }
+
+                        chooseEquipment(++iter)
+                    }
+                    btnClicked = true
                 }
             }
         }
@@ -417,11 +421,11 @@ function stripEQChoice(inputString) {
 
 // Function that handles a limit of two choices
 function parseWeaponChoicesTwo(str, iter) {
-        parseWeaponChoices(str.replace('Two ',''), iter, 2)
+    parseWeaponChoices(str.replace('Two ', ''), iter, 2)
 }
 
 function parseWeaponChoices(str, iter, numOptions = 1) {
-    console.log("string here: "+str)
+    console.log("string here: " + str)
     type = str.split(' ')[1]
     console.log(type)
     console.log('about to aprse srting')
@@ -439,10 +443,10 @@ function parseWeaponChoices(str, iter, numOptions = 1) {
         default:
             console.log('in defailt case')
             break;
-        
+
     }
     if (numOptions > 1) {
-        parseWeaponChoices(str,iter,--numOptions)
+        parseWeaponChoices(str, iter, --numOptions)
     }
 }
 
@@ -1252,7 +1256,6 @@ function anyWeaponChoice(type, iter, numChoices) {
         .then(response => response.json())
         .then(data => {
             wpns = data.weapons[type]
-            console.log(wpns)
             for (let w in wpns) {
                 // console.log(wpns[w] +' Weapons w')
                 const weapon = wpns[w]
@@ -2694,7 +2697,7 @@ function arrayUnion(arr1, arr2) {
 function createNameTable(race, maleValues, femaleValues) {
     // Create a table element
     const table = document.createElement('table');
-    table.setAttribute('id','langTable')
+    table.setAttribute('id', 'langTable')
 
     // Create a table header row
     const headerRow = table.insertRow();
@@ -2978,12 +2981,12 @@ function createTable(title, languages, omit) {
     contBtn.onclick = function () {
         selLangs = localStorage.getItem('langsFromRace') + ' '
         for (l in selectedLangs) {
-            selLangs = selLangs + ' ' + selectedLangs[l]+ ','
+            selLangs = selLangs + ' ' + selectedLangs[l] + ','
         }
         localStorage.setItem(
             '_selectedLangs',
             selLangs
-            )
+        )
         localStorage.setItem('backgroundState', '8')
         otherBackgroundTraits()
         localStorage.setItem('backgroundDone', 'true')
@@ -3228,17 +3231,17 @@ function rollForAbilities() {
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
     main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:"
-    strengthDiv = appendToContent('div','smallDiv')
+    strengthDiv = appendToContent('div', 'smallDiv')
     strengthDiv.innerHTML = '<b>Strength</b>: measures physical power.'
-    dexDiv = appendToContent('div','smallDiv')
+    dexDiv = appendToContent('div', 'smallDiv')
     dexDiv.innerHTML = "<b>Dexterity</b>: measures agility and finess."
-    constDiv = appendToContent('div','smallDiv')
+    constDiv = appendToContent('div', 'smallDiv')
     constDiv.innerHTML = "<b>Constitution</b>: measures endurance, or how long you can engage in physical activity before tiring."
-    intDiv = appendToContent('div','smallDiv')
+    intDiv = appendToContent('div', 'smallDiv')
     intDiv.innerHTML = "<b>Intelligence</b>: measures reasoning and memory."
-    wisDiv = appendToContent('div','smallDiv')
+    wisDiv = appendToContent('div', 'smallDiv')
     wisDiv.innerHTML = "<b>Wisdom</b>: measures perception and insight."
-    charDiv = appendToContent('div','smallDiv')
+    charDiv = appendToContent('div', 'smallDiv')
     charDiv.innerHTML = "<b>Charisma</b>: measures the force of your personality."
     abilScoreContextDiv = appendToContent('div')
     abilScoreContextDiv.innerText = "These six physical and mental characteristics determine your character's ability modifiers and skills. They are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have two ways of determining ability scores. Please select one of the options below:\n"
@@ -3287,7 +3290,7 @@ function rollTheDice(abil) {
             if (localStorage.getItem('_race') == 'Half-Elf') {
                 handleHalfElfAbilityScores()
             }
-            if (localStorage.getItem('_race' == 'Human')){
+            if (localStorage.getItem('_race' == 'Human')) {
                 handleHumanAbilityScores()
             }
 
@@ -3324,7 +3327,7 @@ function handleHumanAbilityScores() {
     const abilityScores = ['_strength', '_dex', '_constitution', '_intellegence', '_wisdom', '_charisma'];
 
     for (abil in abilityScores) {
-        console.log("Adding "+abilityScores[abil] + " plus 1 to "+localStorage.getItem(abilityScores[abil]))
+        console.log("Adding " + abilityScores[abil] + " plus 1 to " + localStorage.getItem(abilityScores[abil]))
         addToLocalStorageInt(abilityScores[abil], 1)
     }
 }
@@ -3410,7 +3413,7 @@ function standardArray() {
         content = clearContentAndGet()
         main = appendToContent('div', 'standardDiv')
         main.innerText = 'Assign any of these values to an ability:'
-        
+
         if (!assignedAbils.includes('strength')) {
             const abil1 = document.createElement('div')
 
@@ -3440,7 +3443,7 @@ function standardArray() {
 
         if (!assignedAbils.includes('wisdom')) {
             const abil4 = document.createElement('div')
-            
+
             abil4.setAttribute("id", "ab4")
             abil4.innerText = 'Wisdom:'
             appendAbilityValues(abil4, vals, 'wisdom')
@@ -3457,7 +3460,7 @@ function standardArray() {
         }
 
         if (!assignedAbils.includes('charisma')) {
-            console.log("Charisma is "+localStorage.getItem('_charisma'))
+            console.log("Charisma is " + localStorage.getItem('_charisma'))
             const abil6 = document.createElement('div')
 
             abil6.setAttribute("id", "ab6")
@@ -3629,7 +3632,7 @@ function applyRaceBenifits() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Class Features (Level 1)')
         .then(data => {
             if (data !== null) {
-                console.log(data);
+                console.log("Class Features level 1: " + data);
                 addToLocalStorageString(
                     '_featuresandtraits',
                     data
@@ -3675,7 +3678,7 @@ function handleHalfElfAbilityScores() {
             const key = '_' + abilityScores[abilScrs].toLowerCase()
         }
         btn.onclick = function () {
-            console.log('Key: '+key)
+            console.log('Key: ' + key)
             addToLocalStorageInt(key, 1)
             btn.remove()
             choices++
@@ -3714,8 +3717,8 @@ function setGold() {
             if (data !== null) {
                 console.log(data + '  looking for GOLD')
                 gpArr = data.split(' ')
-                console.log(gpArr[gpArr.length-2] + ' gp arr minus 2')
-                localStorage.setItem('_eqGP',gpArr[gpArr.length-2])
+                console.log(gpArr[gpArr.length - 2] + ' gp arr minus 2')
+                localStorage.setItem('_eqGP', gpArr[gpArr.length - 2])
             } else {
                 console.log("Target Not Found for Gold");
             }
