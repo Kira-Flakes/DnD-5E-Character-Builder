@@ -1,8 +1,12 @@
+// John Gilbert - Wiz-Rad
+// This code creates 3d dice. Used to roll for ability scores.
+
 import * as CANNON from 'https://cdn.skypack.dev/cannon-es';
 import { OrbitControls } from '../js/OrbitControls.js';
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
+// initialize the html elements required for functionality. 
 const canvasEl = document.querySelector('#canvas');
 const scoreResult = document.querySelector('#score-result');
 const rollBtn = document.querySelector('#roll-btn');
@@ -15,7 +19,7 @@ let divFitHeight = .5
 const walls = [];
 const scores = [];
 
-
+// Edit this for tweaking.
 const params = {
     numberOfDice: 4,
     segments: 40,
@@ -24,14 +28,16 @@ const params = {
     notchDepth: .1,
 };
 
+// All dice are accesses via this array.
 const diceArray = [];
 
 initPhysics();
 initScene();
 
+// If window is resized, update the size of the 3d playground
 window.addEventListener('resize', updateSceneSize);
-// window.addEventListener('dblclick', throwDice);
 
+// Load rolling on click event
 rollBtn.onclick = function() {
     if (localStorage.getItem('canThrow') == 'true') {
         throwDice()
@@ -39,7 +45,6 @@ rollBtn.onclick = function() {
     }
 }
 
-// rollBtn.addEventListener('click', throwDice);
 
 function initScene() {
 

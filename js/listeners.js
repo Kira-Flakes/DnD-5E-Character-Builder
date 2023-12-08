@@ -2638,6 +2638,7 @@ function dietyDebrief() {
 
 // TODO: For humans we need to get region
 function characterName() {
+    setGold()
     content = clearContentAndGet()
     appendToContent('h2').innerText = "Character Name"
     appendToContent('div', 'standardDiv').innerHTML = "It's time to choose your character's name."
@@ -2979,7 +2980,7 @@ function createTable(title, languages, omit) {
         for (l in selectedLangs) {
             selLangs = selLangs + ' ' + selectedLangs[l]+ ','
         }
-        addToLocalStorageString(
+        localStorage.setItem(
             '_selectedLangs',
             selLangs
             )
@@ -3121,13 +3122,6 @@ function choosePersonality() {
                 });
                 btn.innerText = allPT[id]
                 optDiv.appendChild(btn)
-                // btn.onclick = function () {
-                //     localStorage.setItem('_personalityTraits', btn.innerText)
-                //     localStorage.setItem("backgroundState", "1")
-                //     // window.location.href = '../html/equipment.html'
-                //     // characterName()
-                //     // rollForAbilities()
-                // }
             }
             content.appendChild(optDiv)
             inp = document.createElement('input')
@@ -3142,9 +3136,6 @@ function choosePersonality() {
             subButton.onclick = function () {
                 localStorage.setItem('_personalityTraits', inp.value)
                 localStorage.setItem("backgroundState", "4")
-                // window.location.href = '../html/equipment.html'
-                // characterName()
-                // initRolling()
                 chooseIdeals()
             }
         })
@@ -3236,7 +3227,21 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\n<b>Strength</b>, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
+    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:"
+    strengthDiv = appendToContent('div','smallDiv')
+    strengthDiv.innerHTML = '<b>Strength</b>: measures physical power.'
+    dexDiv = appendToContent('div','smallDiv')
+    dexDiv.innerHTML = "<b>Dexterity</b>: measures agility and finess."
+    constDiv = appendToContent('div','smallDiv')
+    constDiv.innerHTML = "<b>Constitution</b>: measures endurance, or how long you can engage in physical activity before tiring."
+    intDiv = appendToContent('div','smallDiv')
+    intDiv.innerHTML = "<b>Intelligence</b>: measures reasoning and memory."
+    wisDiv = appendToContent('div','smallDiv')
+    wisDiv.innerHTML = "<b>Wisdom</b>: measures perception and insight."
+    charDiv = appendToContent('div','smallDiv')
+    charDiv.innerHTML = "<b>Charisma</b>: measures the force of your personality."
+    abilScoreContextDiv = appendToContent('div')
+    abilScoreContextDiv.innerText = "These six physical and mental characteristics determine your character's ability modifiers and skills. They are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have two ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
@@ -3707,9 +3712,10 @@ function setGold() {
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
         .then(data => {
             if (data !== null) {
-                console.log(data)
+                console.log(data + '  looking for GOLD')
                 gpArr = data.split(' ')
-                localStorage.setItem('_eqGP')
+                console.log(gpArr[gpArr.length-2] + ' gp arr minus 2')
+                localStorage.setItem('_eqGP',gpArr[gpArr.length-2])
             } else {
                 console.log("Target Not Found for Gold");
             }

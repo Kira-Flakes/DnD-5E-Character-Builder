@@ -2,12 +2,9 @@
 // This file should represent the entirety of a character sheet, 
 // with all attributes.
 
+// Used to update the html page that displays the character sheet, creating a JS object using 
+// values from localStorage.
 
-// TODO: Figure out where we want to do value checking
-// NOTE: Naming conventions are VITAL. Everything breaks if we aren't careful.
-//  Strings: _<stringname>
-//  ints: ???
-//  ints with dependencies: ???
 
 // Grabs user input based on the id of its input tag and stores 
 // it in local storage with the same key name as the input id
@@ -21,17 +18,18 @@ function storeKeyFromInput(inputID) {
   else {
     var userInput = document.getElementById(inputID).value;
   }
-
+  // Store local storage item
   localStorage.setItem(inputID, userInput);
 }
+
+
 
 // Object represents the character sheet values
 class characterSheet {
 
   constructor() {
-
     // all values are initialized first from the blank character sheet.
-    // allows for us to use placeholders. NOTE: This can be simplified later 
+    // allows for us to use placeholders. 
     this._name = "";
     this._classlevel = "";
     this._background = "";
@@ -98,7 +96,6 @@ class characterSheet {
     this._eqGP = '';
     this._eqPP = '';
 
-    // add get set for the following
     this._eqList = '';
     this._attSp1Name = '';
     this._attSp1AtkB = '';
@@ -131,7 +128,6 @@ class characterSheet {
     this._6 = ''
     this._7 = ''
     this._8 = ''
-
   }
 
   // Getter method to retrieve the character's name.
@@ -705,7 +701,7 @@ class characterSheet {
   }
 
 
-  // IMPORTANT: this function will return keys for all variables. 
+  // IMPORTANT NOTE: this function will return keys for all variables. 
   // Will not work if character object hasn't been instantiated. 
   // Input: none
   // Output: an array of all keys (the data for the CharSheet)
@@ -724,8 +720,6 @@ class characterSheet {
 
     console.log("Updating character sheet from localStorage")
     var keys = character.keyNames(); // grabs all keys associated with a character sheet
-    // var unkowns = "Variabls not assigned: ";
-    // console.log("KEYS: " + keys)
     for (const key in keys) { // set all attributes on the character sheet based on the keys.
       var flag = 0
       if (localStorage.getItem(keys[key]) != null) {// if it's in local storage, set it on the html sheet.
@@ -733,29 +727,22 @@ class characterSheet {
           document.getElementById(keys[key]).textContent = localStorage.getItem(keys[key]);
         } catch {
           flag = 1
-          // console.log("[" + keys[key] + "] not assigned");
         }
         try {
           document.getElementById(keys[key]).value = localStorage.getItem(keys[key])
         }
         catch {
           flag = 1
-
-          // console.log("[" + keys[key] + "] not assigned");
         }
         try {
           document.getElementById(keys[key]).innerText = localStorage.getItem(keys[key])
 
         }
         catch {
-          flag = 1
-          // console.log("[" + keys[key] + "] not assigned");
-        }
-        // if (flag == 1) console.log("[" + keys[key] + "] not assigned");
+          flag = 1        }
       }
       else { // it's not in local storage, set it in local storage, blank value
         localStorage.setItem(keys[key], "");
-        // unkowns = unkowns + " " + keys[key] + ", ";
       }
     }
     try {
@@ -787,38 +774,14 @@ class characterSheet {
 
     }
 
-    // try {
     var otherFandT = localStorage.getItem('_weaponProfs')
-
+    console.log(localStorage.getItem('_selectedLangs') + '  dksdfjksdnmfjkdn')
     otherFandT += "        Languages: " + localStorage.getItem('_selectedLangs')
     console.log(otherFandT + ' other fandt')
     localStorage.setItem('_otherproficiencieslanguages',otherFandT)
-    // this._otherproficiencieslanguages = otherFandT
-    // }
-    // catch {
-    //   console.log("No otherProficienciesAndTrait values to load yet...")
-    // }
 
-    // try {
-    //   if (localStorage.getItem('_race').includes('Dragonborn')) {
-    //     breathWeaponType = extractStringBetweenParentheses(localStorage.getItem('_race').includes('Dragonborn'))
-    //     console.log('breath weapon types: '+ breathWeaponType)
-    //     switch (breathWeaponType) {
-    //       case ''
-    //     }
-
-    //   }
-    // }
-    // catch {
-    //   console.log('race not selected...')
-    // }
-
-    // console.log(unkowns);
   }
-  //TODO here: input should be any value asssigned to a character sheet and it should be set to local storage.
-  // setValueInLocalStorage() {
 
-  // }
 
   // Helper function that removes all the elements from local storage,
   // will likely be modified with different parameters later on.
@@ -827,6 +790,7 @@ class characterSheet {
   }
 }
 
+// Helper function for dragonborn. Extracts the color to load the breath weapon.
 function extractStringBetweenParentheses(inputString) {
   const regex = /\(([^)]+)\)/;  // Regular expression for matching text between '(' and ')'
   const match = inputString.match(regex);
@@ -839,6 +803,8 @@ function extractStringBetweenParentheses(inputString) {
 }
 
 
+
+// Preset character sheet objects
 const DwarfPreset = new characterSheet()
 const DarkElfPreset = new characterSheet()
 const HalfOrcPreset = new characterSheet()
@@ -846,7 +812,6 @@ const ForestGnomePreset = new characterSheet()
 const HumanPreset = new characterSheet()
 
 const allPresets = [DwarfPreset, DarkElfPreset, HalfOrcPreset, ForestGnomePreset, HumanPreset]
-
 
 DwarfPreset._name = "Ulfgar Rumnaheim"
 DwarfPreset._classlevel = 'War Cleric 1'
@@ -1231,16 +1196,18 @@ HumanPreset._eqList = '-A rapier and a diplomat\'s pack containing a chest, 2 ca
 HumanPreset._etcAttacksAndSpells = 'Dissonant Whispers    5    3d6 psychic';
 
 
+
+// Loads the preset objects to localstorage, which is then
+// piped into the html character sheet page
 function loadPreset(presetName) {
   if (presetName == "DwarfPreset") var preset = DwarfPreset
   if (presetName == "HumanPreset") var preset = HumanPreset
   if (presetName == "ForestGnomePreset") var preset = ForestGnomePreset
   if (presetName == "HalfOrcPreset") var preset = HalfOrcPreset
   if (presetName == "DarkElfPreset") var preset = DarkElfPreset
-  console.log("Name of preset:" + preset)
+
   var keys = character.keyNames();
-  for (var key in keys) {
+  for (var key in keys) { // all object values added to localStorage
     localStorage.setItem(keys[key], preset[keys[key]])
   }
-  // DwarfPreset.updateSheet()
 }
