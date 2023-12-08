@@ -520,7 +520,7 @@ img {
 }
 
 /* Mobile screen settings */
-@media screen and (max-width: 1000px) {
+@media screen and (max-aspect-ratio: 3/4) {
     .right {
         flex: 1;
         min-height: 10vh;
