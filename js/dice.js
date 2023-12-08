@@ -16,8 +16,6 @@ const walls = [];
 const scores = [];
 
 
-
-
 const params = {
     numberOfDice: 4,
     segments: 40,

@@ -260,13 +260,15 @@ function chooseEquipment(iter = 0) {
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
             oBtn.onclick = function () {
-                if (oBtn.innerText.includes('Any')) {
+                console.log("clicked")
+                if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('Two')) {
+                    console.log("HERUKEHRKEJHRJKESBKEBKU")
+                    parseWeaponChoicesTwo(oBtn.innerText, iter)
+                }
+                else if (oBtn.innerText.includes('Any')) {
                     parseWeaponChoices(oBtn.innerText, iter)
                 }
-                else if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('[Two]')) {
-                    parseWeaponChoicesTwo(oBtn.innerText, iter)
-
-                }
+                
                 else {
                     extracted = extractWeaponSubstring(currentQuestion[c])
                     if (extracted == currentQuestion[c])
@@ -415,15 +417,11 @@ function stripEQChoice(inputString) {
 
 // Function that handles a limit of two choices
 function parseWeaponChoicesTwo(str, iter) {
-    if (str.includes('Any')) {
-        // call parseWeaponChoices with two options allowed
-        parseWeaponChoices(str, iter, 2)
-    } else {
-
-    }
+        parseWeaponChoices(str.replace('Two ',''), iter, 2)
 }
 
 function parseWeaponChoices(str, iter, numOptions = 1) {
+    console.log("string here: "+str)
     type = str.split(' ')[1]
     console.log(type)
     console.log('about to aprse srting')
@@ -440,6 +438,11 @@ function parseWeaponChoices(str, iter, numOptions = 1) {
             break;
         default:
             console.log('in defailt case')
+            break;
+        
+    }
+    if (numOptions > 1) {
+        parseWeaponChoices(str,iter,--numOptions)
     }
 }
 
@@ -2653,7 +2656,9 @@ function characterName() {
         .then(response => response.json())
         .then(data => {
             var race = localStorage.getItem("_race")
-            console.log(race)
+            if (race.includes('Dragon')) {
+                race = 'Dragonborn'
+            }
             var males = data.races[race].maleNames
             var females = data.races[race].femaleNames
             console.log(males)
@@ -2688,6 +2693,7 @@ function arrayUnion(arr1, arr2) {
 function createNameTable(race, maleValues, femaleValues) {
     // Create a table element
     const table = document.createElement('table');
+    table.setAttribute('id','langTable')
 
     // Create a table header row
     const headerRow = table.insertRow();
@@ -2969,6 +2975,14 @@ function createTable(title, languages, omit) {
     contBtn.style.display = 'none'
     contBtn.innerText = "Continue"
     contBtn.onclick = function () {
+        selLangs = localStorage.getItem('langsFromRace') + ' '
+        for (l in selectedLangs) {
+            selLangs = selLangs + ' ' + selectedLangs[l]+ ','
+        }
+        addToLocalStorageString(
+            '_selectedLangs',
+            selLangs
+            )
         localStorage.setItem('backgroundState', '8')
         otherBackgroundTraits()
         localStorage.setItem('backgroundDone', 'true')
@@ -3150,7 +3164,7 @@ function chooseLanguages() {
         .then(data => {
             if (data !== null) {
                 numExtraLangs = 0
-
+                localStorage.setItem('langsFromRace', data)
                 langs = data.split(',')
                 if (langs[langs.length - 1].includes('extra')) {
                     txt = ''
@@ -3268,6 +3282,9 @@ function rollTheDice(abil) {
             if (localStorage.getItem('_race') == 'Half-Elf') {
                 handleHalfElfAbilityScores()
             }
+            if (localStorage.getItem('_race' == 'Human')){
+                handleHumanAbilityScores()
+            }
 
             // fullDebrief()
         }
@@ -3296,6 +3313,15 @@ function rollTheDice(abil) {
     // beginBtn.innerHTML = '<button onclick="initScene()">WORK!</button>'
     // content.appendChild(beginBtn)
 
+}
+
+function handleHumanAbilityScores() {
+    const abilityScores = ['_strength', '_dex', '_constitution', '_intellegence', '_wisdom', '_charisma'];
+
+    for (abil in abilityScores) {
+        console.log("Adding "+abilityScores[abil] + " plus 1 to "+localStorage.getItem(abilityScores[abil]))
+        addToLocalStorageInt(abilityScores[abil], 1)
+    }
 }
 
 function assignProficiencies() {
@@ -3328,6 +3354,7 @@ function getNextRoll(currentScore) {
     // If the current score is not found or is the last one, return 'done'
     if (currentIndex === -1 || currentIndex === abilityScores.length - 1) {
         console.log('done')
+        fullDebrief()
         return 'done';
     }
 
@@ -3416,6 +3443,7 @@ function standardArray() {
         }
 
         if (!assignedAbils.includes('charisma')) {
+            console.log("Charisma is "+localStorage.getItem('_charisma'))
             const abil6 = document.createElement('div')
             abil6.innerText = 'Charisma:\t\t'
             appendAbilityValues(abil6, vals, 'charisma')
@@ -3480,7 +3508,7 @@ function applyProficiencies() {
         });
 }
 
-function calculateValsFromAbilityScores() {
+function calculateValsFromAbilityScores(humanHandled = false) {
     localStorage.setItem(
         '_armorClass',
         parseInt(localStorage.getItem('_dex')) + 10
@@ -3519,7 +3547,7 @@ function calculateValsFromAbilityScores() {
     )
 
 
-    applyRaceBenifits()
+    if (!humanHandled) applyRaceBenifits()
 
 
     // Dependant stats
@@ -3542,6 +3570,10 @@ function applyRaceBenifits() {
         for (sc in scores) {
             if (localStorage.getItem('_race') == 'Half-Elf') {
                 handleHalfElfAbilityScores()
+            }
+            if (localStorage.getItem('_race') == 'Human') {
+                handleHumanAbilityScores()
+                calculateValsFromAbilityScores(true)
             }
             splitVal = scores[sc].split(' ')
             var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
@@ -3619,11 +3651,15 @@ function handleHalfElfAbilityScores() {
     for (const abilScrs in abilityScores) {
         const btn = document.createElement('button')
         btn.innerText = abilityScores[abilScrs]
-        key = '_' + abilityScores[abilScrs].toLowerCase()
+        const key = '_' + abilityScores[abilScrs].toLowerCase()
         if (abilityScores[abilScrs] == 'Intelligence') {
-            key = '_intellegence'
+            const key = '_intellegence'
+        }
+        else {
+            const key = '_' + abilityScores[abilScrs].toLowerCase()
         }
         btn.onclick = function () {
+            console.log('Key: '+key)
             addToLocalStorageInt(key, 1)
             btn.remove()
             choices++
@@ -3710,15 +3746,13 @@ function updateModifiers() {
 
         if (!isNaN(abilityScoreValue)) {
             const modifiedValue = Math.floor((abilityScoreValue - 10) / 2);
+            // console.log('abil is '+score + ' at ' +localStorage.getItem('_'+score)+ ' and value is '+modifiedValue)
             const modifiedKey = `_${score}ST`;
 
             localStorage.setItem(modifiedKey, modifiedValue.toString());
         }
     });
 }
-
-// Call the function to update the modifiers
-// updateModifiers();
 
 
 function removeValue(arr, valueToRemove) {
@@ -3781,16 +3815,6 @@ function getRelevantAbilityScore(skill) {
     return skillToAbilityScore[skill] || 'Unknown';
 }
 
-// Example usage:
-// updateSkillLocalStorageValues();
-
-
-
-
-// function clearContentAndGet() {
-//     clearDiv(document.getElementById('content'))
-//     return document.getElementById('content')
-// }
 
 function clearContentAndGet() {
     const contentDiv = document.getElementById('content');

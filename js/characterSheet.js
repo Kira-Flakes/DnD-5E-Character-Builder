@@ -122,7 +122,7 @@ class characterSheet {
     this._c6 = ''
     this._c7 = ''
     this._c8 = ''
-  
+
     this._1 = ''
     this._2 = ''
     this._3 = ''
@@ -759,7 +759,7 @@ class characterSheet {
       }
     }
     try {
-      console.log("truest "+localStorage.getItem("_trueSavingThrows"))
+      console.log("truest " + localStorage.getItem("_trueSavingThrows"))
       const savingThrowsToCheck = localStorage.getItem("_trueSavingThrows").split(',')
       console.log(savingThrowsToCheck)
       const st1 = document.getElementsByName(savingThrowsToCheck[0])
@@ -774,10 +774,10 @@ class characterSheet {
 
     try {
       const skillProfs = localStorage.getItem('_skillProfs').split(',')
-      console.log('Skillporfs: '+ skillProfs)
+      console.log('Skillporfs: ' + skillProfs)
       for (var sp in skillProfs) {
         console.log(skillProfs[sp])
-        var p = document.getElementsByName(skillProfs[sp]+'-prof')
+        var p = document.getElementsByName(skillProfs[sp] + '-prof')
         p[0].checked = true
       }
 
@@ -786,17 +786,55 @@ class characterSheet {
       console.log("Skill profs either not yet selected or something is wrong.")
 
     }
+
+    // try {
+    var otherFandT = localStorage.getItem('_weaponProfs')
+
+    otherFandT += "        Languages: " + localStorage.getItem('_selectedLangs')
+    console.log(otherFandT + ' other fandt')
+    localStorage.setItem('_otherproficiencieslanguages',otherFandT)
+    // this._otherproficiencieslanguages = otherFandT
+    // }
+    // catch {
+    //   console.log("No otherProficienciesAndTrait values to load yet...")
+    // }
+
+    // try {
+    //   if (localStorage.getItem('_race').includes('Dragonborn')) {
+    //     breathWeaponType = extractStringBetweenParentheses(localStorage.getItem('_race').includes('Dragonborn'))
+    //     console.log('breath weapon types: '+ breathWeaponType)
+    //     switch (breathWeaponType) {
+    //       case ''
+    //     }
+
+    //   }
+    // }
+    // catch {
+    //   console.log('race not selected...')
+    // }
+
     // console.log(unkowns);
   }
   //TODO here: input should be any value asssigned to a character sheet and it should be set to local storage.
-  setValueInLocalStorage() {
+  // setValueInLocalStorage() {
 
-  }
+  // }
 
   // Helper function that removes all the elements from local storage,
   // will likely be modified with different parameters later on.
   clearLocalSorage() {
     localStorage.clear
+  }
+}
+
+function extractStringBetweenParentheses(inputString) {
+  const regex = /\(([^)]+)\)/;  // Regular expression for matching text between '(' and ')'
+  const match = inputString.match(regex);
+
+  if (match && match.length > 1) {
+    return match[1];  // Return the text between '(' and ')'
+  } else {
+    return null;  // Return null if no match is found
   }
 }
 
