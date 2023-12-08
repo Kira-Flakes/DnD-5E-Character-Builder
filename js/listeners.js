@@ -1864,8 +1864,8 @@ function parseForGenericRace(race) {
     // Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc
     if (race == 'Hill Dwarf') return 'Dwarf'
     if (race == 'Mountain Dwarf') return 'Dwarf'
-    if (race == 'Lightfoot Halfling') return 'no image'
-    if (race == 'Stout Halfling') return 'no image'
+    if (race == 'Lightfoot Halfling') return 'Halfling'
+    if (race == 'Stout Halfling') return 'Halfling'
     if (race == 'Forest Gnome') return 'Gnome'
     if (race == 'Rock Gnome') return 'Gnome'
     if (race == 'High Elf') return 'Elf'
