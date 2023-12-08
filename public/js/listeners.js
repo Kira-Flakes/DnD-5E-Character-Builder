@@ -259,28 +259,34 @@ function chooseEquipment(iter = 0) {
             const oBtn = document.createElement('button')
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
+            let btnClicked = false
             oBtn.onclick = function () {
-                if (oBtn.innerText.includes('Any')) {
-                    parseWeaponChoices(oBtn.innerText, iter)
-                }
-                else if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('[Two]')) {
-                    parseWeaponChoicesTwo(oBtn.innerText, iter)
+                if (!btnClicked) {
+                    console.log("clicked")
 
-                }
-                else {
-                    extracted = extractWeaponSubstring(currentQuestion[c])
-                    if (extracted == currentQuestion[c])
-                        addToLocalStorageString('_eqList', oBtn.innerText)
-                    else {
-                        console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
-                        storeChosenWeapon(extracted, weaponsChosen)
-                        // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
-                        weaponsChosen++
-                        // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
-                        // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                    if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('Two')) {
+                        parseWeaponChoicesTwo(oBtn.innerText, iter)
+                    }
+                    else if (oBtn.innerText.includes('Any')) {
+                        parseWeaponChoices(oBtn.innerText, iter)
                     }
 
-                    chooseEquipment(++iter)
+                    else {
+                        extracted = extractWeaponSubstring(currentQuestion[c])
+                        if (extracted == currentQuestion[c])
+                            addToLocalStorageString('_eqList', oBtn.innerText)
+                        else {
+                            console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
+                            storeChosenWeapon(extracted, weaponsChosen)
+                            // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
+                            weaponsChosen++
+                            // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                            // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                        }
+
+                        chooseEquipment(++iter)
+                    }
+                    btnClicked = true
                 }
             }
         }
@@ -415,15 +421,11 @@ function stripEQChoice(inputString) {
 
 // Function that handles a limit of two choices
 function parseWeaponChoicesTwo(str, iter) {
-    if (str.includes('Any')) {
-        // call parseWeaponChoices with two options allowed
-        parseWeaponChoices(str, iter, 2)
-    } else {
-
-    }
+    parseWeaponChoices(str.replace('Two ', ''), iter, 2)
 }
 
 function parseWeaponChoices(str, iter, numOptions = 1) {
+    console.log("string here: " + str)
     type = str.split(' ')[1]
     console.log(type)
     console.log('about to aprse srting')
@@ -440,6 +442,11 @@ function parseWeaponChoices(str, iter, numOptions = 1) {
             break;
         default:
             console.log('in defailt case')
+            break;
+
+    }
+    if (numOptions > 1) {
+        parseWeaponChoices(str, iter, --numOptions)
     }
 }
 
@@ -1249,7 +1256,6 @@ function anyWeaponChoice(type, iter, numChoices) {
         .then(response => response.json())
         .then(data => {
             wpns = data.weapons[type]
-            console.log(wpns)
             for (let w in wpns) {
                 // console.log(wpns[w] +' Weapons w')
                 const weapon = wpns[w]
@@ -1858,8 +1864,8 @@ function parseForGenericRace(race) {
     // Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc
     if (race == 'Hill Dwarf') return 'Dwarf'
     if (race == 'Mountain Dwarf') return 'Dwarf'
-    if (race == 'Lightfoot Halfling') return 'no image'
-    if (race == 'Stout Halfling') return 'no image'
+    if (race == 'Lightfoot Halfling') return 'Halfling'
+    if (race == 'Stout Halfling') return 'Halfling'
     if (race == 'Forest Gnome') return 'Gnome'
     if (race == 'Rock Gnome') return 'Gnome'
     if (race == 'High Elf') return 'Elf'
@@ -2635,6 +2641,7 @@ function dietyDebrief() {
 
 // TODO: For humans we need to get region
 function characterName() {
+    setGold()
     content = clearContentAndGet()
     appendToContent('h2').innerText = "Character Name"
     appendToContent('div', 'standardDiv').innerHTML = "It's time to choose your character's name."
@@ -2653,7 +2660,9 @@ function characterName() {
         .then(response => response.json())
         .then(data => {
             var race = localStorage.getItem("_race")
-            console.log(race)
+            if (race.includes('Dragon')) {
+                race = 'Dragonborn'
+            }
             var males = data.races[race].maleNames
             var females = data.races[race].femaleNames
             console.log(males)
@@ -2688,6 +2697,7 @@ function arrayUnion(arr1, arr2) {
 function createNameTable(race, maleValues, femaleValues) {
     // Create a table element
     const table = document.createElement('table');
+    table.setAttribute('id', 'langTable')
 
     // Create a table header row
     const headerRow = table.insertRow();
@@ -2969,6 +2979,14 @@ function createTable(title, languages, omit) {
     contBtn.style.display = 'none'
     contBtn.innerText = "Continue"
     contBtn.onclick = function () {
+        selLangs = localStorage.getItem('langsFromRace') + ' '
+        for (l in selectedLangs) {
+            selLangs = selLangs + ' ' + selectedLangs[l] + ','
+        }
+        localStorage.setItem(
+            '_selectedLangs',
+            selLangs
+        )
         localStorage.setItem('backgroundState', '8')
         otherBackgroundTraits()
         localStorage.setItem('backgroundDone', 'true')
@@ -3107,13 +3125,6 @@ function choosePersonality() {
                 });
                 btn.innerText = allPT[id]
                 optDiv.appendChild(btn)
-                // btn.onclick = function () {
-                //     localStorage.setItem('_personalityTraits', btn.innerText)
-                //     localStorage.setItem("backgroundState", "1")
-                //     // window.location.href = '../html/equipment.html'
-                //     // characterName()
-                //     // rollForAbilities()
-                // }
             }
             content.appendChild(optDiv)
             inp = document.createElement('input')
@@ -3128,9 +3139,6 @@ function choosePersonality() {
             subButton.onclick = function () {
                 localStorage.setItem('_personalityTraits', inp.value)
                 localStorage.setItem("backgroundState", "4")
-                // window.location.href = '../html/equipment.html'
-                // characterName()
-                // initRolling()
                 chooseIdeals()
             }
         })
@@ -3150,7 +3158,7 @@ function chooseLanguages() {
         .then(data => {
             if (data !== null) {
                 numExtraLangs = 0
-
+                localStorage.setItem('langsFromRace', data)
                 langs = data.split(',')
                 if (langs[langs.length - 1].includes('extra')) {
                     txt = ''
@@ -3222,7 +3230,21 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\n<b>Strength</b>, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
+    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:"
+    strengthDiv = appendToContent('div', 'smallDiv')
+    strengthDiv.innerHTML = '<b>Strength</b>: measures physical power.'
+    dexDiv = appendToContent('div', 'smallDiv')
+    dexDiv.innerHTML = "<b>Dexterity</b>: measures agility and finess."
+    constDiv = appendToContent('div', 'smallDiv')
+    constDiv.innerHTML = "<b>Constitution</b>: measures endurance, or how long you can engage in physical activity before tiring."
+    intDiv = appendToContent('div', 'smallDiv')
+    intDiv.innerHTML = "<b>Intelligence</b>: measures reasoning and memory."
+    wisDiv = appendToContent('div', 'smallDiv')
+    wisDiv.innerHTML = "<b>Wisdom</b>: measures perception and insight."
+    charDiv = appendToContent('div', 'smallDiv')
+    charDiv.innerHTML = "<b>Charisma</b>: measures the force of your personality."
+    abilScoreContextDiv = appendToContent('div')
+    abilScoreContextDiv.innerText = "These six physical and mental characteristics determine your character's ability modifiers and skills. They are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have two ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
@@ -3268,6 +3290,9 @@ function rollTheDice(abil) {
             if (localStorage.getItem('_race') == 'Half-Elf') {
                 handleHalfElfAbilityScores()
             }
+            if (localStorage.getItem('_race' == 'Human')) {
+                handleHumanAbilityScores()
+            }
 
             // fullDebrief()
         }
@@ -3296,6 +3321,15 @@ function rollTheDice(abil) {
     // beginBtn.innerHTML = '<button onclick="initScene()">WORK!</button>'
     // content.appendChild(beginBtn)
 
+}
+
+function handleHumanAbilityScores() {
+    const abilityScores = ['_strength', '_dex', '_constitution', '_intellegence', '_wisdom', '_charisma'];
+
+    for (abil in abilityScores) {
+        console.log("Adding " + abilityScores[abil] + " plus 1 to " + localStorage.getItem(abilityScores[abil]))
+        addToLocalStorageInt(abilityScores[abil], 1)
+    }
 }
 
 function assignProficiencies() {
@@ -3328,6 +3362,7 @@ function getNextRoll(currentScore) {
     // If the current score is not found or is the last one, return 'done'
     if (currentIndex === -1 || currentIndex === abilityScores.length - 1) {
         console.log('done')
+        fullDebrief()
         return 'done';
     }
 
@@ -3378,7 +3413,7 @@ function standardArray() {
         content = clearContentAndGet()
         main = appendToContent('div', 'standardDiv')
         main.innerText = 'Assign any of these values to an ability:'
-        
+
         if (!assignedAbils.includes('strength')) {
             const abil1 = document.createElement('div')
 
@@ -3408,7 +3443,7 @@ function standardArray() {
 
         if (!assignedAbils.includes('wisdom')) {
             const abil4 = document.createElement('div')
-            
+
             abil4.setAttribute("id", "ab4")
             abil4.innerText = 'Wisdom:'
             appendAbilityValues(abil4, vals, 'wisdom')
@@ -3425,6 +3460,7 @@ function standardArray() {
         }
 
         if (!assignedAbils.includes('charisma')) {
+            console.log("Charisma is " + localStorage.getItem('_charisma'))
             const abil6 = document.createElement('div')
 
             abil6.setAttribute("id", "ab6")
@@ -3491,7 +3527,7 @@ function applyProficiencies() {
         });
 }
 
-function calculateValsFromAbilityScores() {
+function calculateValsFromAbilityScores(humanHandled = false) {
     localStorage.setItem(
         '_armorClass',
         parseInt(localStorage.getItem('_dex')) + 10
@@ -3530,7 +3566,7 @@ function calculateValsFromAbilityScores() {
     )
 
 
-    applyRaceBenifits()
+    if (!humanHandled) applyRaceBenifits()
 
 
     // Dependant stats
@@ -3553,6 +3589,10 @@ function applyRaceBenifits() {
         for (sc in scores) {
             if (localStorage.getItem('_race') == 'Half-Elf') {
                 handleHalfElfAbilityScores()
+            }
+            if (localStorage.getItem('_race') == 'Human') {
+                handleHumanAbilityScores()
+                calculateValsFromAbilityScores(true)
             }
             splitVal = scores[sc].split(' ')
             var currentInt = parseInt(localStorage.getItem('_' + splitVal[0].toLowerCase()))
@@ -3592,7 +3632,7 @@ function applyRaceBenifits() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Class Features (Level 1)')
         .then(data => {
             if (data !== null) {
-                console.log(data);
+                console.log("Class Features level 1: " + data);
                 addToLocalStorageString(
                     '_featuresandtraits',
                     data
@@ -3630,11 +3670,15 @@ function handleHalfElfAbilityScores() {
     for (const abilScrs in abilityScores) {
         const btn = document.createElement('button')
         btn.innerText = abilityScores[abilScrs]
-        key = '_' + abilityScores[abilScrs].toLowerCase()
+        const key = '_' + abilityScores[abilScrs].toLowerCase()
         if (abilityScores[abilScrs] == 'Intelligence') {
-            key = '_intellegence'
+            const key = '_intellegence'
+        }
+        else {
+            const key = '_' + abilityScores[abilScrs].toLowerCase()
         }
         btn.onclick = function () {
+            console.log('Key: ' + key)
             addToLocalStorageInt(key, 1)
             btn.remove()
             choices++
@@ -3671,9 +3715,10 @@ function setGold() {
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
         .then(data => {
             if (data !== null) {
-                console.log(data)
+                console.log(data + '  looking for GOLD')
                 gpArr = data.split(' ')
-                localStorage.setItem('_eqGP')
+                console.log(gpArr[gpArr.length - 2] + ' gp arr minus 2')
+                localStorage.setItem('_eqGP', gpArr[gpArr.length - 2])
             } else {
                 console.log("Target Not Found for Gold");
             }
@@ -3721,15 +3766,13 @@ function updateModifiers() {
 
         if (!isNaN(abilityScoreValue)) {
             const modifiedValue = Math.floor((abilityScoreValue - 10) / 2);
+            // console.log('abil is '+score + ' at ' +localStorage.getItem('_'+score)+ ' and value is '+modifiedValue)
             const modifiedKey = `_${score}ST`;
 
             localStorage.setItem(modifiedKey, modifiedValue.toString());
         }
     });
 }
-
-// Call the function to update the modifiers
-// updateModifiers();
 
 
 function removeValue(arr, valueToRemove) {
@@ -3792,16 +3835,6 @@ function getRelevantAbilityScore(skill) {
     return skillToAbilityScore[skill] || 'Unknown';
 }
 
-// Example usage:
-// updateSkillLocalStorageValues();
-
-
-
-
-// function clearContentAndGet() {
-//     clearDiv(document.getElementById('content'))
-//     return document.getElementById('content')
-// }
 
 function clearContentAndGet() {
     const contentDiv = document.getElementById('content');
