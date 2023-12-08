@@ -285,7 +285,7 @@
                     "Support": [
                         "Cleric",
                         "",
-                        "->conclusion"
+                        "->cleric"
                     ],
                     "Offensive": [
                         "Druid",
@@ -1924,6 +1924,36 @@
         "Draconic Bloodline": "Your innate magic stems from draconic blood mingled with yours or your ancestors', often traced back to a dragon-related pact or ancestry. Some bloodlines are well-known, while others are obscure, and any sorcerer could be the first of a new bloodline.",
         "Wild Magic": "Your innate magic originates from the chaotic forces underlying creation. Exposure to raw magic, encounters with fey creatures, demonic blessings, or unexplained birth anomalies may have triggered this unpredictable magic within you."
     },
+    "divineDomains": {
+        "Knowledge": {
+            "desc": "The gods of knowledge, including Oghma, Boccob, Gilean, Aureon, and Thoth, value learning and understanding above all. Followers of these gods study esoteric lore, collect old tomes, delve into the secret places of the earth, and learn all they can.",
+            "spells": "Command,Identify"
+        },
+        "Life": {
+            "desc": "The Life domain focuses on the vibrant positive energy, one of the fundamental forces of the universe, that sustains all life. Gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath.",
+            "spells": "Bless,Cure Wounds"
+        },
+        "Light": {
+            "desc": "Gods of light, including Hehn, Lathander, Pholtus, Branchala, the Silver Flame, Belenus, Apollo, and Re-Horakhty, promote the ideals of rebirth and renewal, truth, vigilance, and beauty, often using the symbol of the sun.",
+            "spells": "Burning Hands,Faerie Fire"
+        },
+        "Nature": {
+            "desc": "Gods of nature are as varied as the natural world itself, from inscrutable gods of the deep forests to friendly deities associated with particular springs and groves. These gods have clerics who might hunt evil monstrosities, bless harvests, or wither crops of those who anger their gods.",
+            "spells": "Animal Friendship,Speak with Animals"
+        },
+        "Tempest": {
+            "desc": "Gods whose portfolios include the Tempest domain, such as Talos, Umberlee, Kord, Zeboim, the Devourer, Zeus, and Thor, govern storms, sea, and sky. They include gods of lightning and thunder, gods of earthquakes, and certain gods of violence, physical strength, and courage.",
+            "spells": "Fog Cloud,Thunderwave"
+        },
+        "Trickery": {
+            "desc": "Gods of trickery, such as Tymora, Beshaba, Olidammara, the Traveler, Garl Glittergold, and Loki, are mischief-makers and instigators who challenge the accepted order among both gods and mortals. Their clerics are a disruptive force in the world, preferring subterfuge, pranks, deception, and theft.",
+            "spells": "Charm Person,Disguise Self"
+        },
+        "War": {
+            "desc": "War has many manifestations, making heroes of ordinary people or being desperate and horrific. Gods of war watch over warriors and reward them for their great deeds. The clerics of such gods excel in battle, inspiring others to fight the good fight or offering acts of violence as prayers.",
+            "spells": "Divine Favor,Shield of Faith"
+        }
+    },
     "weapons": {
         "simpleMeleeWeapons": [
             {
@@ -1988,7 +2018,8 @@
                 "name": "Mace",
                 "cost": "5 gp",
                 "damage": "1d6 bludgeoning",
-                "weight": "4 lb."
+                "weight": "4 lb.",
+                "properties": []
             },
             {
                 "name": "Quarterstaff",
@@ -2020,8 +2051,673 @@
             },
             {
                 "name": "Unarmed strike",
-                "damage": "1 bludgeoning"
+                "cost": "-",
+                "damage": "1 bludgeoning",
+                "weight": "-"
+            }
+        ],
+        "simpleRangedWeapons": [
+            {
+                "name": "Crossbow, light",
+                "cost": "25 gp",
+                "damage": "1d8 piercing",
+                "weight": "5 lb.",
+                "properties": [
+                    "Ammunition (range 80/320)",
+                    "Loading",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Dart",
+                "cost": "5 cp",
+                "damage": "1d4 piercing",
+                "weight": "1/4 lb.",
+                "properties": [
+                    "Finesse",
+                    "Thrown (range 20/60)"
+                ]
+            },
+            {
+                "name": "Shortbow",
+                "cost": "25 gp",
+                "damage": "1d6 piercing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Ammunition (range 80/320)",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Sling",
+                "cost": "1 sp",
+                "damage": "1d4 bludgeoning",
+                "weight": "-",
+                "properties": [
+                    "Ammunition (range 30/120)"
+                ]
+            }
+        ],
+        "martialMeleeWeapons": [
+            {
+                "name": "Battleaxe",
+                "cost": "10 gp",
+                "damage": "1d8 slashing",
+                "weight": "4 lb.",
+                "properties": [
+                    "Versatile (1d10)"
+                ]
+            },
+            {
+                "name": "Flail",
+                "cost": "10 gp",
+                "damage": "1d8 bludgeoning",
+                "weight": "2 lb.",
+                "properties": []
+            },
+            {
+                "name": "Glaive",
+                "cost": "20 gp",
+                "damage": "1d10 slashing",
+                "weight": "6 lb.",
+                "properties": [
+                    "Heavy",
+                    "Reach",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Greataxe",
+                "cost": "30 gp",
+                "damage": "1d12 slashing",
+                "weight": "7 lb.",
+                "properties": [
+                    "Heavy",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Greatsword",
+                "cost": "50 gp",
+                "damage": "2d6 slashing",
+                "weight": "6 lb.",
+                "properties": [
+                    "Heavy",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Halberd",
+                "cost": "20 gp",
+                "damage": "1d10 slashing",
+                "weight": "6 lb.",
+                "properties": [
+                    "Heavy",
+                    "Reach",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Lance",
+                "cost": "10 gp",
+                "damage": "1d12 piercing",
+                "weight": "6 lb.",
+                "properties": [
+                    "Reach",
+                    "Special"
+                ]
+            },
+            {
+                "name": "Longsword",
+                "cost": "15 gp",
+                "damage": "1d8 slashing",
+                "weight": "3 lb.",
+                "properties": [
+                    "Versatile (1d10)"
+                ]
+            },
+            {
+                "name": "Maul",
+                "cost": "10 gp",
+                "damage": "2d6 bludgeoning",
+                "weight": "10 lb.",
+                "properties": [
+                    "Heavy",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Morningstar",
+                "cost": "15 gp",
+                "damage": "1d8 piercing",
+                "weight": "4 lb.",
+                "properties": []
+            },
+            {
+                "name": "Pike",
+                "cost": "5 gp",
+                "damage": "1d10 piercing",
+                "weight": "18 lb.",
+                "properties": [
+                    "Heavy",
+                    "Reach",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Rapier",
+                "cost": "25 gp",
+                "damage": "1d8 piercing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Finesse"
+                ]
+            },
+            {
+                "name": "Scimitar",
+                "cost": "25 gp",
+                "damage": "1d6 slashing",
+                "weight": "3 lb.",
+                "properties": [
+                    "Finesse",
+                    "Light"
+                ]
+            },
+            {
+                "name": "Shortsword",
+                "cost": "10 gp",
+                "damage": "1d6 piercing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Finesse",
+                    "Light"
+                ]
+            },
+            {
+                "name": "Trident",
+                "cost": "5 gp",
+                "damage": "1d6 piercing",
+                "weight": "4 lb.",
+                "properties": [
+                    "Thrown (range 20/60)",
+                    "Versatile (1d8)"
+                ]
+            },
+            {
+                "name": "War pick",
+                "cost": "5 gp",
+                "damage": "1d8 piercing",
+                "weight": "2 lb.",
+                "properties": []
+            },
+            {
+                "name": "Warhammer",
+                "cost": "15 gp",
+                "damage": "1d8 bludgeoning",
+                "weight": "2 lb.",
+                "properties": [
+                    "Versatile (1d10)"
+                ]
+            },
+            {
+                "name": "Whip",
+                "cost": "2 gp",
+                "damage": "1d4 slashing",
+                "weight": "3 lb.",
+                "properties": [
+                    "Finesse",
+                    "Reach"
+                ]
+            }
+        ],
+        "martialRangedWeapons": [
+            {
+                "name": "Blowgun",
+                "cost": "10 gp",
+                "damage": "1 piercing",
+                "weight": "1 lb.",
+                "properties": [
+                    "Ammunition (range 25/100)",
+                    "Loading"
+                ]
+            },
+            {
+                "name": "Crossbow, hand",
+                "cost": "75 gp",
+                "damage": "1d6 piercing",
+                "weight": "3 lb.",
+                "properties": [
+                    "Ammunition (range 30/120)",
+                    "Light",
+                    "Loading"
+                ]
+            },
+            {
+                "name": "Crossbow, heavy",
+                "cost": "50 gp",
+                "damage": "1d10 piercing",
+                "weight": "18 lb.",
+                "properties": [
+                    "Ammunition (range 100/400)",
+                    "Heavy",
+                    "Loading",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Longbow",
+                "cost": "50 gp",
+                "damage": "1d8 piercing",
+                "weight": "2 lb.",
+                "properties": [
+                    "Ammunition (range 150/600)",
+                    "Heavy",
+                    "Two-handed"
+                ]
+            },
+            {
+                "name": "Net",
+                "cost": "1 gp",
+                "weight": "3 lb.",
+                "properties": [
+                    "Special",
+                    "Thrown (range 5/15)"
+                ]
             }
         ]
-    }
+    },
+    "otherBackgroundTraits": {
+        "Favorite Schemes": {
+            "desc": "Every charlatan has an angle he or she uses in preference to other schemes. Choose a favorite scam.",
+            "opts": [
+                {
+                    "name": "I cheat at games of chance.",
+                    "description": "Cheating at various games of chance."
+                },
+                {
+                    "name": "I shave coins or forge documents.",
+                    "description": "Coin shaving or document forgery."
+                },
+                {
+                    "name": "I insinuate myself into people's lives to prey on their weakness and secure their fortunes.",
+                    "description": "Infiltrating lives to exploit weaknesses and secure fortunes."
+                },
+                {
+                    "name": "I put on new identities like clothes.",
+                    "description": "Frequent adoption of new identities."
+                },
+                {
+                    "name": "I run sleight-of-hand cons on street corners.",
+                    "description": "Conning people using sleight-of-hand on street corners."
+                },
+                {
+                    "name": "I convince people that worthless junk is worth their hard-earned money.",
+                    "description": "Persuading people to buy worthless items at a high price."
+                }
+            ]
+        },
+        "Criminal Specialty": {
+            "desc": "There are many kinds of criminals, and within a thieves' guild or similar criminal organization, individual members have particular specialties. Even criminals who operate outside of such organizations have strong preferences for certain kinds of crimes over others. Choose the role you played in your criminal life.",
+            "opts": [
+                {
+                    "name": "Blackmailer",
+                    "description": "Engaging in blackmail activities."
+                },
+                {
+                    "name": "Burglar",
+                    "description": "Specializing in breaking into buildings for theft."
+                },
+                {
+                    "name": "Enforcer",
+                    "description": "Acting as a strong-arm or enforcer for criminal organizations."
+                },
+                {
+                    "name": "Fence",
+                    "description": "Dealing with stolen goods and their resale."
+                },
+                {
+                    "name": "Highway robber",
+                    "description": "Robbing travelers on highways."
+                },
+                {
+                    "name": "Hired killer",
+                    "description": "Taking contracts for assassination."
+                },
+                {
+                    "name": "Pickpocket",
+                    "description": "Stealing from people's pockets skillfully."
+                },
+                {
+                    "name": "Smuggler",
+                    "description": "Illegally transporting goods across borders or restrictions."
+                }
+            ]
+        },
+        "Entertainer Routines": {
+            "desc": "A good entertainer is versatile, spicing up every performance with a variety of different routines. Choose a routine.",
+            "opts": [
+                {
+                    "name": "Actor",
+                    "description": "Performing as an actor on stage."
+                },
+                {
+                    "name": "Dancer",
+                    "description": "Entertaining through dance."
+                },
+                {
+                    "name": "Fire-eater",
+                    "description": "Displaying fire-eating skills."
+                },
+                {
+                    "name": "Jester",
+                    "description": "Performing as a court jester."
+                },
+                {
+                    "name": "Instrumentalist",
+                    "description": "Playing musical instruments."
+                },
+                {
+                    "name": "Poet",
+                    "description": "Creating and reciting poetry."
+                },
+                {
+                    "name": "Singer",
+                    "description": "Entertaining through singing."
+                },
+                {
+                    "name": "Storyteller",
+                    "description": "Narrating captivating stories."
+                },
+                {
+                    "name": "Juggler",
+                    "description": "Showcasing juggling skills."
+                },
+                {
+                    "name": "Tumbler",
+                    "description": "Performing acrobatic tumbling routines."
+                }
+            ]
+        },
+        "Defining Event": {
+            "desc": "You previously pursued a simple profession among the peasantry, perhaps as a farmer, miner, servant, shepherd, woodcutter, or gravedigger. But something happened that set you on a different path and marked you for greater things. Choose a defining event that marked you as a hero of the people.",
+            "opts": [
+                {
+                    "name": "I stood up to a tyrant's agents.",
+                    "description": "Defying agents of a tyrant."
+                },
+                {
+                    "name": "I saved people during a natural disaster.",
+                    "description": "Rescuing people in the midst of a natural disaster."
+                },
+                {
+                    "name": "I stood alone against a terrible monster.",
+                    "description": "Confronting a formidable monster single-handedly."
+                },
+                {
+                    "name": "I stole from a corrupt merchant to help the poor.",
+                    "description": "Robbing a corrupt merchant to assist the poor."
+                },
+                {
+                    "name": "I led a militia to fight off an invading army.",
+                    "description": "Commanding a militia to repel an invading army."
+                },
+                {
+                    "name": "I broke into a tyrant's castle and stole weapons to arm the people.",
+                    "description": "Infiltrating a tyrant's castle to steal weapons for the people."
+                },
+                {
+                    "name": "I trained the peasantry to use farm implements as weapons against a tyrant's soldiers.",
+                    "description": "Teaching peasants to use farm implements as weapons against tyrant's soldiers."
+                },
+                {
+                    "name": "A lord rescinded an unpopular decree after I led a symbolic act of protest against it.",
+                    "description": "Leading a symbolic protest resulting in the rescindment of an unpopular decree."
+                },
+                {
+                    "name": "A celestial, fey, or similar creature gave me a blessing or revealed my secret origin.",
+                    "description": "Receiving a blessing or discovering a secret origin from a celestial, fey, or similar creature."
+                },
+                {
+                    "name": "Recruited into a lord's army, I rose to leadership and was commended for my heroism.",
+                    "description": "Joining a lord's army, advancing to leadership, and being commended for heroism."
+                }
+            ]
+        },
+        "Guild Business": {
+            "desc": "Guilds are generally found in cities large enough to support several artisans practicing the same trade. However, your guild might instead be a loose network of artisans who each work in a different village within a larger realm. Select your guild business.",
+            "opts": [
+                {
+                    "name": "Alchemists and apothecaries",
+                    "description": "Practicing alchemy and creating potions and elixirs."
+                },
+                {
+                    "name": "Armorers, locksmiths, and finesmiths",
+                    "description": "Crafting armor, locks, and fine metalwork."
+                },
+                {
+                    "name": "Brewers, distillers, and vintners",
+                    "description": "Brewing and distilling alcoholic beverages or crafting wines."
+                },
+                {
+                    "name": "Calligraphers, scribes, and scriveners",
+                    "description": "Creating intricate and decorative writing."
+                },
+                {
+                    "name": "Carpenters, roofers, and plasterers",
+                    "description": "Working with wood, roofing, and plastering."
+                },
+                {
+                    "name": "Cartographers, surveyors, and chart-makers",
+                    "description": "Mapping and charting geographical areas."
+                },
+                {
+                    "name": "Cobblers and shoemakers",
+                    "description": "Crafting and repairing shoes."
+                },
+                {
+                    "name": "Cooks and bakers",
+                    "description": "Preparing and baking food."
+                },
+                {
+                    "name": "Glassblowers and glaziers",
+                    "description": "Blowing and shaping glass, and installing glass windows."
+                },
+                {
+                    "name": "Jewelers and gemcutters",
+                    "description": "Crafting and cutting jewelry and gemstones."
+                },
+                {
+                    "name": "Leatherworkers, skinners, and tanners",
+                    "description": "Working with leather, skinning animals, and tanning hides."
+                },
+                {
+                    "name": "Masons and stonecutters",
+                    "description": "Building with stone, cutting stone blocks."
+                },
+                {
+                    "name": "Painters, limners, and sign-makers",
+                    "description": "Creating paintings, illuminations, and signs."
+                },
+                {
+                    "name": "Potters and tile-makers",
+                    "description": "Crafting pottery and tiles."
+                },
+                {
+                    "name": "Shipwrights and sailmakers",
+                    "description": "Building ships and crafting sails."
+                },
+                {
+                    "name": "Smiths and metal-forgers",
+                    "description": "Working with metal, forging tools, and weapons."
+                },
+                {
+                    "name": "Tinkers, pewterers, and casters",
+                    "description": "Crafting small metal items and casting metal."
+                },
+                {
+                    "name": "Wagon-makers and wheelwrights",
+                    "description": "Building wagons and crafting wheels."
+                },
+                {
+                    "name": "Weavers and dyers",
+                    "description": "Weaving fabric and dyeing textiles."
+                },
+                {
+                    "name": "Woodcarvers, coopers, and bowyers",
+                    "description": "Carving wood, crafting barrels, and making bows."
+                }
+            ]
+        },
+        "Origin": {
+            "desc": "Determine your character's origin based on various options such as being a forester, trapper, homesteader, guide, exile or outcast, tribal nomad, hunter-gatherer, or tribal marauder.",
+            "opts": [
+                {
+                    "name": "Forester",
+                    "description": "Living and working in forests."
+                },
+                {
+                    "name": "Trapper",
+                    "description": "Engaging in trapping animals for fur and resources."
+                },
+                {
+                    "name": "Homesteader",
+                    "description": "Establishing and maintaining a homestead or small farm."
+                },
+                {
+                    "name": "Guide",
+                    "description": "Guiding others through wilderness areas."
+                },
+                {
+                    "name": "Exile or outcast",
+                    "description": "Being banished or choosing to live in exile."
+                },
+                {
+                    "name": "Bounty hunter",
+                    "description": "Tracking and capturing individuals for bounties."
+                },
+                {
+                    "name": "Pilgrim",
+                    "description": "Undertaking a religious pilgrimage."
+                },
+                {
+                    "name": "Tribal nomad",
+                    "description": "Belonging to a nomadic tribal community."
+                },
+                {
+                    "name": "Hunter-gatherer",
+                    "description": "Surviving by hunting and gathering resources."
+                },
+                {
+                    "name": "Tribal marauder",
+                    "description": "Participating in raiding and marauding activities with a tribal group."
+                }
+            ]
+        },
+        "Sage Specialty": {
+            "desc": "To determine the nature of your scholarly training. Choose from the options in the table below.",
+            "opts": [
+                {
+                    "name": "Alchemist",
+                    "description": "Studying and practicing alchemical arts."
+                },
+                {
+                    "name": "Astronomer",
+                    "description": "Observing and studying celestial bodies."
+                },
+                {
+                    "name": "Discredited academic",
+                    "description": "Being discredited in academic circles."
+                },
+                {
+                    "name": "Librarian",
+                    "description": "Working in a library and preserving knowledge."
+                },
+                {
+                    "name": "Professor",
+                    "description": "Teaching and imparting knowledge."
+                },
+                {
+                    "name": "Researcher",
+                    "description": "Conducting research in various fields."
+                },
+                {
+                    "name": "Wizard's apprentice",
+                    "description": "Learning the arcane arts as an apprentice to a wizard."
+                },
+                {
+                    "name": "Scribe",
+                    "description": "Copying and creating written records."
+                }
+            ]
+        },
+        "Soldier Specialty": {
+            "desc": "During your time as a soldier, you had a specific role to play in your unit or army. Choose from the options below to determine your role.",
+            "opts": [
+                {
+                    "name": "Officer",
+                    "description": "Holding a leadership role in the military."
+                },
+                {
+                    "name": "Scout",
+                    "description": "Serving as a scout, gathering information."
+                },
+                {
+                    "name": "Infantry",
+                    "description": "Being part of the foot soldiers in the military."
+                },
+                {
+                    "name": "Cavalry",
+                    "description": "Serving as a mounted soldier."
+                },
+                {
+                    "name": "Healer",
+                    "description": "Providing medical aid and healing services to soldiers."
+                },
+                {
+                    "name": "Quartermaster",
+                    "description": "Managing supplies and logistics."
+                },
+                {
+                    "name": "Standard bearer",
+                    "description": "Carrying and protecting the military standard."
+                },
+                {
+                    "name": "Support staff (cook, blacksmith, or the like)",
+                    "description": "Working in support roles such as cooking or blacksmithing."
+                }
+            ]
+        }
+    },
+    "skills": {
+        "acrobatics": "The ability to perform agile and precise physical maneuvers, often involving balance and coordination.",
+        "animal handling": "The skill to interact with animals, calm them, and understand their behaviors.",
+        "arcana": "Knowledge of magic, spells, and the mystical forces that shape the world.",
+        "athletics": "Physical prowess and ability in activities such as running, jumping, and climbing.",
+        "deception": "The art of concealing one's true intentions and misleading others through speech or action.",
+        "history": "Knowledge of past events, cultures, and historical figures.",
+        "insight": "The ability to read people, discern their motives, and understand their true feelings.",
+        "intimidation": "The skill of inducing fear or awe in others through words, demeanor, or presence.",
+        "investigation": "The talent for examining details, scrutinizing evidence, and solving puzzles.",
+        "medicine": "The ability to provide medical care, treat injuries, and diagnose illnesses.",
+        "nature": "Knowledge of the natural world, including plants, animals, and the environment.",
+        "perception": "Keen awareness of one's surroundings, allowing the detection of hidden or subtle details.",
+        "performance": "The skill to captivate an audience through various forms of artistic expression.",
+        "persuasion": "The art of convincing others to adopt a certain point of view or take a specific action.",
+        "religion": "Understanding of divine magic, religious traditions, and knowledge of deities.",
+        "sleight of hand": "The ability to perform manual tricks, pick pockets, and manipulate small objects with dexterity.",
+        "stealth": "The skill to move quietly and avoid detection, whether through shadows or disguise.",
+        "survival": "Knowledge and ability to thrive in the wilderness, including tracking, foraging, and navigating."
+    },
+    "musicalInstruments": [
+        "Bagpipes",
+        "Drum",
+        "Dulcimer",
+        "Flute",
+        "Lute",
+        "Lyre",
+        "Horn",
+        "Pan Flute",
+        "Shawm",
+        "Viol"
+    ]
 }

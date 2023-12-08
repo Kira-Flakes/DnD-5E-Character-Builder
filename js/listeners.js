@@ -3195,9 +3195,9 @@ function chooseLanguages() {
                 localStorage.setItem('extraLangs', numExtraLangs)
                 moreExplainer = appendToContent('div', 'standardDiv')
                 if (numExtraLangs == 1) {
-                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra language.'
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languageby clicking the table rows below.'
                 } else {
-                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages by clicking the table rows below.'
                 }
                 langTables = createLanguageTables(langs)
                 content.appendChild(langTables)
@@ -3405,39 +3405,48 @@ function standardArray() {
         content = clearContentAndGet()
         main = appendToContent('div', 'standardDiv')
         main.innerText = 'Assign any of these values to an ability:'
-
+        
         if (!assignedAbils.includes('strength')) {
             const abil1 = document.createElement('div')
-            abil1.innerText = 'Strength:\t\t'
-            // input1 = document.createElement('input')
+
+            abil1.setAttribute("id", "ab1")
+            abil1.innerText = 'Strength:'
             appendAbilityValues(abil1, vals, 'strength')
             main.appendChild(abil1)
         }
 
         if (!assignedAbils.includes('dex')) {
             const abil2 = document.createElement('div')
-            abil2.innerText = 'Dexterity:\t\t'
+
+            abil2.setAttribute("id", "ab2")
+            abil2.innerText = 'Dexterity:'
             appendAbilityValues(abil2, vals, 'dex')
             main.appendChild(abil2)
         }
 
         if (!assignedAbils.includes('constitution')) {
             const abil3 = document.createElement('div')
-            abil3.innerText = 'Constitution:\t\t'
+
+            abil3.setAttribute("id", "ab3")
+            abil3.innerText = 'Constitution:'
             appendAbilityValues(abil3, vals, 'constitution')
             main.appendChild(abil3)
         }
 
         if (!assignedAbils.includes('wisdom')) {
             const abil4 = document.createElement('div')
-            abil4.innerText = 'Wisdom:\t\t'
+            
+            abil4.setAttribute("id", "ab4")
+            abil4.innerText = 'Wisdom:'
             appendAbilityValues(abil4, vals, 'wisdom')
             main.appendChild(abil4)
         }
 
         if (!assignedAbils.includes('intellegence')) {
             const abil5 = document.createElement('div')
-            abil5.innerText = 'Intelligence:\t\t'
+
+            abil5.setAttribute("id", "ab5")
+            abil5.innerText = 'Intelligence:'
             appendAbilityValues(abil5, vals, 'intellegence')
             main.appendChild(abil5)
         }
@@ -3445,7 +3454,9 @@ function standardArray() {
         if (!assignedAbils.includes('charisma')) {
             console.log("Charisma is "+localStorage.getItem('_charisma'))
             const abil6 = document.createElement('div')
-            abil6.innerText = 'Charisma:\t\t'
+
+            abil6.setAttribute("id", "ab6")
+            abil6.innerText = 'Charisma:'
             appendAbilityValues(abil6, vals, 'charisma')
             main.appendChild(abil6)
         }
