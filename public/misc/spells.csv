@@ -1,0 +1,17 @@
+Class,Cantrips (Level 0 Spells),Level 1 Spells,Level 1 Spell Slots Total,Spellcasting Ability,Spell Save DC,Spell Attack Bonus
+Bard,"Friend,Vicious Mockery","Dissonant Whispers,Feather Fall,Healing Word,Tasha's Hidious Laughter",2,Charisma,8 + Proficiency Bonus + Charisma modifier,Proficiency Bonus + Charisma modifier
+Cleric,"Guidance,Resistance,Sacred Flame",Domain Spells Here (See Table Below),2,Wisdom,8 + Proficiency Bonus + Wisdom modifier,Proficiency Bonus + Wisdom modifier
+Druid,"Shillelagh,Thorn Whip",,2,Wisdom,8 + Proficiency Bonus + Wisdom modifier,Proficiency Bonus + Wisdom modifier
+Sorcerer,"Fire Bolt,Mage Hand,Ray of Frost,Shocking Grasp","Chromatic Orb,Magic Missile",2,Charisma,8 + Proficiency Bonus + Charisma modifier,Proficiency Bonus + Charisma modifier
+Warlock,"Eldritch Blast,Minor Illusion","Arms of Hadar,Hex",1,Charisma,8 + Proficiency Bonus + Charisma modifier,Proficiency Bonus + Charisma modifier
+Wizard,"Fire Bolt,Mage Hand,Ray of Frost","Burning Hands,False Life,Grease,Mage Armor,Magic Missile,Thunderwave",2,Intelligence,8 + Proficiency Bonus + Intelligence modifier,Proficiency Bonus + Intelligence modifier
+,,,,,,
+,,,,,,
+Divine Domain (Cleric),Level 1 Spells,,,,,
+Knowledge,"Command,Identify",,,,,
+Life,"Bless,Cure Wounds",,,,,
+Light,"Burning Hands,Faerie Fire",,,,,
+Nature,"Animal Friendship,Speak with Animals",,,,,
+Tempest,"Fog Cloud,Thunderwave",,,,,
+Trickery,"Charm Person,Disguise Self",,,,,
+War,"Divine Favor,Shield of Faith",,,,,

@@ -510,6 +510,41 @@ img {
 }
 
 #personalityBtn.clicked {
-    background-color: green; /* Change to the desired color */
+    background-color: rgb(119, 45, 45);; /* Change to the desired color */
     color: white; /* Change to the desired text color */
+}
+
+#langTable {
+    border-collapse: collapse;
+    margin: 25px 0;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: rgb(79, 47, 47);
+    border-radius: 10px;
+}
+
+#langTable tr {
+    border: 2px solid black;
+}
+
+#langTable th {
+    background-color: #f2f2f2;
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    color: #000000;  /* Adjust the color as needed */
+}
+
+#langTable caption {
+    color: #ffffff;  /* Adjust the color as needed */
+    font-weight: bold;
+    font-size: 1.2em;  /* Adjust the font size as needed */
+}
+
+#langTable tbody tr:first-child {
+    /* Your styles for the first row go here */
+    font-weight: bold;
+    font-size: 110%;
+    background-color: #883737;
+    /* color: #000000; */
 }
