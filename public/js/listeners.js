@@ -80,7 +80,7 @@ function init() {
     localStorage.setItem("_race", '')
     localStorage.setItem('_subRace', '')
 
-    localStorage.setItem('currentRef', '../html/gettingStarted.html');
+    localStorage.setItem('currentRef', '../index.html');
     // States are directly associated with the questions. 
     // Example: chainging race to state 2 will mean question 2 of the state will be asked.
     localStorage.setItem("state", '0'); // saves the state of the program, set to zero
@@ -321,7 +321,7 @@ function loadCantrips() {
 
                 continueBtn = newContinueButton(true)
                 continueBtn.onclick = function () {
-
+                    rollForAbilities()
                 }
 
             }
@@ -663,21 +663,7 @@ function initPageInfo(page, iter) {
         if (page == 'class') localStorage.setItem('_classState', '0')
         conclusion(page)
     }
-    // if (page == 'gettingStarted' && localStorage.getItem('gettingStartedState') == '1') {
-    //     content = clearContentAndGet()
-    //     askName = appendToContent('div')
-    //     askName.innerText = 'Would you like to start over?'
-    //     loseProg = appendToContent('div')
-    //     loseProg.innerText = 'If you restart, you will lose all progress for your current character.'
-    //     resetBtn = appendToContent('button')
-    //     resetBtn.innerText = 'Reset'
-    //     resetBtn.onclick = function () {
-    //         localStorage.setItem('gettingStartedState', '0')
-    //         init()
-    //         initPageInfo(page,0)
-    //     }
-    // } 
-    // else {
+
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -706,8 +692,6 @@ function initPageInfo(page, iter) {
         .catch(error => {
             console.error('Error:', error);
         });
-    // }
-    // initPageInfo(page, iter+1)
 }
 
 function handleSpecialCase(page) {
@@ -3397,7 +3381,7 @@ function standardArray() {
 
         if (!assignedAbils.includes('strength')) {
             const abil1 = document.createElement('div')
-            abil1.innerText = 'Strength: '
+            abil1.innerText = 'Strength:\t\t'
             // input1 = document.createElement('input')
             appendAbilityValues(abil1, vals, 'strength')
             main.appendChild(abil1)
@@ -3405,35 +3389,35 @@ function standardArray() {
 
         if (!assignedAbils.includes('dex')) {
             const abil2 = document.createElement('div')
-            abil2.innerText = 'Dexterity: '
+            abil2.innerText = 'Dexterity:\t\t'
             appendAbilityValues(abil2, vals, 'dex')
             main.appendChild(abil2)
         }
 
         if (!assignedAbils.includes('constitution')) {
             const abil3 = document.createElement('div')
-            abil3.innerText = 'Constitution'
+            abil3.innerText = 'Constitution:\t\t'
             appendAbilityValues(abil3, vals, 'constitution')
             main.appendChild(abil3)
         }
 
         if (!assignedAbils.includes('wisdom')) {
             const abil4 = document.createElement('div')
-            abil4.innerText = 'Wisdom'
+            abil4.innerText = 'Wisdom:\t\t'
             appendAbilityValues(abil4, vals, 'wisdom')
             main.appendChild(abil4)
         }
 
         if (!assignedAbils.includes('intellegence')) {
             const abil5 = document.createElement('div')
-            abil5.innerText = 'Intelligence'
+            abil5.innerText = 'Intelligence:\t\t'
             appendAbilityValues(abil5, vals, 'intellegence')
             main.appendChild(abil5)
         }
 
         if (!assignedAbils.includes('charisma')) {
             const abil6 = document.createElement('div')
-            abil6.innerText = 'Charisma'
+            abil6.innerText = 'Charisma:\t\t'
             appendAbilityValues(abil6, vals, 'charisma')
             main.appendChild(abil6)
         }
