@@ -15,6 +15,41 @@ const divCache = []
 var allDetails = []
 let racePrev = 0
 
+// Example usage
+const instrumentData = [
+    "Bagpipes",
+    "Drum",
+    "Dulcimer",
+    "Flute",
+    "Lute",
+    "Lyre",
+    "Horn",
+    "Pan Flute",
+    "Shawm",
+    "Viol"
+];
+
+const artisanToolData = [
+    "Alchemist's supplies",
+    "Brewer's supplies",
+    "Calligrapher's supplies",
+    "Carpenter's tools",
+    "Cartographer's tools",
+    "Cobbler's tools",
+    "Cook's utensils",
+    "Glassblower's tools",
+    "Jeweler's tools",
+    "Leatherworker's tools",
+    "Mason's tools",
+    "Painter's supplies",
+    "Potter's tools",
+    "Smith's tools",
+    "Tinker's tools",
+    "Weaver's tools",
+    "Woodcarver's tools"
+];
+
+
 const sd = "standardDiv"
 
 
@@ -45,7 +80,7 @@ function init() {
     localStorage.setItem("_race", '')
     localStorage.setItem('_subRace', '')
 
-    localStorage.setItem('currentRef', '../html/gettingStarted.html');
+    localStorage.setItem('currentRef', '../index.html');
     // States are directly associated with the questions. 
     // Example: chainging race to state 2 will mean question 2 of the state will be asked.
     localStorage.setItem("state", '0'); // saves the state of the program, set to zero
@@ -132,11 +167,29 @@ function presentPreset() {
 
 }
 
+function clearEquipmentChoices() {
+    localStorage.removeItem('_eqList')
+
+    localStorage.removeItem('_attSp1Name')
+    localStorage.removeItem('_attSp1AtkB')
+    localStorage.removeItem('_attSp1Dam')
+
+    localStorage.removeItem('_attSp2Name')
+    localStorage.removeItem('_attSp2AtkB')
+    localStorage.removeItem('_attSp2Dam')
+
+    localStorage.removeItem('_attSp3Name')
+    localStorage.removeItem('_attSp3AtkB')
+    localStorage.removeItem('_attSp3Dam')
+    weaponsChosen = 1
+}
+
 var equipmentQuestions = []
 var givenEquipment = []
 var weaponChoices = []
 
 function initEquipment() {
+    clearEquipmentChoices()
     equipmentQuestions = []
     givenEquipment = []
     gatherEQQuestionsClass()
@@ -158,15 +211,20 @@ function initEquipment() {
 
 
 function beginEquipment() {
+    console.log(equipmentQuestions)
     content = clearContentAndGet()
     explain = appendToContent('div')
+    localStorage.removeItem('_eqList') // remove equipment if they already tried something else before.
     explain.innerText = 'You have already been given this starting equipment: '
     for (e in givenEquipment) {
+        console.log('giceneq: ' + givenEquipment[e])
         const eDiv = appendToContent('div', 'smallDiv')
         eDiv.innerHTML = highlightTextWithMouseover(
             givenEquipment[e],
             allDetails
         )
+        if (givenEquipment[e] !== null)
+            addToLocalStorageString('_eqList', givenEquipment[e] + '\n')
         // eDiv.style.margin = '-15px'
         // eDiv.style.fontsize = '10%'
     }
@@ -179,16 +237,212 @@ function beginEquipment() {
 }
 
 function chooseEquipment(iter = 0) {
-    content = clearContentAndGet()
-    choiceDiv = appendToContent('div')
-    choiceDiv.innerText = "Choose Between: "
-    currentQuestion = equipmentQuestions[iter].split('*')
-    for (c in currentQuestion) {
-        oBtn = document.createElement('button')
-        oBtn.innerText = currentQuestion[c]
-        choiceDiv.appendChild(oBtn)
+    if (iter >= equipmentQuestions.length) {
+        console.log("Done with equipment questions...")
+        loadCantrips()
+        // window.location.href = '../html/rollDemo.html'
+        // rollForAbilities()
+    }
+    else {
+        console.log(iter + ' iter')
+        content = clearContentAndGet()
+        choiceDiv = appendToContent('div')
+        choiceDiv.innerText = "Choose Between: "
+
+        currentQuestion = equipmentQuestions[iter].split('*')
+        for (let c in currentQuestion) {
+            if (currentQuestion[c].charAt(0) == '_') {
+                console.log("Found a _")
+                choiceDiv.innerText = 'Choose ' + currentQuestion[c].slice(1) + ': '
+                continue;
+            }
+            const oBtn = document.createElement('button')
+            oBtn.innerText = stripEQChoice(currentQuestion[c])
+            choiceDiv.appendChild(oBtn)
+            oBtn.onclick = function () {
+                if (oBtn.innerText.includes('Any')) {
+                    parseWeaponChoices(oBtn.innerText, iter)
+                }
+                else if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('[Two]')) {
+                    parseWeaponChoicesTwo(oBtn.innerText, iter)
+
+                }
+                else {
+                    extracted = extractWeaponSubstring(currentQuestion[c])
+                    if (extracted == currentQuestion[c])
+                        addToLocalStorageString('_eqList', oBtn.innerText)
+                    else {
+                        console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
+                        storeChosenWeapon(extracted, weaponsChosen)
+                        // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
+                        weaponsChosen++
+                        // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                        // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+                    }
+
+                    chooseEquipment(++iter)
+                }
+            }
+        }
     }
 }
+
+function loadCantrips() {
+    content = clearContentAndGet()
+    title = appendToContent('h3')
+    title.innerText = 'Spells'
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Cantrips (Level 0 Spells)')
+        .then(data => {
+            if (data !== null) {
+                cantrips = data.split(',')
+                explainer = appendToContent('div')
+                explainer.innerHTML = highlightTextWithMouseover(
+                    'As a ' + localStorage.getItem('_class') + ' you have been assigned these cantrips:',
+                    allDetails
+                )
+                for (i = 0; i < cantrips.length; i++) {
+                    console.log('i ' + i)
+                    cantripDiv = appendToContent('div', 'smallDiv')
+                    cantripDiv.innerHTML = highlightTextWithMouseover(
+                        cantrips[i],
+                        allDetails
+                    )
+                    localStorage.setItem('_c' + (i + 1), cantrips[i])
+                }
+
+                if (localStorage.getItem('_class') == 'Cleric') {
+                    // continue on to cleric
+                    console.log("Here with cleric level one spells")
+
+                }
+                else {
+                    loadLevel1Spells()
+                }
+
+                continueBtn = newContinueButton(true)
+                continueBtn.onclick = function () {
+                    rollForAbilities()
+                }
+
+            }
+            else {
+                console.log('No cantrips for ' + localStorage.getItem('_class'))
+                window.location.href = '../html/rollDemo.html'
+                rollForAbilities()
+            }
+        })
+}
+
+function loadClericLevel1Spells() {
+    getFromCSV('spells.csv', '')
+}
+
+function loadLevel1Spells() {
+    getFromCSV('spells.csv', localStorage.getItem('_class'), 'Level 1 Spells')
+        .then(data => {
+            if (data !== null) {
+                l1Spells = data.split(',')
+                if (l1Spells.length > 1) {
+                    level1SpellDiv = appendToContent('div')
+                    level1SpellDiv.innerHTML = highlightTextWithMouseover(
+                        'Additionally, you have the following level 1 spells:',
+                        allDetails
+                    )
+                    for (i = 0; i < l1Spells.length; i++) {
+                        console.log('i ' + i)
+                        levelDiv = appendToContent('div', 'smallDiv')
+                        levelDiv.innerHTML = highlightTextWithMouseover(
+                            l1Spells[i],
+                            allDetails
+                        )
+                        localStorage.setItem('_c' + (i + 1), l1Spells[i])
+                    }
+                }
+
+            }
+            else {
+                console.log('No level 1 spells for ' + localStorage.getItem('_class'))
+                // window.location.href = '../html/rollDemo.html'
+                // rollForAbilities()
+            }
+        })
+}
+
+function storeChosenWeapon(wpn, currNumChosen) {
+    console.log('in store Chosen weapon')
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            allWeapons = data.weapons
+            for (type in allWeapons) {
+                console.log(type + ' type')
+                for (n in allWeapons[type]) {
+                    if (allWeapons[type][n].name == wpn) {
+                        console.log('found!')
+                        localStorage.setItem('_attSp' + currNumChosen + 'Name', allWeapons[type][n].name)
+                        localStorage.setItem('_attSp' + currNumChosen + 'Dam', allWeapons[type][n].damage)
+                        return
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+function extractWeaponSubstring(inputString) {
+    const startIdx = inputString.indexOf('{');
+    const endIdx = inputString.indexOf('}');
+
+    if (startIdx !== -1 && endIdx !== -1 && startIdx < endIdx) {
+        console.log('extracted: ' + inputString.substring(startIdx + 1, endIdx))
+        return inputString.substring(startIdx + 1, endIdx);
+    } else {
+        return inputString;
+    }
+}
+
+function stripEQChoice(inputString) {
+    var res = inputString;
+    console.log('input string initially: ' + res);
+    const regex = /\([^)]*\)|\{|\}|\[|\]/g;
+    res = res.replace(regex, '');
+    console.log(res + ' :input string');
+    return res;
+}
+
+// Function that handles a limit of two choices
+function parseWeaponChoicesTwo(str, iter) {
+    if (str.includes('Any')) {
+        // call parseWeaponChoices with two options allowed
+        parseWeaponChoices(str, iter, 2)
+    } else {
+
+    }
+}
+
+function parseWeaponChoices(str, iter, numOptions = 1) {
+    type = str.split(' ')[1]
+    console.log(type)
+    console.log('about to aprse srting')
+    switch (type) {
+        case "martial":
+            console.log('martial weapon type')
+            anyWeaponChoice('martialMeleeWeapons', iter, numOptions)
+            anyWeaponChoice('martialRangedWeapons', iter, numOptions)
+            break;
+        case 'simple':
+            console.log("Simple weapon type")
+            anyWeaponChoice('simpleMeleeWeapons', iter, numOptions)
+            anyWeaponChoice('simpleRangedWeapons', iter, numOptions)
+            break;
+        default:
+            console.log('in defailt case')
+    }
+}
+
 
 function gatherEQQuestionsClass() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Equipment')
@@ -409,26 +663,11 @@ function initPageInfo(page, iter) {
         if (page == 'class') localStorage.setItem('_classState', '0')
         conclusion(page)
     }
-    // if (page == 'gettingStarted' && localStorage.getItem('gettingStartedState') == '1') {
-    //     content = clearContentAndGet()
-    //     askName = appendToContent('div')
-    //     askName.innerText = 'Would you like to start over?'
-    //     loseProg = appendToContent('div')
-    //     loseProg.innerText = 'If you restart, you will lose all progress for your current character.'
-    //     resetBtn = appendToContent('button')
-    //     resetBtn.innerText = 'Reset'
-    //     resetBtn.onclick = function () {
-    //         localStorage.setItem('gettingStartedState', '0')
-    //         init()
-    //         initPageInfo(page,0)
-    //     }
-    // } 
-    // else {
+
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
-            console.log("HERERER: " + Object.keys(currentPage)[iter])
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
                     console.log("Setting welcome info for " + page)
@@ -453,8 +692,6 @@ function initPageInfo(page, iter) {
         .catch(error => {
             console.error('Error:', error);
         });
-    // }
-    // initPageInfo(page, iter+1)
 }
 
 function handleSpecialCase(page) {
@@ -582,6 +819,146 @@ function loadQuestion(page) {
         });
 }
 
+function handleTools() {
+    clss = localStorage.getItem('_class')
+    // content = document.getElementById('content')
+    const toolDiv = appendToContent('div')
+    explainer = document.createElement('div')
+    toolDiv.appendChild(explainer)
+
+    if (clss == 'Bard') {
+        // pick 3 lessons
+        explainer.innerText = 'As a Bard, you get to choose three musical instruments to be proficient with.'
+        const instrumentTable = createInstrumentTable('Musical Instruments', instrumentData);
+        explainer.appendChild(instrumentTable);
+
+    }
+    else if (clss == 'Druid') {
+        // Inform and load herbalism kit prof
+
+        explainer.innerText = 'As a Druid, you are proficient with an Herbalism Kit. This kit allows you to create remedies and potions which can help you and your team.'
+    }
+    else if (clss == 'Monk') {
+        // Choose one type of artisan's tools or one musical instrument
+        explainer.innerText = 'As a Monk, you need to choose one artisan tool OR one musical instrument.'
+        const instrumentTable = createInstrumentTable('Musical Instruments', instrumentData)
+        const artisanTools = createToolsTable('Artisan Tools', artisanToolData)
+        musicalInstBtn = document.createElement('button')
+        toolDiv.appendChild(musicalInstBtn)
+        musicalInstBtn.innerText = 'Musical Instruments'
+        artToolsBtn = document.createElement('button')
+        toolDiv.appendChild(artToolsBtn)
+        artToolsBtn.innerText = 'Artisan Tools'
+
+        musicalInstBtn.onclick = function () {
+            try {
+                toolDiv.removeChild(artisanTools)
+            }
+            catch {
+                console.log("Removed table")
+            }
+
+            toolDiv.appendChild(instrumentTable)
+        }
+        artToolsBtn.onclick = function () {
+            try {
+                toolDiv.removeChild(instrumentTable)
+            }
+            catch {
+                console.log("Removed table")
+            }
+            toolDiv.appendChild(artisanTools)
+        }
+
+    }
+    else if (clss == 'Rogue') {
+        // Inform and load Thieve's tools
+        explainer.innerText = 'As a Rogue, you are proficient with Thieve\'s tools. These tools give you a better change at opening locks and disarming traps you may encounter.'
+    }
+    contBtn = newContinueButton(true)
+    contBtn.onclick = function () {
+        chooseSkills(_class)
+    }
+}
+
+function createToolsTable(title, toolsList) {
+    const table = document.createElement('table');
+    table.setAttribute('id', 'langTable');
+    const caption = table.createCaption();
+    caption.textContent = title;
+
+    let selectedRow = null; // Variable to store the currently selected row
+
+    // Create header row
+    const headerRow = table.insertRow();
+    // const toolHeader = headerRow.insertCell();
+    // toolHeader.textContent = 'Tool';
+
+    // Create rows for each tool
+    toolsList.forEach((tool) => {
+        const row = table.insertRow();
+        row.addEventListener('click', () => {
+            // Toggle row color
+            if (selectedRow === row) {
+                row.style.backgroundColor = ''; // Unselect the row
+                selectedRow = null;
+            } else {
+                // Unselect the previously selected row
+                if (selectedRow) {
+                    selectedRow.style.backgroundColor = '';
+                }
+                row.style.backgroundColor = 'rgb(119, 45, 45)'; // Select the row
+                selectedRow = row;
+            }
+        });
+
+        const toolCell = row.insertCell();
+        toolCell.textContent = tool;
+    });
+
+    return table;
+}
+
+function createInstrumentTable(title, instruments) {
+    const table = document.createElement('table');
+    table.setAttribute('id', 'langTable');
+    const caption = table.createCaption();
+    caption.textContent = title;
+
+    let selectedRow = null; // Variable to store the currently selected row
+
+    // Create header row
+    const headerRow = table.insertRow();
+    // const instrumentHeader = headerRow.insertCell();
+    // instrumentHeader.textContent = 'Musical Instrument';
+
+    // Create rows for each instrument
+    instruments.forEach((instrument) => {
+        const row = table.insertRow();
+        row.addEventListener('click', () => {
+            // Toggle row color
+            if (selectedRow === row) {
+                row.style.backgroundColor = ''; // Unselect the row
+                selectedRow = null;
+            } else {
+                // Unselect the previously selected row
+                if (selectedRow) {
+                    selectedRow.style.backgroundColor = '';
+                }
+                row.style.backgroundColor = 'rgb(119, 45, 45)'; // Select the row
+                selectedRow = row;
+            }
+        });
+
+        const instrumentCell = row.insertCell();
+        instrumentCell.textContent = instrument;
+    });
+
+    return table;
+}
+
+
+
 function classResponseHandler(type) {
     if (type == '->fighter') {
         console.log("Handling fighter case...")
@@ -597,9 +974,71 @@ function classResponseHandler(type) {
     else if (type == '->sorcerer') {
         handleSorcerer()
     }
+    else if (type == '->cleric') {
+        handleCleric()
+    }
     else {
         classDebrief()
     }
+}
+
+function handleCleric() {
+    const divineDomains = [
+        "Knowledge",
+        "Life",
+        "Light",
+        "Nature",
+        "Tempest",
+        "Trickery",
+        "War"
+    ];
+
+    choice = []
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            dDomain = data.divineDomains
+            // Use the JSON data here
+            for (var d in divineDomains) {
+                const dom = divineDomains[d]
+                const sBtn = document.createElement('button')
+                sBtn.innerText = divineDomains[d]
+                spellsGiven = dDomain[dom].spells.split(',')
+                sBtn.onclick = function () {
+                    localStorage.setItem("_divineDomain", sBtn.innerText)
+                    // Set level one spells for the domain
+                    for (const s in spellsGiven) {
+
+                        num = parseInt(s) + 1
+                        console.log(num + '   s')
+                        localStorage.setItem('_' + (num), spellsGiven[s])
+                    }
+                    classDebrief()
+                }
+                choice.push(sBtn)
+                sBtn.addEventListener('mouseenter', function () {
+                    helperInfoDiv = document.getElementById('helperInfo')
+                    helperInfoDiv.innerText = dDomain[dom].desc
+
+                    spellExpDiv = document.createElement('div')
+                    spellExpDiv.innerText = "You will be given the following level one spells:"
+                    helperInfoDiv.appendChild(spellExpDiv)
+                    for (sp in spellsGiven) {
+                        var spDiv = document.createElement('div')
+                        helperInfoDiv.appendChild(spDiv)
+                        spDiv.innerText = spellsGiven[sp]
+                    }
+                })
+            }
+            basicQuestionAnswer(
+                "Each domain comes with specific spells and features upon selection at 1st level. Gain enhanced Channel Divinity options at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+                choice,
+                "Select a domain aligned with your deity: Knowledge, Life, Light, Nature, Tempest, Trickery, or War."
+            )
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function handleSorcerer() {
@@ -759,8 +1198,85 @@ function classDebrief() {
     showSavingThrows(_class)
 }
 
+// Requests weapon profs from the class CSV to be displayed and loaded to the character sheet.
+var weaponProfs = []
+function getWeaponProfs() {
+    getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Weapon Proficiencies')
+        .then(data => {
+            if (data !== null) {
+                profs = data.split(',')
+                for (p in profs) {
+                    weaponProfs.push(profs[p])
+                    addToLocalStorageString('_weaponProfs', profs[p])
+                }
+            }
+        })
+}
+
+// function createWeaponsTable(columnLabels, data) {
+//     // Create a table element
+//     var table = document.createElement("table");
+
+//     // Create a header row
+//     var headerRow = table.insertRow();
+//     for (var i = 0; i < columnLabels.length; i++) {
+//       var headerCell = headerRow.insertCell(i);
+//       headerCell.textContent = columnLabels[i];
+//     }
+
+//     // Parse and add data rows
+//     for (var j = 0; j < data.length; j++) {
+//       var rowData = data[j].split(',');
+//       var dataRow = table.insertRow();
+
+//       for (var k = 0; k < rowData.length; k++) {
+//         var dataCell = dataRow.insertCell(k);
+//         dataCell.textContent = rowData[k];
+//       }
+//     }
+
+//     // Return the created table
+//     return table;
+//   }
+
+var weaponsChosen = 1
+
+// call this function to give options for selecting weapons and equipment 
+// from the weapons tables.
+function anyWeaponChoice(type, iter, numChoices) {
+    console.log("In any weapon choice, type: " + type)
+    fetch('/guide.json')
+        .then(response => response.json())
+        .then(data => {
+            wpns = data.weapons[type]
+            console.log(wpns)
+            for (let w in wpns) {
+                // console.log(wpns[w] +' Weapons w')
+                const weapon = wpns[w]
+                const wBtn = appendToContent('button', 'smallDiv')
+                wBtn.innerText = wpns[w].name
+                wBtn.onclick = function () {
+                    // addToLocalStorageString('_weapons', wBtn.innerText)
+                    // console.log(wpns[w].name+ " weapon added to local storage.")
+                    localStorage.setItem('_attSp' + weaponsChosen + 'Name', weapon.name)
+                    // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                    localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
+
+                    if (++weaponsChosen > numChoices) {
+                        console.log("weapon limit reached TODO")
+                        chooseEquipment(++iter)
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 
 function showSavingThrows(_class) {
+    getWeaponProfs()
     content = clearContentAndGet()
     var savingThrows = appendToContent('div')
     console.log('class: ' + _class)
@@ -772,19 +1288,33 @@ function showSavingThrows(_class) {
                     "You have been assigned the class " + _class + ". You have " + opts[0] + " and " + opts[1] + " saving throws.",
                     allDetails
                 )
+                weaponProfsDiv = appendToContent('div')
+                weaponProfsDiv.innerHTML = highlightTextWithMouseover(
+                    'Also, you have the following weapon proficiencies:',
+                    allDetails
+                )
+                for (const pr in weaponProfs) {
+                    const pDiv = appendToContent('div', 'smallDiv')
+                    pDiv.innerHTML = highlightTextWithMouseover(
+                        weaponProfs[pr],
+                        allDetails
+                    )
+                }
                 st1 = opts[0] + "-save-prof"
                 st2 = opts[1] + "-save-prof"
                 localStorage.setItem("_trueSavingThrows", st1 + "," + st2)
+                handleTools()
             }
             else {
                 console.log("Target Not Found for showSavingThrows");
             }
         })
+    // handleTools()
 
-    contBtn = newContinueButton(true)
-    contBtn.onclick = function () {
-        chooseSkills(_class)
-    }
+    // contBtn = newContinueButton(true)
+    // contBtn.onclick = function () {
+    //     chooseSkills(_class)
+    // }
 }
 
 function chooseSkills(_class) {
@@ -813,6 +1343,20 @@ function chooseSkills(_class) {
                     btn.innerText = profs[p]
                     clicked = 0
                     let isClicked = false;
+
+                    btn.addEventListener('mouseenter', function () {
+                        fetch('/guide.json')
+                            .then(response => response.json())
+                            .then(data => {
+                                skillDesc = data.skills[btn.innerText.toLowerCase()]
+                                helperInfo = document.getElementById('helperInfo')
+                                helperInfo.innerText = skillDesc
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    })
+
                     btn.onclick = function () {
 
                         isClicked = !isClicked; // Toggle the state
@@ -1258,12 +1802,17 @@ function classConclusion() {
 function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
     if (page == 'class') classConclusion()
 
-    const conclusionDiv = document.createElement('div')
-    conclusionDiv.setAttribute('id', 'conclusionDiv')
+    // const conclusionDiv = document.createElement('div')
+    // conclusionDiv.setAttribute('id', 'conclusionDiv')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             document.getElementById('content').innerHTML = highlightTextWithMouseover(data[page].conclusion.header)
+
+            if (page == 'race') {
+                addRaceImage(localStorage.getItem('_race'))
+            }
+
             if (localStorage.getItem(page + 'Done') == 'true') {
                 doneDiv = appendToContent('div')
                 doneDiv.innerText = 'If you want to reset your ' + page + ' you will lose all progress on your character after this point.'
@@ -1291,6 +1840,34 @@ function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
         });
 
 
+}
+
+function addRaceImage(race) {
+    parsedRace = parseForGenericRace(race)
+    if (parsedRace !== 'no image') {
+        console.log("Adding race image for " + parsedRace)
+        pImg = document.createElement('img')
+        pImg.setAttribute('src', '../img/raceImg/' + parsedRace + '.png')
+        content = document.getElementById('content')
+        content.appendChild(pImg)
+    }
+}
+
+function parseForGenericRace(race) {
+    // Halfling,Gnome,Dwarf
+    // Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc
+    if (race == 'Hill Dwarf') return 'Dwarf'
+    if (race == 'Mountain Dwarf') return 'Dwarf'
+    if (race == 'Lightfoot Halfling') return 'no image'
+    if (race == 'Stout Halfling') return 'no image'
+    if (race == 'Forest Gnome') return 'Gnome'
+    if (race == 'Rock Gnome') return 'Gnome'
+    if (race == 'High Elf') return 'Elf'
+    if (race == 'Wood Elf') return 'Elf'
+    if (race == 'Dark Elf (Drow)') return 'Elf'
+    if (race.includes('Dragonborn')) return 'Dragonborn'
+    if (race == 'Human') return 'no image'
+    return race
 }
 
 function continueToNextPage(currentPage, nextPage) {
@@ -1326,6 +1903,7 @@ function resetProgress(current) {
         console.log("Removing background items...")
         // ...
         localStorage.setItem('backgroundState', '0')
+        location.reload()
     }
     else if (current == 'equipment') {
         console.log('Removing equipment items...')
@@ -1505,6 +2083,7 @@ function loadHelperInfoFromMisc(text) {
 }
 
 function beginBackground(specialCaseHandled = false) {
+
     console.log("BEGINNING BACKGROUnd, class is: " + localStorage.getItem('_class'))
     if (localStorage.getItem('_class') == 'Cleric' && !specialCaseHandled) {
         initClericDieties()
@@ -1521,7 +2100,8 @@ function beginBackground(specialCaseHandled = false) {
             if (sInt == 5) chooseBonds()
             if (sInt == 6) chooseFlaws()
             if (sInt == 7) chooseLanguages()
-            if (sInt == 8) characterName()
+            if (sInt == 8) otherBackgroundTraits()
+            if (sInt == 9) characterName()
             if (sInt == 10) askForBackgroundReset()
         }
         else {
@@ -1529,6 +2109,82 @@ function beginBackground(specialCaseHandled = false) {
         }
     }
 
+}
+
+
+
+function otherBackgroundTraits() {
+    console.log('in other backgorund traits')
+    content = clearContentAndGet()
+    explainer = appendToContent('div')
+    getFromCSV('background.csv', localStorage.getItem('_background'), 'Other Background/Trait')
+        .then(dataCSV => {
+            if (dataCSV !== null) {
+                // // caseOf = 
+                // content = clearContentAndGet()
+                // console.log("Case is: " + data)
+                // switch (data) {
+                //     case 'Favorite Schemes':
+                //         break;
+                //     case 'Criminal Specialty':
+                //         break;
+                //     case 'Entertainer Routines':
+                //         break;
+                //     case 'Defining Event':
+                //         break;
+                //     case 'Guild Business':
+                //         break;
+                //     case 'Life of Seclusion':
+                //         break;
+                //     case 'Origin':
+                //         break;
+                //     case 'Specialty':
+                //         break;
+
+                // }
+
+                console.log('datacsv: ' + dataCSV)
+                fetch('/guide.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        otherBg = data.otherBackgroundTraits[dataCSV]
+                        if (otherBg === undefined) {
+                            localStorage.setItem('backgroundState', '10')
+                            characterName()
+                        }
+
+                        explainer.innerHTML = highlightTextWithMouseover(
+                            'As a ' + localStorage.getItem('_background') + ', you need to pick this special trait. ' + otherBg.desc,
+                            allDetails
+                        )
+
+                        console.log("OTHER BG: " + otherBg.opts)
+                        allOpts = otherBg.opts
+                        for (const opt in allOpts) {
+
+                            btn = appendToContent('button', 'smallDiv')
+                            btn.innerText = allOpts[opt].name
+                            btn.addEventListener('mouseenter', function () {
+                                const helperInfo = document.getElementById('helperInfo')
+                                helperInfo.innerText = allOpts[opt].description
+                            })
+                            btn.onclick = function () {
+                                localStorage.setItem('_otherSpecialTrait', dataCSV + ': ' + btn.innerText)
+                                localStorage.setItem('backgroundState', '10')
+                                characterName()
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+            else {
+                console.log("No other background traits to handle. Moving on to name")
+                localStorage.setItem('backgroundState', '10')
+                characterName()
+            }
+        })
 }
 
 function askForBackgroundReset() {
@@ -1988,7 +2644,9 @@ function characterName() {
     cBtn = document.getElementById('continueButton')
     cBtn.onclick = function () {
         storeKeyFromInput('_name')
+        localStorage.setItem('backgroundState', '10')
         determineProfs()
+
 
     }
     fetch('/guide.json')
@@ -2261,7 +2919,7 @@ function chooseBonds() {
         });
 }
 
-function createLanguageTables() {
+function createLanguageTables(omit) {
     // Create the main div
     const mainDiv = document.createElement('div');
 
@@ -2270,7 +2928,7 @@ function createLanguageTables() {
         .then(response => response.json())
         .then(data => {
             // Create a table for standard languages
-            const standardTable = createTable('Standard Languages', data.standardLanguages);
+            const standardTable = createTable('Languages', data.standardLanguages, omit);
             mainDiv.appendChild(standardTable);
 
             // Create a table for exotic languages
@@ -2288,8 +2946,9 @@ function createLanguageTables() {
 
 
 // Helper function to create a table
-function createTable(title, languages) {
+function createTable(title, languages, omit) {
     const table = document.createElement('table');
+    table.setAttribute('id', 'langTable')
     const caption = table.createCaption();
     caption.textContent = title;
 
@@ -2311,45 +2970,47 @@ function createTable(title, languages) {
     contBtn.innerText = "Continue"
     contBtn.onclick = function () {
         localStorage.setItem('backgroundState', '8')
-        characterName()
+        otherBackgroundTraits()
         localStorage.setItem('backgroundDone', 'true')
     }
     languages.forEach((language, index) => {
+        // Check if the language should be omitted
+        if (!omit.includes(language.language)) {
+            const row = table.insertRow();
+            row.addEventListener('click', () => {
+                // Change background color on row click
+                if (selected < allowed && row.style.backgroundColor != 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected += 1
+                    selectedLangs.push(row.cells[0].textContent)
+                    console.log(selectedLangs)
+                } else if (row.style.backgroundColor == 'rgb(119, 45, 45)') {
+                    row.style.backgroundColor = row.style.backgroundColor ? '' : 'rgb(119, 45, 45)';
+                    selected -= 1
+                    console.log(selectedLangs.indexOf(row.cells[0].textContent))
+                    selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
+                    console.log(selectedLangs)
+                }
+                if (allowed == selectedLangs.length) {
+                    contBtn.style.display = 'block'
+                } else {
+                    contBtn.style.display = 'none'
+                }
+            });
 
-        const row = table.insertRow();
-        row.addEventListener('click', () => {
-            // Change background color on row click
-            if (selected < allowed && row.style.backgroundColor != 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected += 1
-                selectedLangs.push(row.cells[0].textContent)
-                console.log(selectedLangs)
-            } else if (row.style.backgroundColor == 'lightblue') {
-                row.style.backgroundColor = row.style.backgroundColor ? '' : 'lightblue';
-                selected -= 1
-                console.log(selectedLangs.indexOf(row.cells[0].textContent))
-                selectedLangs.splice(selectedLangs.indexOf(row.cells[0].textContent), 1)
-                console.log(selectedLangs)
-            }
-            if (allowed == selectedLangs.length) {
-                contBtn.style.display = 'block'
-            } else {
-                contBtn.style.display = 'none'
-            }
+            const languageCell = row.insertCell();
+            const speakersCell = row.insertCell();
+            const scriptCell = row.insertCell();
 
-        });
-
-        const languageCell = row.insertCell();
-        const speakersCell = row.insertCell();
-        const scriptCell = row.insertCell();
-
-        languageCell.textContent = language.language;
-        speakersCell.textContent = language.typicalSpeakers;
-        scriptCell.textContent = language.script;
+            languageCell.textContent = language.language;
+            speakersCell.textContent = language.typicalSpeakers;
+            scriptCell.textContent = language.script;
+        }
     });
 
     return table;
 }
+
 
 // Example usage: Append the created div to the body
 //   document.body.appendChild(createLanguageTables());
@@ -2399,6 +3060,7 @@ function chooseFlaws() {
 }
 var numberOfPersonalityTraits = 0
 var personalityTraits = ''
+var chosenTraitsArr = []
 function choosePersonality() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -2411,20 +3073,34 @@ function choosePersonality() {
             console.log("id " + allPT)
             optDiv = appendToContent('div', 'standardDiv')
             for (id in allPT) {
+                let clicked = false
                 const btn = appendToContent('button')
                 btn.setAttribute('id', 'personalityBtn')
                 btn.addEventListener('click', function () {
                     // Toggle the 'clicked' class when the button is clicked
+                    clicked = !clicked
+                    // if less that two picked
+                    // toggle color
+                    // if not clicked, clear trait from arr[numOfStraits]
+                    // if clicked, load trait arr[num]
+
+                    // if two chosen, load them and move on
 
                     if (numberOfPersonalityTraits < 2) {
-                        numberOfPersonalityTraits += 1
                         this.classList.toggle('clicked');
-                        personalityTraits += numberOfPersonalityTraits + '. ' + btn.innerText + '  '
-                        console.log("PT: +" + personalityTraits)
+                        if (clicked) {
+                            chosenTraitsArr[numberOfPersonalityTraits++] = btn.innerText
+                        }
+                        else {
+                            chosenTraitsArr[numberOfPersonalityTraits--] = ''
+                        }
+
+                        // personalityTraits += numberOfPersonalityTraits + '. ' + btn.innerText + '  '
+                        // console.log("PT: +" + personalityTraits)
                     }
                     if (numberOfPersonalityTraits == 2) {
                         localStorage.setItem("backgroundState", "4")
-                        localStorage.setItem('_personalityTraits', personalityTraits)
+                        localStorage.setItem('_personalityTraits', chosenTraitsArr[0] + '\n' + chosenTraitsArr[1])
                         // characterName()
                         chooseIdeals()
                     }
@@ -2469,12 +3145,6 @@ function chooseLanguages() {
     content = clearContentAndGet()
     explainer = appendToContent('div', 'standardDiv')
     console.log('All details are here: ' + allDetails)
-    // explainer.innerHTML = highlightTextWithMouseover(
-    //     'As a ' + localStorage.getItem('_race') + ' you can already speak these languages: ',
-    //     allDetails
-    // )
-
-
     currLangDiv = appendToContent()
     getFromCSV('raceFeatures.csv', localStorage.getItem('_subRace'), 'Languages')
         .then(data => {
@@ -2498,8 +3168,9 @@ function chooseLanguages() {
                 console.log("langsfrombackground:" + localStorage.getItem('langsFromBackground'))
                 numExtraLangs += parseInt(localStorage.getItem('langsFromBackground'))
                 if (numExtraLangs == 0) {
-                    localStorage.setItem('backgroundState', '2')
-                    chooseBonds()
+                    localStorage.setItem('backgroundState', '8')
+                    // chooseBonds()
+                    otherBackgroundTraits()
                     return
                 }
 
@@ -2511,9 +3182,10 @@ function chooseLanguages() {
                 moreExplainer = appendToContent('div', 'standardDiv')
                 if (numExtraLangs == 1) {
                     moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra language.'
+                } else {
+                    moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
                 }
-                moreExplainer.innerText = 'You may choose ' + numExtraLangs + ' extra languages.'
-                langTables = createLanguageTables()
+                langTables = createLanguageTables(langs)
                 content.appendChild(langTables)
 
             } else {
@@ -2550,7 +3222,7 @@ function rollForAbilities() {
 
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
-    main.innerText = "It's time to assign your ability scores."
+    main.innerHTML = "Ability scores affect how your character plays Dungeons & Dragons. There are six different abilities:\n<b>Strength</b>, measuring physical power\nDexterity, measuring agility\nConstitution, measuring endurance\nIntelligence, measuring reasoning and memory\nWisdom, measuring perception and insight\nCharisma, measuring force of personality\n\nThese six physical and mental characteristics determine your character's ability modifiers and skills and are used often while playing D&D for ability checks, saving throws, attack rolls, and passive checks. We have multiple ways of determining ability scores. Please select one of the options below:\n"
     stdArray = document.createElement('button')
     stdArray.innerText = "Standard Array"
     stdArray.onclick = function () {
@@ -2593,6 +3265,10 @@ function rollTheDice(abil) {
         }
         else {
             assignProficiencies()
+            if (localStorage.getItem('_race') == 'Half-Elf') {
+                handleHalfElfAbilityScores()
+            }
+
             // fullDebrief()
         }
         // rollTheDice(getNextRoll(abil))
@@ -2687,7 +3363,8 @@ function getFromCSV(fileName, target, column) {
 function standardArray() {
     if (assignedAbils.length == 6) {
         content = clearContentAndGet()
-        content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
+        if (localStorage.getItem('_race') != 'Half-Elf')
+            content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
         contBtn = document.createElement('button')
         contBtn.innerText = 'Continue'
         contBtn.onclick = function () {
@@ -2704,7 +3381,7 @@ function standardArray() {
 
         if (!assignedAbils.includes('strength')) {
             const abil1 = document.createElement('div')
-            abil1.innerText = 'Strength: '
+            abil1.innerText = 'Strength:\t\t'
             // input1 = document.createElement('input')
             appendAbilityValues(abil1, vals, 'strength')
             main.appendChild(abil1)
@@ -2712,35 +3389,35 @@ function standardArray() {
 
         if (!assignedAbils.includes('dex')) {
             const abil2 = document.createElement('div')
-            abil2.innerText = 'Dexterity: '
+            abil2.innerText = 'Dexterity:\t\t'
             appendAbilityValues(abil2, vals, 'dex')
             main.appendChild(abil2)
         }
 
         if (!assignedAbils.includes('constitution')) {
             const abil3 = document.createElement('div')
-            abil3.innerText = 'Constitution'
+            abil3.innerText = 'Constitution:\t\t'
             appendAbilityValues(abil3, vals, 'constitution')
             main.appendChild(abil3)
         }
 
         if (!assignedAbils.includes('wisdom')) {
             const abil4 = document.createElement('div')
-            abil4.innerText = 'Wisdom'
+            abil4.innerText = 'Wisdom:\t\t'
             appendAbilityValues(abil4, vals, 'wisdom')
             main.appendChild(abil4)
         }
 
         if (!assignedAbils.includes('intellegence')) {
             const abil5 = document.createElement('div')
-            abil5.innerText = 'Intelligence'
+            abil5.innerText = 'Intelligence:\t\t'
             appendAbilityValues(abil5, vals, 'intellegence')
             main.appendChild(abil5)
         }
 
         if (!assignedAbils.includes('charisma')) {
             const abil6 = document.createElement('div')
-            abil6.innerText = 'Charisma'
+            abil6.innerText = 'Charisma:\t\t'
             appendAbilityValues(abil6, vals, 'charisma')
             main.appendChild(abil6)
         }
@@ -2937,9 +3614,10 @@ function calculateMaxHP() {
 function handleHalfElfAbilityScores() {
     q = 'As a Half-Elf, you get to choose two more ability scores to increase by 1.'
     ansBtns = []
+    var choices = 0
     const abilityScores = ['Strength', 'Dex', 'Constitution', 'Intelligence', 'Wisdom']
-    for (abilScrs in abilityScores) {
-        btn = document.createElement('button')
+    for (const abilScrs in abilityScores) {
+        const btn = document.createElement('button')
         btn.innerText = abilityScores[abilScrs]
         key = '_' + abilityScores[abilScrs].toLowerCase()
         if (abilityScores[abilScrs] == 'Intelligence') {
@@ -2948,8 +3626,12 @@ function handleHalfElfAbilityScores() {
         btn.onclick = function () {
             addToLocalStorageInt(key, 1)
             btn.remove()
+            choices++
+            if (choices >= 2) {
+                fullDebrief()
+            }
         }
-        ansBtn.push(btn)
+        ansBtns.push(btn)
     }
     basicQuestionAnswer(q, ansBtns)
     contBtn = document.createElement('button')
@@ -3007,8 +3689,12 @@ function addToLocalStorageInt(key, value) {
 function addToLocalStorageString(key, value) {
     try {
         currVal = localStorage.getItem(key)
-        newVal = currVal + '  ' + value
-        localStorage.setItem(key, newVal)
+        if (currVal !== null) {
+            newVal = currVal + '  ' + value
+            localStorage.setItem(key, newVal)
+        } else {
+            localStorage.setItem(key, value)
+        }
     }
     catch {
         console.error("Could not parse the local storage value in addToLocalStorage.")
