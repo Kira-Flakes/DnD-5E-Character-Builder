@@ -1,20 +1,6 @@
 <!doctype html>
 <html>
-<script src="/js/characterSheet.js"></script>
-<script src="/js/listeners.js"></script>
-<script type="module" src="../js/d20Logo.js"></script>
-<script>
-    localStorage.setItem("currentRef","../html/gettingstarted.html")
-    var character; // global scope
 
-    // Initialize the character object, all remaining script calls should reference this object.
-    window.addEventListener('load', function () {
-        character = new characterSheet();
-        // character.updateSheet(); // local storage attributes fill the sheet
-        // setWelcomeInfo();
-        initPageInfo('gettingStarted', 0);
-    }); // end listener
-</script>
 
 <head>
     <meta charset="UTF-8">
@@ -25,16 +11,16 @@
     <script type="text/javascript" src="/js/api.js"></script>
 
     <title>Getting Started</title>
-    
+
 </head>
 
 <body>
     <h1>Wiz-Rad!
         <div style="display:inline;">
             <canvas class="webgl"></canvas>
-        </div> 
+        </div>
     </h1>
-    
+
     <div class="tabs">
         <div style="flex-direction: row" ; class="container" ;>
             <div class="tab current">
@@ -72,13 +58,13 @@
                 <div class="question">
                     <p>First, please enter YOUR real name as you'd like it to appear on the character sheet:</p>
 
-                    <input id="_playername" type="text" class="textinput" placeholder="Enter Your Name"/><br>
+                    <input id="_playername" type="text" class="textinput" placeholder="Enter Your Name" /><br>
                     <button onclick="presentPreset()" type="submit" class="submitButton">Submit</button>
                     <script>
                         function next() {
                             character.setPlayername(document.getElementById('_playername').value)
-                            localStorage.setItem('_playername',document.getElementById("_playername").value)
-                            localStorage.setItem('gettingStartedState','1')
+                            localStorage.setItem('_playername', document.getElementById("_playername").value)
+                            localStorage.setItem('gettingStartedState', '1')
                             window.location.href = "../html/race.html"
                         }
                     </script>
@@ -92,7 +78,8 @@
         <div class="column right" id="colRight">
             <!-- <p>During this process, we will show you helpful informaiton about your decisions.</p> -->
             <div>
-                <p id="helperInfo">As you create your character, you may want to learn more about certain elements of a character sheet. That information will be displayed here.</p>
+                <p id="helperInfo">As you create your character, you may want to learn more about certain elements of a
+                    character sheet. That information will be displayed here.</p>
             </div>
 
             <!-- <p id="stat"></p>
@@ -129,11 +116,14 @@
                 <button onclick="window.location.href = 'charsheet.html';">
                     Character Sheet
                 </button>
+                <button onclick="init(); location.reload()">
+                    Reset
+                </button>
             </footer>
         </div>
     </div>
     <script>
-        initPageInfo("gettingstarted",parseInt(localStorage.getItem("gettingstartedState")))
+        initPageInfo("gettingstarted", parseInt(localStorage.getItem("gettingstartedState")))
     </script>
     <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
     <script type="importmap">
@@ -142,6 +132,21 @@
             "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
             "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"			}
         }
+    </script>
+    <script src="/js/characterSheet.js"></script>
+    <script src="/js/listeners.js"></script>
+    <script type="module" src="../js/d20Logo.js"></script>
+    <script>
+        localStorage.setItem("currentRef", "../html/gettingstarted.html")
+        var character; // global scope
+
+        // Initialize the character object, all remaining script calls should reference this object.
+        window.addEventListener('load', function () {
+            character = new characterSheet();
+            // character.updateSheet(); // local storage attributes fill the sheet
+            // setWelcomeInfo();
+            initPageInfo('gettingStarted', 0);
+        }); // end listener
     </script>
 </body>
 

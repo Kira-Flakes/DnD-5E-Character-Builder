@@ -688,14 +688,27 @@
     "races": {
         "Human": {
             "maleNames": [
-                "John",
-                "Michael",
-                "David"
+                "Bar",
+                "Fadei",
+                "Glar",
+                "Grigor",
+                "Igan",
+                "Ivor",
+                "Kosef",
+                "MivaI",
+                "Orei",
+                "Pavel",
+                "Sergor"
             ],
             "femaleNames": [
-                "Alice",
-                "Emily",
-                "Sophia"
+                "Alethra",
+                "Kara",
+                "Katernin",
+                "Mara",
+                "Natali",
+                "Olma",
+                "Tana",
+                "Zora"
             ],
             "lang": [
                 "Common",
