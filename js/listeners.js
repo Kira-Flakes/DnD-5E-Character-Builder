@@ -321,7 +321,7 @@ function loadCantrips() {
 
                 continueBtn = newContinueButton(true)
                 continueBtn.onclick = function () {
-
+                    rollForAbilities()
                 }
 
             }
@@ -663,21 +663,7 @@ function initPageInfo(page, iter) {
         if (page == 'class') localStorage.setItem('_classState', '0')
         conclusion(page)
     }
-    // if (page == 'gettingStarted' && localStorage.getItem('gettingStartedState') == '1') {
-    //     content = clearContentAndGet()
-    //     askName = appendToContent('div')
-    //     askName.innerText = 'Would you like to start over?'
-    //     loseProg = appendToContent('div')
-    //     loseProg.innerText = 'If you restart, you will lose all progress for your current character.'
-    //     resetBtn = appendToContent('button')
-    //     resetBtn.innerText = 'Reset'
-    //     resetBtn.onclick = function () {
-    //         localStorage.setItem('gettingStartedState', '0')
-    //         init()
-    //         initPageInfo(page,0)
-    //     }
-    // } 
-    // else {
+
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -706,8 +692,6 @@ function initPageInfo(page, iter) {
         .catch(error => {
             console.error('Error:', error);
         });
-    // }
-    // initPageInfo(page, iter+1)
 }
 
 function handleSpecialCase(page) {
