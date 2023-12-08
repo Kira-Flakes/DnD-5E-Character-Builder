@@ -51,11 +51,11 @@ h1 {
 
 h2 {
     font-family: 'Nougat';
-    font-size: 40px;
+    font-size: 3.5vh;
     font-style: italic;
     color: rgb(189, 75, 75);
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: 3vh;
 }
 
 table {
@@ -98,11 +98,10 @@ input[type="radio"]:checked+label {
 }
 
 .textinput {
-    font-size: 2vh;
-    border: 0; 
-    padding: 0.7vh 1vh; 
+    font-size: 2.7vh;
+    padding: 1vh 1vh; 
     margin: 1vh 0vh;
-    border: 1px solid #ccc; 
+    border: 0.2vh solid #ccc;
     position: relative;
     background: transparent;
     color: white;
@@ -154,15 +153,14 @@ button {
 .submitButton {
     background-color: initial;
     background-image: linear-gradient(-180deg, #ab6c6c, #9c6161);
-    border-radius: 5px;
+    border-radius: 0.3vh;
     box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
     color: #FFFFFF;
     cursor: pointer;
     /*display: inline-block;*/
 
     font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
-    height: 58px;
-    line-height: 44px;
+    height: 6vh;
 
     outline: 0;
     overflow: hidden;
@@ -189,7 +187,6 @@ label {
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
-    /* background-color: #454545; */
     color: white;
     padding: 1vh 1.5vh;
     margin-bottom: 10px;
@@ -245,7 +242,7 @@ button:focus {
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
 
-/* 3-Column layout using the Flexbox container*/
+/* 2-Column layout using the Flexbox container*/
 /* https://youtu.be/fYq5PXgSsbE?si=N6nJtT9u_ge_fNvo */
 .container {
     display: flex;
@@ -301,23 +298,6 @@ button:focus {
     background-color: rgb(39, 39, 39);
 }
 
-/* Mobile screen settings */
-@media screen and (max-width: 700px) {
-    .right {
-        flex: 1;
-        min-height: 10vh;
-        bottom: 0;
-    }
-    
-    .container {
-        flex-direction: column;
-    }
-
-    h1 {
-        padding-left: 0;
-    }
-}
-
 /* For p tags inside right column */
 .right p {
     color: rgb(255, 255, 255);
@@ -362,10 +342,6 @@ button:hover {
     /* Set your desired background color here */
     color: white;
 }
-
-/* div .raceDesc {
-    margin: 20px;
-} */
 
 /* For signifying current selected tab (<div class="tab current">) */
 .current {
@@ -432,13 +408,6 @@ img {
     right: 0;
 }
 
-/* .box{
-    display: flex;
-
-  } */
-
-
-
 #standardDiv {
     display: grid;
     align-items: center;
@@ -453,7 +422,6 @@ img {
     margin: 20;
 
 }
-
 
 #continueBtn {
     position: absolute;
@@ -483,13 +451,6 @@ img {
     font-size: 80%;
 }
 
-/* #backgroundInfo button {
-    scale: 80%;
-    align-items: center;
-
-} */
-
-
 #innerInfo {
     text-align: left;
     font-size: 80%;
@@ -505,6 +466,14 @@ img {
     min-width: 5%;
 }
 
+/* Ghetto-ass way of aligning standard array */
+#ab1 {padding-left: 4.6vh}
+#ab2 {padding-left: 3.6vh}
+#ab3 {padding-left: 0vh}
+#ab4 {padding-left: 5.5vh}
+#ab5 {padding-left: 0.7vh}
+#ab6 {padding-left: 4vh}
+
 #rolling {
     display: none;
 }
@@ -517,7 +486,7 @@ img {
 #langTable {
     border-collapse: collapse;
     margin: 25px 0;
-    min-width: 400px;
+    min-width: 70%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: rgb(79, 47, 47);
     border-radius: 10px;
@@ -525,6 +494,7 @@ img {
 
 #langTable tr {
     border: 2px solid black;
+    height: 2.5vh;
 }
 
 #langTable th {
@@ -547,4 +517,38 @@ img {
     font-size: 110%;
     background-color: #883737;
     /* color: #000000; */
+}
+
+/* Mobile screen settings */
+@media screen and (max-width: 1000px) {
+    .right {
+        flex: 1;
+        min-height: 10vh;
+        bottom: 0;
+    }
+    
+    /* Make right column display below main left column */
+    .container {
+        flex-direction: column;
+    }
+
+    h1 {
+        padding-left: 0;
+    }
+
+    /* Changes language selection table to be more mobile-friendly */
+    #langTable {
+        margin: 0.3vh 0;
+        min-width: 100%;
+        box-shadow: 0 0 2vh rgba(0, 0, 0, 0.15);
+        border-radius: 1vh;
+        font-size: 1.7vh;
+        
+    }
+    #langTable tr {
+        border: 0.4vh solid black;
+        height: 9vh;
+        text-align:center;
+        padding: 1vh
+    }
 }
