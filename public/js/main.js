@@ -1,6 +1,6 @@
 // Calling this function will reset every aspect of the creator, as if a new
-// User was creating their character. Useful for testing, but should not be called as much in
-// the final implementation
+// User was creating their character. Useful for testing, but is not be called as much in
+// the final implementation, only on reset user request.
 function init() {
 
     // initialize localStorage values
@@ -29,11 +29,3 @@ function init() {
 
 }   // end init
 
-function progressBar() {
-    
-}
-
-// resets all the data in localstorage
-// function reset() {
-//     for (e in localStorage.get)
-// }
