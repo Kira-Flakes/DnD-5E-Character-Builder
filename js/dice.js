@@ -70,8 +70,11 @@ function initScene() {
 
     updateSceneSize();
 
+    // set ambient light and half intensity
     const ambientLight = new THREE.AmbientLight(0xffffff, .5);
     scene.add(ambientLight);
+
+    // add additional top down light at half intensity, at an angle.
     const topLight = new THREE.PointLight(0xffffff, .5);
     topLight.position.set(10, 15, 0);
     topLight.castShadow = true;
@@ -80,10 +83,13 @@ function initScene() {
     topLight.shadow.camera.near = 5;
     topLight.shadow.camera.far = 400;
     scene.add(topLight);
+
+    // make hitboxes
     createFloor();
     createWalls(new THREE.Vector3(0, 0, -5.5), true)
     createWalls(new THREE.Vector3(0, 0, 16), false)
  
+    // create all the dice (should be 4)
     diceMesh = createDiceMesh();
     for (let i = 0; i < params.numberOfDice; i++) {
         diceArray.push(createDice());
@@ -212,7 +218,7 @@ function createBoxGeometry() {
         const addition = new THREE.Vector3().subVectors(position, subCube);
 
 
-        //something to do with the physics
+        // for all sides, link the physics using scalars. 
         if (Math.abs(position.x) > subCubeHalfSize && Math.abs(position.y) > subCubeHalfSize && Math.abs(position.z) > subCubeHalfSize) {
             addition.normalize().multiplyScalar(params.edgeRadius);
             position = subCube.add(addition);
@@ -233,6 +239,7 @@ function createBoxGeometry() {
             position.z = subCube.z + addition.z;
         }
 
+        // not sure what this does but the tutorial used it.
         const notchWave = (v) => {
             v = (1 / params.notchRadius) * v;
             v = Math.PI * Math.max(-1, Math.min(1, v));
@@ -278,7 +285,7 @@ function createBoxGeometry() {
 
     boxGeometry.deleteAttribute('normal');
     boxGeometry.deleteAttribute('uv');
-    boxGeometry = BufferGeometryUtils.mergeVertices(boxGeometry);
+    boxGeometry = BufferGeometryUtils.mergeVertices(boxGeometry); // finialize the hitboxes
 
     boxGeometry.computeVertexNormals();
 
@@ -299,7 +306,7 @@ function createInnerGeometry() {
     ], false);
 }
 
-// Some math I got from a three.js turorial. 
+// Some math I got from a three.js turorial. Determines what side is facing up and logs that number. 
 function addDiceEvents(dice) {
     dice.body.addEventListener('sleep', (e) => {
 
@@ -340,23 +347,19 @@ function addDiceEvents(dice) {
 }
 
 
-var summation = ''
+var summation = '' // var to handle the total roll from the dice
 
 function showRollResults(score) {
     if (scoreResult.innerHTML === '') {
         scores.push(score)
-        // scoreResult.innerHTML += score;
     } else {
         scores.push(score)
-        // scoreResult.innerHTML += ('+' + score);
     }
     if (scores.length >= 4) {
         summation = sumOfThreeLargest(scores)
         scoreResult.innerHTML = summation
-        // while (scores.length > 0) {
-        //     scores.pop();
-        //   }
-        if (summation != '') {
+
+        if (summation != '') { // the roll has occured, you cannot reroll the die.
             localStorage.setItem(localStorage.getItem('currentRoll'), summation.toString())
             localStorage.setItem('canThrow','false')
             document.getElementById('nextButton').style.display = 'block';
@@ -383,7 +386,7 @@ function sumOfThreeLargest(arr) {
 
 
 
-
+// Render the scene
 function render() {
     physicsWorld.fixedStep();
 
@@ -396,12 +399,14 @@ function render() {
     requestAnimationFrame(render);
 }
 
+// if the window changes, call this function
 function updateSceneSize() {
     camera.aspect = window.innerWidth * .6 / (window.innerHeight * divFitHeight);
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth * .6, (window.innerHeight * divFitHeight));
 }
 
+// a die got stuck or rolled too far away, allow another roll
 function mulligan() {
     if (summation == '')
     localStorage.setItem('canThrow','true')
@@ -410,7 +415,7 @@ function mulligan() {
 
 function throwDice() {
     summation = ''
-    setTimeout(mulligan, 3*1000)
+    setTimeout(mulligan, 3*1000) // if 3 seconds has passed and a score hasn't been calculated, reroll.
     scoreResult.innerHTML = '';
     while (scores.length > 0) {
         scores.pop();
@@ -425,11 +430,11 @@ function throwDice() {
         d.body.position = new CANNON.Vec3(-14, dIdx * 1.5, 5);
         d.mesh.position.copy(d.body.position);
 
-        d.mesh.rotation.set(2 * Math.PI * Math.random(), 0, 2 * Math.PI * Math.random())
+        d.mesh.rotation.set(2 * Math.PI * Math.random(), 0, 2 * Math.PI * Math.random()) // randomly spin the die when they are thrown.
         d.body.quaternion.copy(d.mesh.quaternion);
 
-        const force = 3 + 5 * Math.random();
-        d.body.applyImpulse(
+        const force = 3 + 5 * Math.random(); // change initial velocity here if needed
+        d.body.applyImpulse( 
             new CANNON.Vec3(force * 2, force * 1.7, -6),
             new CANNON.Vec3(0, 0, .15)
         );

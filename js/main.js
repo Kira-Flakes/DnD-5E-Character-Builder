@@ -29,11 +29,3 @@ function init() {
 
 }   // end init
 
-function progressBar() {
-    
-}
-
-// resets all the data in localstorage
-// function reset() {
-//     for (e in localStorage.get)
-// }

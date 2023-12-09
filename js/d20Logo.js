@@ -50,6 +50,7 @@ window.addEventListener('resize', () => {
     renderer.setSize(sizes.width,sizes.height);
 });*/
 
+// init the animation loop.
 const loop = () => {
     mesh.rotation.x += 0.005;
     mesh.rotation.y += 0.005;
