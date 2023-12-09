@@ -1,6 +1,8 @@
 // John Gilbert - Wiz-Rad
 // This code creates 3d dice. Used to roll for ability scores.
 
+// Uses cannon and three.js
+
 import * as CANNON from 'https://cdn.skypack.dev/cannon-es';
 import { OrbitControls } from '../js/OrbitControls.js';
 import * as THREE from 'three';
@@ -45,7 +47,7 @@ rollBtn.onclick = function() {
     }
 }
 
-
+// access the canvas and render the scene.
 function initScene() {
 
     renderer = new THREE.WebGLRenderer({
@@ -81,8 +83,7 @@ function initScene() {
     createFloor();
     createWalls(new THREE.Vector3(0, 0, -5.5), true)
     createWalls(new THREE.Vector3(0, 0, 16), false)
-    // createWalls(new THREE.Vector3(0, 0, 0), false)
-    // createWalls(new THREE.Vector3(0, 0, 5.5), true)
+ 
     diceMesh = createDiceMesh();
     for (let i = 0; i < params.numberOfDice; i++) {
         diceArray.push(createDice());
@@ -93,6 +94,7 @@ function initScene() {
     render();
 }
 
+// create a generic physics world for the dice.
 function initPhysics() {
     physicsWorld = new CANNON.World({
         allowSleep: true,
@@ -101,13 +103,14 @@ function initPhysics() {
     physicsWorld.defaultContactMaterial.restitution = .3;
 }
 
+
+// create hitbox walls so the dice bounde off.
 function createWalls(pos, horizontal = true) {
     const wall = new THREE.Mesh(
         new THREE.PlaneGeometry(70, 3),
         new THREE.ShadowMaterial({
             opacity: 0
         })
-        // new THREE.MeshBasicMaterial({ color: col, opacity: .01 })
     )
     wall.material.side = THREE.DoubleSide;
 
@@ -123,7 +126,6 @@ function createWalls(pos, horizontal = true) {
         console.log("Horiz")
     }
     scene.add(wall)
-    // walls.push(wall)
 
     const wallBody = new CANNON.Body({
         type: CANNON.Body.STATIC,
@@ -134,13 +136,13 @@ function createWalls(pos, horizontal = true) {
     physicsWorld.addBody(wallBody);
 }
 
+// Create the floor hitbox so the dice don't fall into the void.
 function createFloor() {
     const floor = new THREE.Mesh(
         new THREE.PlaneGeometry(100, 100),
         new THREE.ShadowMaterial({
             opacity: .1
         })
-        // new THREE.MeshBasicMaterial({ color: 0xfff00, opacity: .1 })
     )
 
     floor.receiveShadow = true;
@@ -155,13 +157,9 @@ function createFloor() {
     floorBody.position.copy(floor.position);
     floorBody.quaternion.copy(floor.quaternion);
     physicsWorld.addBody(floorBody);
-
-    // createWalls(new THREE.Vector3(0, 0, -5.5), true, 0xffff0f)
-    // createWalls(new THREE.Vector3(0, 0, 16), false, 0xff332f)
-    // createWalls(new THREE.Vector3(0, 0, 0), false, 0xff332f)
-    // createWalls(new THREE.Vector3(0, 0, 5.5), true, 0xf0ff09)
 }
 
+// Function to create divots in the dice and the two color meshes.
 function createDiceMesh() {
     const boxMaterialOuter = new THREE.MeshStandardMaterial({
         color: 0xd66770,
@@ -182,6 +180,7 @@ function createDiceMesh() {
     return diceMesh;
 }
 
+// called based on the number of dice. Creates a new dice and adds it to the dice array.
 function createDice() {
     const mesh = diceMesh.clone();
     scene.add(mesh);
@@ -196,6 +195,7 @@ function createDice() {
     return { mesh, body };
 }
 
+// Creates the box geometry for the dice, to hold the mesh
 function createBoxGeometry() {
 
     let boxGeometry = new THREE.BoxGeometry(1, 1, 1, params.segments, params.segments, params.segments);
@@ -299,6 +299,7 @@ function createInnerGeometry() {
     ], false);
 }
 
+// Some math I got from a three.js turorial. 
 function addDiceEvents(dice) {
     dice.body.addEventListener('sleep', (e) => {
 
