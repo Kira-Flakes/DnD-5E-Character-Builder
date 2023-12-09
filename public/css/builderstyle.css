@@ -1,11 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=MedievalSharp&display=swap');
+/* CSS file for the character-builder/wizard 
+   Mobile settings at the bottom */
 
-/* Fonts from fonts folder */
-@font-face {
-    font-family: 'Franchise';
-    src: url(../fonts/Franchise.ttf);
-}
-
+/* Wiz-Rad at the top of the page */
 @font-face {
     font-family: 'Nougat-ExtraBlack';
     src: url(../fonts/Nougat-ExtraBlack.ttf);
@@ -15,6 +11,7 @@
     --left-col-width: 100px;
 }
 
+/* Fonts, font colors, universal font size, and page background */
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: #171717;
@@ -49,6 +46,7 @@ h1 {
     padding-left: 8vw;
 }
 
+/* Headers inside left and right columns */
 h2 {
     font-family: 'Nougat';
     font-size: 3.5vh;
@@ -58,6 +56,7 @@ h2 {
     margin-bottom: 3vh;
 }
 
+/* Tables without an id */
 table {
     font-style: italic;
     font-size: 20px;
@@ -97,6 +96,7 @@ input[type="radio"]:checked+label {
     background-color: rgb(119, 45, 45);
 }
 
+/* Text input boxes */
 .textinput {
     font-size: 2.7vh;
     padding: 1vh 1vh; 
@@ -112,6 +112,7 @@ input[type="radio"]:checked+label {
     outline: 0;
 }
 
+/* For when text input box is selected */
 .textinput~.focus-bg {
     position: absolute;
     left: 0;
@@ -133,7 +134,9 @@ input[type="radio"]:checked+label {
     color: rgb(149, 149, 149);
 }
 
+/* Box holding spinning d20 */
 canvas {
+    /* Weird but necessary for correct canvas placement */
     margin-top:-12vh; 
     margin-bottom:-8vh;
     background: transparent;
@@ -158,11 +161,8 @@ button {
     box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
     color: #FFFFFF;
     cursor: pointer;
-    /*display: inline-block;*/
-
     font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
     height: 6vh;
-
     outline: 0;
     overflow: hidden;
     pointer-events: auto;
@@ -171,13 +171,13 @@ button {
     touch-action: manipulation;
     user-select: none;
     -webkit-user-select: none;
-    
     white-space: nowrap;
     width: 2.7vw;
     z-index: 9;
     border: 0;
 }
 
+/* Change color when hovering over submit button */
 .submitButton:hover {
     background: #822f2f;
 }
@@ -195,11 +195,10 @@ label {
     font-size: 2.4vh;
 }
 
-/* CSS */
+/* For all buttons */
 button {
     appearance: button;
     backface-visibility: hidden;
-
     border-width: 0;
     height: fit-content;
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .1) 0 2px 5px 0, rgba(0, 0, 0, .07) 0 1px 1px 0;
@@ -209,9 +208,7 @@ button {
     font-size: 2.4vh;
     height: auto;
     padding: 1.25vh 2vh;
-
     line-height: 1.15;
-    /* margin: 12px 0 0; */
     outline: none;
     overflow: hidden;
     position: relative;
@@ -230,7 +227,6 @@ button {
     text-align: center;
     background-color: #454545;
     color: white;
-    
     margin-bottom: 1.5vh;
     border-radius: 3px;
 }
@@ -283,12 +279,9 @@ button:focus {
     flex: 1;
     flex-grow: 1.6;
     padding: 1vh;
-    
     min-height: 70vh;
     background-color: rgb(39, 39, 39);
-    /* padding: 30px 0; */
     row-gap: 20px;
-
 }
 
 /* Right column for info */
@@ -328,7 +321,6 @@ button:focus {
     max-width: 100%;
 }
 
-/* Add this rule to your CSS file */
 #greyOut {
     color: #5d5a5a;
     /* Set a grey background color */
@@ -349,6 +341,7 @@ button:hover {
     background-color: rgb(119, 45, 45);
 }
 
+/* Highlighted terms/keywords */
 mark {
     background-color: transparent;
     color: #ba8c10;
@@ -358,11 +351,10 @@ mark {
     /* Smooth transition over 0.3 seconds */
 }
 
+/* Info column explanations for race */
 .raceInfoDiv {
     color: #ffd35c;
     padding: auto;
-
-    /* font-size: 50%; */
 }
 
 .raceInfoDiv h2 {
@@ -398,7 +390,6 @@ mark:hover {
 
 img {
     width: 60%;
-    /* height: 20%; */
     height: auto;
     object-fit: cover;
     filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%);
@@ -409,16 +400,13 @@ img {
     right: 0;
 }
 
+/* Div for each row of ability score table */
 #standardDiv {
     display: grid;
     align-items: center;
-    /* justify-content: center; */
-    /* height: 10vh; */
     position: relative;
-    /* margin: auto; */
     display: block;
     flex: auto;
-    /* margin-bottom: 10px; */
     padding: 20px;
     margin: 20;
 
@@ -430,11 +418,11 @@ img {
     right: 10px;
 }
 
+/* Info column explanations for background */
 #backgroundInfo h1 {
     font-size: 80%;
     margin: 0;
     padding: 0;
-
 }
 
 #backgroundInfo p {
@@ -442,13 +430,11 @@ img {
     margin: 0;
     padding: 0;
     text-indent: 5%;
-
 }
 
 #backgroundInfo h3 {
     text-align: left;
     margin: 4px;
-    /* padding: 0; */
     font-size: 80%;
 }
 
@@ -460,20 +446,20 @@ img {
 
 #realmOption {
     display: grid;
-    
 }
 
 #abilBtn{
     min-width: 5%;
 }
 
-/* Ghetto-ass way of aligning standard array */
-#ab1 {padding-left: 4.6vh}
-#ab2 {padding-left: 3.6vh}
-#ab3 {padding-left: 0vh}
-#ab4 {padding-left: 5.5vh}
-#ab5 {padding-left: 0.7vh}
-#ab6 {padding-left: 4vh}
+/* Ghetto way for aligning rows of standard array. Each row is adjusted 
+   by the length of the word before it.*/
+#ab1 {padding-left: 4.6vh} /* Strength */
+#ab2 {padding-left: 3.6vh} /* Dexterity */
+#ab3 {padding-left: 0vh}   /* Constitution */
+#ab4 {padding-left: 5.5vh} /* Wisdom */
+#ab5 {padding-left: 0.7vh} /* Intelligence */
+#ab6 {padding-left: 4vh}   /* Charisma */
 
 #rolling {
     display: none;
@@ -484,6 +470,7 @@ img {
     color: white; /* Change to the desired text color */
 }
 
+/* Show user table of selectable languages */
 #langTable {
     border-collapse: collapse;
     margin: 25px 0;
@@ -493,11 +480,13 @@ img {
     border-radius: 10px;
 }
 
+/* Rows */
 #langTable tr {
     border: 2px solid black;
     height: 2.5vh;
 }
 
+/* Header */
 #langTable th {
     background-color: #f2f2f2;
     border: 1px solid black;
@@ -506,6 +495,7 @@ img {
     color: #000000;  /* Adjust the color as needed */
 }
 
+/* Part that says 'Language' above table */
 #langTable caption {
     color: #ffffff;  /* Adjust the color as needed */
     font-weight: bold;
@@ -517,10 +507,10 @@ img {
     font-weight: bold;
     font-size: 110%;
     background-color: #883737;
-    /* color: #000000; */
 }
 
-/* Mobile screen settings */
+/* Mobile screen settings only applied on 3:4 screens or screens
+   taller than that. */
 @media screen and (max-aspect-ratio: 3/4) {
     .right {
         flex: 1;
@@ -537,7 +527,7 @@ img {
         padding-left: 0;
     }
 
-    /* Changes language selection table to be more mobile-friendly */
+    /* Changes language selection table to be more mobile-friendly. */
     #langTable {
         margin: 0.3vh 0;
         min-width: 100%;
@@ -546,6 +536,8 @@ img {
         font-size: 1.7vh;
         
     }
+
+    /* Table rows are bigger and easier to tap */
     #langTable tr {
         border: 0.4vh solid black;
         height: 9vh;

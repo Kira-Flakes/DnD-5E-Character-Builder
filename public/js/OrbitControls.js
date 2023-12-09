@@ -1,3 +1,5 @@
+// NOT OUR CODE. Given by three.js
+
 import {
 	EventDispatcher,
 	MOUSE,

@@ -1,21 +1,41 @@
-// TODO:
-// 1. Fix dieties to present multiple options
-// 2 fix highlight text with mousover. Just rewrite it.
+// John Gilbert - Wiz Rad Character creator listener functions. File contains all actions based on user input.
 
 
-// import { API } from './api.js';
-// Scipts that allow for us to listen to html pages and update the pages based on 
-// user actions.
+// API calls imported from Erick's files. (Denoted by a series of newlines towards the end of this file)
+
+/*
+
+    In order to elimnate redundant comments, the following conventions are explained.
+        Local Storage values are divided into two catagories:
+            Values directly sent to the character sheet (beginning with '_')
+            Values meant to help with logic and flag events (do not begin with '_')
+        The ~130 character sheet attributes can be found in characterSheet.js
+
+    Besides API calls, fetched data has two file types: json and csv.
+        json data cannot be commented, but the organization of the json file should be self explanatory based on data names. 
+        Each page has it's own data set with explainations and question sequences. Additional info was added as needed, 
+        such as specific tools, background traits and misc info.
+
+    Often used custom functions:
+        clearContentAndGet: clears the content div and returns it. The content div is the main div of the webpage.
+        highlightTextWithMousover: parses the text from guide.json { "misc" }  and pipes it into the helper column.
+
+    Other details:
+        explainers are variables that hold explainations for each page.
+        helperInfo refers to information displayed on mouseover events for significant words and buttons.
+
+    An assumption has been made that a readers are familair with javascript, and functions from the default
+    library are not always explained.
+
+    Documentation of this file (listeners.js) is the responsibility of John Gilbert only.
+*/
 
 
-// var api = new API()
+const divCache = [] // Used to cache API to div translations, in order to increase speed.
+var allDetails = [] // Loaded with misc elements from guide.json (optionally used with highlight text with mouseover)
+// let racePrev = 0
 
-// const { nextTick } = require("process");
-const divCache = []
-var allDetails = []
-let racePrev = 0
-
-// Example usage
+// Some data used in equipment sequences. 
 const instrumentData = [
     "Bagpipes",
     "Drum",
@@ -28,7 +48,6 @@ const instrumentData = [
     "Shawm",
     "Viol"
 ];
-
 const artisanToolData = [
     "Alchemist's supplies",
     "Brewer's supplies",
@@ -49,11 +68,7 @@ const artisanToolData = [
     "Woodcarver's tools"
 ];
 
-
-const sd = "standardDiv"
-
-
-// Use the fetch API to retrieve the JSON data
+// fetch json misc data and load into allDetails
 fetch('/guide.json')
     .then(response => response.json())
     .then(data => {
@@ -67,37 +82,33 @@ fetch('/guide.json')
 
 
 function init() {
-
     // initialize localStorage values
     localStorage.clear()
-    // races = "Dwarf;0,Elf;0,Tiefling;0,Dragonborn;0,Human;0,Half-Elf;0,Half-Orc;0,Halfling;0,Gnome;0";
+
     races = "Dwarf,Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc,Halfling,Gnome";
     classes = "Barbarian,Bard,Cleric,Druid,Fighter,Monk,Paladin,Ranger,Rogue,Sorcerer,Warlock,Wizard"
-    localStorage.setItem("$race", races); // working set
+    // use the working sets
+    localStorage.setItem("$race", races);
     localStorage.setItem("%race", races);
     localStorage.setItem("class", classes)
     localStorage.setItem("$class", classes)
     localStorage.setItem("_race", '')
     localStorage.setItem('_subRace', '')
 
-    localStorage.setItem('currentRef', '../index.html');
-    // States are directly associated with the questions. 
-    // Example: chainging race to state 2 will mean question 2 of the state will be asked.
-    localStorage.setItem("state", '0'); // saves the state of the program, set to zero
+    // reset the state of all page progression.
+    localStorage.setItem('currentRef', '../index.html'); // 
+    localStorage.setItem("state", '0');
     localStorage.setItem("raceState", "0");
     localStorage.setItem("classState", "0");
     localStorage.setItem("raceIter", "0")
-
     localStorage.setItem("gettingstartedState", "0");
-    localStorage.setItem("init", '1')
+    localStorage.setItem("init", '1') // set init to true
     localStorage.setItem("possibleAlignments", "")
-
 }   // end init
 
 
-// Sets the message for the user to be greeted with
+// Sets the message for the user to be greeted with, accessed in json data
 function setWelcomeInfo(page) {
-    // init()
     const welcomeTxt = document.getElementById('welcomeMessage');
     const info = document.getElementById('info')
     fetch('/guide.json')
@@ -110,22 +121,28 @@ function setWelcomeInfo(page) {
         .catch(error => {
             console.error('Error:', error);
         });
-}
+}// end setWelcomeInfo
 
 
+// Should user request to access a preset, clear all the info and present the options
 function presentPreset() {
-    clearHelperInfo()
+    clearHelperInfo() // remove right column information
     localStorage.setItem('gettingstartedState', '1')
     colLeft = document.getElementById("colLeft")
+
+    // if a name has been entered, add it to local storage
     if (document.getElementById('_playername').value === null) {
         localStorage.setItem('_playername', '')
     }
     else {
         localStorage.setItem('_playername', document.getElementById('_playername').value)
     }
+
+    // add the player name value to the preset character sheet.
     for (var pres in allPresets) {
         allPresets[pres]._playername = localStorage.getItem('_playername')
     }
+
     // clear the div, make room for preset question.
     if (colLeft) {
         // Remove all child elements
@@ -135,6 +152,8 @@ function presentPreset() {
     } else {
         console.log('Div element not found.');
     }
+
+    // fetching explaination of presets, pipe into html.
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
@@ -145,14 +164,19 @@ function presentPreset() {
             let qDiv = document.createElement('div')
             qDiv.innerHTML = data['presetChoice'].questions.q
             colLeft.appendChild(qDiv)
+
+            // create the button to select a preset
             pBtn = document.createElement('button')
             npBtn = document.createElement('button')
             pBtn.innerHTML = data['presetChoice'].questions.ans[0]
+
+            // when button is clicked, load the preset options.
             pBtn.onclick = function () {
                 clearDiv(colLeft)
                 loadPresetBios()
-
             }
+
+            // if no preset option is chosen, begin character creation process, starting with race.
             npBtn.innerHTML = data['presetChoice'].questions.ans[1]
             npBtn.onclick = function () {
                 flushSheet(["_playername"])
@@ -165,8 +189,9 @@ function presentPreset() {
             console.error('Error:', error);
         });
 
-}
+} // end presentPreset
 
+// helper function to clear weapon selections (3 total), used to reset equipment progress.
 function clearEquipmentChoices() {
     localStorage.removeItem('_eqList')
 
@@ -182,12 +207,15 @@ function clearEquipmentChoices() {
     localStorage.removeItem('_attSp3AtkB')
     localStorage.removeItem('_attSp3Dam')
     weaponsChosen = 1
-}
+} // end clearEquipmentChoices
 
+// init global arrays to keep track of equipment across html pages.
 var equipmentQuestions = []
 var givenEquipment = []
 var weaponChoices = []
 
+
+// When equipment begins, always reset the values gathered to prevent errors. Then load explainations for equipment.
 function initEquipment() {
     clearEquipmentChoices()
     equipmentQuestions = []
@@ -204,10 +232,12 @@ function initEquipment() {
         allDetails
     )
     cBtn = newContinueButton(true)
+
+    // continue to start the equipment sequence
     cBtn.onclick = function () {
         beginEquipment()
     }
-}
+} // end clearEquipmentChoices
 
 
 function beginEquipment() {
@@ -231,68 +261,76 @@ function beginEquipment() {
     contDiv = appendToContent('div')
     contDiv.innerText = "\nContinue on to choose the rest of your equipment."
     cBtn = newContinueButton(true)
+
+    // begin the question/answer sequence for equipment.
     cBtn.onclick = function () {
         chooseEquipment()
     }
 }
 
+// Iterate across the sequence to ask about what equipment the player wants.
+// CSV data is parsed in a specific way, '*' represents a seperation between choices and
+// ';' represents a new question.
 function chooseEquipment(iter = 0) {
+
+    // ensure they haven't reached the max amount of weapons allowed.
+    // If they have, move on to spells (not fully implemented due to time constrains, we just choose the spells for them based on class and race)
     if (iter >= equipmentQuestions.length) {
         console.log("Done with equipment questions...")
         loadCantrips()
-        // window.location.href = '../html/rollDemo.html'
-        // rollForAbilities()
     }
-    else {
-        console.log(iter + ' iter')
+    else { // we still have choices to present
         content = clearContentAndGet()
         choiceDiv = appendToContent('div')
         choiceDiv.innerText = "Choose Between: "
 
-        currentQuestion = equipmentQuestions[iter].split('*')
-        for (let c in currentQuestion) {
-            if (currentQuestion[c].charAt(0) == '_') {
-                console.log("Found a _")
+        currentQuestion = equipmentQuestions[iter].split('*') // parsing options from csv
+
+        for (let c in currentQuestion) { // load the question
+            if (currentQuestion[c].charAt(0) == '_') { // this is an explaination for the question, move to next iteration after loading.
                 choiceDiv.innerText = 'Choose ' + currentQuestion[c].slice(1) + ': '
                 continue;
             }
+
+            // make option button, on click load that option to the relevant charsheet location.
             const oBtn = document.createElement('button')
             oBtn.innerText = stripEQChoice(currentQuestion[c])
             choiceDiv.appendChild(oBtn)
-            let btnClicked = false
+            let btnClicked = false // used to track toggle of button, and allowance of click actions
             oBtn.onclick = function () {
                 if (!btnClicked) {
-                    console.log("clicked")
-
                     if (oBtn.innerText.includes('Any') && oBtn.innerText.includes('Two')) {
+                        // we have an ANY TWO choice to handle (eg any two martial weapons)
                         parseWeaponChoicesTwo(oBtn.innerText, iter)
                     }
                     else if (oBtn.innerText.includes('Any')) {
+                        // we have an any one choice
                         parseWeaponChoices(oBtn.innerText, iter)
                     }
 
-                    else {
+                    else { // we have a basic choice, no need to provide additional options to choose from.
+                        // we need to extract the weapon from the spreadsheet (it is between {})
                         extracted = extractWeaponSubstring(currentQuestion[c])
+
                         if (extracted == currentQuestion[c])
                             addToLocalStorageString('_eqList', oBtn.innerText)
                         else {
                             console.log('wName: ' + '_attSp' + weaponsChosen + 'Name')
                             storeChosenWeapon(extracted, weaponsChosen)
-                            // localStorage.setItem('_attSp' + weaponsChosen + 'Name', extracted)
                             weaponsChosen++
-                            // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
-                            // localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
                         }
 
-                        chooseEquipment(++iter)
+                        chooseEquipment(++iter) // move on to next question in sequence
                     }
-                    btnClicked = true
+                    btnClicked = true // toggle to true
                 }
             }
         }
     }
 }
 
+// cantrips are essentially level 0 spells, based on class/race. Access CSV with this info and load it into localStorage.
+// Explain that cantrips have been awarded to the player.
 function loadCantrips() {
     content = clearContentAndGet()
     title = appendToContent('h3')
@@ -316,22 +354,23 @@ function loadCantrips() {
                     localStorage.setItem('_c' + (i + 1), cantrips[i])
                 }
 
+                // we have a special case for cleric. you'll see this often >:(
                 if (localStorage.getItem('_class') == 'Cleric') {
-                    // continue on to cleric
-                    console.log("Here with cleric level one spells")
-
+                    // currently cleric isn't handled here.
+                    console.log("Cleric level one spells not handled in loadCantrips")
                 }
-                else {
+                else { // not cleric, we can load the level 1 spells.
                     loadLevel1Spells()
                 }
 
+                // once this sequence is done, we can more on to ability scores.
                 continueBtn = newContinueButton(true)
                 continueBtn.onclick = function () {
                     rollForAbilities()
                 }
 
             }
-            else {
+            else { // data is null for cantrips (not all classes have them. Alert and move on.)
                 console.log('No cantrips for ' + localStorage.getItem('_class'))
                 window.location.href = '../html/rollDemo.html'
                 rollForAbilities()
@@ -339,10 +378,7 @@ function loadCantrips() {
         })
 }
 
-function loadClericLevel1Spells() {
-    getFromCSV('spells.csv', '')
-}
-
+// Access spells.csv and load the level 1 spells to localStorage.
 function loadLevel1Spells() {
     getFromCSV('spells.csv', localStorage.getItem('_class'), 'Level 1 Spells')
         .then(data => {
@@ -366,14 +402,14 @@ function loadLevel1Spells() {
                 }
 
             }
-            else {
+            else { // we have a class that doesn't have level one spells.
                 console.log('No level 1 spells for ' + localStorage.getItem('_class'))
-                // window.location.href = '../html/rollDemo.html'
-                // rollForAbilities()
             }
         })
 }
 
+// Since there are three spells, the current number of chosen spells is added to local Storage.
+// Data is seen on the middle of character sheet.
 function storeChosenWeapon(wpn, currNumChosen) {
     console.log('in store Chosen weapon')
     fetch('/guide.json')
@@ -398,6 +434,7 @@ function storeChosenWeapon(wpn, currNumChosen) {
 
 }
 
+// helper function to extract the string found between { and }. This will (should) alway be a weapon found in json data.
 function extractWeaponSubstring(inputString) {
     const startIdx = inputString.indexOf('{');
     const endIdx = inputString.indexOf('}');
@@ -410,6 +447,7 @@ function extractWeaponSubstring(inputString) {
     }
 }
 
+// helper function that uses regex to strip out the equipment options from the csv.
 function stripEQChoice(inputString) {
     var res = inputString;
     console.log('input string initially: ' + res);
@@ -419,16 +457,16 @@ function stripEQChoice(inputString) {
     return res;
 }
 
-// Function that handles a limit of two choices
+// Function that handles the case where two choices are supposed to be selected 
+// for a weapon type (eg two martial weapons).
 function parseWeaponChoicesTwo(str, iter) {
     parseWeaponChoices(str.replace('Two ', ''), iter, 2)
 }
 
+
+// break CSV strings into questions and answers when the user needs to choose two weapons of the same type.
 function parseWeaponChoices(str, iter, numOptions = 1) {
-    console.log("string here: " + str)
-    type = str.split(' ')[1]
-    console.log(type)
-    console.log('about to aprse srting')
+    type = str.split(' ')[1] // this is the type ALWAYS.
     switch (type) {
         case "martial":
             console.log('martial weapon type')
@@ -443,14 +481,13 @@ function parseWeaponChoices(str, iter, numOptions = 1) {
         default:
             console.log('in defailt case')
             break;
-
     }
     if (numOptions > 1) {
-        parseWeaponChoices(str, iter, --numOptions)
+        parseWeaponChoices(str, iter, --numOptions) // do it again, but now we only need to choose 1.
     }
 }
 
-
+// Load all equipment into two catagories. Given automatically or a selected choice. If eq is automatically given, it does not contain a '*' character.
 function gatherEQQuestionsClass() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Equipment')
         .then(data => {
@@ -469,6 +506,9 @@ function gatherEQQuestionsClass() {
             console.error('Error:', error);
         });
 }
+
+// Load all equipment into two catagorize. Repeated code from the above question because fetching causes issue when
+// done twice in the same function.
 function gatherEQQuestionsBackground() {
     console.log(localStorage.getItem('_background'))
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
@@ -490,7 +530,7 @@ function gatherEQQuestionsBackground() {
         });
 }
 
-
+// Remove all values from the sheet except the ignored values.
 function flushSheet(ignore) {
     for (var i = 0; i < localStorage.length; i++) {
         item = localStorage.key(i);
@@ -505,6 +545,7 @@ function flushSheet(ignore) {
     }
 }
 
+// Helper function to check it an array contains an item.
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
         if (a[i] === obj) {
@@ -514,6 +555,7 @@ function contains(a, obj) {
     return false;
 }
 
+// Load the bios for each preset.
 function loadPresetBios() {
     fetch('/guide.json')
         .then(response => response.json())
@@ -521,25 +563,36 @@ function loadPresetBios() {
             colLeft = document.getElementById("colLeft")
             presets = data['presetChoice'].presets
             for (const p in presets) {
+                // Create the html elements for each attribute we want to shoe the user.
                 bioContainer = document.createElement('div')
-                // bioContainer.setAttribute('class','container')
                 bioContainer.setAttribute('id', 'bio')
+
                 colLeft.appendChild(bioContainer)
+
                 boxL = document.createElement('div')
                 boxR = document.createElement('div')
+
                 boxL.setAttribute('class', 'box')
                 boxR.setAttribute('class', 'box')
+
                 bioContainer.appendChild(boxL)
                 bioContainer.appendChild(boxR)
+
                 pDiv = document.createElement("div")
                 pDiv.setAttribute('id', 'presetBio')
+
                 race = document.createElement("h2")
+
                 race.innerHTML = presets[p].race
+
                 boxL.appendChild(race)
+
+                // Load art assets for the presets.
                 pImg = document.createElement('img')
                 pImg.setAttribute('src', '../img/' + presets[p].id + '.png')
-                // pImg.setAttribute('id','pImg')
                 boxL.appendChild(pImg)
+
+                // add the vio information
                 pBio = document.createElement('div')
                 pBio.innerHTML = presets[p].bio
                 boxR.appendChild(pBio)
@@ -547,7 +600,8 @@ function loadPresetBios() {
                 viewSheet.setAttribute('id', 'viewSheetBtn' + p)
                 viewSheet.innerText = "View Character Sheet"
                 var funcHelper = presets[p].id
-                viewSheet.onclick = function () {
+
+                viewSheet.onclick = function () { // this is the users choice, load and display.
                     loadPreset(presets[p].id)
                     window.location.href = "../html/charsheet.html"
                 }
@@ -560,7 +614,7 @@ function loadPresetBios() {
         });
 }
 
-// Put all explainer information on the page
+// Put all explainer information on the page that is found in guide.json.
 function loadExplainer(page, iter) {
     console.log("Loading explainer...")
     explainerDiv = document.getElementById("explainer")
@@ -572,7 +626,8 @@ function loadExplainer(page, iter) {
             continueBtn = document.createElement('button')
             continueBtn.setAttribute('id', 'beginButton')
             continueBtn.innerText = 'Begin'
-            continueBtn.onclick = function () {
+
+            continueBtn.onclick = function () { // move on to beging the question sequence.
                 clearDiv(explainerDiv)
                 alterState(page, 1)
                 loadQuestion(page)
@@ -593,6 +648,7 @@ function clearDiv(div) {
     }
 }
 
+// Given a div, remove the children except for divs passed into the function
 function removeAllChildrenExceptOne(divIdToKeep) {
     var parentDiv = document.getElementById('content'); // replace with your actual parent div id
     var children = parentDiv.children;
@@ -636,64 +692,56 @@ function setAlignmentInfo() {
     });
 }
 
-// access guide and get the races
+// access guide.json and get the races, including explainations. 
 function races() {
     const res = document.getElementById("raceExplainer");
     const helperStart = document.getElementById('helperInfo')
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-
             res.innerText = data.race.explainer;
             helperStart.innerHTML = data.race.explainer.details
-
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
+// simply capitalize a string and return
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 
+// For class race and getting started, use this method to load the information found in the json.
 function initPageInfo(page, iter) {
-    // const continueButton = document.createElement('button')
-    // const mainContent = document.getElementsByClassName('content')
-    console.log("Initializing page \'" + page + "\'")
 
-    if (localStorage.getItem('_' + page) != "") {
+    if (localStorage.getItem('_' + page) != "") { // alert of special case
         console.log("In special case on page")
     }
     if (localStorage.getItem(page + 'Done') == 'true') {
         if (page == 'class') localStorage.setItem('_classState', '0')
-        conclusion(page)
+        conclusion(page) // Done with this page, debrief the user
     }
 
+    // fetch the guide info for the page, based in the current state of the sequence
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
             const currentPage = data[page]
             switch (Object.keys(currentPage)[iter]) {
                 case "welcome":
-                    console.log("Setting welcome info for " + page)
                     setWelcomeInfo(page) // adds continue button on return
                     break;
                 case "explainer":
-                    console.log("In explainer for " + page)
-                    // test()
                     loadExplainer(page, iter)
                     break;
                 case "questions":
-                    console.log("Setting questions info for " + page)
                     loadQuestion(page)
                     break;
                 default:
                     console.log("No info type found, handling")
                     handleSpecialCase(page)
-
-                // mainContent.appendChild(continueButton)
             }
         })
         .catch(error => {
@@ -701,6 +749,7 @@ function initPageInfo(page, iter) {
         });
 }
 
+// we have a special case on the page, handle this case (currently only actionable event is that subrace is done)
 function handleSpecialCase(page) {
     switch (page) {
         case 'race':
@@ -714,8 +763,7 @@ function handleSpecialCase(page) {
             break;
         case 'class':
             console.log("In class case, state is ", localStorage.getItem('classState'))
-        // loadResponse(page)
-        // setToCurrentClassState(localStorage.getItem('classState'))
+
         default: return
     }
 }
@@ -778,8 +826,6 @@ function loadQuestion(page) {
                 answerButton.onclick = function () {
                     // get the intersection of the returned set and the new set
                     localStorage.setItem('$' + page, answers[ans][0])
-                    // nextQuestion(answers[ans])
-                    // racePrev = localStorage.getItem(page+"State")
                     alterState(page, nextQuestion(answers[ans])); // add one to the state, so we go to the next question
                     for (btn in tempButtonsId) { // delete all buttons, since we are done with this question
                         document.getElementById(tempButtonsId[btn]).remove()
@@ -826,6 +872,7 @@ function loadQuestion(page) {
         });
 }
 
+// Handle the tools for Bard, Druid, Monk and Rogue. All other classes do not require tool proficiencies.
 function handleTools() {
     clss = localStorage.getItem('_class')
     // content = document.getElementById('content')
@@ -847,7 +894,10 @@ function handleTools() {
     }
     else if (clss == 'Monk') {
         // Choose one type of artisan's tools or one musical instrument
+
         explainer.innerText = 'As a Monk, you need to choose one artisan tool OR one musical instrument.'
+
+        // Init both tables with data from the json.
         const instrumentTable = createInstrumentTable('Musical Instruments', instrumentData)
         const artisanTools = createToolsTable('Artisan Tools', artisanToolData)
         musicalInstBtn = document.createElement('button')
@@ -857,8 +907,9 @@ function handleTools() {
         toolDiv.appendChild(artToolsBtn)
         artToolsBtn.innerText = 'Artisan Tools'
 
+        // if user wants to choose a musical instrument
         musicalInstBtn.onclick = function () {
-            try {
+            try { // to remove artisan tools if they already browsed
                 toolDiv.removeChild(artisanTools)
             }
             catch {
@@ -867,8 +918,10 @@ function handleTools() {
 
             toolDiv.appendChild(instrumentTable)
         }
+
+        // the user wants to choose an artisan tool
         artToolsBtn.onclick = function () {
-            try {
+            try { // to remove instruments if they already browsed
                 toolDiv.removeChild(instrumentTable)
             }
             catch {
@@ -882,12 +935,15 @@ function handleTools() {
         // Inform and load Thieve's tools
         explainer.innerText = 'As a Rogue, you are proficient with Thieve\'s tools. These tools give you a better change at opening locks and disarming traps you may encounter.'
     }
+
+    // these cases have been presented, when user is ready, move on to choose skills
     contBtn = newContinueButton(true)
     contBtn.onclick = function () {
         chooseSkills(_class)
     }
 }
 
+// Creates a table with the possible tools
 function createToolsTable(title, toolsList) {
     const table = document.createElement('table');
     table.setAttribute('id', 'langTable');
@@ -898,8 +954,6 @@ function createToolsTable(title, toolsList) {
 
     // Create header row
     const headerRow = table.insertRow();
-    // const toolHeader = headerRow.insertCell();
-    // toolHeader.textContent = 'Tool';
 
     // Create rows for each tool
     toolsList.forEach((tool) => {
@@ -926,6 +980,7 @@ function createToolsTable(title, toolsList) {
     return table;
 }
 
+//Create a table with possible instruments
 function createInstrumentTable(title, instruments) {
     const table = document.createElement('table');
     table.setAttribute('id', 'langTable');
@@ -936,8 +991,6 @@ function createInstrumentTable(title, instruments) {
 
     // Create header row
     const headerRow = table.insertRow();
-    // const instrumentHeader = headerRow.insertCell();
-    // instrumentHeader.textContent = 'Musical Instrument';
 
     // Create rows for each instrument
     instruments.forEach((instrument) => {
@@ -965,7 +1018,7 @@ function createInstrumentTable(title, instruments) {
 }
 
 
-
+// Used in dcecision tree for class, these classes have special information that the user needs to be alerted of, and make choices.
 function classResponseHandler(type) {
     if (type == '->fighter') {
         console.log("Handling fighter case...")
@@ -989,6 +1042,7 @@ function classResponseHandler(type) {
     }
 }
 
+// The cleric class requires a divine domain to be chosen.
 function handleCleric() {
     const divineDomains = [
         "Knowledge",
@@ -1015,14 +1069,16 @@ function handleCleric() {
                     localStorage.setItem("_divineDomain", sBtn.innerText)
                     // Set level one spells for the domain
                     for (const s in spellsGiven) {
-
+                        // load all the spells based in the users divine domain.
                         num = parseInt(s) + 1
                         console.log(num + '   s')
                         localStorage.setItem('_' + (num), spellsGiven[s])
                     }
-                    classDebrief()
+                    classDebrief() // move on
                 }
                 choice.push(sBtn)
+
+                // load helper info for divine domains
                 sBtn.addEventListener('mouseenter', function () {
                     helperInfoDiv = document.getElementById('helperInfo')
                     helperInfoDiv.innerText = dDomain[dom].desc
@@ -1048,6 +1104,8 @@ function handleCleric() {
         });
 }
 
+// Sorcerers must choose their origin. Two options are allowed. Load options, present helper info, 
+// and gather input
 function handleSorcerer() {
     const originsOpts = [
         "Draconic Bloodline",
@@ -1083,6 +1141,7 @@ function handleSorcerer() {
         });
 }
 
+// Warlocks have a patron they are bound to. Help, gather, move on.
 function handleWarlock() {
     const patrons = [
         "The Archfey",
@@ -1119,6 +1178,7 @@ function handleWarlock() {
         });
 }
 
+// Rangers have to choose a prefered enemy. Load help info, gather input, move on.
 function handleRanger() {
     const creatureTypes = [
         "Aberrations",
@@ -1166,6 +1226,7 @@ function handleRanger() {
 
 }
 
+// Fighters have a preferred fighting style. Load options, explain, gather input, move on.
 function handleFighter() {
     fightingStyles = ["Archery", "Defense", "Dueling", "Great Weapon Fighting", "Protection", "Two-Weapon Fighting"]
     choices = []
@@ -1199,6 +1260,7 @@ function handleFighter() {
         });
 }
 
+// Class sequence is done, show their saving throws
 function classDebrief() {
     _class = localStorage.getItem('_class')
     localStorage.setItem('classDone', 'true')
@@ -1220,31 +1282,6 @@ function getWeaponProfs() {
         })
 }
 
-// function createWeaponsTable(columnLabels, data) {
-//     // Create a table element
-//     var table = document.createElement("table");
-
-//     // Create a header row
-//     var headerRow = table.insertRow();
-//     for (var i = 0; i < columnLabels.length; i++) {
-//       var headerCell = headerRow.insertCell(i);
-//       headerCell.textContent = columnLabels[i];
-//     }
-
-//     // Parse and add data rows
-//     for (var j = 0; j < data.length; j++) {
-//       var rowData = data[j].split(',');
-//       var dataRow = table.insertRow();
-
-//       for (var k = 0; k < rowData.length; k++) {
-//         var dataCell = dataRow.insertCell(k);
-//         dataCell.textContent = rowData[k];
-//       }
-//     }
-
-//     // Return the created table
-//     return table;
-//   }
 
 var weaponsChosen = 1
 
@@ -1257,15 +1294,13 @@ function anyWeaponChoice(type, iter, numChoices) {
         .then(data => {
             wpns = data.weapons[type]
             for (let w in wpns) {
-                // console.log(wpns[w] +' Weapons w')
                 const weapon = wpns[w]
                 const wBtn = appendToContent('button', 'smallDiv')
                 wBtn.innerText = wpns[w].name
                 wBtn.onclick = function () {
-                    // addToLocalStorageString('_weapons', wBtn.innerText)
-                    // console.log(wpns[w].name+ " weapon added to local storage.")
+
                     localStorage.setItem('_attSp' + weaponsChosen + 'Name', weapon.name)
-                    // localStorage.setItem('_attSp'+weaponsChosen+'AtkB',weapon.name)
+                    // Notably, attack bonus has not been calculated
                     localStorage.setItem('_attSp' + weaponsChosen + 'Dam', weapon.damage)
 
                     if (++weaponsChosen > numChoices) {
@@ -1280,7 +1315,7 @@ function anyWeaponChoice(type, iter, numChoices) {
         });
 }
 
-
+// Based on the user's chosen class, provide an explaination of their saving throws.
 function showSavingThrows(_class) {
     getWeaponProfs()
     content = clearContentAndGet()
@@ -1306,6 +1341,7 @@ function showSavingThrows(_class) {
                         allDetails
                     )
                 }
+                // Since there are always two saving throws, show them here from a split string
                 st1 = opts[0] + "-save-prof"
                 st2 = opts[1] + "-save-prof"
                 localStorage.setItem("_trueSavingThrows", st1 + "," + st2)
@@ -1315,14 +1351,10 @@ function showSavingThrows(_class) {
                 console.log("Target Not Found for showSavingThrows");
             }
         })
-    // handleTools()
-
-    // contBtn = newContinueButton(true)
-    // contBtn.onclick = function () {
-    //     chooseSkills(_class)
-    // }
 }
 
+
+// User is required to choose additional skills to be proficient in, these options are based on class and provided here.
 function chooseSkills(_class) {
 
     var chosenProfs = []
@@ -1350,6 +1382,7 @@ function chooseSkills(_class) {
                     clicked = 0
                     let isClicked = false;
 
+                    // load helper info when option is hovered over.
                     btn.addEventListener('mouseenter', function () {
                         fetch('/guide.json')
                             .then(response => response.json())
@@ -1404,94 +1437,97 @@ function chooseSkills(_class) {
         })
 }
 
+// Given the json data for a question, access the pointer value of the next question and return that value
 function nextQuestion(previousAnswer) {
     console.log("Previous answer: " + previousAnswer[2])
-    if (previousAnswer[2] == '->more') {
+    if (previousAnswer[2] == '->more') { // handled elsewhere
         console.log("In more case")
-        // TODO: Add more logic here
     }
     return parseInt(previousAnswer[2])
 }
 
-function extractNames(inputString, asSet = false) {
-    if (asSet) {
-        // Initialize a Set to store names
-        const namesSet = new Set();
-        // Split the input string by commas to separate elements
-        const parts = inputString.split(',');
-        for (const part of parts) {
-            // Split each part by a semicolon to separate the name and value
-            const elements = part.split(';');
-            // Check if the part has the required format (name;value)
-            if (elements.length === 2) {
-                const name = elements[0].trim(); // Extract and trim the name
-                namesSet.add(name); // Add the name to the set
-            }
-        }
-        return namesSet; // Return the set of names
-    } else {
-        // Initialize an array to store names
-        const namesArray = [];
-        // Split the input string by commas to separate elements
-        const parts = inputString.split(',');
-        for (const part of parts) {
-            // Split each part by a semicolon to separate the name and value
-            const elements = part.split(';');
-            // Check if the part has the required format (name;value)
-            if (elements.length === 2) {
-                const name = elements[0].trim(); // Extract and trim the name
-                namesArray.push(name); // Add the name to the array
-            }
-        }
-        // Join the names in the array into a comma-separated string
-        const namesString = namesArray.join(', ');
-        return namesString; // Return the string of names
-    }
-}
 
-function combineValues(string1, string2) {
-    const result = new Map();
+// function extractNames(inputString, asSet = false) {
+//     if (asSet) {
+//         // Initialize a Set to store names
+//         const namesSet = new Set();
+//         // Split the input string by commas to separate elements
+//         const parts = inputString.split(',');
+//         for (const part of parts) {
+//             // Split each part by a semicolon to separate the name and value
+//             const elements = part.split(';');
+//             // Check if the part has the required format (name;value)
+//             if (elements.length === 2) {
+//                 const name = elements[0].trim(); // Extract and trim the name
+//                 namesSet.add(name); // Add the name to the set
+//             }
+//         }
+//         return namesSet; // Return the set of names
+//     } else {
+//         // Initialize an array to store names
+//         const namesArray = [];
+//         // Split the input string by commas to separate elements
+//         const parts = inputString.split(',');
+//         for (const part of parts) {
+//             // Split each part by a semicolon to separate the name and value
+//             const elements = part.split(';');
+//             // Check if the part has the required format (name;value)
+//             if (elements.length === 2) {
+//                 const name = elements[0].trim(); // Extract and trim the name
+//                 namesArray.push(name); // Add the name to the array
+//             }
+//         }
+//         // Join the names in the array into a comma-separated string
+//         const namesString = namesArray.join(', ');
+//         return namesString; // Return the string of names
+//     }
+// }
 
-    function parseString(inputString) {
-        const parts = inputString.split(',');
 
-        for (const part of parts) {
-            const elements = part.split(';');
-            if (elements.length === 2) {
-                const name = elements[0];
-                const value = parseInt(elements[1]);
+// Per
+// function combineValues(string1, string2) {
+//     const result = new Map();
 
-                if (!isNaN(value)) {
-                    if (result.has(name)) {
-                        result.set(name, result.get(name) + value);
-                    } else {
-                        result.set(name, value);
-                    }
-                }
-            }
-        }
-    }
+//     function parseString(inputString) {
+//         const parts = inputString.split(',');
 
-    parseString(string1);
-    parseString(string2);
+//         for (const part of parts) {
+//             const elements = part.split(';');
+//             if (elements.length === 2) {
+//                 const name = elements[0];
+//                 const value = parseInt(elements[1]);
 
-    const combinedString = Array.from(result, ([name, value]) => `${name};${value}`).join(',');
-    return combinedString;
-}
+//                 if (!isNaN(value)) {
+//                     if (result.has(name)) {
+//                         result.set(name, result.get(name) + value);
+//                     } else {
+//                         result.set(name, value);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     parseString(string1);
+//     parseString(string2);
+
+//     const combinedString = Array.from(result, ([name, value]) => `${name};${value}`).join(',');
+//     return combinedString;
+// }
 
 // put this in alterstate param. Checks for
 // the next question that actually changes the working set
-function checkAnswerViability(title, currentPage, qNumber) {
-    var nextQ = currentPage.questions['q' + (qNumber + 1)];
-    if (nextQ === undefined) return 1
-    workingSet = localStorage.getItem('$' + title)
-    for (var ans in nextQ.ans) {
-        if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
-            return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
-        }
-    }
-    return 0
-}
+// function checkAnswerViability(title, currentPage, qNumber) {
+//     var nextQ = currentPage.questions['q' + (qNumber + 1)];
+//     if (nextQ === undefined) return 1
+//     workingSet = localStorage.getItem('$' + title)
+//     for (var ans in nextQ.ans) {
+//         if (setFunctions("intersection", workingSet, nextQ.ans[ans][0]).length == 0) {
+//             return 1 + checkAnswerViability(title, currentPage, qNumber + 1)
+//         }
+//     }
+//     return 0
+// }
 
 // Function uses the json data attached to each question, specifically the helpful information.
 // loads it to the right column of the page when the user hovers over the option.
@@ -1576,6 +1612,7 @@ function giveChoices(page) {
         });
 }
 
+// Specific to race choices. Load the given html elements with the given options
 function raceChoices(options, tempButtons, div, page) {
     console.log("In race choices")
     for (const r in options) {
@@ -1596,12 +1633,10 @@ function raceChoices(options, tempButtons, div, page) {
             if (options[r].includes('Dragonborn')) {
                 localStorage.setItem('_subrace', options[r])
                 localStorage.setItem('_race', options[r])
-                // loadLanguages('Dragonborn')
                 loadSpeed('Dragonborn')
             }
             else {
                 localStorage.setItem('_' + page, options[r])
-                // loadLanguages(options[r])
                 loadSpeed(options[r])
             }
 
@@ -1610,19 +1645,17 @@ function raceChoices(options, tempButtons, div, page) {
             }
             if (page == 'race') pickSubrace(options[r])
 
-        }; // set actions for the buttons
-        // button.addEventListener('mouseenter', function () {
+        }; // set actions for the buttons (clear and load new helper info)
         choice.addEventListener('mouseenter', function () {
             clearHelperInfo()
             document.getElementById('helperInfo').appendChild(divCache[r].val)
         })
         tempButtons.push(choice)
         div.appendChild(choice)
-        // TODO: add listeners for mousover and 
     }
 }
 
-
+// Pipe speed into the character sheet from race spreadsheet.
 function loadSpeed(race) {
     console.log("Loading speed for " + race)
     fetch('/guide.json')
@@ -1636,6 +1669,7 @@ function loadSpeed(race) {
         });
 }
 
+// helper function that appends a current a local storage value based on the key (item)
 function appendToCharacterSheet(item, string) {
     i = localStorage.getItem(item)
     if (i == null) {
@@ -1646,10 +1680,9 @@ function appendToCharacterSheet(item, string) {
     localStorage.setItem(item, i)
 }
 
+
+// Load the options for class choices based on json objects. Part of the question sequence.
 function classChoices(options, tempButtons, div, page) {
-    // while (divCache.length > 0) {
-    //     divCache.pop(); // Remove the last element
-    // }
     console.log("In class choices")
     if (options > 0) {
 
@@ -1664,8 +1697,6 @@ function classChoices(options, tempButtons, div, page) {
 
             classD.val = classDescriptionDiv(options[c])
 
-            // classD.val = DiscreptionDiv(options[c])
-
             divCache.push(classD)
             choice.setAttribute('id', 'choiceButton')
             choice.innerText = options[c]
@@ -1676,16 +1707,13 @@ function classChoices(options, tempButtons, div, page) {
                 }
                 // Set the class
                 setClass(options[c]);
-                // conclusion(page);
 
             }; // set actions for the buttons
-            // button.addEventListener('mouseenter', function () {
             choice.addEventListener('mouseenter', function () {
                 clearHelperInfo()
                 document.getElementById('helperInfo').appendChild(divCache[c].val)
             })
             tempButtons.push(choice)
-            // div.appendChild(raceDiscreptionDiv(options[r]))
             div.appendChild(choice)
         }
     } else {
@@ -1694,17 +1722,21 @@ function classChoices(options, tempButtons, div, page) {
     }
 }
 
+// Since class is really class and level, and level is always 1 for the current project iteration,
+// append 1 to the class name.
 function setClass(_class) {
     localStorage.setItem("_classlevel", _class + " 1");
     localStorage.setItem("_class", _class)
 }
 
+// Remove all helper info strings, keep the divs
 function clearHelperInfo() {
     document.getElementById('helperInfo').innerText = ''
     document.getElementById('helperInfo').innerHTML = ''
 
 }
 
+// Remove all main info, keep the html elements
 function clearMainInfo() {
     document.getElementById('title').innerText = ""
     document.getElementById('explainer').innerText = ""
@@ -1714,16 +1746,14 @@ function clearMainInfo() {
 
 }
 
+// Gather API info (string must be lowercase)
 function raceDiscreptionDiv(race) {
     res = races(race.toLowerCase())
-    // children = res.childElements()
-    // for (const child in children) {
-    //     child.
-    // }
     return res
 
 }
 
+// Load the discriptions for class information to the html elements.
 function classDescriptionDiv(_class) {
     const res = document.createElement('div')
     res.setAttribute('id', 'raceDesc' + _class)
@@ -1741,18 +1771,17 @@ function classDescriptionDiv(_class) {
         .catch(error => {
             console.error('Error:', error);
         });
-
-    // res = classes(_class.toLowerCase());
-
     return res
 }
 
+// Race has been chosen, the user must now select a subrace.
+// Dragonborn subrace info is handled elsewhere as a special case.
 function pickSubrace(race) {
     const tempButtonsId = []
     fetch('/guide.json')
         .then(response => response.json())
         .then(data => {
-            // if no subrace is to be chosen.
+            // if no subrace is to be chosen (dragonborn or half-breeds).
             if (data['race'].subRace[race] === undefined) {
                 localStorage.setItem("_race", race)
                 localStorage.setItem('_subRace', race)
@@ -1761,10 +1790,11 @@ function pickSubrace(race) {
                 conclusion("race")
                 return
             }
+
+            // Load subrace info
             setElementsInColumnOne({
                 title: 'Race: ' + race,
                 explanation: 'Now choose your ' + race + '\'s subrace:',
-                // prompt: 'Select your race:',
                 responseTitle: ''
             })
             opts = data['race'].subRace[race]
@@ -1772,11 +1802,9 @@ function pickSubrace(race) {
                 btn = document.createElement('button')
                 btn.setAttribute('id', o)
                 btn.innerText = o
-                btn.onclick = function () {
+                btn.onclick = function () { // choice selected. remove, unload and move on
                     localStorage.setItem('_subRace', o)
                     localStorage.setItem('_race', o)
-
-                    // localStorage.setItem('_race', o)
                     clearMainInfo()
 
                     for (const b in tempButtonsId) {
@@ -1799,12 +1827,15 @@ function pickSubrace(race) {
         });
 }
 
+
+// Debfied user on the conclusion. Let them know their choice has been logged.
 function classConclusion() {
     content = clearContentAndGet()
     classDoneDiv = appendToContent('div')
     classDoneDiv.innerText = 'You have choosen ' + localStorage.getItem('_class') + ' as your class. If you\'d like to reset your class, you\'ll lose all progress after this section and need to do it again.'
 }
 
+// Generic conclusion function for each page. Uses guide.json to add the information we need to display.
 function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
     if (page == 'class') classConclusion()
 
@@ -1829,9 +1860,6 @@ function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
                     resetProgress(page)
                 }
             }
-            // const continueBtn = document.createElement('button')
-            // continueBtn.innerText = "Continue"
-            // document.getElementById('footerButton').innerText = 'Continue'
             continueToNextPage(page, data[page].conclusion.next)
             try {
                 document.getElementById('explainer').innerHTML = raceDiscreptionDiv(localStorage.getItem('_race'))
@@ -1848,6 +1876,7 @@ function conclusion(page, specialCase = false, typeOfSpecialCase = '') {
 
 }
 
+// Link the png profile images for each race.
 function addRaceImage(race) {
     parsedRace = parseForGenericRace(race)
     if (parsedRace !== 'no image') {
@@ -1859,9 +1888,9 @@ function addRaceImage(race) {
     }
 }
 
+// Since races are logged as the subrace (which always has the generic race as a substring), we account for 
+// cases where generic races needs to be handled.
 function parseForGenericRace(race) {
-    // Halfling,Gnome,Dwarf
-    // Elf,Tiefling,Dragonborn,Human,Half-Elf,Half-Orc
     if (race == 'Hill Dwarf') return 'Dwarf'
     if (race == 'Mountain Dwarf') return 'Dwarf'
     if (race == 'Lightfoot Halfling') return 'Halfling'
@@ -1876,6 +1905,7 @@ function parseForGenericRace(race) {
     return race
 }
 
+// Move from one html page to the next, both given as parameters.
 function continueToNextPage(currentPage, nextPage) {
     btn = document.createElement('button')
     btn.setAttribute('id', 'continueBtn')
@@ -1887,6 +1917,9 @@ function continueToNextPage(currentPage, nextPage) {
     document.getElementById('content').appendChild(btn)
 }
 
+// Resets the gathered data. Pages depend on each other, so 
+// If a page is reset, so are all pages after (user is alerted of this behavior)
+// Simply clear localStorage values for the info gained on the current page.
 function resetProgress(current) {
     if (current == 'race') {
         currName = localStorage.getItem('_playername')
@@ -1896,7 +1929,6 @@ function resetProgress(current) {
     } else if (current == 'class') {
         localStorage.setItem('_class', '')
         localStorage.setItem('_classlevel', '')
-        // todo: remove all items required to reset class
         resetProgress('background')
         resetProgress('equipment')
         localStorage.setItem('classState', '0')
@@ -1907,7 +1939,7 @@ function resetProgress(current) {
     }
     else if (current == 'background') {
         console.log("Removing background items...")
-        // ...
+
         localStorage.setItem('backgroundState', '0')
         location.reload()
     }
@@ -1916,10 +1948,7 @@ function resetProgress(current) {
     }
 }
 
-function loadRaceCompletionDiv() {
-
-}
-
+// Set data in the main div (column one)
 function setElementsInColumnOne(requestedElements) {
     // Retrieve the parent div
     const contentDiv = document.getElementById('content');
@@ -1954,43 +1983,40 @@ function setElementsInColumnOne(requestedElements) {
         const responseTitleElement = document.getElementById('responseTitle');
         responseTitleElement.innerText = requestedElements.responseTitle;
     }
-
-    // Additional elements can be set similarly
-
-    // Optionally, you can also add error handling or checks for null values if needed
 }
 
-function getItemsWithHighestValues(inputString) {
-    const pairs = inputString.split(',');
-    let highestValue = -1;
-    let secondHighestValue = -1;
-    let highestValueRaces = [];
-    let secondHighestValueRaces = [];
+// 
+// function getItemsWithHighestValues(inputString) {
+//     const pairs = inputString.split(',');
+//     let highestValue = -1;
+//     let secondHighestValue = -1;
+//     let highestValueRaces = [];
+//     let secondHighestValueRaces = [];
 
-    pairs.forEach(pair => {
-        const [race, value] = pair.split(';');
-        const numericValue = parseInt(value, 10);
+//     pairs.forEach(pair => {
+//         const [race, value] = pair.split(';');
+//         const numericValue = parseInt(value, 10);
 
-        if (numericValue > highestValue) {
-            secondHighestValue = highestValue;
-            secondHighestValueRaces = [...highestValueRaces];
-            highestValue = numericValue;
-            highestValueRaces = [race];
-        } else if (numericValue === highestValue) {
-            highestValueRaces.push(race);
-        } else if (numericValue > secondHighestValue) {
-            secondHighestValue = numericValue;
-            secondHighestValueRaces = [race];
-        } else if (numericValue === secondHighestValue) {
-            secondHighestValueRaces.push(race);
-        }
-    });
+//         if (numericValue > highestValue) {
+//             secondHighestValue = highestValue;
+//             secondHighestValueRaces = [...highestValueRaces];
+//             highestValue = numericValue;
+//             highestValueRaces = [race];
+//         } else if (numericValue === highestValue) {
+//             highestValueRaces.push(race);
+//         } else if (numericValue > secondHighestValue) {
+//             secondHighestValue = numericValue;
+//             secondHighestValueRaces = [race];
+//         } else if (numericValue === secondHighestValue) {
+//             secondHighestValueRaces.push(race);
+//         }
+//     });
 
-    if (highestValueRaces.length === 1) {
-        return [...highestValueRaces, ...secondHighestValueRaces];
-    }
-    return highestValueRaces;
-}
+//     if (highestValueRaces.length === 1) {
+//         return [...highestValueRaces, ...secondHighestValueRaces];
+//     }
+//     return highestValueRaces;
+// }
 
 // Returns a set object based on the working set in localstorage
 // Useful for perfroming set operations.
@@ -2003,6 +2029,7 @@ function currentSet(seeking) {
 
 
 // Returns a new set based on a set operation between two sets
+// Only intersection proved necessary
 function setFunctions(action, setone, settwo) {
     var s1arr = setone.split(',');
 
@@ -2040,10 +2067,13 @@ function alterState(topic, change) {
     localStorage.setItem(storageItem, change)
 }
 
-
+// Function that takes a string, uses the data in texts to highlight (most likely allDetails, gathered
+// from misc in guide.json), and adds html tags to highlight the text and create the mouseover event that provides
+// helper information.
 function highlightTextWithMouseover(inputString, textsToHighlight) {
 
-    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) { //TODO: Account for multiple '**' sequences
+    // A string that contains ** should not ever be highlighted. This check ensures this is the case
+    if (!inputString || !Array.isArray(textsToHighlight) || textsToHighlight.length === 0) {
         if (inputString.includes('**')) {
             const strEl = inputString.split("**")
             const newString = strEl[0] + localStorage.getItem(strEl[1]) + ' ' + strEl[strEl.length - 1]
@@ -2051,7 +2081,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
         }
     }
 
-    const closeTag = '</mark>';
+    const closeTag = '</mark>'; // highlight
 
     let highlightedString = inputString;
     const encounteredTexts = new Set();
@@ -2059,7 +2089,7 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
     const newString = strEl[0] + localStorage.getItem("_") + strEl[strEl.length]
 
     textsToHighlight.forEach(textToHighlight => {
-        const regex = new RegExp(textToHighlight, 'gi');
+        const regex = new RegExp(textToHighlight, 'gi'); // seek to the detail
         highlightedString = highlightedString.replace(regex, match => {
             if (!encounteredTexts.has(match)) {
                 encounteredTexts.add(match);
@@ -2067,12 +2097,14 @@ function highlightTextWithMouseover(inputString, textsToHighlight) {
                 const openTag = '<mark onmouseover="' + mouseoverAction + '">';
                 return openTag + match + closeTag;
             }
-            return match; // Return the match without highlighting if it's encountered again
+            return match; // Return the match without highlighting if it's encountered again. We don't need to highlight 
+            // the same word on the same page more than once.
         });
     });
     return highlightedString;
 }
 
+// Function used in highlighttextwithmouseover. Loads the helper info (accessed in html always)
 function loadHelperInfoFromMisc(text) {
     fetch('../guide.json')
         .then(response => response.json())
@@ -2084,20 +2116,21 @@ function loadHelperInfoFromMisc(text) {
             console.error('Error:', error);
         });
 
-
+    // set the text
     document.getElementById('helperInfo').innerText = text
 }
 
+
+// initialize the background case based on the current state. 
 function beginBackground(specialCaseHandled = false) {
 
-    console.log("BEGINNING BACKGROUnd, class is: " + localStorage.getItem('_class'))
     if (localStorage.getItem('_class') == 'Cleric' && !specialCaseHandled) {
         initClericDieties()
     } else {
         var state = localStorage.getItem("backgroundState")
         var sInt = parseInt(state)
         console.log("BG state: " + sInt)
-        if (state != null || sInt == 1) {
+        if (state != null || sInt == 1) { // check the state, so user can leave and come back to same page.
             if (sInt == 0) chooseAlignment()
             // if (sInt == 1) chooseLanguages()
             if (sInt == 2) backgroundQuestions()
@@ -2111,43 +2144,21 @@ function beginBackground(specialCaseHandled = false) {
             if (sInt == 10) askForBackgroundReset()
         }
         else {
-            loadBackgroundExplainer()
+            loadBackgroundExplainer() // default, begin the background sequence
         }
     }
 
 }
 
 
-
+// Backgrounds have special characteristics, found in the background csv. Access, load the info,
+// and wait for the user to continue.
 function otherBackgroundTraits() {
-    console.log('in other backgorund traits')
     content = clearContentAndGet()
     explainer = appendToContent('div')
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Other Background/Trait')
         .then(dataCSV => {
             if (dataCSV !== null) {
-                // // caseOf = 
-                // content = clearContentAndGet()
-                // console.log("Case is: " + data)
-                // switch (data) {
-                //     case 'Favorite Schemes':
-                //         break;
-                //     case 'Criminal Specialty':
-                //         break;
-                //     case 'Entertainer Routines':
-                //         break;
-                //     case 'Defining Event':
-                //         break;
-                //     case 'Guild Business':
-                //         break;
-                //     case 'Life of Seclusion':
-                //         break;
-                //     case 'Origin':
-                //         break;
-                //     case 'Specialty':
-                //         break;
-
-                // }
 
                 console.log('datacsv: ' + dataCSV)
                 fetch('/guide.json')
@@ -2193,6 +2204,8 @@ function otherBackgroundTraits() {
         })
 }
 
+// If the background has been comleted, and the user returns to this tab,
+// ask if they would like to reset the background progress.
 function askForBackgroundReset() {
     content = clearContentAndGet()
     ask = appendToContent('div')
@@ -2204,6 +2217,7 @@ function askForBackgroundReset() {
     }
 }
 
+// The background csv holds the two proficiency bonuses each background has. Access, alert user, load to localStorage.
 function setBackgroundProfs() {
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Skill Proficiencies')
         .then(data => {
@@ -2217,6 +2231,7 @@ function setBackgroundProfs() {
         })
 }
 
+// Explain what a background is. Clear content and reset with relevant information
 function loadBackgroundExplainer() {
     content = clearContentAndGet()
     title = appendToContent('h2')
@@ -2232,25 +2247,7 @@ function loadBackgroundExplainer() {
     }
 }
 
-// Before we give the generic backround sequence, we need to handle special cases
-// function checkForSpecialBackgroundCase() {
-//     const cl = localStorage.getItem("_class")
-//     // cleric case - dieties are tied to alignment
-//     if (cl == "Cleric") {
-//         console.log("Cleric background special case. Handling...")
-//         initClericDieties();
-//     }
-//     else if (cl == 'Warlock') {
-//         console.log("Warlock background special case. Handling...")
-//         warlockDetails()
-//     }
-
-//     else {
-//         beginBackground(true)
-//     }
-
-// }
-
+// Yet another special case. Warlocks have a patron they must choose. Alert the user.
 function warlockDetails() {
     content = clearContentAndGet()
     wlDetailDiv = appendToContent('div', 'standardDiv')
@@ -2260,23 +2257,27 @@ function warlockDetails() {
 
 }
 
-function getRealms() {
-    var filePath = '../misc/clericDieties.csv';
-    fetch(filePath)
-        .then(response => response.text())
-        .then(csvText => {
-            Papa.parse(csvText, {
-                header: true,
-                complete: function (results) {
-                    const categoryIndex = results.meta.fields.indexOf('Category');
-                    const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
-                    const uniqueCategories = Array.from(new Set(categories));
-                    console.log(uniqueCategories);
-                }
-            });
-        });
-}
+// Clerics have limited aligmnent choices based on the realm their campaing takes place in. 
+// Access the realm options
+// function getRealms() {
+//     var filePath = '../misc/clericDieties.csv';
+//     fetch(filePath)
+//         .then(response => response.text())
+//         .then(csvText => {
+//             Papa.parse(csvText, {
+//                 header: true,
+//                 complete: function (results) {
+//                     const categoryIndex = results.meta.fields.indexOf('Category');
+//                     const categories = results.data.map(row => row[results.meta.fields[categoryIndex]]);
+//                     const uniqueCategories = Array.from(new Set(categories));
+//                 }
+//             });
+//         });
+// }
 
+
+// Races have special features that need to be loaded onto the character sheet. 
+// This function access the csv column and returns the data found.
 function parseRaceFeatures(race, column) {
     var filePath = '../misc/raceFeatures.csv';
     return fetch(filePath)
@@ -2298,18 +2299,15 @@ function parseRaceFeatures(race, column) {
         });
 }
 
-// // Example usage:
-// parseRaceFeatures('Elf', 'Ability Score Increase (Race)')
-//     .then(value => {
-//         console.log(value);
-//     });
 
 
 
 
-
-
+// Clerics have dieties they must choose to follow. This is explained, options are given, and
+// input is recorded. If the user knows the realm their campaign takes place in, they choose it
+// and thus their alignment options are limited.
 function initClericDieties() {
+
     // main div
     const contentDiv = document.getElementById('content')
     clearDiv(contentDiv);
@@ -2339,6 +2337,8 @@ function initClericDieties() {
 
 }
 
+// Present realm options to the user as buttons. If a realm is selected, limit their alignment choices based on the 
+// csv data.
 function chooseRealm() {
     content = document.getElementById('content');
     clearDiv(content);
@@ -2372,8 +2372,8 @@ function chooseRealm() {
         });
 }
 
+// Function takes in a realm and uses limitAlignmentHelper to store possible alignments in local storage.
 function limitAlighment(realm) {
-    // console.log(realm)
     var filePath = '../misc/clericDieties.csv';
     fetch(filePath)
         .then(response => response.text())
@@ -2404,7 +2404,6 @@ function limitAlighment(realm) {
 }
 
 // compare alignments together, store the 'illegal' options in localstorage under
-// 
 function limitAlighmentHelper(options) {
     var possibleAlignments = []
 
@@ -2423,6 +2422,8 @@ function limitAlighmentHelper(options) {
     chooseAlignmentLimited(lsValue)
 }
 
+// only used in the case where a cleric is chosen. Limited alignment options may occur, thus 
+// their choices are given as a different sequence.
 function chooseAlignmentLimited(aligns) {
     console.log(localStorage.getItem("possibleAlignments"))
     content = clearContentAndGet()
@@ -2440,6 +2441,9 @@ function chooseAlignmentLimited(aligns) {
     }
 }
 
+// Since alignment names were stored as abbreviations, I'd rather make a function
+// that turns the abbreviations into the full aligmnent name. Also accounts for Neutral Neutral conversion
+// to True Neutral
 function getFullAlighnmentName(AlignAcronymObject) {
     var al1
     var al2
@@ -2456,8 +2460,7 @@ function getFullAlighnmentName(AlignAcronymObject) {
     else return result
 }
 
-// </p><div class=\"container\"><button name=\"_alignment\"  value=\"Lawful Good\" onclick=\"character.setAlignment(value)\">Lawful Good</button><button name=\"_alignment\" value=\"Neutral Good\" onclick=\"character.setAlignment(value)\">Neutral Good</button><button name=\"_alignment\" value=\"Chaotic Good\" onclick=\"character.setAlignment(value)\">Chaotic Good</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Neutral\" onclick=\"character.setAlignment(value)\">Lawful Neutral</button><button name=\"_alignment\" value=\"True Neutral\" onclick=\"character.setAlignment(value)\">True Neutral</button><button name=\"_alignment\" value=\"Chaotic Neutral\" onclick=\"character.setAlignment(value)\">Chaotic Neutral</button></div><div class=\"container\"><button name=\"_alignment\" value=\"Lawful Evil\" onclick=\"character.setAlignment(value)\">Lawful Evil</button><button name=\"_alignment\" value=\"Neutral Evil\" onclick=\"character.setAlignment(value)\">Neutral Evil</button><button name=\"_alignment\" value=\"Chaotic Evil\" onclick=\"character.setAlignment(value)\">Chaotic Evil</button></div>"
-
+// Normal case (not cleric). Begin the question sequence that helps the user pick their aligmnent. 
 function chooseAlignment() {
     content = document.getElementById("content")
     clearDiv(content)
@@ -2484,45 +2487,9 @@ function chooseAlignment() {
         .catch(error => {
             console.error('Error:', error);
         });
-
-
-    // get all children from content
-    // children = content.children
-    // allowedAlignments = localStorage.getItem("possibleAlignments").split(',')
-    // // console.log("Allowed align: " + allowedAlignments)
-    // for (let i = 0; i < children.length; i++) {
-    //     const child = children[i];
-    //     const childsChild = child.children
-    //     for (let j = 0; j < childsChild.length; j++) {
-    //         const cc = childsChild[j]
-    //         // console.log("cval: " + cc.innerText)
-    //         // Do something with each child element
-    //         if (!allowedAlignments.includes(cc.value)) {
-    //             // console.log("Grey out: " + child.innerText)
-    //             cc.setAttribute('id', 'greyOut')
-    //         }
-    //         else cc.setAttribute('id', '')
-
-    //         cc.onclick = function () {
-    //             localStorage.setItem("_alignment", cc.innerText)
-    //             if (localStorage.getItem("_class") == "Cleric") {
-    //                 chooseDiety(localStorage.getItem("_alignment"))
-    //                     .then(chosenDeity => {
-
-    //                         console.log("Chosen Deity:", chosenDeity);
-    //                         localStorage.setItem("_diety", chosenDeity)
-    //                         addDietyInfo(chosenDeity)
-    //                     })
-    //                     .catch(error => {
-    //                         console.error("Error:", error);
-    //                     });
-    //             }
-    //             // dietyDebrief()
-    //         }
-    //     }
-    // }
 }
 
+// The second part of the alignment axis.
 function alignQuestion2(data) {
     content = clearContentAndGet()
     var quest2 = data.background.questionsAlign.q2
@@ -2547,6 +2514,7 @@ function alignQuestion2(data) {
     }
 }
 
+// Alignment chosen. Present their result and move on with a click.
 function alignDebrief() {
     content = clearContentAndGet()
     appendToContent('div', 'standardDiv').innerHTML = highlightTextWithMouseover("Your character's alignment is " + localStorage.getItem('_alignment') + ".", allDetails)
@@ -2560,86 +2528,94 @@ function alignDebrief() {
 
 }
 
-function chooseDiety(alignment) {
-    alignchars = alignment.split(" ")
-    var alignKey = []
-    alignKey.push(alignchars[0].charAt(0))
-    if (alignKey[0] == 'T') alignKey[0] = 'N'
-    alignKey.push(alignchars[1].charAt(0))
-    var filePath = '../misc/clericDieties.csv';
 
-    return new Promise((resolve, reject) => {
-        fetch(filePath)
-            .then(response => response.text())
-            .then(csvText => {
-                Papa.parse(csvText, {
-                    header: true,
-                    complete: function (results) {
-                        const data = results.data;
 
-                        // Replace 'YourCategory' with the desired category
-                        // const desiredCategory = 'YourCategory';
-
-                        // Filter data for the desired category
-                        const categoryData = data.filter(row => row['Category'] === localStorage.getItem("realm"));
-
-                        // Find all deities that match the conditions
-                        const matchingDeities = categoryData
-                            .filter(row => row['Order'] === alignKey[0] && row['Morality'] === alignKey[1])
-                            .map(row => row['Deity']);
-
-                        // Resolve with the array of deities if found, otherwise, reject
-                        if (matchingDeities.length > 0) {
-                            resolve(matchingDeities);
-                        } else {
-                            reject("No deities found for the specified alignment.");
-                        }
-                    }
-                });
-            })
-            .catch(error => reject('Error fetching the CSV file: ' + error));
-    });
+// Call roll for abilities. Accessed from html pages
+function initRolling() {
+    rollForAbilities()
 }
 
-function addDietyInfo(listOfDieties) {
-    content = clearContentAndGet()
+// function chooseDiety(alignment) {
+//     alignchars = alignment.split(" ")
+//     var alignKey = []
+//     alignKey.push(alignchars[0].charAt(0))
+//     if (alignKey[0] == 'T') alignKey[0] = 'N'
+//     alignKey.push(alignchars[1].charAt(0))
+//     var filePath = '../misc/clericDieties.csv';
+
+//     return new Promise((resolve, reject) => {
+//         fetch(filePath)
+//             .then(response => response.text())
+//             .then(csvText => {
+//                 Papa.parse(csvText, {
+//                     header: true,
+//                     complete: function (results) {
+//                         const data = results.data;
+
+//                         // Replace 'YourCategory' with the desired category
+//                         // const desiredCategory = 'YourCategory';
+
+//                         // Filter data for the desired category
+//                         const categoryData = data.filter(row => row['Category'] === localStorage.getItem("realm"));
+
+//                         // Find all deities that match the conditions
+//                         const matchingDeities = categoryData
+//                             .filter(row => row['Order'] === alignKey[0] && row['Morality'] === alignKey[1])
+//                             .map(row => row['Deity']);
+
+//                         // Resolve with the array of deities if found, otherwise, reject
+//                         if (matchingDeities.length > 0) {
+//                             resolve(matchingDeities);
+//                         } else {
+//                             reject("No deities found for the specified alignment.");
+//                         }
+//                     }
+//                 });
+//             })
+//             .catch(error => reject('Error fetching the CSV file: ' + error));
+//     });
+// }
+
+// function addDietyInfo(listOfDieties) {
+//     content = clearContentAndGet()
 
 
-    if (listOfDieties.length == 1) {
-        d = appendToContent('div', "standardDiv")
-        d.innerHTML = highlightTextWithMouseover("You have been assigned " + listOfDieties[0] + ".", allDetails)
-        // content.appendChild(d)
-        localStorage.setItem("_diety", listOfDieties[0])
-    }
-    else {
-        var explain = appendToContent('div', 'standardDiv')
-        possibleDietiesDiv = appendToContent('div', 'standardDiv')
-        explain.innerHTML = highlightTextWithMouseover("Choose a Diety to worship:\n", allDetails)
-        for (const d in listOfDieties) {
-            const diety = listOfDieties[d]
-            const dietyInfo = document.createElement('button')
-            dietyInfo.setAttribute('id', 'standardDiv')
-            dietyInfo.innerHTML = highlightTextWithMouseover(
-                listOfDieties[d],
-                allDetails)
-            possibleDietiesDiv.appendChild(dietyInfo)
-        }
-    }
-    cBtn = newContinueButton(true)
-    cBtn.onclick = function () {
-        console.log("TBT button action in function addDietyInfo")
-        pickJob()
-    }
-}
+//     if (listOfDieties.length == 1) {
+//         d = appendToContent('div', "standardDiv")
+//         d.innerHTML = highlightTextWithMouseover("You have been assigned " + listOfDieties[0] + ".", allDetails)
+//         // content.appendChild(d)
+//         localStorage.setItem("_diety", listOfDieties[0])
+//     }
+//     else {
+//         var explain = appendToContent('div', 'standardDiv')
+//         possibleDietiesDiv = appendToContent('div', 'standardDiv')
+//         explain.innerHTML = highlightTextWithMouseover("Choose a Diety to worship:\n", allDetails)
+//         for (const d in listOfDieties) {
+//             const diety = listOfDieties[d]
+//             const dietyInfo = document.createElement('button')
+//             dietyInfo.setAttribute('id', 'standardDiv')
+//             dietyInfo.innerHTML = highlightTextWithMouseover(
+//                 listOfDieties[d],
+//                 allDetails)
+//             possibleDietiesDiv.appendChild(dietyInfo)
+//         }
+//     }
+//     cBtn = newContinueButton(true)
+//     cBtn.onclick = function () {
+//         console.log("TBT button action in function addDietyInfo")
+//         pickJob()
+//     }
+// }
 
-function dietyDebrief() {
-    content = clearContentAndGet()
-    dietyOutro = appendToContent('div', 'standardDiv')
-    dietyOutro.innerHTML = highlightTextWithMouseover('Your cleric worships ' + localStorage.getItem("_diety"), allDetails)
-}
+// function dietyDebrief() {
+//     content = clearContentAndGet()
+//     dietyOutro = appendToContent('div', 'standardDiv')
+//     dietyOutro.innerHTML = highlightTextWithMouseover('Your cleric worships ' + localStorage.getItem("_diety"), allDetails)
+// }
 
 
-// TODO: For humans we need to get region
+// Access suggested names and put them in a table. Present a textfield for the user to
+// enter their name. On click continue to next part of background sequence (proficiencies)
 function characterName() {
     setGold()
     content = clearContentAndGet()
@@ -2674,6 +2650,7 @@ function characterName() {
         });
 }
 
+// Load pros into local storage, so they can be flagged on the character sheet.
 function determineProfs() {
     fromClass = localStorage.getItem('_profFromClass').split(',')
     fromBackground = localStorage.getItem('_profFromBackground').split(',')
@@ -2685,6 +2662,7 @@ function determineProfs() {
 
 }
 
+// Get the union of two arrays
 function arrayUnion(arr1, arr2) {
     // Use Set to eliminate duplicates
     const set = new Set([...arr1, ...arr2]);
@@ -2693,7 +2671,7 @@ function arrayUnion(arr1, arr2) {
     return [...set];
 }
 
-
+// Create the tabel html element that suggest names for the user based on their race.
 function createNameTable(race, maleValues, femaleValues) {
     // Create a table element
     const table = document.createElement('table');
@@ -2730,20 +2708,14 @@ function createNameTable(race, maleValues, femaleValues) {
     return table
 }
 
+// Load the current iteration of the background question.
 function backgroundQuestions(questionNum = 1) {
-    console.log("In bgq")
     content = clearContentAndGet()
-    if (questionNum == 1) {
+    if (questionNum == 1) { // inital case, explain the sequence
         explainer = appendToContent('div', 'standardDiv')
         explainer.innerHTML = "Every character's story begins with a background that shapes their identity and journey. Whether a knight, soldier, sage, or artisan, your character's past provides essential clues about their origin and motivations. Delving into your background prompts crucial questions about change, the transition to adventuring, the source of your initial funds, skill acquisition, and what distinguishes you within your shared background."
-
-        // explainer2 = appendToContent('div','standardDiv')
-        // explainer2.innerHTML = highlightTextWithMouseover(
-        //     "",
-        //     allDetails
-        // )
     }
-    fetch('/guide.json')
+    fetch('/guide.json') // load the question.
         .then(response => response.json())
         .then(data => {
             var quest = data.background.questions['q' + questionNum.toString()]
@@ -2752,7 +2724,7 @@ function backgroundQuestions(questionNum = 1) {
             for (const ans in quest.ans) {
                 const btn = appendToContent('button')
                 btn.innerText = ans
-                btn.onclick = function () {
+                btn.onclick = function () { // if answer is selected, move to the question the answer point to
                     console.log(quest.ans[ans][2])
                     if (quest.ans[ans][2].charAt(0) == '-') {
                         clearContentAndGet()
@@ -2770,15 +2742,15 @@ function backgroundQuestions(questionNum = 1) {
         });
 } // backgroundQuestions
 
+// Get the pointer to the next question.
 function pickBackgroundFromQuestions(optionsAsString) {
     possibleChoices = optionsAsString.split(',')
     for (const choice in possibleChoices) {
-        // console.log("Choice: "+possibleChoices[choice])
-        // console.log(possibleChoices[choice].toLowerCase())
         loadAllBackgroundInfo(possibleChoices[choice])
     }
 }
 
+// Based on the choice the user chooses, load the information explaining the choice to the page.
 function loadAllBackgroundInfo(choice) {
     // var bgData
     fetch('/guide.json')
@@ -2790,7 +2762,6 @@ function loadAllBackgroundInfo(choice) {
             title.innerText = choice
             bgDiv.appendChild(title)
             const bgData = data[choice]
-            // console.log("bgDATA: " + bgData)
             for (el in bgData) {
                 console.log(el)
                 const label = document.createElement('h3')
@@ -2820,7 +2791,7 @@ function loadAllBackgroundInfo(choice) {
             }
             select = document.createElement('button')
             select.innerText = "Select " + choice
-            select.onclick = function () {
+            select.onclick = function () { // Seet the choice into local storage and move on to personality
                 localStorage.setItem("_background", choice)
                 localStorage.setItem('backgroundState', '3')
                 setBackgroundProfs()
@@ -2842,10 +2813,9 @@ function loadAllBackgroundInfo(choice) {
         .catch(error => {
             console.error('Error:', error);
         });
-
-    // "_otherproficiencieslanguages"
 }
 
+// Using json data, load the ideal for each background for the user to select.
 function chooseIdeals() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -2887,6 +2857,7 @@ function chooseIdeals() {
         });
 }
 
+// Using json data, load the bond options for each background for the user to select.
 function chooseBonds() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -2929,6 +2900,8 @@ function chooseBonds() {
         });
 }
 
+// Create and retunr a div that hold the table of possible languages the user can choose. Omit languages
+// the character should already know.
 function createLanguageTables(omit) {
     // Create the main div
     const mainDiv = document.createElement('div');
@@ -2941,9 +2914,6 @@ function createLanguageTables(omit) {
             const standardTable = createTable('Languages', data.standardLanguages, omit);
             mainDiv.appendChild(standardTable);
 
-            // Create a table for exotic languages
-            // const exoticTable = createTable('Exotic Languages', data.exoticLanguages);
-            // mainDiv.appendChild(exoticTable);
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
@@ -2952,10 +2922,8 @@ function createLanguageTables(omit) {
     return mainDiv;
 }
 
-// Rest of the code remains the same...
 
-
-// Helper function to create a table
+// Helper function to create a language table with a title, options and languages to avoid inserting.
 function createTable(title, languages, omit) {
     const table = document.createElement('table');
     table.setAttribute('id', 'langTable')
@@ -3029,12 +2997,7 @@ function createTable(title, languages, omit) {
     return table;
 }
 
-
-// Example usage: Append the created div to the body
-//   document.body.appendChild(createLanguageTables());
-
-
-
+// Using json data, load the flaw for each background for the user to select.
 function chooseFlaws() {
     content = clearContentAndGet()
     bkgnd = localStorage.getItem('_background')
@@ -3076,6 +3039,9 @@ function chooseFlaws() {
             console.error('Error:', error);
         });
 }
+
+// User chooses two personality traits to load onto the character sheet.
+// Choices from the handbook are given, but a custom personality trait can be given instead.
 var numberOfPersonalityTraits = 0
 var personalityTraits = ''
 var chosenTraitsArr = []
@@ -3097,13 +3063,8 @@ function choosePersonality() {
                 btn.addEventListener('click', function () {
                     // Toggle the 'clicked' class when the button is clicked
                     clicked = !clicked
-                    // if less that two picked
-                    // toggle color
-                    // if not clicked, clear trait from arr[numOfStraits]
-                    // if clicked, load trait arr[num]
 
                     // if two chosen, load them and move on
-
                     if (numberOfPersonalityTraits < 2) {
                         this.classList.toggle('clicked');
                         if (clicked) {
@@ -3126,6 +3087,8 @@ function choosePersonality() {
                 btn.innerText = allPT[id]
                 optDiv.appendChild(btn)
             }
+
+            // Load the instructions
             content.appendChild(optDiv)
             inp = document.createElement('input')
             inpDiv = appendToContent('div', 'standardDiv')
@@ -3147,6 +3110,7 @@ function choosePersonality() {
         });
 }
 
+// Choose the languages from the table, based on race and background.
 function chooseLanguages() {
     // set extra languages to 0
     localStorage.setItem('extraLangs', '0')
@@ -3200,11 +3164,9 @@ function chooseLanguages() {
                 console.log("Target Not Found for chooseLanguages: " + localStorage.getItem('_subRace'));
             }
         })
-
-    // console.log('currLang '+ currentLang)
-
 }
 
+// Find the allowed amount of languages by accessing the background csv.
 async function getNumLanguagesFromBackground() {
     try {
         const data = await getFromCSV('background.csv', localStorage.getItem('_background'), 'Languages');
@@ -3219,12 +3181,7 @@ async function getNumLanguagesFromBackground() {
     }
 }
 
-
-
-function initRolling() {
-    rollForAbilities()
-}
-
+// Roll for abilities. Explain what abilities are and give details for each one. Present standard Array and die roll options.
 function rollForAbilities() {
     console.log('here')
 
@@ -3260,7 +3217,7 @@ function rollForAbilities() {
 
 }
 
-
+// Using the button linked to 
 function rollTheDice(abil) {
     localStorage.setItem('currentRoll', abil)
     localStorage.setItem('nextRoll', 'false')
@@ -3272,7 +3229,6 @@ function rollTheDice(abil) {
     explainer.innerHTML = '<h2>' + abilTitle.charAt(0).toUpperCase() + abilTitle.slice(1) + '</h2>'
 
     content.insertBefore(explainer, document.getElementById('rolling'))
-    // if (localStorage.getItem('nextRoll') == 'true') {
     nextBtn = document.createElement('button')
     nextBtn.setAttribute('id', 'nextButton')
     nextBtn.style.display = 'none'
@@ -3298,28 +3254,6 @@ function rollTheDice(abil) {
         }
         // rollTheDice(getNextRoll(abil))
     }
-    // }
-    // canvas = document.createElement('canvas')
-    // canvas.setAttribute('id', 'canvas')
-    // content.appendChild(canvas)
-
-    // uiControls = document.createElement('div')
-    // uiControls.setAttribute('id', 'ui-controls')
-
-    // score = document.createElement('div')
-    // score.class = 'score'
-    // score.innerHTML = 'Score: <span id="score-result"></span>'
-    // uiControls.appendChild(score)
-
-    // rollBtn = document.createElement('button')
-    // rollBtn.innerText = "Throw Dice"
-    // uiControls.appendChild(rollBtn)
-
-    // content.appendChild(uiControls)
-
-    // beginBtn = document.createElement('div')
-    // beginBtn.innerHTML = '<button onclick="initScene()">WORK!</button>'
-    // content.appendChild(beginBtn)
 
 }
 
@@ -3374,6 +3308,8 @@ function getNextRoll(currentScore) {
 vals = [8, 10, 12, 13, 14, 15]
 assignedAbils = []
 
+
+// helper function that gets the data from the given csv file name and column.
 function getFromCSV(fileName, target, column) {
     return fetch('../misc/' + fileName)
         .then(response => response.text())
@@ -3394,7 +3330,7 @@ function getFromCSV(fileName, target, column) {
         });
 }
 
-
+// init the stardard array sequence
 function standardArray() {
     if (assignedAbils.length == 6) {
         content = clearContentAndGet()
@@ -3402,10 +3338,9 @@ function standardArray() {
             content.innerText = 'If you are happy with your scores, your character sheet is now complete.'
         contBtn = document.createElement('button')
         contBtn.innerText = 'Continue'
-        contBtn.onclick = function () {
+        contBtn.onclick = function () { // we are totally done
             calculateValsFromAbilityScores()
             fullDebrief()
-            // window.location.href = '../html/charactersheet.html'
         }
         content.appendChild(contBtn)
     }
@@ -3480,6 +3415,7 @@ function standardArray() {
     content.appendChild(resetBtn)
 }
 
+// All done, explain the process and present the character sheet button.
 function fullDebrief() {
     content = clearContentAndGet()
     main = appendToContent('div', 'standardDiv')
@@ -3488,6 +3424,7 @@ function fullDebrief() {
     charSheetViewDiv.innerHTML = "<button onclick=\"window.location.href = 'charsheet.html';\">Character Sheet</button>"
 }
 
+// flag ability scores and increase based on the given abilities.
 function appendAbilityValues(divAbil, vals, abil) {
     for (i = 0; i < vals.length; i++) {
         const toAppend = document.createElement('button')
@@ -3495,21 +3432,19 @@ function appendAbilityValues(divAbil, vals, abil) {
         toAppend.innerText = vals[i]
         divAbil.appendChild(toAppend)
         toAppend.onclick = function () {
-            // divAbil.innerHTML = ''
             assignedAbils.push(abil)
             localStorage.setItem('_' + abil.toLowerCase(), toAppend.innerText)
             vals = removeValue(vals, parseInt(toAppend.innerText));
-            // console.log('valsn ow: ' +vals)
             standardArray()
-
         }
     }
 }
 
-function flagProficiencies() {
-    getFromCSV('')
-}
+// function flagProficiencies() {
+//     getFromCSV('')
+// }
 
+// based on race csv, get the proficiency bonuses from that column and flag them on the character sheet.
 function applyProficiencies() {
     var filePath = '../misc/raceFeatures.csv';
     fetch(filePath)
@@ -3527,6 +3462,8 @@ function applyProficiencies() {
         });
 }
 
+// Calculate the values of ability score modifiers: flr((score-10)/2)
+// Also set passive wisdom as the dependencies for that are calculated here as well.
 function calculateValsFromAbilityScores(humanHandled = false) {
     localStorage.setItem(
         '_armorClass',
@@ -3570,8 +3507,7 @@ function calculateValsFromAbilityScores(humanHandled = false) {
 
 
     // Dependant stats
-
-    // TODO: if proficient in perception add that score to this stat
+    
     localStorage.setItem(
         '_passiveWisdom',
         parseInt(localStorage.getItem('_wisdomMod')) + 10
@@ -3579,6 +3515,7 @@ function calculateValsFromAbilityScores(humanHandled = false) {
 
 }
 
+// From the race csv, seek ability scores that need to be increased and increase them.
 function applyRaceBenifits() {
     plRace = localStorage.getItem('_race')
     plSubRace = localStorage.getItem('_subRace')
@@ -3603,6 +3540,7 @@ function applyRaceBenifits() {
 
     })
 
+    // From the race features, add the values in the csv to local storage.
     parseRaceFeatures(plSubRace, 'Ability Score Increase (Subrace)').then(value => {
         console.log("subrace val: " + value)
         splitVal = value.split(' ')
@@ -3612,6 +3550,7 @@ function applyRaceBenifits() {
         localStorage.setItem('_' + splitVal[0].toLowerCase(), currentInt)
     })
 
+    // 
     parseRaceFeatures(plRace, 'Traits (Race)').then(value => {
         localStorage.setItem('_featuresandtraits', value)
     })
@@ -3644,10 +3583,9 @@ function applyRaceBenifits() {
         .catch(error => console.error('Error: ', error));
     // calculateSkills() 
     calculateMaxHP()
-
-
 }
 
+// Max hp is found in the class csv, load and move on.
 function calculateMaxHP() {
     getFromCSV('classFeatures.csv', localStorage.getItem('_class'), 'Hit Points')
         .then(data => {
@@ -3662,6 +3600,7 @@ function calculateMaxHP() {
         })
 }
 
+// Half elfs get to choose two more ability scores to increase. Handle here.
 function handleHalfElfAbilityScores() {
     q = 'As a Half-Elf, you get to choose two more ability scores to increase by 1.'
     ansBtns = []
@@ -3711,6 +3650,7 @@ function basicQuestionAnswer(question, answers, explainer = '', clear = true) {
     }
 }
 
+// gold amount is a sbustring in background csv. Seek and load to local storage.
 function setGold() {
     getFromCSV('background.csv', localStorage.getItem('_background'), 'Equipment')
         .then(data => {
@@ -3725,6 +3665,7 @@ function setGold() {
         })
 }
 
+// add a value to a current value in local storage.
 function addToLocalStorageInt(key, value) {
 
     if (localStorage.getItem(key) == 'NaN') {
@@ -3742,6 +3683,7 @@ function addToLocalStorageInt(key, value) {
     }
 }
 
+// append a string to a current string in local storage.
 function addToLocalStorageString(key, value) {
     try {
         currVal = localStorage.getItem(key)
@@ -3757,6 +3699,7 @@ function addToLocalStorageString(key, value) {
     }
 }
 
+// modifiers are calculated here.
 function updateModifiers() {
     const abilityScores = ['strength', 'dex', 'constitution', 'intellegence', 'wisdom', 'charisma'];
 
@@ -3774,7 +3717,7 @@ function updateModifiers() {
     });
 }
 
-
+// Remove the value from an array.
 function removeValue(arr, valueToRemove) {
     const index = arr.indexOf(valueToRemove);
     if (index !== -1) {
@@ -3782,7 +3725,7 @@ function removeValue(arr, valueToRemove) {
     }
 }
 
-
+// Set local storage values if they are a part of the race/class choice.
 function updateSkillLocalStorageValues() {
     const skills = [
         'Acrobatics', 'Animalhandling', 'Arcana', 'Athletics',
@@ -3801,7 +3744,6 @@ function updateSkillLocalStorageValues() {
         const abilityScoreValue = localStorage.getItem(abilityScoreKey);
 
         // Set the value in localStorage for the skill
-        console.log("ABSCORE VAL:" + abilityScoreValue)
         localStorage.setItem(skillKey, abilityScoreValue);
     });
 }
@@ -3835,7 +3777,7 @@ function getRelevantAbilityScore(skill) {
     return skillToAbilityScore[skill] || 'Unknown';
 }
 
-
+// clear the content div (its on all pages) and return it.
 function clearContentAndGet() {
     const contentDiv = document.getElementById('content');
 
@@ -3854,6 +3796,7 @@ function clearContentAndGet() {
     return contentDiv;
 }
 
+// hide or show the rolling info.
 function toggleRollDisplay() {
     rolling = document.getElementById('rolling')
     console.log('rolling info: ' + rolling.style.display)
@@ -3866,6 +3809,7 @@ function toggleRollDisplay() {
     }
 }
 
+// seek content div and add a new html elemnt to it.
 function appendToContent(type, id = 'standardDiv') {
     res = document.createElement(type)
     document.getElementById('content').appendChild(res)
@@ -3874,6 +3818,8 @@ function appendToContent(type, id = 'standardDiv') {
 
 }
 
+// create and append (if true) a button that says 'continue'. Load action in
+// calling function
 function newContinueButton(append = false) {
     res = document.createElement('button')
     res.innerText = "Continue"
@@ -3881,11 +3827,6 @@ function newContinueButton(append = false) {
     if (append) document.getElementById('content').appendChild(res)
     return res
 }
-
-// function appendToCharacterSheet(box, item) {
-//     val = localStorage.getItem('_' + box)
-//     localStorage.setItem('_' + box, val + '\n' + item)
-// }
 
 
 
