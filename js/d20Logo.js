@@ -1,3 +1,5 @@
+// Creates a 3d icosaherdrom (D20) for the website logo.
+
 import * as THREE from 'three';
 
 
@@ -37,7 +39,7 @@ renderer.setClearColor( 0x000000, 0 )
 renderer.setSize(sizes.width,sizes.height);
 renderer.render(scene, camera);
 
-// resize 
+// resize  (not used currently)
 /*
 window.addEventListener('resize', () => {
     sizes.width = window.innerWidth/10
