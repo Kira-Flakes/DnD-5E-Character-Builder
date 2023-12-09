@@ -1,6 +1,6 @@
 # DnD-5E-Character-Builder
 
-## Authors: John Gilber, Simon Hockin, Marcus Martinez, Erick Ortiz
+## Authors: John Gilbert, Simon Hockin, Marcus Martinez, Erick Ortiz
 
 ## [Link to Project](https://wiz-rad.com/)
 
